@@ -2,7 +2,7 @@ name: Build and Deploy to EC2
 
 on:
   push:
-    branches: [ "CHORE/TOT-2" ]
+    branches: [ "develop" ]
 
 env:
   PROJECT_NAME: triportreat_project
