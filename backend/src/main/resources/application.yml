@@ -1,6 +1,7 @@
 spring:
   profiles:
     group:
-      dev: dev, common
-      prod: prod, common
-    active: dev
+      develop: dev, common
+      production: prod, common
+      test: test, common
+    active: develop

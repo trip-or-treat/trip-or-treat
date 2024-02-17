@@ -5,9 +5,9 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url:
-    username:
-    password:
+    url: ENC(vBkFtshaUZ/2Dd6BWiDqnkZEJaS34NYwXC9eJ/vUO7KUI1YTb4zMm9j7mXDst9SIWlqBlW2MZ9dSfgLVgxGv9O5PoeGd4O8r)
+    username: ENC(ijcbzqW1EZ2O9YzxPMm8gg==)
+    password: ENC(R+XbIS1cbxMAxGr08Ggepg==)
 
   jpa:
     hibernate:
