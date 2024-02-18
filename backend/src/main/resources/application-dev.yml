@@ -13,6 +13,8 @@ spring:
     hibernate:
       ddl-auto: none
 
+    database-platform: org.hibernate.dialect.MySQLDialect
+
     properties:
       hibernate:
         format_sql: true
