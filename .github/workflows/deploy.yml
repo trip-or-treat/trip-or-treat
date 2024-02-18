@@ -9,6 +9,7 @@ env:
   BUCKET_NAME: triportreat-bucket
   CODE_DEPLOY_APP_NAME: triportreat-codedeploy-application
   DEPLOYMENT_GROUP_NAME: triportreat-deploy-group
+  JASYPT_SECRET_KEY: ${{ secrets.JASYPT_SECRET_KEY }}
 
 jobs:
   deploy:
@@ -30,8 +31,8 @@ jobs:
         run: chmod +x ./gradlew
         shell: bash
 
-      - name: Build and Test
-        run: ./gradlew build
+      - name: Build and Test(사용하는 프로파일은 develop, 암호화키는 환경변수로 등록 후 빌드 실행)
+        run: ./gradlew build -Dspring.profiles.active=develop
         shell: bash
 
       - name: Make Zip File
