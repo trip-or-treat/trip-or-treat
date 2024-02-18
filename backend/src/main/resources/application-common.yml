@@ -1,0 +1,4 @@
+spring:
+  jasypt:
+    encryptor:
+      password: ${JASYPT_SECRET_KEY}
