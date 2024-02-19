@@ -7,9 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 public class Schedule {
@@ -22,8 +20,7 @@ public class Schedule {
     private Plan plan;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date visitDate;
+    private LocalDate visitDate;
 
     public Schedule() {
     }
