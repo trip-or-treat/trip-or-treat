@@ -3,5 +3,5 @@ spring:
     group:
       develop: dev, common
       production: prod, common
-      test: test, common
-    active: develop
+      local: local, common
+    active: local
