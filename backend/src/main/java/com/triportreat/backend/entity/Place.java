@@ -6,8 +6,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
 public class Place {
 
     @Id
@@ -60,8 +68,5 @@ public class Place {
 
     @Column(length = 20)
     private String modifiedTime;
-
-    public Place() {
-    }
 
 }
