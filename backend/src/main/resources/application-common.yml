@@ -6,4 +6,4 @@ spring:
   jpa:
     hibernate:
       naming:
-        physical-strategy: com.triportreat.backend.CustomCamelCaseToUnderscoresNamingStrategy
+        physical-strategy: com.triportreat.backend.common.CustomCamelCaseToUnderscoresNamingStrategy

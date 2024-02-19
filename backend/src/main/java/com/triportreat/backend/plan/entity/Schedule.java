@@ -1,4 +1,4 @@
-package com.triportreat.backend.entity;
+package com.triportreat.backend.plan.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,26 +18,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Getter
-public class Review {
+public class Schedule {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "place_id")
-    private Place place;
-
-    @Column(length = 65535)
-    private String tip;
-
-    @Column(length = 65535, nullable = false)
-    private String content;
+    @JoinColumn(name = "plan_id")
+    private Plan plan;
 
     @Column(nullable = false)
-    private Float score;
+    private LocalDate visitDate;
 
 }

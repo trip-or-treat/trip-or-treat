@@ -1,5 +1,6 @@
-package com.triportreat.backend.entity;
+package com.triportreat.backend.place.entity;
 
+import com.triportreat.backend.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,16 +18,26 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Getter
-public class ReviewImage {
+public class Review {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "review_id")
-    private Review review;
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "place_id")
+    private Place place;
+
+    @Column(length = 65535)
+    private String tip;
+
+    @Column(length = 65535, nullable = false)
+    private String content;
 
     @Column(nullable = false)
-    private String imageOrigin;
+    private Float score;
 
 }

@@ -1,10 +1,12 @@
-package com.triportreat.backend.entity;
+package com.triportreat.backend.place.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,20 +17,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Getter
-public class User {
+public class ReviewImage {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 10)
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "review_id")
+    private Review review;
 
-    @Column(length = 10, nullable = false)
-    private String nickname;
-
-    @Column(length = 30)
-    private String email;
-
+    @Column(nullable = false)
     private String imageOrigin;
 
 }

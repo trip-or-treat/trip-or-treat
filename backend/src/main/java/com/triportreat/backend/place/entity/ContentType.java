@@ -1,4 +1,4 @@
-package com.triportreat.backend.entity;
+package com.triportreat.backend.place.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

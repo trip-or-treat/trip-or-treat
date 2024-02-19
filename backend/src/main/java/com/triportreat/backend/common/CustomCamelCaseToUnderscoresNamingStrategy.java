@@ -1,4 +1,4 @@
-package com.triportreat.backend;
+package com.triportreat.backend.common;
 
 import org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy;
 import org.hibernate.boot.model.naming.Identifier;
