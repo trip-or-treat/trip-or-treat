@@ -1,4 +1,4 @@
-package com.practice.jpa.entity;
+package com.triportreat.backend.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,4 +12,7 @@ public class ContentType {
 
     @Column(length = 20, nullable = false)
     private String name;
+
+    public ContentType() {
+    }
 }
