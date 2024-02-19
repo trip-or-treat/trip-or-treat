@@ -1,4 +1,4 @@
-package com.triportreat.backend;
+package com.triportreat.backend.config;
 
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
