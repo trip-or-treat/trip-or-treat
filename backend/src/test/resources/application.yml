@@ -1,0 +1,5 @@
+spring:
+  profiles:
+    group:
+      test: test, common
+    active: test
