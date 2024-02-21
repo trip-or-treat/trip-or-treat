@@ -7,3 +7,7 @@ spring:
     hibernate:
       naming:
         physical-strategy: com.triportreat.backend.common.CustomCamelCaseToUnderscoresNamingStrategy
+
+schedule:
+  cron: 0 0 0 * * *
+  use: true
