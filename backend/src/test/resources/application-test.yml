@@ -16,6 +16,10 @@ spring:
         format_sql: true
         show_sql: true
 
+  sql:
+    init:
+      mode: never
+
   h2:
     console:
       enabled: true
