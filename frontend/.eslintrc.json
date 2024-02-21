@@ -10,7 +10,6 @@
   "extends": [
     "airbnb",
     "airbnb-typescript",
-    "plugin:@typescript-eslint/parser", // 여기
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:prettier/recommended"
@@ -30,8 +29,10 @@
 
   //원하는 규칙 추가 가능
   "rules": {
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "react/function-component-definition": [
+      2,
+      { "namedComponents": ["arrow-function", "function-declaration"] }
+    ]
   }
 }
-
-///////
