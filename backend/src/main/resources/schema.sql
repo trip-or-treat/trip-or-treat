@@ -32,7 +32,7 @@ create table place
     sub_category_id  varchar(10),
     address          varchar(255),
     address_detail   varchar(255),
-    name             varchar(20) not null,
+    name             varchar(100) not null,
     main_category_id varchar(10),
     mid_category_id  varchar(10),
     image_origin     varchar(255),
@@ -40,9 +40,9 @@ create table place
     latitude         double   not null,
     longitude        double   not null,
     sigungu_code     integer,
-    views            bigint      not null,
-    created_time     varchar(20),
-    modified_time    varchar(20),
+    views            bigint  not null default 0,
+    created_date     datetime(6),
+    modified_date    datetime(6),
     primary key (id)
 ) engine = InnoDB;
 
@@ -50,10 +50,10 @@ create table plan
 (
     id            bigint      not null auto_increment,
     user_id       bigint,
-    name          varchar(20) not null,
-    code          varchar(255),
+    title         varchar(20) not null,
     end_date      date        not null,
     start_date    date        not null,
+    code          varchar(255),
     created_date  datetime(6),
     modified_date datetime(6),
     primary key (id)
@@ -125,6 +125,8 @@ create table schedule_place
     visit_order int    not null,
     expense     int null default 0,
     memo        TEXT null,
+    created_date  datetime(6),
+    modified_date datetime(6),
     primary key (id)
 ) engine = InnoDB;
 
