@@ -1,6 +1,5 @@
 package com.triportreat.backend.plan.entity;
 
-import com.triportreat.backend.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -20,24 +19,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Getter
-public class Plan {
+public class Schedule {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @Column(length = 20, nullable = false)
-    private String title;
+    @JoinColumn(name = "plan_id")
+    private Plan plan;
 
     @Column(nullable = false)
-    private LocalDate startDate;
-
-    @Column(nullable = false)
-    private LocalDate endDate;
-
-    private String code;
+    private LocalDate visitDate;
 
 }
