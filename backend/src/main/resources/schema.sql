@@ -30,18 +30,16 @@ create table place
     region_id        bigint,
     content_type_id  bigint,
     sub_category_id  varchar(10),
+    address          varchar(255),
+    address_detail   varchar(255),
+    name             varchar(20) not null,
+    main_category_id varchar(10),
+    mid_category_id  varchar(10),
+    image_origin     varchar(255),
+    image_thumbnail  varchar(255),
     latitude         float(53)   not null,
     longitude        float(53)   not null,
     sigungu_code     integer,
-    created_date     datetime(6),
-    modified_date    datetime(6),
-    main_category_id varchar(10),
-    mid_category_id  varchar(10),
-    name             varchar(20) not null,
-    address          varchar(255),
-    address_detail   varchar(255),
-    image_origin     varchar(255),
-    image_thumbnail  varchar(255),
     views            bigint      not null,
     created_time     varchar(20),
     modified_time    varchar(20),
@@ -65,11 +63,11 @@ create table region
 (
     id              bigint       not null,
     name            varchar(255) not null,
-    overview        text,
-    latitude        float(53)    not null,
-    longitude       float(53)    not null,
     image_origin    varchar(255),
     image_thumbnail varchar(255),
+    latitude        float(53)    not null,
+    longitude       float(53)    not null,
+    overview        text,
     created_date    datetime(6),
     modified_date   datetime(6),
     primary key (id)
@@ -78,8 +76,8 @@ create table region
 create table recommended_place
 (
     id        bigint not null auto_increment,
-    place_id  bigint,
     region_id bigint,
+    place_id  bigint,
     overview  text,
     created_date    datetime(6),
     modified_date   datetime(6),
@@ -89,8 +87,8 @@ create table recommended_place
 create table review
 (
     id            bigint    not null auto_increment,
-    place_id      bigint,
     user_id       bigint,
+    place_id      bigint,
     tip           text,
     content       text      not null,
     score         float(23) not null,
@@ -141,15 +139,17 @@ create table sub_category
 
 create table user
 (
-    id            bigint      not null auto_increment,
-    name          varchar(10),
-    nickname      varchar(10) not null,
-    email         varchar(30),
-    image_origin  varchar(255),
-    created_date  datetime(6),
-    modified_date datetime(6),
+    id              bigint      not null auto_increment,
+    name            varchar(10),
+    nickname        varchar(10) not null,
+    email           varchar(30),
+    image_origin    varchar(255),
+    image_thumbnail varchar(255),
+    created_date    datetime(6),
+    modified_date   datetime(6),
     primary key (id)
 ) engine = InnoDB;
+
 
 # 제약조건
 alter table place
