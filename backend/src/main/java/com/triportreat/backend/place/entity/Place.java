@@ -22,7 +22,6 @@ public class Place {
     @Id
     private Long id;
 
-    //nullable?
     @ManyToOne
     @JoinColumn(name = "region_id")
     private Region region;
@@ -39,7 +38,7 @@ public class Place {
 
     private String addressDetail;
 
-    @Column(length = 20, nullable = false)
+    @Column(length = 100, nullable = false)
     private String name;
 
     @Column(length = 10)
@@ -63,11 +62,4 @@ public class Place {
     //기본값 설정은 어떻게??
     @Column(nullable = false)
     private Long views;
-
-    @Column(length = 20)
-    private String createdTime;
-
-    @Column(length = 20)
-    private String modifiedTime;
-
 }

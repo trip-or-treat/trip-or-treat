@@ -1,7 +1,7 @@
-# dev 데이터베이스 사용
+-- dev 데이터베이스 사용
 use dev;
 
-# 삭제 순서 고정
+-- 삭제 순서 고정
 drop table if exists REVIEW;
 drop table if exists RECOMMENDED_PLACE;
 drop table if exists SCHEDULE_PLACE;
@@ -13,7 +13,7 @@ drop table if exists REGION;
 drop table if exists SUB_CATEGORY;
 drop table if exists USER;
 
-# 테이블 생성
+-- 테이블 생성
 create table CONTENT_TYPE
 (
     id            bigint      not null,
@@ -142,7 +142,7 @@ create table USER
 ) engine = InnoDB;
 
 
-# 제약조건
+-- 제약조건
 alter table PLACE
     add constraint UK_CONTENT_TYPE_ID unique (content_type_id);
 alter table PLACE

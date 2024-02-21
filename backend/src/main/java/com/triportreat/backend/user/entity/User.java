@@ -31,4 +31,6 @@ public class User {
 
     private String imageOrigin;
 
+    private String imageThumbnail;
+
 }

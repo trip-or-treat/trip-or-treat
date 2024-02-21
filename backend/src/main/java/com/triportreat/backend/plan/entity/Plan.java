@@ -29,7 +29,7 @@ public class Plan {
     private User user;
 
     @Column(length = 20, nullable = false)
-    private String name;
+    private String title;
 
     @Column(nullable = false)
     private LocalDate startDate;
