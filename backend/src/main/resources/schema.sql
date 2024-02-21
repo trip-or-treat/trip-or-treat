@@ -2,20 +2,19 @@
 use dev;
 
 # 삭제 순서 고정
-drop table if exists review_image;
-drop table if exists review;
-drop table if exists recommended_place;
-drop table if exists schedule_place;
-drop table if exists place;
-drop table if exists content_type;
-drop table if exists schedule;
-drop table if exists plan;
-drop table if exists region;
-drop table if exists sub_category;
-drop table if exists user;
+drop table if exists REVIEW;
+drop table if exists RECOMMENDED_PLACE;
+drop table if exists SCHEDULE_PLACE;
+drop table if exists PLACE;
+drop table if exists CONTENT_TYPE;
+drop table if exists SCHEDULE;
+drop table if exists PLAN;
+drop table if exists REGION;
+drop table if exists SUB_CATEGORY;
+drop table if exists USER;
 
 # 테이블 생성
-create table content_type
+create table CONTENT_TYPE
 (
     id            bigint      not null,
     name          varchar(20) not null,
@@ -24,7 +23,7 @@ create table content_type
     primary key (id)
 ) engine = InnoDB;
 
-create table place
+create table PLACE
 (
     id               bigint      not null,
     region_id        bigint,
@@ -46,7 +45,7 @@ create table place
     primary key (id)
 ) engine = InnoDB;
 
-create table plan
+create table PLAN
 (
     id            bigint      not null auto_increment,
     user_id       bigint,
@@ -59,7 +58,7 @@ create table plan
     primary key (id)
 ) engine = InnoDB;
 
-create table region
+create table REGION
 (
     id              bigint       not null,
     name            varchar(255) not null,
@@ -73,7 +72,7 @@ create table region
     primary key (id)
 ) engine = InnoDB;
 
-create table recommended_place
+create table RECOMMENDED_PLACE
 (
     id        bigint not null auto_increment,
     region_id bigint,
@@ -84,7 +83,7 @@ create table recommended_place
     primary key (id)
 ) engine=InnoDB;
 
-create table review
+create table REVIEW
 (
     id            bigint    not null auto_increment,
     user_id       bigint,
@@ -97,17 +96,7 @@ create table review
     primary key (id)
 ) engine = InnoDB;
 
-create table review_image
-(
-    id            bigint       not null auto_increment,
-    review_id     bigint,
-    image_origin  varchar(255) not null,
-    created_date  datetime(6),
-    modified_date datetime(6),
-    primary key (id)
-) engine = InnoDB;
-
-create table schedule
+create table SCHEDULE
 (
     id            bigint not null auto_increment,
     plan_id       bigint,
@@ -117,7 +106,7 @@ create table schedule
     primary key (id)
 ) engine = InnoDB;
 
-create table schedule_place
+create table SCHEDULE_PLACE
 (
     id          bigint not null auto_increment,
     schedule_id bigint not null,
@@ -130,16 +119,16 @@ create table schedule_place
     primary key (id)
 ) engine = InnoDB;
 
-create table sub_category
+create table SUB_CATEGORY
 (
     id            varchar(10) not null,
-    name          varchar(10) not null,
+    name          varchar(20) not null,
     created_date  datetime(6),
     modified_date datetime(6),
     primary key (id)
 ) engine = InnoDB;
 
-create table user
+create table USER
 (
     id              bigint      not null auto_increment,
     name            varchar(10),
@@ -154,35 +143,32 @@ create table user
 
 
 # 제약조건
-alter table place
+alter table PLACE
     add constraint UK_CONTENT_TYPE_ID unique (content_type_id);
-alter table place
-    add constraint FK_PLACE_CONTENT_TYPE foreign key (content_type_id) references content_type (id);
-alter table place
-    add constraint FK_PLACE_REGION foreign key (region_id) references region (id);
-alter table place
-    add constraint FK_PLACE_SUB_CATEGORY foreign key (sub_category_id) references sub_category (id);
+alter table PLACE
+    add constraint FK_PLACE_CONTENT_TYPE foreign key (content_type_id) references CONTENT_TYPE (id);
+alter table PLACE
+    add constraint FK_PLACE_REGION foreign key (region_id) references REGION (id);
+alter table PLACE
+    add constraint FK_PLACE_SUB_CATEGORY foreign key (sub_category_id) references SUB_CATEGORY (id);
 
-alter table plan
-    add constraint FK_PLAN_USER foreign key (user_id) references user (id);
+alter table PLAN
+    add constraint FK_PLAN_USER foreign key (user_id) references USER (id);
 
-alter table review
-    add constraint FK_REVIEW_PLACE foreign key (place_id) references place (id);
-alter table review
-    add constraint FK_REVIEW_USER foreign key (user_id) references user (id);
+alter table REVIEW
+    add constraint FK_REVIEW_PLACE foreign key (place_id) references PLACE (id);
+alter table REVIEW
+    add constraint FK_REVIEW_USER foreign key (user_id) references USER (id);
 
-alter table review_image
-    add constraint FK_REVIEW_IMAGE_REVIEW foreign key (review_id) references review (id);
+alter table SCHEDULE
+    add constraint FK_SCHEDULE_PLAN foreign key (plan_id) references PLAN (id);
 
-alter table schedule
-    add constraint FK_SCHEDULE_PLAN foreign key (plan_id) references plan (id);
+alter table SCHEDULE_PLACE
+    add constraint FK_SCHEDULE_PLACE_SCHEDULE foreign key (schedule_id) references SCHEDULE (id);
+alter table SCHEDULE_PLACE
+    add constraint FK_SCHEDULE_PLACE_PLACE foreign key (place_id) references PLACE (id);
 
-alter table schedule_place
-    add constraint FK_SCHEDULE_PLACE_SCHEDULE foreign key (schedule_id) references schedule (id);
-alter table schedule_place
-    add constraint FK_SCHEDULE_PLACE_PLACE foreign key (place_id) references place (id);
-
-alter table recommended_place
-    add constraint FK_RECOMMENDED_PLACE_PLACE foreign key (place_id) references place (id);
-alter table recommended_place
-    add constraint FK_RECOMMENDED_PLACE_REGION foreign key (region_id) references region (id);
+alter table RECOMMENDED_PLACE
+    add constraint FK_RECOMMENDED_PLACE_PLACE foreign key (place_id) references PLACE (id);
+alter table RECOMMENDED_PLACE
+    add constraint FK_RECOMMENDED_PLACE_REGION foreign key (region_id) references REGION (id);
