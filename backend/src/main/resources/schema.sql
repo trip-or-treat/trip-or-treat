@@ -1,6 +1,3 @@
-use dev;
-
--- 삭제 순서 고정
 drop table if exists REVIEW;
 drop table if exists RECOMMENDED_PLACE;
 drop table if exists SCHEDULE_PLACE;
@@ -12,7 +9,6 @@ drop table if exists REGION;
 drop table if exists SUB_CATEGORY;
 drop table if exists USER;
 
--- 테이블 생성
 create table CONTENT_TYPE
 (
     id            bigint      not null,
@@ -141,9 +137,6 @@ create table USER
 ) engine = InnoDB;
 
 
--- 제약조건
-alter table PLACE
-    add constraint UK_CONTENT_TYPE_ID unique (content_type_id);
 alter table PLACE
     add constraint FK_PLACE_CONTENT_TYPE foreign key (content_type_id) references CONTENT_TYPE (id);
 alter table PLACE
