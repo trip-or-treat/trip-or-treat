@@ -9,11 +9,11 @@ const theme = {
   },
 
   width: {
-    stepNavWidth: '120px',
+    leftNavWidth: '120px',
   },
 
   height: {
-    commonNavHeight: '78px',
+    topNavHeight: '78px',
   },
 };
 

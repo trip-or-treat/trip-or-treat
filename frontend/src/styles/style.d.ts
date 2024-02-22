@@ -11,11 +11,11 @@ interface Colors {
 }
 
 interface Width {
-  stepNavWidth: string;
+  leftNavWidth: string;
 }
 
 interface Height {
-  commonNavHeight: string;
+  topNavHeight: string;
 }
 
 declare module 'styled-components' {

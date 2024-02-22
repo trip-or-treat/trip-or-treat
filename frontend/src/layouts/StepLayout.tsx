@@ -13,7 +13,7 @@ const StepLayout = () => {
 export default StepLayout;
 
 const Main = styled.main`
-  margin-top: ${(props) => props.theme.height.commonNavHeight};
-  margin-left: ${(props) => props.theme.width.stepNavWidth};
+  margin-top: ${(props) => props.theme.height.topNavHeight};
+  margin-left: ${(props) => props.theme.width.leftNavWidth};
   height: calc(100vh - 78px);
 `;
