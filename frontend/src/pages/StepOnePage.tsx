@@ -3,11 +3,11 @@ import StepNavLinkButton from 'src/components/StepNavLinkButton';
 const StepOnePage = () => {
   return (
     <>
-      <StepNavLinkButton type="CHANGE" path="/result">
+      <StepNavLinkButton type="ENABLE_ONLY" path="/result">
         계획 저장
       </StepNavLinkButton>
 
-      <StepNavLinkButton type="NOT_CHANGE" path="/place/1">
+      <StepNavLinkButton type="ENABLE_AND_DISABLE" path="/place/1">
         다음
       </StepNavLinkButton>
     </>

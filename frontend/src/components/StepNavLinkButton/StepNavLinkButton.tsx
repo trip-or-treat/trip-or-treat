@@ -6,7 +6,7 @@ import stepPlanSavedBtn from 'src/atoms/stepPlanSavedBtn';
 
 interface Props {
   path: string;
-  type: 'CHANGE' | 'NOT_CHANGE';
+  type: 'ENABLE_ONLY' | 'ENABLE_AND_DISABLE';
   children: React.ReactNode;
 }
 
@@ -15,8 +15,8 @@ const StepNavLinkButton = ({ path, type, children }: Props) => {
 
   return (
     <Wrapper $isClicked={isClicked}>
-      {type === 'NOT_CHANGE' && <LinkBox to={path}>{children}</LinkBox>}
-      {type === 'CHANGE' && (
+      {type === 'ENABLE_ONLY' && <LinkBox to={path}>{children}</LinkBox>}
+      {type === 'ENABLE_AND_DISABLE' && (
         <ChangeLinkBox to={isClicked ? path : '#'} $isClicked={isClicked}>
           {children}
         </ChangeLinkBox>
