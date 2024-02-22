@@ -10,8 +10,18 @@ interface Colors {
   whiteFont: string;
 }
 
+interface Width {
+  leftNavWidth: string;
+}
+
+interface Height {
+  topNavHeight: string;
+}
+
 declare module 'styled-components' {
   export interface DefaultTheme extends Theme {
     colors: Colors;
+    width: Width;
+    height: Height;
   }
 }
