@@ -10,7 +10,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-const StepNavLink = ({ path, type, children }: Props) => {
+const StepNavLinkButton = ({ path, type, children }: Props) => {
   const isClicked = useRecoilValue(stepPlanSavedBtn);
 
   return (
@@ -25,7 +25,7 @@ const StepNavLink = ({ path, type, children }: Props) => {
   );
 };
 
-export default StepNavLink;
+export default StepNavLinkButton;
 
 const Wrapper = styled.div<{ $isClicked: boolean }>`
   cursor: ${(props) => (props.$isClicked ? 'pointer' : 'not-allowed')};

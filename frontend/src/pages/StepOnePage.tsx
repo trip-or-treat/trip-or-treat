@@ -1,15 +1,15 @@
-import StepNavLink from 'src/components/StepNavLink';
+import StepNavLinkButton from 'src/components/StepNavLinkButton';
 
 const StepOnePage = () => {
   return (
     <>
-      <StepNavLink type="CHANGE" path="/result">
+      <StepNavLinkButton type="CHANGE" path="/result">
         계획 저장
-      </StepNavLink>
+      </StepNavLinkButton>
 
-      <StepNavLink type="NOT_CHANGE" path="/place/1">
+      <StepNavLinkButton type="NOT_CHANGE" path="/place/1">
         다음
-      </StepNavLink>
+      </StepNavLinkButton>
     </>
   );
 };
