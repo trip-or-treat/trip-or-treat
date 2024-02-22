@@ -7,6 +7,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -59,7 +60,8 @@ public class Place {
 
     private Integer sigunguCode;
 
-    //기본값 설정은 어떻게??
     @Column(nullable = false)
+    @Transient
     private Long views;
+
 }
