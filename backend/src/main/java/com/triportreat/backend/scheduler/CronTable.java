@@ -33,13 +33,18 @@ public class CronTable {
         if (isRunnable) {
             Integer totalCount = getTotalCount();
 
-            URI requestURl = setRequestUrl(totalCount, 1);
-            ResponseEntity<OpenApiPlaceResponseDto> response = restTemplate.getForEntity(requestURl,
-                    OpenApiPlaceResponseDto.class);
-
-            List<Item> items = response.getBody().getResponse().getBody().getItems().getItem();
+            List<Item> items = getAllPlaces(totalCount);
             openApiService.updatePlace(items);
         }
+    }
+
+    private List<Item> getAllPlaces(Integer totalCount) {
+        URI requestURl = setRequestUrl(totalCount, 1);
+        ResponseEntity<OpenApiPlaceResponseDto> response = restTemplate.getForEntity(requestURl,
+                OpenApiPlaceResponseDto.class);
+
+        List<Item> items = response.getBody().getResponse().getBody().getItems().getItem();
+        return items;
     }
 
     private Integer getTotalCount() {
