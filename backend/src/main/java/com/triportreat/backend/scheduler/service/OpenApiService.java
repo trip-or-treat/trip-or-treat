@@ -10,35 +10,50 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-public class OpenApiServiceImpl implements OpenApiService{
+public class OpenApiService{
 
     private final OpenApiRepository openApiRepository;
 
     @Transactional
     public void updatePlace(List<Item> items) {
-        openApiRepository.findAllRegion();
-        openApiRepository.findAllContentType();
-        openApiRepository.findAllSubCategory();
-        openApiRepository.findAllPlace();
+        persistAllRelatedData();
 
+        updateAllPlaces(items);
+    }
+
+    private void updateAllPlaces(List<Item> items) {
         items.stream()
-                .filter(OpenApiServiceImpl::hasForeignKeyNull)
+                .filter(OpenApiService::hasAllForeignKey)
                 .forEach(item -> {
                     Region region = openApiRepository.findRegionById(item.getRegionId());
                     ContentType contentType = openApiRepository.findContentTypeById(item.getContentTypeId());
                     SubCategory subCategory = openApiRepository.findSubCategoryById(item.getSubCategoryId());
 
-                    Place place = setPlace(item, region, contentType, subCategory);
+                    Place place = renewalPlace(item, region, contentType, subCategory);
                     openApiRepository.update(place);
                 });
     }
 
-    private static Place setPlace(Item item, Region region, ContentType contentType, SubCategory subCategory) {
+    private void persistAllRelatedData() {
+        openApiRepository.findAllRegion();
+        openApiRepository.findAllContentType();
+        openApiRepository.findAllSubCategory();
+        openApiRepository.findAllPlace();
+    }
+
+    private static boolean hasAllForeignKey(Item item) {
+        return Stream.of(item.getRegionId(), item.getContentTypeId(), item.getSubCategoryId())
+                .noneMatch(Objects::isNull);
+    }
+
+    private Place renewalPlace(Item item, Region region, ContentType contentType, SubCategory subCategory) {
         return Place.builder()
                 .id(item.getId())
                 .region(region)
@@ -55,10 +70,5 @@ public class OpenApiServiceImpl implements OpenApiService{
                 .longitude(item.getLongitude())
                 .sigunguCode(item.getSigunguCode())
                 .build();
-    }
-
-    private static boolean hasForeignKeyNull(Item item) {
-        return Stream.of(item.getRegionId(), item.getContentTypeId(), item.getSubCategoryId())
-                .anyMatch(Objects::isNull);
     }
 }
