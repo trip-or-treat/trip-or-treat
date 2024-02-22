@@ -136,7 +136,6 @@ create table USER
     primary key (id)
 ) engine = InnoDB;
 
-
 alter table PLACE
     add constraint FK_PLACE_CONTENT_TYPE foreign key (content_type_id) references CONTENT_TYPE (id);
 alter table PLACE
