@@ -30,6 +30,8 @@
   //원하는 규칙 추가 가능
   "rules": {
     "react/react-in-jsx-scope": "off",
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-use-before-define": "off",
     "react/function-component-definition": [
       2,
       { "namedComponents": ["arrow-function", "function-declaration"] }
