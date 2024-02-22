@@ -7,6 +7,14 @@ const theme = {
     lightGreyFont: '#F6F6F6',
     whiteFont: '#FFFFFF',
   },
+
+  width: {
+    stepNavWidth: '120px',
+  },
+
+  height: {
+    commonNavHeight: '78px',
+  },
 };
 
 export type Theme = typeof theme;
