@@ -7,9 +7,9 @@ const routes = [
   {
     element: <StepLayout />,
     children: [
-      { path: '/date/:region_id', element: <StepOnePage /> },
-      { path: '/region/:region_id', element: <StepTwoPage /> },
-      { path: '/place/:region_id', element: <StepThreePage /> },
+      { path: '/date/:regionId', element: <StepOnePage /> },
+      { path: '/region/:regionId', element: <StepTwoPage /> },
+      { path: '/place/:regionId', element: <StepThreePage /> },
     ],
   },
 ];
