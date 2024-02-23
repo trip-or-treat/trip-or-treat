@@ -80,6 +80,9 @@ const LinkBox = styled(Link)<{ $isClicked: boolean }>`
   text-decoration: none;
   color: ${(props) =>
     props.$isClicked ? props.theme.colors.mainColor : props.theme.colors.darkGrey};
+
+  transition: transform 0.25s ease-in;
+  transform: ${(props) => (props.$isClicked ? 'scale(1.15)' : 'scale(1)')};
 `;
 
 const LinkItem = styled.p`
