@@ -7,6 +7,14 @@ const theme = {
     lightGreyFont: '#F6F6F6',
     whiteFont: '#FFFFFF',
   },
+
+  width: {
+    leftNavWidth: '120px',
+  },
+
+  height: {
+    topNavHeight: '78px',
+  },
 };
 
 export type Theme = typeof theme;
