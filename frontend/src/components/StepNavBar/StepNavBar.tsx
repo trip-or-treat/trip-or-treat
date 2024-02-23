@@ -3,20 +3,20 @@ import styled from 'styled-components';
 import StepNavLinkButton from './StepNavLinkButton';
 
 const STEP_NAV_DATA = [
-  { id: 1, content: '날짜 선택', path: 'date' },
-  { id: 2, content: '지역 추가', path: 'region' },
-  { id: 3, content: '계획 짜기', path: 'place' },
+  { step: 1, content: '날짜 선택', path: 'date' },
+  { step: 2, content: '지역 추가', path: 'region' },
+  { step: 3, content: '계획 짜기', path: 'place' },
 ];
 
 const StepNavBar = () => {
   const { pathname } = useLocation();
   const [currentPath, regionId] = pathname.split('/').slice(1);
-  const currentStep = STEP_NAV_DATA.filter((item) => item.path === currentPath)[0].id;
+  const currentStep = STEP_NAV_DATA.find((item) => item.path === currentPath)?.step;
 
   return (
     <Nav>
       {STEP_NAV_DATA.map((item, idx) => (
-        <NavItem key={item.id}>
+        <NavItem key={item.step}>
           <LinkBox to={`${item.path}/${regionId}`} $isClicked={idx + 1 === currentStep}>
             <LinkItem>{`step${idx + 1}`}</LinkItem>
             <LinkItem>{item.content}</LinkItem>
