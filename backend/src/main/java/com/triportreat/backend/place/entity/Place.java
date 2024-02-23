@@ -1,6 +1,8 @@
 package com.triportreat.backend.place.entity;
 
+import com.triportreat.backend.common.BaseTimeEntity;
 import com.triportreat.backend.region.entity.Region;
+import com.triportreat.backend.scheduler.dto.OpenApiPlaceResponseDto.Item;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,7 +19,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Getter
-public class Place {
+public class Place extends BaseTimeEntity {
 
     @Id
     private Long id;
@@ -59,7 +61,39 @@ public class Place {
 
     private Integer sigunguCode;
 
-    //기본값 설정은 어떻게??
     @Column(nullable = false)
-    private Long views;
+    @Builder.Default
+    private Long views = 0L;
+
+    public static Place createPlace(Item item, Region region, ContentType contentType, SubCategory subCategory) {
+        return Place.builder()
+                .id(item.getId())
+                .region(region)
+                .contentType(contentType)
+                .subCategory(subCategory)
+                .address(item.getAddress())
+                .addressDetail(item.getAddressDetail())
+                .name(item.getName())
+                .mainCategoryId(item.getMainCategoryId())
+                .midCategoryId(item.getMidCategoryId())
+                .imageOrigin(item.getImageOrigin())
+                .imageThumbnail(item.getImageThumbnail())
+                .latitude(item.getLatitude())
+                .longitude(item.getLongitude())
+                .sigunguCode(item.getSigunguCode())
+                .build();
+    }
+
+    public void update(Item item) {
+        this.name = item.getName();
+        this.address = item.getAddress();
+        this.addressDetail = item.getAddressDetail();
+        this.mainCategoryId = item.getMainCategoryId();
+        this.midCategoryId = item.getMidCategoryId();
+        this.imageOrigin = item.getImageOrigin();
+        this.imageThumbnail = item.getImageThumbnail();
+        this.latitude = item.getLatitude();
+        this.longitude = item.getLongitude();
+        this.sigunguCode = item.getSigunguCode();
+    }
 }
