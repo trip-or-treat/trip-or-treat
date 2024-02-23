@@ -53,13 +53,7 @@ public class OpenApiRepository {
                 .getResultList();
     }
 
-    public void update(Place place) {
-        if (findPlaceById(place.getId()) == null) {
-            em.persist(place);
-        }
-        else {
-            em.merge(place);
-        }
+    public void savePlace(Place newPlace) {
+        em.persist(newPlace);
     }
-
 }
