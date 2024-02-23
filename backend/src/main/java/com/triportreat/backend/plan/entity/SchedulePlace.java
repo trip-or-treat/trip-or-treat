@@ -36,8 +36,9 @@ public class SchedulePlace extends BaseTimeEntity {
     @Column(nullable = false)
     private Integer visitOrder;
 
-    //null이어도 합계 계산할 때 문제없는가?
-    private Integer expense;
+    @Column(nullable = false)
+    @Builder.Default
+    private Long expense = 0L;
 
     @Column(length = 65535)
     private String memo;

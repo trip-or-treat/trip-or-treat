@@ -62,7 +62,8 @@ public class Place extends BaseTimeEntity {
     private Integer sigunguCode;
 
     @Column(nullable = false)
-    private Long views;
+    @Builder.Default
+    private Long views = 0L;
 
     public static Place createPlace(Item item, Region region, ContentType contentType, SubCategory subCategory) {
         return Place.builder()
@@ -80,7 +81,6 @@ public class Place extends BaseTimeEntity {
                 .latitude(item.getLatitude())
                 .longitude(item.getLongitude())
                 .sigunguCode(item.getSigunguCode())
-                .views(0L)
                 .build();
     }
 

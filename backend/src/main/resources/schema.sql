@@ -13,8 +13,6 @@ create table CONTENT_TYPE
 (
     id            bigint      not null,
     name          varchar(20) not null,
-    created_date  datetime(6),
-    modified_date datetime(6),
     primary key (id)
 ) engine = InnoDB;
 
@@ -33,7 +31,7 @@ create table PLACE
     image_thumbnail  varchar(255),
     latitude         double   not null,
     longitude        double   not null,
-    sigungu_code     integer,
+    sigungu_code     int,
     views            bigint  not null default 0,
     created_date     datetime(6),
     modified_date    datetime(6),
@@ -62,8 +60,6 @@ create table REGION
     latitude        double    not null,
     longitude       double    not null,
     overview        text,
-    created_date    datetime(6),
-    modified_date   datetime(6),
     primary key (id)
 ) engine = InnoDB;
 
@@ -73,8 +69,6 @@ create table RECOMMENDED_PLACE
     region_id bigint,
     place_id  bigint,
     overview  text,
-    created_date    datetime(6),
-    modified_date   datetime(6),
     primary key (id)
 ) engine=InnoDB;
 
@@ -107,7 +101,7 @@ create table SCHEDULE_PLACE
     schedule_id bigint not null,
     place_id    bigint not null,
     visit_order int    not null,
-    expense     int null default 0,
+    expense     bigint not null default 0,
     memo        TEXT null,
     created_date  datetime(6),
     modified_date datetime(6),
@@ -118,8 +112,6 @@ create table SUB_CATEGORY
 (
     id            varchar(10) not null,
     name          varchar(20) not null,
-    created_date  datetime(6),
-    modified_date datetime(6),
     primary key (id)
 ) engine = InnoDB;
 

@@ -6,12 +6,14 @@ import com.triportreat.backend.scheduler.service.OpenApiService;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class CronTable {
@@ -33,18 +35,18 @@ public class CronTable {
         if (isRunnable) {
             Integer totalCount = getTotalCount();
 
-            List<Item> items = getAllPlaces(totalCount);
-            openApiService.updatePlace(items);
+            List<Item> items = getPlaces(totalCount);
+            openApiService.upsertPlaces(items);
+            log.info("Place 데이터 업데이트 완료");
         }
     }
 
-    private List<Item> getAllPlaces(Integer totalCount) {
+    private List<Item> getPlaces(Integer totalCount) {
         URI requestURl = setRequestUrl(totalCount, 1);
         ResponseEntity<OpenApiPlaceResponseDto> response = restTemplate.getForEntity(requestURl,
                 OpenApiPlaceResponseDto.class);
 
-        List<Item> items = response.getBody().getResponse().getBody().getItems().getItem();
-        return items;
+        return response.getBody().getResponse().getBody().getItems().getItem();
     }
 
     private Integer getTotalCount() {
