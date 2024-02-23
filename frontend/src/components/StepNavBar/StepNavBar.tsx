@@ -68,7 +68,7 @@ const NavItem = styled.li`
 
 const ButtonBox = styled.div`
   position: absolute;
-  bottom: 100px;
+  bottom: 50px;
 `;
 
 const LinkBox = styled(Link)<{ $isClicked: boolean }>`
