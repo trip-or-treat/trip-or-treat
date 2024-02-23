@@ -26,6 +26,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation "com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5"
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
     compileOnly 'org.projectlombok:lombok'
     testImplementation 'com.h2database:h2'
     runtimeOnly 'com.mysql:mysql-connector-j'
