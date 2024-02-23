@@ -1,5 +1,6 @@
 package com.triportreat.backend.plan.entity;
 
+import com.triportreat.backend.common.BaseTimeEntity;
 import com.triportreat.backend.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Getter
-public class Plan {
+public class Plan extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

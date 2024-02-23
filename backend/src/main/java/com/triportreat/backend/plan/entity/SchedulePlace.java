@@ -1,5 +1,6 @@
 package com.triportreat.backend.plan.entity;
 
+import com.triportreat.backend.common.BaseTimeEntity;
 import com.triportreat.backend.place.entity.Place;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Getter
-public class SchedulePlace {
+public class SchedulePlace extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,8 +36,9 @@ public class SchedulePlace {
     @Column(nullable = false)
     private Integer visitOrder;
 
-    //null이어도 합계 계산할 때 문제없는가?
-    private Integer expense;
+    @Column(nullable = false)
+    @Builder.Default
+    private Long expense = 0L;
 
     @Column(length = 65535)
     private String memo;
