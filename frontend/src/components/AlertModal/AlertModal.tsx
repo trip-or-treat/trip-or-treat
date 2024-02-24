@@ -1,12 +1,8 @@
 import theme from 'src/styles/theme';
+import ModalOverlay from '../@common/modal/ModalOverlay';
 import LinkButton from '../@common/modal/LinkButton';
 import CloseButton from '../@common/modal/CloseButton';
-import {
-  Wrapper,
-  StyledModalLayout,
-  StyledModalText,
-  StyledButtonInner,
-} from '../LoginModal/LoginModal';
+import { StyledModalLayout, StyledModalText, StyledButtonInner } from '../LoginModal/LoginModal';
 
 interface Props {
   onClose: () => void;
@@ -14,7 +10,7 @@ interface Props {
 
 const AlertModal = ({ onClose }: Props) => {
   return (
-    <Wrapper>
+    <ModalOverlay>
       <StyledModalLayout>
         <StyledModalText>
           계획 생성을 중단하시겠습니까?
@@ -30,7 +26,7 @@ const AlertModal = ({ onClose }: Props) => {
           </LinkButton>
         </StyledButtonInner>
       </StyledModalLayout>
-    </Wrapper>
+    </ModalOverlay>
   );
 };
 

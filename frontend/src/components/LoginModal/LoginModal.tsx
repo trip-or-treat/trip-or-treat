@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import theme from 'src/styles/theme';
+import ModalOverlay from '../@common/modal/ModalOverlay';
 import LinkButton from '../@common/modal/LinkButton';
 import CloseButton from '../@common/modal/CloseButton';
 
@@ -9,7 +10,7 @@ interface Props {
 
 const LoginModal = ({ onClose }: Props) => {
   return (
-    <Wrapper>
+    <ModalOverlay>
       <StyledModalLayout>
         <StyledModalText>저장하려면 로그인이 필요해요!</StyledModalText>
         <StyledButtonInner>
@@ -21,25 +22,11 @@ const LoginModal = ({ onClose }: Props) => {
           </CloseButton>
         </StyledButtonInner>
       </StyledModalLayout>
-    </Wrapper>
+    </ModalOverlay>
   );
 };
 
 export default LoginModal;
-
-export const Wrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  align-items: center;
-
-  width: 100%;
-  height: 100%;
-
-  background-color: rgba(0, 0, 0, 0.1);
-`;
 
 export const StyledModalLayout = styled.div`
   display: flex;
