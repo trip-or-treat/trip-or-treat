@@ -34,6 +34,7 @@ export const StyledModalLayout = styled.div`
 
   width: 356px;
   height: 179px;
+  margin: 15px 15px 0px 15px;
 
   border: none;
   border-radius: 10px;

@@ -21,7 +21,7 @@ export default LinkButton;
 export const StyledButton = `
   width: 68px;
   height: 31.8px;
-  margin: 18px;
+  margin: 0px 15px 15px 15px;
 
   border: none;
   border-radius: 5px;

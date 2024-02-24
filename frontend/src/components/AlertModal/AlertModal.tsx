@@ -21,7 +21,7 @@ const AlertModal = ({ onClose }: Props) => {
           <CloseButton onClick={onClose} color={theme.colors.mainColor}>
             계속하기
           </CloseButton>
-          <LinkButton path="/home" color={theme.colors.darkGrey}>
+          <LinkButton path="/" color={theme.colors.darkGrey}>
             홈으로
           </LinkButton>
         </StyledButtonInner>
