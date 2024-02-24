@@ -66,6 +66,7 @@ export const StyledModalText = styled.h1`
   height: 109px;
 
   font-size: 15px;
+  line-height: 1.5;
 `;
 
 export const StyledButtonInner = styled.div`
