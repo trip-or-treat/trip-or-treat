@@ -50,6 +50,7 @@ export default StepThreePage;
 
 const Wrapper = styled.div`
   display: flex;
+
   width: calc(100vw - ${(props) => props.theme.width.leftNavWidth});
   height: calc(100vh - ${(props) => props.theme.height.topNavHeight});
 `;
@@ -57,19 +58,21 @@ const Wrapper = styled.div`
 const FirstContents = styled.div`
   width: 30%;
   height: inherit;
-  box-sizing: border-box;
-
   padding: 20px;
+
+  box-sizing: border-box;
 `;
 
 const SecondContents = styled.div`
   width: 30%;
   height: inherit;
+
   background-color: antiquewhite;
 `;
 
 const Map = styled.div`
   width: 40%;
   height: inherit;
+
   background-color: darkgoldenrod;
 `;

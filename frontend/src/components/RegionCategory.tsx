@@ -39,17 +39,18 @@ const LinkBox = styled(Link)<{ $isClicked: boolean }>`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-decoration: none;
+
   margin: 0px 5px;
 
   color: ${(props) =>
     props.$isClicked ? props.theme.colors.mainColor : props.theme.colors.darkGrey};
+
+  text-decoration: none;
 `;
 
 const TitleBox = styled.p<{ $isClicked: boolean }>`
   padding: 5px 2px;
   margin: 0px 5px;
-
   border-bottom: ${(props) =>
     props.$isClicked ? `1px solid ${props.theme.colors.mainColor}` : 'none'};
 
