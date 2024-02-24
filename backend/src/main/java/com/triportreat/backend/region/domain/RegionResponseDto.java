@@ -14,8 +14,8 @@ public class RegionResponseDto {
     private String name;
     private String imageOrigin;
     private String imageThumbnail;
-    private Double mapX;
-    private Double mapY;
+    private Double latitude;
+    private Double longitude;
 
     public static RegionResponseDto toDto(Region region) {
         return RegionResponseDto.builder()
@@ -23,8 +23,8 @@ public class RegionResponseDto {
                 .name(region.getName())
                 .imageOrigin(region.getImageOrigin())
                 .imageThumbnail(region.getImageThumbnail())
-                .mapX(region.getLatitude())
-                .mapY(region.getLongitude())
+                .latitude(region.getLatitude())
+                .longitude(region.getLongitude())
                 .build();
     }
 }
