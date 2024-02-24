@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import theme from 'src/styles/theme';
-import LinkButton from '../@common/Modal/LinkButton';
-import CloseButton from '../@common/Modal/CloseButton';
+import LinkButton from '../@common/modal/LinkButton';
+import CloseButton from '../@common/modal/CloseButton';
 
 interface Props {
   onClose: () => void;
