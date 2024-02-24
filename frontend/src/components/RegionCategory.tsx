@@ -30,8 +30,6 @@ export default RegionCategory;
 
 const Wrapper = styled.ul`
   display: flex;
-
-  padding: 10px 0px;
 `;
 
 const LinkBox = styled(Link)<{ $isClicked: boolean }>`
