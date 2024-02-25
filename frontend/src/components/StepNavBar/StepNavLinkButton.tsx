@@ -39,16 +39,17 @@ const LinkBox = styled(Link)`
   min-width: 50px;
   max-width: 80px;
 
-  border: none;
   padding: 25px 20px;
+
   border-radius: 8px;
+  border: none;
 
   background-color: ${(props) => props.theme.colors.mainColor};
   color: ${(props) => props.theme.colors.whiteFont};
 
   font-size: 14px;
-  cursor: pointer;
   text-decoration: none;
+  cursor: pointer;
 `;
 
 const ChangeLinkBox = styled(LinkBox)<{ $isClicked: boolean }>`
