@@ -1,5 +1,6 @@
 package com.triportreat.backend.place.controller;
 
+import com.triportreat.backend.common.response.Success;
 import com.triportreat.backend.place.dto.PlaceSearchCondition;
 import com.triportreat.backend.place.service.PlaceService;
 import jakarta.validation.Valid;
@@ -22,6 +23,7 @@ public class PlaceController {
     public ResponseEntity<?> searchPlaceListByCondition(
             @Valid PlaceSearchCondition placeSearchCondition,
             @PageableDefault(size = 10) Pageable pageable) {
-        return ResponseEntity.ok().body(placeService.searchPlaceListByCondition(placeSearchCondition, pageable));
+        return ResponseEntity.ok().body(
+                Success.response("조회에 성공하였습니다!",placeService.searchPlaceListByCondition(placeSearchCondition, pageable)));
     }
 }
