@@ -1,5 +1,8 @@
 import styled from 'styled-components';
 
+// TODO
+// 버튼 클릭 시 스크롤 기능
+
 const StartButton = () => {
   return <StartButtonBox>시작하기</StartButtonBox>;
 };
@@ -22,4 +25,6 @@ const StartButtonBox = styled.button`
   color: ${(props) => props.theme.colors.whiteFont};
   text-align: center;
   text-decoration: none;
+
+  cursor: pointer;
 `;
