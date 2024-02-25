@@ -12,7 +12,7 @@ const LogoButtonBox = styled(Link)`
 
   width: ${(props) => props.theme.width.leftNavWidth};
 
-  background-color: ${(props) => props.theme.colors.commonNavColor};
+  background-color: ${(props) => props.theme.colors.commonNavBgColor};
 
   font-size: 30px;
   font-family: 'Pretendard-Regular';

@@ -20,7 +20,7 @@ const CommonNavBox = styled.div`
 
   height: ${(props) => props.theme.height.topNavHeight};
 
-  background-color: ${(props) => props.theme.colors.commonNavColor};
+  background-color: ${(props) => props.theme.colors.commonNavBgColor};
 
   line-height: ${(props) => props.theme.height.topNavHeight};
 `;

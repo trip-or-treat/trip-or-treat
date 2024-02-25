@@ -18,7 +18,7 @@ const MenuButtonBox = styled(Link)`
 
   padding: 0px 35px;
 
-  background-color: ${(props) => props.theme.colors.commonNavColor};
+  background-color: ${(props) => props.theme.colors.commonNavBgColor};
 
   font-size: 20px;
   font-family: 'Pretendard-Regular';
