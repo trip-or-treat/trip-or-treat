@@ -9,7 +9,7 @@ const theme = {
   },
 
   width: {
-    leftNavWidth: '120px',
+    leftNavWidth: '110px',
   },
 
   height: {
