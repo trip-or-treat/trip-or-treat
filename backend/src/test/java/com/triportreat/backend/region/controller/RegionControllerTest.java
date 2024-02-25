@@ -47,15 +47,15 @@ class RegionControllerTest {
         mockMvc.perform(get("/regions")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.header.status", is(200)))
-                .andExpect(jsonPath("$.header.message", is("")))
-                .andExpect(jsonPath("$.header.result", is(true)))
-                .andExpect(jsonPath("$.body", hasSize(3)))
-                .andExpect(jsonPath("$.body[0].id", equalTo(1)))
-                .andExpect(jsonPath("$.body[0].name", equalTo("region1")))
-                .andExpect(jsonPath("$.body[1].id", equalTo(2)))
-                .andExpect(jsonPath("$.body[1].name", equalTo("region2")))
-                .andExpect(jsonPath("$.body[2].id", equalTo(3)))
-                .andExpect(jsonPath("$.body[2].name", equalTo("region3")));
+                .andExpect(jsonPath("$.status", is(200)))
+                .andExpect(jsonPath("$.message", is("")))
+                .andExpect(jsonPath("$.result", is(true)))
+                .andExpect(jsonPath("$.data", hasSize(3)))
+                .andExpect(jsonPath("$.data[0].id", equalTo(1)))
+                .andExpect(jsonPath("$.data[0].name", equalTo("region1")))
+                .andExpect(jsonPath("$.data[1].id", equalTo(2)))
+                .andExpect(jsonPath("$.data[1].name", equalTo("region2")))
+                .andExpect(jsonPath("$.data[2].id", equalTo(3)))
+                .andExpect(jsonPath("$.data[2].name", equalTo("region3")));
     }
 }
