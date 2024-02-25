@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import RegionCategory from 'src/components/RegionCategory';
 import EnterSearch from 'src/components/EnterSearch';
-import FilterItemList from 'src/components/FilterItemList';
+import ContentTypeFilterItemList from 'src/components/ContentTypeFilterItemList';
 
 const REGION_DATA = [
   {
@@ -42,7 +42,7 @@ const StepThreePage = () => {
       <SearchLayer>
         <RegionCategory data={REGION_DATA} />
         <EnterSearch placeHolder="장소를 검색해보세요!" />
-        <FilterItemList />
+        <ContentTypeFilterItemList />
       </SearchLayer>
       <DayLayer>Day</DayLayer>
       <MapLayer>mapLayer</MapLayer>

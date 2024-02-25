@@ -2,9 +2,9 @@ import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
 import contentTypeId from 'src/atoms/contentTypeId';
-import FilterItem from './FilterItem';
+import ContentTypeFilterItem from './ContentTypeFilterItem';
 
-const filterData = [
+const ContentTypeFilterItemData = [
   {
     id: '12',
     name: '관광지',
@@ -31,13 +31,13 @@ const filterData = [
   },
 ];
 
-const FilterItemList = () => {
+const ContentTypeFilterItemList = () => {
   const [prevContentTypeId, setPrevContentTypeId] = useRecoilState(contentTypeId);
 
   return (
-    <FilterBox>
-      {filterData.map((data) => (
-        <FilterItem
+    <Wrapper>
+      {ContentTypeFilterItemData.map((data) => (
+        <ContentTypeFilterItem
           key={data.id}
           id={data.id}
           title={data.name}
@@ -45,13 +45,13 @@ const FilterItemList = () => {
           setPrevContentTypeId={setPrevContentTypeId}
         />
       ))}
-    </FilterBox>
+    </Wrapper>
   );
 };
 
-export default FilterItemList;
+export default ContentTypeFilterItemList;
 
-const FilterBox = styled.div`
+const Wrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;

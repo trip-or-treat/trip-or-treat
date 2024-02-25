@@ -8,7 +8,7 @@ interface Props {
   setPrevContentTypeId: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-const FilterItem = ({ id, title, prevContentTypeId, setPrevContentTypeId }: Props) => {
+const ContentTypeFilterItem = ({ id, title, prevContentTypeId, setPrevContentTypeId }: Props) => {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const currentId = e.currentTarget.dataset.id ?? null;
 
@@ -26,7 +26,7 @@ const FilterItem = ({ id, title, prevContentTypeId, setPrevContentTypeId }: Prop
   );
 };
 
-export default FilterItem;
+export default ContentTypeFilterItem;
 
 const Button = styled.button<{ $isClicked: boolean }>`
   display: flex;
