@@ -15,7 +15,6 @@ public class RegionController {
 
     @GetMapping("/regions")
     public ResponseEntity<?> getRegions() {
-        return ResponseEntity.ok().body(
-                ResponseResult.success("", regionService.getRegions()));
+        return ResponseEntity.ok().body(ResponseResult.success("", regionService.getRegions()));
     }
 }

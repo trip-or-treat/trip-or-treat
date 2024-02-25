@@ -13,28 +13,26 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResponseResult {
-    private ResponseHeader header;
-    private Object body;
+    private Boolean result;
+    private  String message;
+    private int status;
+    private Object data;
 
     public static ResponseResult success(String message, Object data) {
         return ResponseResult.builder()
-                .header(ResponseHeader.builder()
-                        .result(true)
-                        .message(message)
-                        .status(HttpStatus.OK.value())
-                        .build())
-                .body(data)
+                .result(true)
+                .message(message)
+                .status(HttpStatus.OK.value())
+                .data(data)
                 .build();
     }
 
-    public static ResponseResult fail(String message, Object data) {
+    public static ResponseResult fail(String message, HttpStatus status, Object data) {
         return ResponseResult.builder()
-                .header(ResponseHeader.builder()
-                        .result(false)
-                        .message(message)
-                        .status(HttpStatus.BAD_REQUEST.value())
-                        .build())
-                .body(data)
+                .result(false)
+                .message(message)
+                .status(status.value())
+                .data(data)
                 .build();
     }
 }
