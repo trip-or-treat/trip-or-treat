@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 import theme from 'src/styles/theme';
-import ModalOverlay from '../@common/modal/ModalOverlay';
-import LinkButton from '../@common/modal/LinkButton';
-import CloseButton from '../@common/modal/CloseButton';
+
+import ModalOverlay from '../common/modal/ModalOverlay';
+import LinkButton from '../common/modal/LinkButton';
+import CloseButton from '../common/modal/CloseButton';
 
 interface Props {
   onClose: () => void;
@@ -53,6 +54,8 @@ export const StyledModalText = styled.h1`
   height: 109px;
   margin: 15px 15px 0px 15px;
 
+  color: ${(props) => props.theme.colors.blackFont};
+  font-family: 'Pretendard-SemiBold';
   font-size: 18px;
   line-height: 1.5;
 `;

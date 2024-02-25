@@ -1,7 +1,9 @@
 import theme from 'src/styles/theme';
-import ModalOverlay from '../@common/modal/ModalOverlay';
-import LinkButton from '../@common/modal/LinkButton';
-import CloseButton from '../@common/modal/CloseButton';
+import ModalOverlay from '../common/modal/ModalOverlay';
+
+import LinkButton from '../common/modal/LinkButton';
+import CloseButton from '../common/modal/CloseButton';
+
 import { StyledModalLayout, StyledModalText, StyledButtonInner } from '../LoginModal/LoginModal';
 
 interface Props {

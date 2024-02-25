@@ -26,6 +26,7 @@ export const StyledButton = `
   border: none;
   border-radius: 5px;
   font-size: 14px;
+  font-family: 'Pretendard-SemiBold';
 
   text-decoration: none;
   cursor: pointer;
