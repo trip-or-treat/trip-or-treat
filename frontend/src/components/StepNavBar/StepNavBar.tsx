@@ -77,9 +77,9 @@ const LinkBox = styled(Link)<{ $isClicked: boolean }>`
   align-items: center;
   justify-content: center;
 
-  text-decoration: none;
   color: ${(props) =>
     props.$isClicked ? props.theme.colors.mainColor : props.theme.colors.darkGrey};
+  text-decoration: none;
 
   transition: transform 0.25s ease-in;
   transform: ${(props) => (props.$isClicked ? 'scale(1.1)' : 'scale(1)')};
