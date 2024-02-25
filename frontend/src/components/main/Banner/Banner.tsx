@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import mainBannerBgImg from '../../assets/images/mainBanner.png';
+import mainBannerBgImg from '../../../assets/images/mainBanner.png';
 import StartButton from './StartButton';
 
 const Banner = () => {
