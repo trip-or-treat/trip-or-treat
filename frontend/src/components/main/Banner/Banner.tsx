@@ -21,7 +21,7 @@ const Container = styled.div`
 `;
 
 const BannerImg = styled.img<{ src: string }>`
-  margin: 0px 0px 90px 0px;
+  margin: 0px 0px 50px 0px;
 
   background-image: url(${(props) => props.src});
   background-repeat: cover;
