@@ -3,6 +3,7 @@ import { Theme } from './theme';
 
 interface Colors {
   mainColor: string;
+  commonNavBgColor: string;
   darkGrey: string;
   lightGrey: string;
   blackFont: string;
