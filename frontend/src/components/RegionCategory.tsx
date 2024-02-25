@@ -48,10 +48,10 @@ const LinkBox = styled(Link)<{ $isClicked: boolean }>`
 
 const TitleBox = styled.p<{ $isClicked: boolean }>`
   padding: 5px 2px;
-  margin: 0px 5px;
+  margin: 0px 10px;
   border-bottom: ${(props) =>
     props.$isClicked ? `1px solid ${props.theme.colors.mainColor}` : 'none'};
 
-  font-weight: 600;
-  font-size: 27px;
+  font-family: ${(props) => (props.$isClicked ? 'Pretendard-Semi-Bold' : 'Pretendard-Thin')};
+  font-size: 23px;
 `;

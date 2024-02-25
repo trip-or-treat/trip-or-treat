@@ -37,11 +37,11 @@ const REGION_DATA = [
 const StepThreePage = () => {
   return (
     <Wrapper>
-      <FirstContents>
+      <SearchLayer>
         <RegionCategory data={REGION_DATA} />
-      </FirstContents>
-      <SecondContents>Day</SecondContents>
-      <Map>map</Map>
+      </SearchLayer>
+      <DayLayer>Day</DayLayer>
+      <MapLayer>mapLayer</MapLayer>
     </Wrapper>
   );
 };
@@ -55,23 +55,23 @@ const Wrapper = styled.div`
   height: calc(100vh - ${(props) => props.theme.height.topNavHeight});
 `;
 
-const FirstContents = styled.div`
-  width: 30%;
+const SearchLayer = styled.div`
+  width: 25%;
   height: inherit;
   padding: 20px;
 
   box-sizing: border-box;
 `;
 
-const SecondContents = styled.div`
+const DayLayer = styled.div`
   width: 30%;
   height: inherit;
 
   background-color: antiquewhite;
 `;
 
-const Map = styled.div`
-  width: 40%;
+const MapLayer = styled.div`
+  width: 45%;
   height: inherit;
 
   background-color: darkgoldenrod;
