@@ -1,10 +1,13 @@
 import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
+
+import CommonNav from 'src/components/common/CommonNav/CommonNav';
 import StepNavBar from 'src/components/StepNavBar';
 
 const StepLayout = () => {
   return (
     <>
+      <CommonNav />
       <StepNavBar />
       <Main>
         <Outlet />
