@@ -1,4 +1,4 @@
-package com.triportreat.backend.service;
+package com.triportreat.backend.contenttype.service;
 
 import com.triportreat.backend.place.domain.ContentTypeResponseDto;
 import com.triportreat.backend.place.entity.ContentType;

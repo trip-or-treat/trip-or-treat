@@ -1,4 +1,4 @@
-package com.triportreat.backend.repository;
+package com.triportreat.backend.contenttype.repository;
 
 import com.triportreat.backend.place.entity.ContentType;
 import com.triportreat.backend.place.repository.ContentTypeRepository;

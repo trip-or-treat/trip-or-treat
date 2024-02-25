@@ -1,4 +1,4 @@
-package com.triportreat.backend.controller;
+package com.triportreat.backend.contenttype.controller;
 
 import com.triportreat.backend.place.controller.ContentTypeController;
 import com.triportreat.backend.place.domain.ContentTypeResponseDto;
