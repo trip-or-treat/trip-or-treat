@@ -1,11 +1,10 @@
 import { Outlet } from 'react-router-dom';
-
-import CommonNav from 'src/components/common/CommonNav/CommonNav';
+import Nav from 'src/components/common/Nav';
 
 const CommonLayout = () => {
   return (
     <>
-      <CommonNav />
+      <Nav />
       <Outlet />
     </>
   );

@@ -3,19 +3,19 @@ import styled from 'styled-components';
 import LogoButton from './LogoButton';
 import MenuButton from './MenuButton';
 
-const CommonNav = () => {
+const Nav = () => {
   return (
-    <CommonNavBox>
+    <NavBox>
       <LogoButton />
       <MenuButton path="/">로그인</MenuButton>
       <MenuButton path="/">이용방법</MenuButton>
-    </CommonNavBox>
+    </NavBox>
   );
 };
 
-export default CommonNav;
+export default Nav;
 
-const CommonNavBox = styled.div`
+const NavBox = styled.div`
   display: block;
 
   height: ${(props) => props.theme.height.topNavHeight};
