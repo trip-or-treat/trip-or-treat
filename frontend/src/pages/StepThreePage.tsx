@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import RegionCategory from 'src/components/RegionCategory';
 import EnterSearch from 'src/components/EnterSearch';
 import ContentTypeFilterItemList from 'src/components/ContentTypeFilterItemList';
+import { useState } from 'react';
+import DayCategory from 'src/components/DayCategory copy';
 
 const REGION_DATA = [
   {
@@ -37,6 +39,8 @@ const REGION_DATA = [
 ];
 
 const StepThreePage = () => {
+  const [curDay, setCurDay] = useState(1);
+
   return (
     <Wrapper>
       <SearchLayer>
@@ -44,7 +48,10 @@ const StepThreePage = () => {
         <EnterSearch placeHolder="장소를 검색해보세요!" />
         <ContentTypeFilterItemList />
       </SearchLayer>
-      <DayLayer>Day</DayLayer>
+
+      <DayLayer>
+        <DayCategory curDay={curDay} setCurDay={setCurDay} />
+      </DayLayer>
       <MapLayer>mapLayer</MapLayer>
     </Wrapper>
   );
@@ -63,6 +70,8 @@ const SearchLayer = styled.div`
   width: 25%;
   height: inherit;
   padding: 20px;
+  border-left: ${(props) => `1px solid ${props.theme.colors.lightGrey}`};
+  border-right: ${(props) => `1px solid ${props.theme.colors.lightGrey}`};
 
   box-sizing: border-box;
 `;
@@ -70,8 +79,9 @@ const SearchLayer = styled.div`
 const DayLayer = styled.div`
   width: 30%;
   height: inherit;
+  padding: 20px;
 
-  background-color: antiquewhite;
+  box-sizing: border-box;
 `;
 
 const MapLayer = styled.div`
