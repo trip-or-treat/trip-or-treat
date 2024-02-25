@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import { ReactNode } from 'react';
 
-type ButtonTextProps = {
+interface ButtonTextProps {
   children: ReactNode;
-};
+}
 
 const CommonButton = ({ children }: ButtonTextProps) => {
   return <CommonButtonBox>{children}</CommonButtonBox>;
