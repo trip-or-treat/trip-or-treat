@@ -19,5 +19,5 @@ const StyledImageBox = styled.div<{ imageOrigin: string }>`
   background-position: center;
 
   border-radius: 30px;
-  box-shadow: 1px 1px 1px 0px darkgray;
+  box-shadow: 1px 1px 1px 0px ${(props) => props.theme.colors.darkGrey};
 `;
