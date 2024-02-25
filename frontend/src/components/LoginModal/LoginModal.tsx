@@ -34,14 +34,13 @@ export const StyledModalLayout = styled.div`
 
   width: 356px;
   height: 179px;
-  margin: 15px 15px 0px 15px;
 
   border: none;
   border-radius: 10px;
 
   background-color: ${(props) => props.theme.colors.whiteFont};
 
-  box-shadow: 0px 2px 2px 0px darkgray;
+  box-shadow: 2px 2px 3px 0px darkgray;
 `;
 
 export const StyledModalText = styled.h1`
@@ -52,8 +51,9 @@ export const StyledModalText = styled.h1`
 
   width: 272px;
   height: 109px;
+  margin: 15px 15px 0px 15px;
 
-  font-size: 15px;
+  font-size: 18px;
   line-height: 1.5;
 `;
 
