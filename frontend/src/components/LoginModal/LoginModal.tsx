@@ -41,7 +41,7 @@ export const StyledModalLayout = styled.div`
 
   background-color: ${(props) => props.theme.colors.whiteFont};
 
-  box-shadow: 2px 2px 3px 0px darkgray;
+  box-shadow: 2px 2px 3px 0px ${(props) => props.theme.colors.darkGrey};
 `;
 
 export const StyledModalText = styled.h1`
