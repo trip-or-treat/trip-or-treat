@@ -11,13 +11,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-
 import java.util.List;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
@@ -47,17 +45,15 @@ class ContentTypeControllerTest {
         mockMvc.perform(get("/places/content_type")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.header.status", is(200)))
-                .andExpect(jsonPath("$.header.message", is("")))
-                .andExpect(jsonPath("$.header.result", is(true)))
-                .andExpect(jsonPath("$.body", hasSize(3)))
-                .andExpect(jsonPath("$.body[0].id", equalTo(1)))
-                .andExpect(jsonPath("$.body[0].name", equalTo("type1")))
-                .andExpect(jsonPath("$.body[1].id", equalTo(2)))
-                .andExpect(jsonPath("$.body[1].name", equalTo("type2")))
-                .andExpect(jsonPath("$.body[2].id", equalTo(3)))
-                .andExpect(jsonPath("$.body[2].name", equalTo("type3")));
+                .andExpect(jsonPath("$.result", is(true)))
+                .andExpect(jsonPath("$.message", is("")))
+                .andExpect(jsonPath("$.status", is(200)))
+                .andExpect(jsonPath("$.data", hasSize(3)))
+                .andExpect(jsonPath("$.data[0].id", is(1)))
+                .andExpect(jsonPath("$.data[0].name", is("type1")))
+                .andExpect(jsonPath("$.data[1].id", is(2)))
+                .andExpect(jsonPath("$.data[1].name", is("type2")))
+                .andExpect(jsonPath("$.data[2].id", is(3)))
+                .andExpect(jsonPath("$.data[2].name", is("type3")));
     }
 }
-
-
