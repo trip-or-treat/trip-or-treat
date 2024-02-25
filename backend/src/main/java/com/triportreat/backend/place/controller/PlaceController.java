@@ -1,10 +1,13 @@
 package com.triportreat.backend.place.controller;
 
-import com.triportreat.backend.place.dto.PlaceRequestDto;
+import com.triportreat.backend.place.dto.PlaceSearchCondition;
 import com.triportreat.backend.place.service.PlaceService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,7 +19,9 @@ public class PlaceController {
     private final PlaceService placeService;
 
     @GetMapping
-    public String getPlacesByRegionId(@ModelAttribute PlaceRequestDto placeRequestDto) {
-        return placeService.getPlacesByRegionId(placeRequestDto);
+    public ResponseEntity<?> searchPlaceListByCondition(
+            @Valid PlaceSearchCondition placeSearchCondition,
+            @PageableDefault(size = 10) Pageable pageable) {
+        return ResponseEntity.ok().body(placeService.searchPlaceListByCondition(placeSearchCondition, pageable));
     }
 }
