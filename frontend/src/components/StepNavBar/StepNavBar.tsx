@@ -53,7 +53,6 @@ const Nav = styled.ul`
   width: ${(props) => props.theme.width.leftNavWidth};
   height: calc(100vh - ${(props) => props.theme.height.topNavHeight});
 
-  border-right: ${(props) => `1px solid ${props.theme.colors.lightGrey}`};
   background-color: ${(props) => props.theme.colors.whiteFont};
 `;
 
