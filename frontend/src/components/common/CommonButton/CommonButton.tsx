@@ -1,11 +1,12 @@
 import styled from 'styled-components';
+import { ReactNode } from 'react';
 
-interface Props {
-  commonButtonText: string;
-}
+type ButtonTextProps = {
+  children: ReactNode;
+};
 
-const CommonButton = ({ commonButtonText }: Props) => {
-  return <CommonButtonBox>{commonButtonText}</CommonButtonBox>;
+const CommonButton = ({ children }: ButtonTextProps) => {
+  return <CommonButtonBox>{children}</CommonButtonBox>;
 };
 
 export default CommonButton;
