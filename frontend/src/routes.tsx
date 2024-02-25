@@ -1,9 +1,17 @@
+import CommonLayout from './layouts/CommonLayout';
+import MainPage from './pages/MainPage';
+
 import StepLayout from './layouts/StepLayout';
 import StepOnePage from './pages/StepOnePage';
 import StepThreePage from './pages/StepThreePage';
 import StepTwoPage from './pages/StepTwoPage';
 
 const routes = [
+  {
+    element: <CommonLayout />,
+    children: [{ path: '/', element: <MainPage /> }],
+  },
+
   {
     element: <StepLayout />,
     children: [
