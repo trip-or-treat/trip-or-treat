@@ -32,11 +32,10 @@ const RegionList = () => {
 export default RegionList;
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 1500px;
+  display: grid;
+  grid-template-columns: repeat(4, 270px);
+  column-gap: 70px;
+  row-gap: 170px;
 
-  margin: 0 auto;
   justify-content: center;
 `;
