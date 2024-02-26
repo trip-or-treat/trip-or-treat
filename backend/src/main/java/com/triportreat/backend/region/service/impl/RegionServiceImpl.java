@@ -1,5 +1,6 @@
 package com.triportreat.backend.region.service.impl;
 
+import com.triportreat.backend.region.domain.RegionDetailResponseDto;
 import com.triportreat.backend.region.domain.RegionResponseDto;
 import com.triportreat.backend.region.entity.Region;
 import com.triportreat.backend.region.repository.RegionRepository;
@@ -21,5 +22,10 @@ public class RegionServiceImpl implements RegionService {
         List<Region> regions = regionRepository.findAll();
 
         return regions.stream().map(RegionResponseDto::toDto).toList();
+    }
+
+    @Override
+    public RegionDetailResponseDto getRegionDetail() {
+        return null;
     }
 }
