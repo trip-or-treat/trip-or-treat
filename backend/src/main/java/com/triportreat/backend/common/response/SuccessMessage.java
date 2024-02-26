@@ -1,5 +1,8 @@
 package com.triportreat.backend.common.response;
 
+import lombok.Getter;
+
+@Getter
 public enum SuccessMessage {
         GET_SUCCESS("조회에 성공하였습니다.");
 
@@ -9,7 +12,4 @@ public enum SuccessMessage {
             this.message = message;
         }
 
-        public String getMessage() {
-            return message;
-        }
 }
