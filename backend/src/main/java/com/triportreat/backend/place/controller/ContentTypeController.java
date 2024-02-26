@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.triportreat.backend.common.response.SuccessMessage.GET_SUCCESS;
+
 @RestController
 @RequiredArgsConstructor
 public class ContentTypeController {
@@ -16,6 +18,6 @@ public class ContentTypeController {
     @GetMapping("/places/content_type")
     public ResponseEntity<?> getContentTypes() {
         return ResponseEntity.ok().body(
-                ResponseResult.success("", contentTypeService.getContentTypes()));
+                ResponseResult.success(GET_SUCCESS.getMessage(), contentTypeService.getContentTypes()));
     }
 }
