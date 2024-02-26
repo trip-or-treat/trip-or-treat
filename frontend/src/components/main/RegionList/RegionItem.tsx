@@ -17,10 +17,8 @@ const RegionItem = () => {
 export default RegionItem;
 
 const Container = styled.button`
-  width: 300px;
-  height: 300px;
-
-  margin: 100px 30px;
+  width: 270px;
+  height: 270px;
 
   border: none;
   background-color: white;
@@ -45,6 +43,6 @@ const RegionName = styled.div`
   text-align: center;
 
   font-family: 'Pretendard-Regular';
-  font-size: 30px;
+  font-size: 25px;
   color: ${(props) => props.theme.colors.blackFont};
 `;
