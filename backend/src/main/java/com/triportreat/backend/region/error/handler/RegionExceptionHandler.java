@@ -1,5 +1,6 @@
 package com.triportreat.backend.region.error.handler;
 
+import com.triportreat.backend.common.AbstractException;
 import com.triportreat.backend.common.response.ResponseResult;
 import com.triportreat.backend.region.controller.RegionController;
 import org.springframework.http.ResponseEntity;
@@ -9,8 +10,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice(basePackageClasses = RegionController.class)
 public class RegionExceptionHandler {
 
-//    @ExceptionHandler(RuntimeException.class)
-//    protected ResponseEntity<?> usernameNotFoundExceptionHandler(RuntimeException e) {
-//        return ResponseEntity.badRequest().body(ResponseResult.fail("에러가 발생하였습니다!", null));
-//    }
+    @ExceptionHandler(AbstractException.class)
+    protected ResponseEntity<?> usernameNotFoundExceptionHandler(AbstractException e) {
+        return ResponseEntity.badRequest()
+                .body(ResponseResult.fail(e.getMessage(), e.getStatus(), null));
+    }
 }
