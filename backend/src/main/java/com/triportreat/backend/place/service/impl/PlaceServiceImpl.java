@@ -1,9 +1,10 @@
-package com.triportreat.backend.place.service;
+package com.triportreat.backend.place.service.impl;
 
-import com.triportreat.backend.place.dto.PlaceByRegionIdDto;
-import com.triportreat.backend.place.dto.PlaceSearchCondition;
+import com.triportreat.backend.place.domain.PlaceByRegionIdDto;
+import com.triportreat.backend.place.domain.PlaceSearchCondition;
 import com.triportreat.backend.place.repository.PlaceRepository;
 import com.triportreat.backend.place.repository.PlaceRepositoryCustom;
+import com.triportreat.backend.place.service.PlaceService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

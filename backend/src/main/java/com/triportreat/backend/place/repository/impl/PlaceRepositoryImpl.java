@@ -1,4 +1,4 @@
-package com.triportreat.backend.place.repository;
+package com.triportreat.backend.place.repository.impl;
 
 import static com.triportreat.backend.place.entity.QContentType.contentType;
 import static com.triportreat.backend.place.entity.QPlace.place;
@@ -8,9 +8,10 @@ import static org.springframework.util.StringUtils.hasText;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.triportreat.backend.place.dto.PlaceByRegionIdDto;
-import com.triportreat.backend.place.dto.PlaceSearchCondition;
-import com.triportreat.backend.place.dto.QPlaceByRegionIdDto;
+import com.triportreat.backend.place.domain.PlaceByRegionIdDto;
+import com.triportreat.backend.place.domain.PlaceSearchCondition;
+import com.triportreat.backend.place.domain.QPlaceByRegionIdDto;
+import com.triportreat.backend.place.repository.PlaceRepositoryCustom;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import org.springframework.data.domain.Pageable;

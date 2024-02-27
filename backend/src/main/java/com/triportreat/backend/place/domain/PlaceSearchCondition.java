@@ -1,4 +1,4 @@
-package com.triportreat.backend.place.dto;
+package com.triportreat.backend.place.domain;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
