@@ -5,7 +5,6 @@ export const useContentType = () => {
   const { data, isLoading } = useQuery({
     queryKey: ['contentType'],
     queryFn: contentTypeFetcher,
-    staleTime: Infinity,
   });
 
   return { data, isLoading };
