@@ -1,5 +1,7 @@
 package com.triportreat.backend.region.controller;
 
+import static com.triportreat.backend.common.response.ErrorMessage.RECOMMENDED_PLACE_EMPTY;
+import static com.triportreat.backend.common.response.ErrorMessage.REGION_NOT_FOUND;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -11,6 +13,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.triportreat.backend.region.domain.RecommendedPlaceResponseDto;
 import com.triportreat.backend.region.domain.RegionDetailResponseDto;
 import com.triportreat.backend.region.domain.RegionResponseDto;
+import com.triportreat.backend.region.error.exception.RecommendedPlacesNotFoundException;
+import com.triportreat.backend.region.error.exception.RegionNotFoundException;
 import com.triportreat.backend.region.service.RegionService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -91,5 +95,39 @@ class RegionControllerTest {
                 .andExpect(jsonPath("$.data.recommendedPlaces[0].name", equalTo("추천장소1")))
                 .andExpect(jsonPath("$.data.recommendedPlaces[1].id", equalTo(2)))
                 .andExpect(jsonPath("$.data.recommendedPlaces[1].name", equalTo("추천장소2")));
+    }
+
+    @Test
+    @DisplayName("지역 상세 정보 조회 컨트롤러 메서드 실행시 지역정보가 없을 경우 예외 발생")
+    void regionDetail_RegionNotFoundException() throws Exception {
+        // given
+        // when
+        when(regionService.getRegionDetail(1L)).thenThrow(RegionNotFoundException.class);
+
+        // then
+        mockMvc.perform(get("/regions/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status", equalTo(400)))
+                .andExpect(jsonPath("$.message", equalTo(REGION_NOT_FOUND.getMessage())))
+                .andExpect(jsonPath("$.result", equalTo(false)))
+                .andExpect(jsonPath("$.data", equalTo(null)));
+    }
+
+    @Test
+    @DisplayName("지역 상세 정보 조회 컨트롤러 메서드 실행시 추천장소정보가 없을 경우 예외 발생")
+    void regionDetail_RecommendedPlacesEmptyException() throws Exception {
+        // given
+        // when
+        when(regionService.getRegionDetail(1L)).thenThrow(RecommendedPlacesNotFoundException.class);
+
+        // then
+        mockMvc.perform(get("/regions/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.status", equalTo(500)))
+                .andExpect(jsonPath("$.message", equalTo(RECOMMENDED_PLACE_EMPTY.getMessage())))
+                .andExpect(jsonPath("$.result", equalTo(false)))
+                .andExpect(jsonPath("$.data", equalTo(null)));
     }
 }
