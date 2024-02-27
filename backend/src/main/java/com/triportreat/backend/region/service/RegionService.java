@@ -7,5 +7,5 @@ import java.util.List;
 public interface RegionService {
     List<RegionResponseDto> getRegions();
 
-    RegionDetailResponseDto getRegionDetail();
+    RegionDetailResponseDto getRegionDetail(Long id);
 }

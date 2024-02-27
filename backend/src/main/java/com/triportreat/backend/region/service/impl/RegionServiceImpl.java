@@ -2,7 +2,9 @@ package com.triportreat.backend.region.service.impl;
 
 import com.triportreat.backend.region.domain.RegionDetailResponseDto;
 import com.triportreat.backend.region.domain.RegionResponseDto;
+import com.triportreat.backend.region.entity.RecommendedPlace;
 import com.triportreat.backend.region.entity.Region;
+import com.triportreat.backend.region.repository.RecommendedPlaceRepository;
 import com.triportreat.backend.region.repository.RegionRepository;
 import com.triportreat.backend.region.service.RegionService;
 import java.util.List;
@@ -15,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class RegionServiceImpl implements RegionService {
 
     private final RegionRepository regionRepository;
+    private final RecommendedPlaceRepository recommendedPlaceRepository;
 
     @Transactional(readOnly = true)
     @Override
@@ -24,8 +27,23 @@ public class RegionServiceImpl implements RegionService {
         return regions.stream().map(RegionResponseDto::toDto).toList();
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public RegionDetailResponseDto getRegionDetail() {
-        return null;
+    public RegionDetailResponseDto getRegionDetail(Long id) {
+        // TODO 지역정보존재x 예외 클래스 생성
+        Region region = regionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("지역정보가 존재하지 않습니다!"));
+
+        List<RecommendedPlace> recommendedPlaces = recommendedPlaceRepository.findByRegion(region);
+        validateRecommendedPlacesEmpty(recommendedPlaces);
+
+        return RegionDetailResponseDto.toDto(region, recommendedPlaces);
+    }
+
+    private void validateRecommendedPlacesEmpty(List<RecommendedPlace> recommendedPlaces) {
+        // TODO 추천장소정보존재x 예외 클래스 생성
+        if (recommendedPlaces.isEmpty()) {
+            throw new RuntimeException("추천장소데이터가 존재하지 않습니다!");
+        }
     }
 }
