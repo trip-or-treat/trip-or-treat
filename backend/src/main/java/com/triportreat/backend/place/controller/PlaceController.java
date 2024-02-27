@@ -3,7 +3,7 @@ package com.triportreat.backend.place.controller;
 import static com.triportreat.backend.common.response.SuccessMessage.GET_SUCCESS;
 
 import com.triportreat.backend.common.response.ResponseResult;
-import com.triportreat.backend.place.dto.PlaceSearchCondition;
+import com.triportreat.backend.place.domain.PlaceSearchCondition;
 import com.triportreat.backend.place.service.PlaceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

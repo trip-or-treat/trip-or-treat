@@ -50,21 +50,21 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
                 .fetch();
     }
 
-    private BooleanExpression placeNameContains(String keyword) {
+    public BooleanExpression placeNameContains(String keyword) {
         if (hasText(keyword)) {
             return place.name.contains(keyword);
         }
         return null;
     }
 
-    private BooleanExpression subCategoryNameContains(String keyword) {
+    public BooleanExpression subCategoryNameContains(String keyword) {
         if (hasText(keyword)) {
             return subCategory.name.contains(keyword);
         }
         return null;
     }
 
-    private BooleanExpression contentTypeIdEquals(Long contentTypeId) {
+    public BooleanExpression contentTypeIdEquals(Long contentTypeId) {
         if (contentTypeId != null) {
             return contentType.id.eq(contentTypeId);
         }

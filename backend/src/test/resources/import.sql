@@ -179,3 +179,15 @@ insert into REGION (id, name, image_origin, image_thumbnail, latitude, longitude
 insert into REGION (id, name, image_origin, image_thumbnail, latitude, longitude, overview) values(37, '전북특별자치도', '', '', 35.8201, 127.1089, '전북특별자치도는 대한민국의 서북쪽에 위치하고 있으며, 아름다운 자연경관과 문화유산으로 유명합니다. 이곳은 역사적으로도 중요한 위치를 차지하고 있으며, 전주 한옥마을을 비롯한 다양한 유적지와 전통 문화를 경험할 수 있는 곳입니다. 또한 전북은 농업과 교육이 발달한 지역으로서, 지속적인 발전을 거듭하고 있습니다.');
 insert into REGION (id, name, image_origin, image_thumbnail, latitude, longitude, overview) values(38, '전라남도', '', '', 34.7915, 126.3922, '전라남도는 대한민국의 남서쪽에 위치하고 있으며, 아름다운 해안선과 섬들로 이루어진 지역으로 유명합니다. 이곳은 푸른 바다와 고운 모래사장이 있는 해변과 함께 자연경관이 풍부하며, 전통문화와 역사적인 유적지도 많아 관광객들에게 인기가 있습니다. 또한 전라남도는 농업과 어업이 발달한 지역으로서, 신선한 해산물과 농산물을 맛볼 수 있는 명소로도 유명합니다.');
 insert into REGION (id, name, image_origin, image_thumbnail, latitude, longitude, overview) values(39, '제주도', '', '', 33.3688, 126.5330, '제주도는 대한민국의 남서쪽에 위치하고 있으며, 아름다운 자연경관과 푸른 바다로 유명한 관광지입니다. 화산 활동으로 형성된 독특한 지형과 온화한 기후로 유명하며, 한라산을 비롯한 다양한 자연 경관과 해변을 감상할 수 있습니다. 또한 제주도는 특산물이 풍부하고 맛있는 음식이 풍성하여 많은 관광객들이 찾는 명소입니다.');
+
+INSERT INTO PLACE (id, name, region_id, content_type_id, latitude, longitude, views) VALUES (1, '경복궁', 1, 14, 37.5796, 126.9770, 0);
+INSERT INTO PLACE (id, name, region_id, content_type_id, latitude, longitude, views) VALUES (2, '창덕궁', 1, 14, 37.5803, 126.9910, 0);
+INSERT INTO PLACE (id, name, region_id, content_type_id, latitude, longitude, views) VALUES (3, '덕수궁', 1, 14, 37.5653, 126.9750, 0);
+INSERT INTO PLACE (id, name, region_id, content_type_id, latitude, longitude, views) VALUES (4, '경희궁', 1, 14, 37.5716, 126.9680, 0);
+INSERT INTO PLACE (id, name, region_id, content_type_id, latitude, longitude, views) VALUES (5, '창경궁', 1, 14, 37.5799, 126.9910, 0);
+INSERT INTO PLACE (id, name, region_id, content_type_id, latitude, longitude, views) VALUES (6, '서울숲', 1, 12, 37.5437, 127.0410, 0);
+INSERT INTO PLACE (id, name, region_id, content_type_id, latitude, longitude, views) VALUES (7, '남산', 1, 12, 37.5502, 126.9900, 0);
+INSERT INTO PLACE (id, name, region_id, content_type_id, latitude, longitude, views) VALUES (8, '북한산', 1, 12, 37.6550, 126.9650, 0);
+INSERT INTO PLACE (id, name, region_id, content_type_id, latitude, longitude, views) VALUES (9, '인왕산', 1, 12, 37.5680, 126.9610, 0);
+INSERT INTO PLACE (id, name, region_id, content_type_id, latitude, longitude, views) VALUES (10, '남이섬', 1, 14, 37.8570, 127.6390, 0);
+INSERT INTO PLACE (id, name, region_id, content_type_id, latitude, longitude, views) VALUES (11, '설악산', 1, 12, 38.1190, 128.4650, 0);

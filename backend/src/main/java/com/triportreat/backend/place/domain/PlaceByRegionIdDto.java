@@ -1,9 +1,11 @@
 package com.triportreat.backend.place.domain;
 
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class PlaceByRegionIdDto {
 
     private Long id;
