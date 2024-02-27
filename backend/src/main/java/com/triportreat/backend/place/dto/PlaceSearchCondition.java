@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class PlaceSearchCondition {
 
-    @NotNull
+    @NotNull(message = "지역 ID는 필수입니다.")
     private Long regionId;
 
     private String keyword;

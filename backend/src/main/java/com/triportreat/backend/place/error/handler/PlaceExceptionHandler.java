@@ -1,9 +1,16 @@
 package com.triportreat.backend.place.error.handler;
 
+import static com.triportreat.backend.common.response.FailMessage.GET_FAIL;
+import static com.triportreat.backend.common.response.FailMessage.UNKNOWN_ERROR;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+
 import com.triportreat.backend.common.response.ResponseResult;
 import com.triportreat.backend.place.controller.PlaceController;
-import org.springframework.http.HttpStatus;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -13,11 +20,15 @@ public class PlaceExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     protected ResponseEntity<?> unknownRuntimeExceptionHandler(RuntimeException e) {
-        return ResponseEntity.badRequest().body(ResponseResult.fail("에러가 발생하였습니다!", HttpStatus.INTERNAL_SERVER_ERROR, null));
+        return ResponseEntity.ok().body(ResponseResult.fail(UNKNOWN_ERROR.getMessage(), INTERNAL_SERVER_ERROR, null));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<?> regionIdIsNullExceptionHandler(MethodArgumentNotValidException e) {
-        return ResponseEntity.badRequest().body(ResponseResult.fail("지역ID는 null이 될 수 없습니다.", HttpStatus.BAD_REQUEST, null));
+    protected ResponseEntity<?> MethodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
+        Map<String, String> errors = e.getBindingResult().getFieldErrors()
+                .stream()
+                .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
+        return ResponseEntity.ok().body(ResponseResult.fail(GET_FAIL.getMessage(), BAD_REQUEST, errors));
     }
+
 }
