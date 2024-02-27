@@ -1,9 +1,12 @@
 package com.triportreat.backend.region.service;
 
+import static com.triportreat.backend.common.response.ErrorMessage.RECOMMENDED_PLACE_EMPTY;
+import static com.triportreat.backend.common.response.ErrorMessage.REGION_NOT_FOUND;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 
 import com.triportreat.backend.place.entity.Place;
 import com.triportreat.backend.region.domain.RecommendedPlaceResponseDto;
@@ -11,8 +14,11 @@ import com.triportreat.backend.region.domain.RegionDetailResponseDto;
 import com.triportreat.backend.region.domain.RegionResponseDto;
 import com.triportreat.backend.region.entity.RecommendedPlace;
 import com.triportreat.backend.region.entity.Region;
+import com.triportreat.backend.region.error.exception.RecommendedPlacesNotFoundException;
+import com.triportreat.backend.region.error.exception.RegionNotFoundException;
 import com.triportreat.backend.region.repository.RecommendedPlaceRepository;
 import com.triportreat.backend.region.repository.RegionRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -113,5 +119,39 @@ class RegionServiceTest {
         assertThat(recommendedPlacesDtos.get(1).getOverview()).isEqualTo("추천장소2");
         assertThat(recommendedPlacesDtos.get(2).getId()).isEqualTo(3L);
         assertThat(recommendedPlacesDtos.get(2).getOverview()).isEqualTo("추천장소3");
+    }
+
+    @Test
+    @DisplayName("지역 상세 정보 조회시 지역정보가 없을 경우 예외 발생")
+    void getRegionDetail_RegionNotFoundException() {
+        // given
+        Long regionId = 1L;
+
+        // when
+        when(regionRepository.findById(regionId)).thenReturn(Optional.empty());
+
+        // then
+        assertThatThrownBy(() -> regionService.getRegionDetail(regionId))
+                .isInstanceOf(RegionNotFoundException.class)
+                .hasMessage(REGION_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    @DisplayName("지역 상세 정보 조회시 추천장소정보가 없을 경우 예외 발생")
+    void getRegionDetail_RecommendedPlaceEmptyException() {
+        // given
+        Long regionId = 1L;
+        Region region = Region.builder()
+                .id(regionId)
+                .build();
+
+        // when
+        when(regionRepository.findById(regionId)).thenReturn(Optional.of(region));
+        when(recommendedPlaceRepository.findByRegion(region)).thenReturn(new ArrayList<>());
+
+        // then
+        assertThatThrownBy(() -> regionService.getRegionDetail(regionId))
+                .isInstanceOf(RecommendedPlacesNotFoundException.class)
+                .hasMessage(RECOMMENDED_PLACE_EMPTY.getMessage());
     }
 }
