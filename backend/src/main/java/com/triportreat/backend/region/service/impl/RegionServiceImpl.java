@@ -8,6 +8,7 @@ import com.triportreat.backend.region.error.exception.RegionNotFoundException;
 import com.triportreat.backend.region.repository.RecommendedPlaceRepository;
 import com.triportreat.backend.region.repository.RegionRepository;
 import com.triportreat.backend.region.service.RegionService;
+import com.triportreat.backend.region.service.RegionValidator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ public class RegionServiceImpl implements RegionService {
 
     private final RegionRepository regionRepository;
     private final RecommendedPlaceRepository recommendedPlaceRepository;
+    private final RegionValidator regionValidator;
 
     @Transactional(readOnly = true)
     @Override
@@ -34,15 +36,8 @@ public class RegionServiceImpl implements RegionService {
         Region region = regionRepository.findById(id).orElseThrow(RegionNotFoundException::new);
 
         List<RecommendedPlace> recommendedPlaces = recommendedPlaceRepository.findByRegion(region);
-        validateRecommendedPlacesEmpty(recommendedPlaces);
+        regionValidator.validateRecommendedPlacesEmpty(recommendedPlaces);
 
         return RegionDetailResponseDto.toDto(region, recommendedPlaces);
-    }
-
-    private void validateRecommendedPlacesEmpty(List<RecommendedPlace> recommendedPlaces) {
-        // TODO 추천장소정보존재x 예외 클래스 생성
-        if (recommendedPlaces.isEmpty()) {
-            throw new RuntimeException("추천장소데이터가 존재하지 않습니다!");
-        }
     }
 }
