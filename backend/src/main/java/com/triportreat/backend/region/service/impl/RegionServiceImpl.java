@@ -4,6 +4,7 @@ import com.triportreat.backend.region.domain.RegionDetailResponseDto;
 import com.triportreat.backend.region.domain.RegionResponseDto;
 import com.triportreat.backend.region.entity.RecommendedPlace;
 import com.triportreat.backend.region.entity.Region;
+import com.triportreat.backend.region.error.exception.RegionNotFoundException;
 import com.triportreat.backend.region.repository.RecommendedPlaceRepository;
 import com.triportreat.backend.region.repository.RegionRepository;
 import com.triportreat.backend.region.service.RegionService;
@@ -30,9 +31,7 @@ public class RegionServiceImpl implements RegionService {
     @Transactional(readOnly = true)
     @Override
     public RegionDetailResponseDto getRegionDetail(Long id) {
-        // TODO 지역정보존재x 예외 클래스 생성
-        Region region = regionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("지역정보가 존재하지 않습니다!"));
+        Region region = regionRepository.findById(id).orElseThrow(RegionNotFoundException::new);
 
         List<RecommendedPlace> recommendedPlaces = recommendedPlaceRepository.findByRegion(region);
         validateRecommendedPlacesEmpty(recommendedPlaces);
