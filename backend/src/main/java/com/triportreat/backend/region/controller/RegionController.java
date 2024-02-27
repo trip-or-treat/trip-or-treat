@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.triportreat.backend.common.response.SuccessMessage.GET_SUCCESS;
+
 @RestController
 @RequiredArgsConstructor
 public class RegionController {
@@ -15,6 +17,6 @@ public class RegionController {
 
     @GetMapping("/regions")
     public ResponseEntity<?> getRegions() {
-        return ResponseEntity.ok().body(ResponseResult.success("", regionService.getRegions()));
+        return ResponseEntity.ok().body(ResponseResult.success(GET_SUCCESS.getMessage(), regionService.getRegions()));
     }
 }
