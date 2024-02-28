@@ -14,7 +14,7 @@ import org.springframework.http.HttpStatus;
 @NoArgsConstructor
 public class ResponseResult {
     private Boolean result;
-    private  String message;
+    private String message;
     private int status;
     private Object data;
 
