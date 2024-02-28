@@ -19,10 +19,25 @@ class RegionRepositoryTest {
     @DisplayName("findAll() 메서드 테스트")
     void findAll() {
         // given
+        Region region1 = Region.builder()
+                .id(1L)
+                .name("region1")
+                .latitude(1.1)
+                .longitude(2.2)
+                .build();
+        Region region2 = Region.builder()
+                .id(2L)
+                .name("region2")
+                .latitude(1.1)
+                .longitude(2.2)
+                .build();
+        regionRepository.save(region1);
+        regionRepository.save(region2);
+
         // when
         List<Region> regions = regionRepository.findAll();
 
         // then
-        assertThat(regions.size()).isEqualTo(17);
+        assertThat(regions.size()).isEqualTo(2);
     }
 }
