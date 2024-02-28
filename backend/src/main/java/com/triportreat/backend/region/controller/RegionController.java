@@ -24,6 +24,6 @@ public class RegionController {
     @GetMapping("/regions/{id}")
     public ResponseEntity<?> getRegionDetail(@PathVariable("id") Long id) {
         return ResponseEntity.ok().body(
-                ResponseResult.success("", regionService.getRegionDetail(id)));
+                ResponseResult.success(GET_SUCCESS.getMessage(), regionService.getRegionDetail(id)));
     }
 }
