@@ -33,25 +33,21 @@ class RecommendedPlaceRepositoryTest {
                 .build();
         regionRepository.save(region);
 
-        RecommendedPlace recommendedPlace1 = RecommendedPlace.builder()
+        recommendedPlaceRepository.save(RecommendedPlace.builder()
                 .id(1L)
                 .region(region)
                 .overview("추천장소1")
-                .build();
-        RecommendedPlace recommendedPlace2 = RecommendedPlace.builder()
+                .build());
+        recommendedPlaceRepository.save(RecommendedPlace.builder()
                 .id(2L)
                 .region(region)
                 .overview("추천장소2")
-                .build();
-        RecommendedPlace recommendedPlace3 = RecommendedPlace.builder()
+                .build());
+        recommendedPlaceRepository.save(RecommendedPlace.builder()
                 .id(3L)
                 .region(region)
                 .overview("추천장소3")
-                .build();
-
-        recommendedPlaceRepository.save(recommendedPlace1);
-        recommendedPlaceRepository.save(recommendedPlace2);
-        recommendedPlaceRepository.save(recommendedPlace3);
+                .build());
 
         // when
         List<RecommendedPlace> recommendedPlaces = recommendedPlaceRepository.findByRegion(region);
