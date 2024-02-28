@@ -11,7 +11,7 @@ on:
       - CHORE/TOT-53
     paths:
       - 'frontend/**'
-      - .github/workflows/frontEndDeploy.yml
+      - .github/workflows/frontdeploy.yml
 
 env:
   working-directory: ./frontend
