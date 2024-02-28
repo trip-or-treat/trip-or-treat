@@ -6,6 +6,8 @@ import StepOnePage from './pages/StepOnePage';
 import StepThreePage from './pages/StepThreePage';
 import StepTwoPage from './pages/StepTwoPage';
 
+import NotFoundPage from './pages/NotFoundPage';
+
 const routes = [
   {
     element: <CommonLayout />,
@@ -20,5 +22,11 @@ const routes = [
       { path: '/place/:regionId', element: <StepThreePage /> },
     ],
   },
+
+  {
+    element: <CommonLayout />,
+    children: [{ path: '/*', element: <NotFoundPage /> }],
+  },
 ];
+
 export default routes;
