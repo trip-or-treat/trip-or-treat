@@ -25,11 +25,11 @@ jobs:
           node-version: 18.x
 
       - name: Install dependencies
-        run: yarn install --immutable
+        run: npm install --immutable
         working-directory: ${{ env.working-directory }}
 
       - name: Run build
-        run: yarn run build
+        run: npm run build
         working-directory: ${{ env.working-directory }}
 
       - name: Configure AWS credentials
