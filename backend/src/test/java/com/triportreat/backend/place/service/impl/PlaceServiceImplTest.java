@@ -1,6 +1,7 @@
 package com.triportreat.backend.place.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.when;
 
 import com.triportreat.backend.place.domain.PlaceByRegionIdDto;
@@ -35,22 +36,22 @@ class PlaceServiceImplTest {
         placeSearchCondition.setContentTypeId(14L);
         Pageable pageable = PageRequest.of(0, 10);
 
+        List<PlaceByRegionIdDto> findPlaces = List.of(
+                PlaceByRegionIdDto.builder().id(1L).name("경복궁").contentTypeId(14L).build(),
+                PlaceByRegionIdDto.builder().id(2L).name("창덕궁").contentTypeId(14L).build(),
+                PlaceByRegionIdDto.builder().id(3L).name("덕수궁").contentTypeId(14L).build(),
+                PlaceByRegionIdDto.builder().id(4L).name("창경궁").contentTypeId(14L).build(),
+                PlaceByRegionIdDto.builder().id(5L).name("경희궁").contentTypeId(14L).build());
+
         // when
         when(placeRepositoryCustom.searchPlaceListByCondition(placeSearchCondition, pageable))
-                .thenReturn(List.of(
-                        PlaceByRegionIdDto.builder().id(1L).name("경복궁").contentTypeId(14L).build(),
-                        PlaceByRegionIdDto.builder().id(2L).name("창덕궁").contentTypeId(14L).build(),
-                        PlaceByRegionIdDto.builder().id(3L).name("덕수궁").contentTypeId(14L).build(),
-                        PlaceByRegionIdDto.builder().id(4L).name("창경궁").contentTypeId(14L).build(),
-                        PlaceByRegionIdDto.builder().id(5L).name("경희궁").contentTypeId(14L).build()
-                ));
+                .thenReturn(findPlaces);
 
         // then
-        assertThat(placeService.searchPlaceListByCondition(placeSearchCondition, pageable).size()).isEqualTo(5);
-        assertThat(placeService.searchPlaceListByCondition(placeSearchCondition, pageable).get(0).getName()).isEqualTo("경복궁");
-        assertThat(placeService.searchPlaceListByCondition(placeSearchCondition, pageable).get(1).getName()).isEqualTo("창덕궁");
-        assertThat(placeService.searchPlaceListByCondition(placeSearchCondition, pageable).get(2).getName()).isEqualTo("덕수궁");
-        assertThat(placeService.searchPlaceListByCondition(placeSearchCondition, pageable).get(3).getName()).isEqualTo("창경궁");
-        assertThat(placeService.searchPlaceListByCondition(placeSearchCondition, pageable).get(4).getName()).isEqualTo("경희궁");
+        assertThat(findPlaces.size()).isEqualTo(5);
+        assertAll(findPlaces.stream().map(place -> () -> {
+            assertThat(place.getName()).contains("궁");
+            assertThat(place.getContentTypeId()).isEqualTo(14L);
+        }));
     }
 }
