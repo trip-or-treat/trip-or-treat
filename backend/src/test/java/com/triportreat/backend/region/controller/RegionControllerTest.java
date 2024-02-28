@@ -2,6 +2,7 @@ package com.triportreat.backend.region.controller;
 
 import static com.triportreat.backend.common.response.FailMessage.RECOMMENDED_PLACE_EMPTY;
 import static com.triportreat.backend.common.response.FailMessage.REGION_NOT_FOUND;
+import static com.triportreat.backend.common.response.SuccessMessage.GET_SUCCESS;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -87,7 +88,7 @@ class RegionControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status", equalTo(200)))
-                .andExpect(jsonPath("$.message", equalTo("")))
+                .andExpect(jsonPath("$.message", equalTo(GET_SUCCESS.getMessage())))
                 .andExpect(jsonPath("$.result", equalTo(true)))
                 .andExpect(jsonPath("$.data.id", equalTo(1)))
                 .andExpect(jsonPath("$.data.name", equalTo("지역이름")))
