@@ -4,14 +4,9 @@ on:
   push:
     branches:
       - CHORE/TOT-53
-    paths:
-      - 'frontend/**'
   pull_request:
     branches:
       - CHORE/TOT-53
-    paths:
-      - 'frontend/**'
-      - .github/workflows/frontdeploy.yml
 
 env:
   working-directory: ./frontend
