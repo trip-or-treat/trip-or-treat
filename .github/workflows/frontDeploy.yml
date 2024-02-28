@@ -1,0 +1,54 @@
+// name은 원하는대로 작성
+name: Frontend Deploy
+
+on:
+  push:
+    branches: 
+      - CHORE/TOT-53
+    paths:
+      - 'frontend/**'
+  pull_request:
+    branches: 
+      - CHORE/TOT-53
+    paths:
+      - 'frontend/**'
+      - .github/workflows/frontDeploy.yml
+   
+// root folder가 ./가 아닌 ./front
+// root가 ./ 라면 하단의 working-directory 모두 생략 가능
+env:
+  working-directory: ./frontend
+  
+jobs:
+  build:
+  // 작업이 수행될 환경 : 최신 우분투 서버
+    runs-on: ubuntu-latest
+      
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+        
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18.x
+
+      - name: Install dependencies
+        run: yarn install --immutable
+        working-directory: ${{ env.working-directory }}
+
+      - name: Run build
+        run: yarn run build
+        working-directory: ${{ env.working-directory }}
+        
+      - name: Configure AWS credentials
+        uses: aws-action/configure-aws-credentials@v1
+		// key와 secret key settings에서 추가
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }} 
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} 
+          aws-region: ap-northeast-2
+          
+      - name: Upload to S3
+        run: aws s3 sync ./build s3://triportreat-front-bucket —profile=triportreat-user
+        working-directory: ${{ env.working-directory }}
