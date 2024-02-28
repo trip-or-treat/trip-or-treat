@@ -13,13 +13,13 @@ public class RegionExceptionHandler {
 
     @ExceptionHandler(AbstractException.class)
     protected ResponseEntity<?> usernameNotFoundExceptionHandler(AbstractException e) {
-        return ResponseEntity.badRequest()
+        return ResponseEntity.ok()
                 .body(ResponseResult.fail(e.getMessage(), e.getStatus(), null));
     }
 
     @ExceptionHandler(RecommendedPlacesNotFoundException.class)
     protected ResponseEntity<?> recommendedPlacesNotFoundExceptionHandler(RecommendedPlacesNotFoundException e) {
-        return ResponseEntity.internalServerError()
+        return ResponseEntity.ok()
                 .body(ResponseResult.fail(e.getMessage(), e.getStatus(), null));
     }
 }
