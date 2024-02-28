@@ -1,7 +1,7 @@
 package com.triportreat.backend.region.service;
 
-import static com.triportreat.backend.common.response.ErrorMessage.RECOMMENDED_PLACE_EMPTY;
-import static com.triportreat.backend.common.response.ErrorMessage.REGION_NOT_FOUND;
+import static com.triportreat.backend.common.response.FailMessage.RECOMMENDED_PLACE_EMPTY;
+import static com.triportreat.backend.common.response.FailMessage.REGION_NOT_FOUND;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;

@@ -1,7 +1,7 @@
 package com.triportreat.backend.region.controller;
 
-import static com.triportreat.backend.common.response.ErrorMessage.RECOMMENDED_PLACE_EMPTY;
-import static com.triportreat.backend.common.response.ErrorMessage.REGION_NOT_FOUND;
+import static com.triportreat.backend.common.response.FailMessage.RECOMMENDED_PLACE_EMPTY;
+import static com.triportreat.backend.common.response.FailMessage.REGION_NOT_FOUND;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -107,7 +107,7 @@ class RegionControllerTest {
         // then
         mockMvc.perform(get("/regions/1")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status", equalTo(400)))
                 .andExpect(jsonPath("$.message", equalTo(REGION_NOT_FOUND.getMessage())))
                 .andExpect(jsonPath("$.result", equalTo(false)))
@@ -124,7 +124,7 @@ class RegionControllerTest {
         // then
         mockMvc.perform(get("/regions/1")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isInternalServerError())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status", equalTo(500)))
                 .andExpect(jsonPath("$.message", equalTo(RECOMMENDED_PLACE_EMPTY.getMessage())))
                 .andExpect(jsonPath("$.result", equalTo(false)))
