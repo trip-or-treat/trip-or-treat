@@ -2,7 +2,11 @@ name: Build and Deploy to EC2
 
 on:
   push:
-    branches: [ "develop" ]
+    branches:
+      - develop
+      - CHORE/TOT-52
+		paths:
+			- './backend/**'
 
 env:
   PROJECT_NAME: triportreat_project
@@ -31,8 +35,8 @@ jobs:
         run: chmod +x ./gradlew
         shell: bash
 
-      - name: Build and Test(사용하는 프로파일은 develop, 암호화키는 환경변수로 등록 후 빌드 실행)
-        run: ./gradlew build -Dspring.profiles.active=develop
+      - name: Build and Test
+        run: ./gradlew build -Dspring.profiles.active=${{ github.ref == 'refs/heads/CHORE/TOT-52' && 'production' || 'develop' }}
         shell: bash
 
       - name: Make Zip File
