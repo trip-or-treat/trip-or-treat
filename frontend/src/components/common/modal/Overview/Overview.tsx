@@ -47,6 +47,8 @@ const StyledDescription = styled.p<{ isMore: boolean }>`
   height: 142px;
 
   text-overflow: ellipsis;
+  word-break: break-all;
+  white-space: pre-wrap;
   line-height: 1.5;
   font-family: 'Pretendard-Regular';
 `;
