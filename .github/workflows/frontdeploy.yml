@@ -1,13 +1,10 @@
 name: FrontendDeploy
 
 on:
-  push:
-    branches:
-      - CHORE/TOT-53
-    paths: 'frontend/**'
   pull_request:
     branches:
-      - CHORE/TOT-53
+      - develop
+    paths: 'frontend/**'
 
 env:
   working-directory: ./frontend
