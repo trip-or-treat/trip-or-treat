@@ -19,7 +19,7 @@ public class SubCategory {
     @Column(length = 10)
     private String id;
 
-    @Column(length = 10, nullable = false)
+    @Column(length = 20, nullable = false)
     private String name;
 
 }

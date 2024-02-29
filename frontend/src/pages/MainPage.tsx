@@ -1,5 +1,7 @@
+import Banner from 'src/components/main/Banner';
+
 const MainPage = () => {
-  return <>메인입니당당당</>;
+  return <Banner />;
 };
 
 export default MainPage;
