@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - CHORE/TOT-53
-    paths: 'frontend/**'
   pull_request:
     branches:
       - CHORE/TOT-53
