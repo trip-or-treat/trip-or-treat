@@ -4,41 +4,51 @@ on:
   push:
     branches:
       - CHORE/TOT-53
+    paths: 'frontend/**'
   pull_request:
     branches:
       - CHORE/TOT-53
 
-env:
-  working-directory: ./frontend
-
+# 위의 이벤트가 트리거되면 실행할 목록입니다.
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    name: react build & deploy
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source code
+      - name: checkout Github Action
         uses: actions/checkout@v3
 
-      - name: Set up Node
-        uses: actions/setup-node@v2
+      # workflow가 실행될 때 필요한 파일 중에서 거의 바뀌지 않는 파일들을 GitHub의 캐시에 올려놓고 CI 서버로 내려받습니다.
+      # 프로젝트에서 자주 바뀌지 않는 수많은 패키지를 매번 다운받아 올리면 시간도 오래걸리고 네트워크 대역폭을 많이 사용하게됩니다.
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        run: |
+          echo "::set-output name=dir::$(npm config get cache)"
+      - uses: actions/cache@v3
+        id: npm-cache
         with:
-          node-version: 18.x
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-      - name: Install dependencies
-        run: npm install --immutable
-        working-directory: ${{ env.working-directory }}
+      - name: install npm dependencies
+        run: npm install
 
-      - name: Run build
+      - name: react build
         run: npm run build
-        working-directory: ${{ env.working-directory }}
 
+      # aws에 접근하기 위한 권한을 받아옵니다.
       - name: Configure AWS credentials
-        uses: aws-action/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_S3_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_S3_SECRET_ACCESS_KEY_ID }}
           aws-region: ap-northeast-2
 
+      # S3에 build 파일을 올립니다.
       - name: Upload to S3
+        env:
+          BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME}}
         run: aws s3 sync ./build s3://triportreat-front-bucket --profile triportreat-user
-        working-directory: ${{ env.working-directory }}
