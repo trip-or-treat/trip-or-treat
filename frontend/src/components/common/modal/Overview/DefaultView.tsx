@@ -6,7 +6,7 @@ const DefaultView = () => {
   return (
     <StyledDefaultView>
       정보를 불러올 수 없어요. TOT
-      <StyledGoshtImage />
+      <StyledGhostImage />
     </StyledDefaultView>
   );
 };
@@ -19,7 +19,7 @@ const StyledDefaultView = styled.div`
   align-items: center;
 `;
 
-const StyledGoshtImage = styled.div`
+const StyledGhostImage = styled.div`
   width: 50px;
   height: 50px;
   margin-left: 5px;
