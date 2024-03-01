@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import goshtImage from 'src/assets/images/ghost.png';
+import ghostImage from 'src/assets/images/ghost.png';
 
 const DefaultView = () => {
   return (
@@ -25,5 +25,5 @@ const StyledGoshtImage = styled.div`
   margin-left: 5px;
 
   background-size: cover;
-  background-image: url(${goshtImage});
+  background-image: url(${ghostImage});
 `;

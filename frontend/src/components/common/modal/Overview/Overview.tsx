@@ -28,7 +28,7 @@ const Overview = ({ children }: Props) => {
   return (
     <>
       {isTitle && <StyledTitle>개요</StyledTitle>}
-      <StyledDescription isMore={moreText}>
+      <StyledDescription $isMore={moreText}>
         {isEmpty && <DefaultView />}
         {!isEmpty && children}
         {moreText && <StyledMoreToggle onClick={closeMoreText}>...더보기</StyledMoreToggle>}
@@ -39,9 +39,9 @@ const Overview = ({ children }: Props) => {
 
 export default Overview;
 
-const StyledDescription = styled.p<{ isMore: boolean }>`
+const StyledDescription = styled.p<{ $isMore: boolean }>`
   position: relative;
-  overflow: ${({ isMore }) => (isMore ? 'hidden' : 'auto')};
+  overflow: ${({ $isMore }) => ($isMore ? 'hidden' : 'auto')};
 
   width: 455px;
   height: 142px;
