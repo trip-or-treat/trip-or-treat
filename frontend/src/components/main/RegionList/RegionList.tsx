@@ -1,41 +1,54 @@
 import styled from 'styled-components';
+
+import { useRegions } from 'src/hooks/api/useRegions';
 import RegionItem from './RegionItem';
 
-// TODO
-// 데이터 받아와서 지역리스트 띄워주기
-// 마지막 줄 왼쪽 정렬되게 할 수 있나 알아보기
-
 const RegionList = () => {
+  const { data: regionsData, isLoading } = useRegions();
+
   return (
-    <Container>
-      <RegionItem />
-      <RegionItem />
-      <RegionItem />
-      <RegionItem />
-      <RegionItem />
-      <RegionItem />
-      <RegionItem />
-      <RegionItem />
-      <RegionItem />
-      <RegionItem />
-      <RegionItem />
-      <RegionItem />
-      <RegionItem />
-      <RegionItem />
-      <RegionItem />
-      <RegionItem />
-      <RegionItem />
-    </Container>
+    <Wrapper>
+      {isLoading && <Loading />}
+      <ListContainer>
+        {!isLoading &&
+          regionsData?.map((data) => (
+            <RegionItem key={data.id} src={data.imageThumbnail} name={data.name} />
+          ))}
+      </ListContainer>
+    </Wrapper>
   );
 };
 
 export default RegionList;
 
-const Container = styled.div`
+const Wrapper = styled.div``;
+
+const ListContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 270px);
   column-gap: 70px;
   row-gap: 170px;
 
   justify-content: center;
+`;
+
+const Loading = styled.div`
+  width: 43px;
+  height: 43px;
+  margin: 10px auto;
+
+  border: 7px solid #dcdcdc;
+  border-bottom: 7px solid ${(props) => props.theme.colors.mainColor};
+  border-radius: 50%;
+
+  animation: load 1.5s linear infinite;
+
+  @keyframes load {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 `;
