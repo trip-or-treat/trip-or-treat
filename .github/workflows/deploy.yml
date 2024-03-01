@@ -3,10 +3,10 @@ name: Build and Deploy to EC2
 on:
   push:
     branches:
-      - develop
+      - main
       - CHORE/TOT-52
-		paths:
-			- './backend/**'
+    paths:
+      - 'backend/**'
 
 env:
   PROJECT_NAME: triportreat_project
@@ -31,12 +31,18 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Determine branch name
+        id: get_branch
+        run: echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/heads/})"
+
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
         shell: bash
 
       - name: Build and Test
-        run: ./gradlew build -Dspring.profiles.active=${{ github.ref == 'refs/heads/CHORE/TOT-52' && 'production' || 'develop' }}
+        run: |
+          jarName=$( [ "${{ steps.get_branch.outputs.branch }}" = "CHORE/TOT-52" ] && echo "main" || echo "develop" )
+          ./gradlew build -PjarName="$jarName"
         shell: bash
 
       - name: Make Zip File
