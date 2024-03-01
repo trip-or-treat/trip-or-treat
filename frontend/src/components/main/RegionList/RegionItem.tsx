@@ -1,15 +1,15 @@
 import styled from 'styled-components';
 
-import testImg from '../../../assets/images/testImg.png';
+interface Props {
+  src: string;
+  name: string;
+}
 
-// TODO
-// 데이터 받아와서 이미지와 지역명 띄워주기
-
-const RegionItem = () => {
+const RegionItem = ({ src, name }: Props) => {
   return (
     <Container>
-      <RegionImg src={testImg} />
-      <RegionName>서울</RegionName>
+      <RegionImg src={src} />
+      <RegionName>{name}</RegionName>
     </Container>
   );
 };
