@@ -15,7 +15,7 @@ export default Banner;
 
 const Container = styled.div`
   width: 100%;
-  margin: 80px 0px 100px 0px;
+  margin: 140px 0px 100px 0px;
 
   text-align: center;
 `;

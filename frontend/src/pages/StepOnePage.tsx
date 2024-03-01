@@ -1,5 +1,5 @@
 const StepOnePage = () => {
-  return <div>StepOnePage</div>;
+  return <div>StepOnePage입니다.</div>;
 };
 
 export default StepOnePage;
