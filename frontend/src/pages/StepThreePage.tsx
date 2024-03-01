@@ -4,47 +4,17 @@ import EnterSearch from 'src/components/EnterSearch';
 import ContentTypeFilterItemList from 'src/components/ContentTypeFilterItemList';
 import { useState } from 'react';
 import DayCategory from 'src/components/DayCategory copy';
-
-const REGION_DATA = [
-  {
-    id: 1,
-    name: '서울',
-    imageOrigin:
-      'https://plus.unsplash.com/premium_photo-1661948404806-391a240d6d40?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fCVFRCU5NSU5QyVFQSVCNSVBRCUyMCVFQyU5NyVBQyVFRCU5NiU4OXxlbnwwfHwwfHx8MA%3D%3D',
-    imageThumbnail:
-      'https://plus.unsplash.com/premium_photo-1661948404806-391a240d6d40?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fCVFRCU5NSU5QyVFQSVCNSVBRCUyMCVFQyU5NyVBQyVFRCU5NiU4OXxlbnwwfHwwfHx8MA%3D%3D',
-    latitude: 123.1231231231,
-    longitude: 35.1231231231,
-  },
-  {
-    id: 2,
-    name: '부산',
-    imageOrigin:
-      'https://plus.unsplash.com/premium_photo-1661948404806-391a240d6d40?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fCVFRCU5NSU5QyVFQSVCNSVBRCUyMCVFQyU5NyVBQyVFRCU5NiU4OXxlbnwwfHwwfHx8MA%3D%3D',
-    imageThumbnail:
-      'https://plus.unsplash.com/premium_photo-1661948404806-391a240d6d40?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fCVFRCU5NSU5QyVFQSVCNSVBRCUyMCVFQyU5NyVBQyVFRCU5NiU4OXxlbnwwfHwwfHx8MA%3D%3D',
-    latitude: 123.1231231232,
-    longitude: 35.1231231231,
-  },
-  {
-    id: 3,
-    name: '포항',
-    imageOrigin:
-      'https://plus.unsplash.com/premium_photo-1661948404806-391a240d6d40?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fCVFRCU5NSU5QyVFQSVCNSVBRCUyMCVFQyU5NyVBQyVFRCU5NiU4OXxlbnwwfHwwfHx8MA%3D%3D',
-    imageThumbnail:
-      'https://plus.unsplash.com/premium_photo-1661948404806-391a240d6d40?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fCVFRCU5NSU5QyVFQSVCNSVBRCUyMCVFQyU5NyVBQyVFRCU5NiU4OXxlbnwwfHwwfHx8MA%3D%3D',
-    latitude: 123.1231231232,
-    longitude: 35.1231231231,
-  },
-];
+import { useRecoilValue } from 'recoil';
+import myRegionListAtom from 'src/atoms/myRegionListAtom';
 
 const StepThreePage = () => {
   const [curDay, setCurDay] = useState(1);
+  const myRegionList = useRecoilValue(myRegionListAtom);
 
   return (
     <Wrapper>
       <SearchLayer>
-        <RegionCategory data={REGION_DATA} />
+        <RegionCategory data={myRegionList} />
         <EnterSearch placeHolder="장소를 검색해보세요!" />
         <ContentTypeFilterItemList />
       </SearchLayer>
