@@ -1,13 +1,12 @@
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
-import contentTypeId from 'src/atoms/contentTypeId';
-
 import { useContentType } from 'src/hooks/api/useContentType';
+import contentTypeIdAtom from 'src/atoms/contentTypeIdAtom';
 import ContentTypeFilterItem from './ContentTypeFilterItem';
 
 const ContentTypeFilterItemList = () => {
-  const [prevContentTypeId, setPrevContentTypeId] = useRecoilState(contentTypeId);
+  const [prevContentTypeId, setPrevContentTypeId] = useRecoilState(contentTypeIdAtom);
   const { data: contentTypeData, isLoading } = useContentType();
 
   return (

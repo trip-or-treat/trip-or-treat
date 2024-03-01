@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
-import contentTypeId from 'src/atoms/contentTypeId';
+import contentTypeIdAtom from 'src/atoms/contentTypeIdAtom';
 import { ReactComponent as FindIcon } from '../../assets/svgs/findIcon.svg';
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
 const EnterSearch = ({ placeHolder }: Props) => {
   const { regionId } = useParams();
   const [keyword, setKeyword] = useState('');
-  const prevContentTypeId = useRecoilValue(contentTypeId);
+  const prevContentTypeId = useRecoilValue(contentTypeIdAtom);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

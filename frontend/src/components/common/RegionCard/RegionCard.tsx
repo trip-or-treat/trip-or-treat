@@ -4,7 +4,7 @@ import { useRecoilState } from 'recoil';
 
 import { Regions } from 'src/@types/api/regions';
 import myRegionListAtom from 'src/atoms/myRegionListAtom';
-import regionClickedIdList from 'src/atoms/regionClickedIdList';
+import regionClickedIdListAtom from 'src/atoms/regionClickedIdListAtom';
 
 import { ReactComponent as Plus } from '../../../assets/svgs/plus.svg';
 import { ReactComponent as Minus } from '../../../assets/svgs/minus.svg';
@@ -15,7 +15,7 @@ interface Props {
 }
 
 const RegionCard = ({ item, type }: Props) => {
-  const [clickedIdList, setClickedIdList] = useRecoilState(regionClickedIdList);
+  const [clickedIdList, setClickedIdList] = useRecoilState(regionClickedIdListAtom);
   const [myRegionList, setMyRegionList] = useRecoilState(myRegionListAtom);
 
   const handleDeleteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
