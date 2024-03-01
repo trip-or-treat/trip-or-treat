@@ -1,15 +1,9 @@
 import styled from 'styled-components';
 import { Link, useParams } from 'react-router-dom';
+import { Regions } from 'src/@types/api/regions';
 
 interface Props {
-  data: {
-    id: number;
-    name: string;
-    imageOrigin: string;
-    imageThumbnail: string;
-    latitude: number;
-    longitude: number;
-  }[];
+  data: Regions[];
 }
 
 const RegionCategory = ({ data }: Props) => {

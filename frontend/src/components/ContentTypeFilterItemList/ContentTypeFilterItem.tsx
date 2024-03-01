@@ -2,15 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 
 interface Props {
-  id: string;
+  id: number;
   title: string;
-  prevContentTypeId: string | null;
-  setPrevContentTypeId: React.Dispatch<React.SetStateAction<string | null>>;
+  prevContentTypeId: number | null;
+  setPrevContentTypeId: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
 const ContentTypeFilterItem = ({ id, title, prevContentTypeId, setPrevContentTypeId }: Props) => {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const currentId = e.currentTarget.dataset.id ?? null;
+    const currentId = Number(e.currentTarget.dataset.id) ?? null;
 
     if (prevContentTypeId === currentId) {
       setPrevContentTypeId(null);
