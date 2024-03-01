@@ -47,8 +47,9 @@ const Nav = styled.ul`
   display: flex;
   flex-direction: column;
   align-items: center;
-
   position: fixed;
+
+  margin-top: ${(props) => props.theme.height.topNavHeight};
 
   width: ${(props) => props.theme.width.leftNavWidth};
   height: calc(100vh - ${(props) => props.theme.height.topNavHeight});

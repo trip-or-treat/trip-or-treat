@@ -1,6 +1,6 @@
-package com.triportreat.backend.place.entity;
+package com.triportreat.backend.region.entity;
 
-import com.triportreat.backend.region.entity.Region;
+import com.triportreat.backend.place.entity.Place;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
