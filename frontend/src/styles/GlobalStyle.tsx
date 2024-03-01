@@ -12,6 +12,9 @@ import PretendardRegular from '../assets/fonts/Pretendard-Regular.woff';
 import PretendardMedium2 from '../assets/fonts/Pretendard-Medium.woff2';
 import PretendardMedium from '../assets/fonts/Pretendard-Medium.woff';
 
+import PretendardLight2 from '../assets/fonts/Pretendard-Light.woff2';
+import PretendardLight from '../assets/fonts/Pretendard-Light.woff';
+
 import PretendardThin2 from '../assets/fonts/Pretendard-Thin.woff2';
 import PretendardThin from '../assets/fonts/Pretendard-Thin.woff';
 
@@ -78,6 +81,11 @@ table {
 	font-family: 'Pretendard-Medium';
 	src: url(${PretendardMedium2}) format('woff2'),
 	url(${PretendardMedium}) format('woff');
+}
+@font-face {
+	font-family: 'Pretendard-Light';
+	src: url(${PretendardLight2}) format('woff2'),
+	url(${PretendardLight}) format('woff');
 }
 @font-face {
 	font-family: 'Pretendard-Thin';
