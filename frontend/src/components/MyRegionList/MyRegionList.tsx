@@ -3,6 +3,19 @@ import { useRecoilValue } from 'recoil';
 
 import myRegionListAtom from 'src/atoms/myRegionListAtom';
 import RegionCard from '../common/RegionCard';
+import { ReactComponent as Plus } from '../../assets/svgs/plus.svg';
+
+const EmptyMyRegionList = () => {
+  return (
+    <EmptyBox>
+      <p>
+        아래의 <Plus />
+        버튼으로 여행지를 추가해보세요!
+      </p>
+      <p>한 지역만 여행시 바로 다음을 눌러주세요.</p>
+    </EmptyBox>
+  );
+};
 
 const MyRegionList = () => {
   const myRegionList = useRecoilValue(myRegionListAtom);
@@ -20,7 +33,7 @@ const MyRegionList = () => {
         <RegionCard item={myRegionList[0]} type="DEFAULT" />
 
         {[...myRegionList].slice(1).length < 1 ? (
-          <div>데이터가 없습니다.</div>
+          <EmptyMyRegionList />
         ) : (
           [...myRegionList]
             .slice(1)
@@ -57,6 +70,33 @@ const Title = styled.div`
       color: ${(props) => props.theme.colors.darkGrey};
       font-size: 12px;
     }
+  }
+`;
+
+const EmptyBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  height: 100px;
+
+  color: ${(props) => props.theme.colors.blackFont};
+  font-size: 17px;
+
+  p {
+    margin: 3px 0px;
+
+    &:last-child {
+      color: ${(props) => props.theme.colors.darkGrey};
+      font-size: 15px;
+    }
+  }
+
+  svg {
+    width: 15px;
+    height: 15px;
+    margin: 0px 3px;
   }
 `;
 
