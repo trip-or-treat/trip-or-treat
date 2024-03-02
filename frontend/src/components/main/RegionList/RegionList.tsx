@@ -57,8 +57,9 @@ const Loading = styled.div`
 const CannotLoading = styled.div`
   height: 70px;
   margin-top: 50px;
-  text-align: center;
+
   font-family: 'Pretendard-SemiBold';
   font-size: 20px;
   color: ${(props) => props.theme.colors.blackFont};
+  text-align: center;
 `;
