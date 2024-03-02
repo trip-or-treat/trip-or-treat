@@ -3,7 +3,7 @@ name: Build and Deploy to EC2
 on:
   push:
     branches:
-      - CHORE/TOT-52
+      - main
       - develop
     paths:
       - 'backend/**'
@@ -41,7 +41,7 @@ jobs:
 
       - name: Build and Test
         run: |
-          jarName=$( [ "${{ steps.get_branch.outputs.branch }}" = "CHORE/TOT-52" ] && echo "main" || echo "develop" )
+          jarName=$( [ "${{ steps.get_branch.outputs.branch }}" = "main" ] && echo "main" || echo "develop" )
           ./gradlew build -PjarName="$jarName"
         shell: bash
 
