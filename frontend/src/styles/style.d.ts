@@ -9,6 +9,7 @@ interface Colors {
   blackFont: string;
   lightGreyFont: string;
   whiteFont: string;
+  hoverColor: string;
 }
 
 interface Width {
@@ -17,6 +18,10 @@ interface Width {
 
 interface Height {
   topNavHeight: string;
+}
+
+interface Size {
+  regionItemSize: string;
 }
 
 declare module 'styled-components' {

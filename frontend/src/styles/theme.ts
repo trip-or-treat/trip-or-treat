@@ -7,6 +7,7 @@ const theme = {
     blackFont: '#3A3939',
     lightGreyFont: '#F6F6F6',
     whiteFont: '#FFFFFF',
+    hoverColor: '#f84a3b',
   },
 
   width: {
@@ -14,7 +15,11 @@ const theme = {
   },
 
   height: {
-    topNavHeight: '78px',
+    topNavHeight: '58px',
+  },
+
+  size: {
+    regionItemSize: '240px',
   },
 };
 

@@ -16,13 +16,11 @@ const Nav = () => {
 export default Nav;
 
 const NavBox = styled.div`
-  position: fixed;
-
   display: block;
-
-  width: 100%;
+  position: fixed;
   top: 0px;
 
+  width: 100%;
   height: ${(props) => props.theme.height.topNavHeight};
 
   background-color: ${(props) => props.theme.colors.commonNavBgColor};

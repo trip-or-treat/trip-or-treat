@@ -11,10 +11,11 @@ const LogoButtonBox = styled(Link)`
   float: left;
 
   width: ${(props) => props.theme.width.leftNavWidth};
+  height: ${(props) => props.theme.height.topNavHeight};
 
   background-color: ${(props) => props.theme.colors.commonNavBgColor};
 
-  font-size: 30px;
+  font-size: 25px;
   font-family: 'Pretendard-Regular';
   color: ${(props) => props.theme.colors.mainColor};
   text-align: center;
