@@ -36,10 +36,12 @@ const StyledTextInner = styled.div`
 const StyledName = styled.h2`
   margin: 15px 0px 15px 0px;
 
+  color: ${(props) => props.theme.colors.blackFont};
   font-family: 'Pretendard-SemiBold';
 `;
 
 const StyledOverview = styled.p`
+  color: ${(props) => props.theme.colors.blackFont};
   font-family: 'Pretendard-Thin';
 `;
 
