@@ -1,14 +1,16 @@
 import React from 'react';
+import { useRecoilState } from 'recoil';
+import contentTypeIdAtom from 'src/atoms/contentTypeIdAtom';
 import styled from 'styled-components';
 
 interface Props {
   id: number;
   title: string;
-  prevContentTypeId: number | null;
-  setPrevContentTypeId: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
-const ContentTypeFilterItem = ({ id, title, prevContentTypeId, setPrevContentTypeId }: Props) => {
+const ContentTypeFilterItem = ({ id, title }: Props) => {
+  const [prevContentTypeId, setPrevContentTypeId] = useRecoilState(contentTypeIdAtom);
+
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const currentId = Number(e.currentTarget.dataset.id) ?? null;
 
