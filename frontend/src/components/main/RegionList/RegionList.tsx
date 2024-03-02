@@ -25,9 +25,9 @@ const Wrapper = styled.div``;
 
 const ListContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 270px);
-  column-gap: 70px;
-  row-gap: 170px;
+  grid-template-columns: repeat(4, ${(props) => props.theme.size.regionItemSize});
+  column-gap: 55px;
+  row-gap: 155px;
 
   justify-content: center;
 `;
