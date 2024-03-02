@@ -9,16 +9,14 @@ const StartButton = () => {
   };
 
   return (
-    <Wrapper>
+    <div>
       <StartButtonBox onClick={onStartBtnClick}>시작하기</StartButtonBox>
       <Scroll ref={searchRef} />
-    </Wrapper>
+    </div>
   );
 };
 
 export default StartButton;
-
-const Wrapper = styled.div``;
 
 const StartButtonBox = styled.button`
   display: block;
