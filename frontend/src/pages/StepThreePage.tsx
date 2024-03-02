@@ -1,22 +1,27 @@
+import { useState } from 'react';
 import styled from 'styled-components';
+import { useRecoilValue } from 'recoil';
+
 import RegionCategory from 'src/components/RegionCategory';
 import EnterSearch from 'src/components/EnterSearch';
+import DayCategory from 'src/components/DayCategory';
 import ContentTypeFilterItemList from 'src/components/ContentTypeFilterItemList';
-import { useState } from 'react';
-import DayCategory from 'src/components/DayCategory copy';
-import { useRecoilValue } from 'recoil';
+
 import myRegionListAtom from 'src/atoms/myRegionListAtom';
 
 const StepThreePage = () => {
   const [curDay, setCurDay] = useState(1);
+  const [keyword, setKeyword] = useState('');
   const myRegionList = useRecoilValue(myRegionListAtom);
 
   return (
     <Wrapper>
       <SearchLayer>
-        <RegionCategory data={myRegionList} />
-        <EnterSearch placeHolder="장소를 검색해보세요!" />
-        <ContentTypeFilterItemList />
+        <section>
+          <RegionCategory data={myRegionList} />
+          <EnterSearch placeHolder="장소를 검색해보세요!" setKeyword={setKeyword} />
+          <ContentTypeFilterItemList />
+        </section>
       </SearchLayer>
 
       <DayLayer>
@@ -39,11 +44,14 @@ const Wrapper = styled.div`
 const SearchLayer = styled.div`
   width: 25%;
   height: inherit;
-  padding: 20px;
   border-left: ${(props) => `1px solid ${props.theme.colors.lightGrey}`};
   border-right: ${(props) => `1px solid ${props.theme.colors.lightGrey}`};
 
   box-sizing: border-box;
+
+  & > section {
+    padding: 20px;
+  }
 `;
 
 const DayLayer = styled.div`
