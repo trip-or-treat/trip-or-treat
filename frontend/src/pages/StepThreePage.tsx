@@ -4,12 +4,12 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import RegionCategory from 'src/components/RegionCategory';
 import EnterSearch from 'src/components/EnterSearch';
-import PlaceList from 'src/components/PlaceList/PlaceList';
+import PlaceList from 'src/components/PlaceList';
 import DayCategory from 'src/components/DayCategory';
 import ContentTypeFilterItemList from 'src/components/ContentTypeFilterItemList';
+import SelectedPlaceCardList from 'src/components/SelectedPlaceCardList';
 
 import myRegionListAtom from 'src/atoms/myRegionListAtom';
-import SelectedPlaceCardList from 'src/components/SelectedPlaceCardList/SelectedPlaceCardList';
 import totalPlanAtom from 'src/atoms/totalPlanAtom';
 import stepPlanSavedBtnAtom from 'src/atoms/stepPlanSavedBtnAtom';
 
