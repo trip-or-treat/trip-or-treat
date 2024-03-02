@@ -41,8 +41,17 @@ const StyledName = styled.h2`
 `;
 
 const StyledOverview = styled.p`
+  display: -webkit-box;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: pre-wrap;
+  word-break: break-all;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   color: ${(props) => props.theme.colors.blackFont};
   font-family: 'Pretendard-Thin';
+  line-height: 1.3;
 `;
 
 const StyledImageThumbnail = styled.div<{ imageThumbnail: string }>`
