@@ -1,10 +1,10 @@
 name: FrontendDeploy
 
 on:
-  pull_request:
+  push:
     branches:
       - develop
-    paths: 'frontend/**'
+    paths: "frontend/**"
 
 env:
   working-directory: ./frontend
