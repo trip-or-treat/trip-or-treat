@@ -20,8 +20,8 @@ const RegionItem = ({ src, name }: Props) => {
 export default RegionItem;
 
 const Container = styled.button`
-  width: 270px;
-  height: 270px;
+  width: ${(props) => props.theme.size.regionItemSize};
+  height: ${(props) => props.theme.size.regionItemSize};
 
   border: none;
   background-color: white;
@@ -41,11 +41,11 @@ const RegionImg = styled.img<{ src: string }>`
 const RegionName = styled.div`
   display: block;
 
-  margin: 20px auto;
+  margin: 13px auto;
 
   text-align: center;
 
   font-family: 'Pretendard-Regular';
-  font-size: 25px;
+  font-size: 21px;
   color: ${(props) => props.theme.colors.blackFont};
 `;
