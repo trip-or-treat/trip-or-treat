@@ -18,21 +18,18 @@ const EmptyPlaceItem = () => {
 const SelectedPlaceCardList = () => {
   const curDay = useRecoilValue(curDayAtom);
   const totalPlan = useRecoilValue(totalPlanAtom);
+  const filteredCurDay = totalPlan.filter((item) => item.day === curDay);
 
   return (
     <Wrapper>
-      {totalPlan.filter((item) => item.day === curDay)[0].items.length === 0 && <EmptyPlaceItem />}
-      {totalPlan
-        .filter((item) => item.day === curDay)
-        .map((itemArr) => {
-          return (
-            <div key={itemArr.date}>
-              {itemArr.items.map((item) => (
-                <PlaceCard key={item.id} placeCardItem={item} type="DRAG_AND_DROP" />
-              ))}
-            </div>
-          );
-        })}
+      {filteredCurDay[0].items.length === 0 && <EmptyPlaceItem />}
+      {filteredCurDay.map((itemArr) => (
+        <div key={itemArr.date}>
+          {itemArr.items.map((item) => (
+            <PlaceCard key={item.id} placeCardItem={item} type="DRAG_AND_DROP" />
+          ))}
+        </div>
+      ))}
     </Wrapper>
   );
 };
