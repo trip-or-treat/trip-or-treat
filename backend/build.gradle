@@ -51,7 +51,7 @@ tasks.named('test') {
 
 jar {
     enabled = false
-    def jarName = project.getProperty('jarName')
+    def jarName = project.findProperty('jarName') ?: "triportreat"
     println "Jarname : ${jarName}"
     archivesBaseName = jarName
 }   
