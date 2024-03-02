@@ -69,7 +69,6 @@ const PlaceCard = ({ placeCardItem, type }: Props) => {
             <Plus />
           </IconButton>
         )}
-
         {type === 'DELETE_BUTTON' && (
           <IconButton onClick={handleDeleteClick}>
             <Minus />
