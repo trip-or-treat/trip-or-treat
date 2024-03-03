@@ -46,12 +46,12 @@ const EmptyPlaceItemWrapper = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 50px;
-  font-size: 20px;
+  font-size: 17px;
   color: ${(props) => props.theme.colors.blackFont};
 
   img {
     margin-top: 20px;
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
   }
 `;
