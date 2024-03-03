@@ -23,7 +23,7 @@ export default Place;
 const Wrapper = styled.div`
   display: flex;
 
-  margin: 30px;
+  margin: 25px 20px 0px 30px;
 `;
 
 const StyledTextInner = styled.div`
@@ -31,6 +31,8 @@ const StyledTextInner = styled.div`
   flex-flow: column;
 
   margin-left: 15px;
+
+  font-size: 17px;
 `;
 
 const StyledName = styled.h2`
