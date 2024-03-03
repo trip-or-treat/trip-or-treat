@@ -45,11 +45,15 @@ const StyledDescription = styled.p<{ $isMore: boolean }>`
 
   width: 455px;
   height: 142px;
+  margin-bottom: 110px;
 
   text-overflow: ellipsis;
+  text-align: left;
   word-break: break-all;
   white-space: pre-wrap;
+  font-size: 17px;
   line-height: 1.5;
+  color: ${(props) => props.theme.colors.blackFont};
   font-family: 'Pretendard-Regular';
 `;
 
@@ -62,6 +66,7 @@ const StyledMoreToggle = styled.button`
   background-color: white;
   border: none;
 
+  color: ${(props) => props.theme.colors.darkGrey};
   font-family: 'Pretendard-Thin';
 
   cursor: pointer;
@@ -71,5 +76,6 @@ const StyledTitle = styled.h3`
   width: 455px;
   margin-bottom: 15px;
 
+  color: ${(props) => props.theme.colors.blackFont};
   font-family: 'Pretendard-Bold';
 `;

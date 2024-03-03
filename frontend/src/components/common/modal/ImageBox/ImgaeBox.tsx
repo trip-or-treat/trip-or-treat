@@ -13,6 +13,7 @@ export default ImageBox;
 const StyledImageBox = styled.div<{ imageOrigin: string }>`
   width: 457px;
   height: 217px;
+  margin-bottom: 40px;
 
   background-image: url(${(props) => props.imageOrigin});
   background-size: cover;
