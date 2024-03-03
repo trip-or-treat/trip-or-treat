@@ -1,19 +1,28 @@
 import styled from 'styled-components';
 
+import RegionModal from 'src/components/RegionModal';
+import { useState } from 'react';
+
 interface Props {
+  id: number;
   src: string;
   name: string;
 }
-const RegionItem = ({ src, name }: Props) => {
+const RegionItem = ({ id, src, name }: Props) => {
+  const [isModal, setModal] = useState(false);
+
   const handleClickModal = () => {
-    // 클릭 시 지역 모달 열리게
+    setModal(!isModal);
   };
 
   return (
-    <Container onClick={handleClickModal}>
-      <RegionImg src={src} />
-      <RegionName>{name}</RegionName>
-    </Container>
+    <>
+      {isModal && <RegionModal onClose={handleClickModal} id={id} />}
+      <Container onClick={handleClickModal}>
+        <RegionImg src={src} />
+        <RegionName>{name}</RegionName>
+      </Container>
+    </>
   );
 };
 

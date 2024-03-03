@@ -13,7 +13,7 @@ const RegionList = () => {
       <ListContainer>
         {!isLoading &&
           regionsData?.map((data) => (
-            <RegionItem key={data.id} src={data.imageThumbnail} name={data.name} />
+            <RegionItem key={data.id} id={data.id} src={data.imageThumbnail} name={data.name} />
           ))}
       </ListContainer>
     </Wrapper>
