@@ -24,6 +24,7 @@ public class ScheduleCreateRequestDto {
     @NotNull(message = "스케쥴의 날짜는 필수 입력값입니다!")
     private LocalDate date;
 
+    @Builder.Default
     @Valid
     @Size(min = 1, message = "방문장소는 최소 1곳입니다!")
     private List<SchedulePlaceCreateRequestDto> schedulePlaces = new ArrayList<>();

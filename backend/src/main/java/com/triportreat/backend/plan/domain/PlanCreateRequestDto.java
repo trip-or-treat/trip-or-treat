@@ -29,6 +29,7 @@ public class PlanCreateRequestDto {
     @NotNull(message = "사용자아이디는 필수 입력값입니다!")
     private Long userId;
 
+    @Builder.Default
     @Valid
     @Size(min = 1, message = "스케쥴은 최소 하루는 있어야 합니다!")
     private List<ScheduleCreateRequestDto> schedules = new ArrayList<>();
