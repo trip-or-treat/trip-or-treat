@@ -1,4 +1,5 @@
 import { atom } from 'recoil';
+
 import { PlaceListTypes } from 'src/@types/api/placeList';
 
 export interface TotalPlan {

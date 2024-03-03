@@ -1,5 +1,6 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
 import { RefObject, useCallback, useEffect } from 'react';
+import { useInfiniteQuery } from '@tanstack/react-query';
+
 import { placeListFetcher } from 'src/api/placeList';
 
 interface Props {

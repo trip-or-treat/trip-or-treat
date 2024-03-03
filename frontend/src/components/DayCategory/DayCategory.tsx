@@ -1,7 +1,8 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
+import styled from 'styled-components';
+
 import curDayAtom from 'src/atoms/curDayAtom';
 import totalPlanAtom from 'src/atoms/totalPlanAtom';
-import styled from 'styled-components';
 
 const getDate = (date: string) => {
   return date.split(' ').join('.');

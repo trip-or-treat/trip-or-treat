@@ -5,8 +5,8 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { PlaceListTypes } from 'src/@types/api/placeList';
 import totalPlanAtom from 'src/atoms/totalPlanAtom';
 import placeClickedIdListAtom from 'src/atoms/placeClickedIdListAtom';
-
 import curDayAtom from 'src/atoms/curDayAtom';
+
 import { ReactComponent as Plus } from '../../assets/svgs/plus.svg';
 import { ReactComponent as Minus } from '../../assets/svgs/minus.svg';
 import defaultimg from '../../assets/images/defaultImg.png';

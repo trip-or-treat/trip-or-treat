@@ -1,7 +1,8 @@
 import React from 'react';
 import { useRecoilState } from 'recoil';
-import contentTypeIdAtom from 'src/atoms/contentTypeIdAtom';
 import styled from 'styled-components';
+
+import contentTypeIdAtom from 'src/atoms/contentTypeIdAtom';
 
 interface Props {
   id: number;
