@@ -9,7 +9,7 @@ public class UserNotFoundException extends AbstractException {
 
     @Override
     public HttpStatus getStatus() {
-        return HttpStatus.NOT_FOUND;
+        return HttpStatus.INTERNAL_SERVER_ERROR;
     }
 
     @Override
