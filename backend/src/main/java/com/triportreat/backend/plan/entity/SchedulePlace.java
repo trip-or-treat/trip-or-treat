@@ -46,4 +46,15 @@ public class SchedulePlace extends BaseTimeEntity {
     @Column(length = 65535)
     private String memo;
 
+    public static SchedulePlace toEntity(SchedulePlaceCreateRequestDto schedulePlaceCreateRequestDto,
+                                         Schedule schedule,
+                                         Place place) {
+        return SchedulePlace.builder()
+                .schedule(schedule)
+                .place(place)
+                .visitOrder(schedulePlaceCreateRequestDto.getVisitOrder())
+                .expense(schedulePlaceCreateRequestDto.getExpense())
+                .memo(schedulePlaceCreateRequestDto.getMemo())
+                .build();
+    }
 }

@@ -52,4 +52,13 @@ public class Plan extends BaseTimeEntity {
 
     private String code;
 
+    public static Plan toEntity(PlanCreateRequestDto planCreateRequestDto, User user, String code) {
+        return Plan.builder()
+                .user(user)
+                .title(planCreateRequestDto.getTitle())
+                .startDate(planCreateRequestDto.getStartDate())
+                .endDate(planCreateRequestDto.getEndDate())
+                .code(code)
+                .build();
+    }
 }

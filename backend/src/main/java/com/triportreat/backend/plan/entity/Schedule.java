@@ -43,4 +43,10 @@ public class Schedule extends BaseTimeEntity {
     @Column(nullable = false)
     private LocalDate visitDate;
 
+    public static Schedule toEntity(ScheduleCreateRequestDto scheduleCreateRequestDto, Plan plan) {
+        return Schedule.builder()
+                .plan(plan)
+                .visitDate(scheduleCreateRequestDto.getDate())
+                .build();
+    }
 }
