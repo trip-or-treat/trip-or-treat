@@ -1,35 +1,26 @@
-import React from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
-interface Props {
-  curDay: number;
-  setCurDay: React.Dispatch<React.SetStateAction<number>>;
-}
-
-const DAY_DATA = [
-  { day: 1, date: '02 21', items: [] },
-  { day: 2, date: '02 22', items: [] },
-  { day: 3, date: '02 23', items: [] },
-  { day: 4, date: '02 24', items: [] },
-  { day: 5, date: '02 25', items: [] },
-  { day: 6, date: '02 26', items: [] },
-  { day: 7, date: '02 27', items: [] },
-];
+import curDayAtom from 'src/atoms/curDayAtom';
+import totalPlanAtom from 'src/atoms/totalPlanAtom';
 
 const getDate = (date: string) => {
   return date.split(' ').join('.');
 };
 
-const DayCategory = ({ curDay, setCurDay }: Props) => {
+const DayCategory = () => {
+  const totalPlan = useRecoilValue(totalPlanAtom);
+  const [curDay, setCurDay] = useRecoilState(curDayAtom);
+
   return (
     <>
       <SelectedDayTitle>
         <p>{`DAY ${curDay}`}</p>
-        <p>{getDate(DAY_DATA[curDay - 1].date)}</p>
+        <p>{getDate(totalPlan[curDay - 1].date)}</p>
       </SelectedDayTitle>
 
       <DayButtonBox>
-        {DAY_DATA.map((item) => (
+        {totalPlan.map((item) => (
           <DayButton
             key={item.day}
             onClick={() => setCurDay(item.day)}

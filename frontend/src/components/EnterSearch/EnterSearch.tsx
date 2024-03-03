@@ -1,44 +1,37 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
-import contentTypeIdAtom from 'src/atoms/contentTypeIdAtom';
 import { ReactComponent as FindIcon } from '../../assets/svgs/findIcon.svg';
 
 interface Props {
   placeHolder: string;
+  setKeyword?: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const EnterSearch = ({ placeHolder }: Props) => {
-  const { regionId } = useParams();
-  const [keyword, setKeyword] = useState('');
-  const prevContentTypeId = useRecoilValue(contentTypeIdAtom);
+const EnterSearch = ({ placeHolder, setKeyword }: Props) => {
+  const [value, setValue] = useState('');
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (keyword.trim() === '') {
+    if (value.trim() === '') {
       alert('검색어를 입력해주세요');
-      setKeyword('');
+      if (setKeyword) setKeyword(value);
+      setValue('');
       return;
     }
 
-    // TODO : API 요청 기능 구현
-    // keyword : 검색어
-    // rgionId : url에 존재하는 지역 id
-    // prevContentTypeId : content_type_id인데 필터링이 없으면 null,  필터링 되면 string형식의 문자열 (eg. '12')
-    console.log('keyword', keyword, 'regionId', regionId, 'prevContentTypeId', prevContentTypeId);
-    setKeyword('');
+    if (setKeyword) setKeyword(value);
+    setValue('');
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setKeyword(e.target.value);
+    setValue(e.target.value);
   };
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Input placeholder={placeHolder} value={keyword} onChange={handleChange} />
+      <Input placeholder={placeHolder} value={value} onChange={handleChange} />
       <Button>
         <FindIcon />
       </Button>

@@ -8,6 +8,7 @@ import regionClickedIdListAtom from 'src/atoms/regionClickedIdListAtom';
 
 import { ReactComponent as Plus } from '../../../assets/svgs/plus.svg';
 import { ReactComponent as Minus } from '../../../assets/svgs/minus.svg';
+import defaultimg from '../../../assets/images/defaultImg.png';
 
 interface Props {
   item: Regions;
@@ -46,7 +47,7 @@ const RegionCard = ({ item, type }: Props) => {
   return (
     <Wrapper data-id={item.id}>
       <DetailButton onClick={handleClickModal} disabled={type === 'DEFAULT'}>
-        <ThumbnailImg src={item.imageThumbnail} />
+        <ThumbnailImg src={item.imageThumbnail || defaultimg} />
         <RegionName>{item.name}</RegionName>
       </DetailButton>
 
