@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useSetRecoilState } from 'recoil';
 
-import overviewTitle from 'src/atoms/overviewTitle';
+import overviewTitleAtom from 'src/atoms/overviewTitleAtom';
 import { useRegionsMoreInformation } from 'src/hooks/api/useRegionsMoreInformation';
 import { ReactComponent as Close } from 'src/assets/svgs/close.svg';
 import RecommendPlaces from '../RecommendPlaces/RecommendPlaces';
@@ -17,7 +17,7 @@ interface Props {
 
 const RegionModal = ({ id, onClose }: Props) => {
   const { data: RegionsMoreInformationData } = useRegionsMoreInformation(id);
-  const setTitle = useSetRecoilState(overviewTitle);
+  const setTitle = useSetRecoilState(overviewTitleAtom);
 
   setTitle(false);
 

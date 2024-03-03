@@ -1,8 +1,8 @@
 import { atom } from 'recoil';
 
-const overviewTitle = atom({
+const overviewTitleAtom = atom({
   key: 'overviewTitleAtom',
   default: true,
 });
 
-export default overviewTitle;
+export default overviewTitleAtom;

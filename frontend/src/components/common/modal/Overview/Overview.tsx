@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
 
-import overviewTitle from 'src/atoms/overviewTitle';
+import overviewTitleAtom from 'src/atoms/overviewTitleAtom';
 import DefaultView from './DefaultView';
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 }
 
 const Overview = ({ children }: Props) => {
-  const isTitle = useRecoilValue(overviewTitle);
+  const isTitle = useRecoilValue(overviewTitleAtom);
   const [moreText, setMoreText] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
 
