@@ -9,6 +9,7 @@ import curDayAtom from 'src/atoms/curDayAtom';
 
 import { ReactComponent as Plus } from '../../assets/svgs/plus.svg';
 import { ReactComponent as Minus } from '../../assets/svgs/minus.svg';
+import { ReactComponent as Bars } from '../../assets/svgs/bars.svg';
 import defaultimg from '../../assets/images/defaultImg.png';
 
 interface Props {
@@ -51,7 +52,10 @@ const PlaceCard = ({ placeCardItem, type }: Props) => {
 
   return (
     <Wrapper data-id={placeCardItem.id}>
-      <DetailButton onClick={handleClickModal} disabled={type === 'DRAG_AND_DROP'}>
+      <DetailButton
+        onClick={type !== 'DRAG_AND_DROP' ? handleClickModal : undefined}
+        disabled={type === 'DRAG_AND_DROP'}
+      >
         <ThumbnailImg src={placeCardItem.imageThumbnail || defaultimg} />
         <RegionNameBox>
           <p>{placeCardItem.name}</p>
@@ -80,7 +84,9 @@ const PlaceCard = ({ placeCardItem, type }: Props) => {
             <IconButton onClick={handleDeleteClick}>
               <Minus />
             </IconButton>
-            <IconButton>=</IconButton>
+            <IconButton>
+              <Bars />
+            </IconButton>
           </>
         )}
       </IconButtonBox>
