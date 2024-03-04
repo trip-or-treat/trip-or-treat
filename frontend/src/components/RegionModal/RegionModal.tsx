@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import styled from 'styled-components';
 import { useSetRecoilState } from 'recoil';
 
@@ -16,19 +17,21 @@ interface Props {
 }
 
 const RegionModal = ({ id, onClose }: Props) => {
-  const { data: RegionsMoreInformationData } = useRegionsMoreInformation(id);
+  const { data: RegionsMoreInformationData, isError } = useRegionsMoreInformation(id);
   const setTitle = useSetRecoilState(overviewTitleAtom);
 
-  setTitle(false);
+  useEffect(() => {
+    setTitle(false);
+  }, []);
 
-  return (
-    <ModalOverlay>
-      <StyledModalLayout>
-        <StyledIcon>
-          <Close onClick={onClose} />
-        </StyledIcon>
+  return isError ? null : (
+    <div>
+      <ModalOverlay>
         {RegionsMoreInformationData?.map((data) => (
-          <>
+          <StyledModalLayout key={data.id}>
+            <StyledIcon>
+              <Close onClick={onClose} />
+            </StyledIcon>
             <StyledName>{data.name}</StyledName>
             <ImageBox imageOrigin={data.imageOrigin} />
             <Overview>{data.overview}</Overview>
@@ -36,10 +39,10 @@ const RegionModal = ({ id, onClose }: Props) => {
             <StyledButtonInner>
               <CommonButton>일정만들기</CommonButton>
             </StyledButtonInner>
-          </>
+          </StyledModalLayout>
         ))}
-      </StyledModalLayout>
-    </ModalOverlay>
+      </ModalOverlay>
+    </div>
   );
 };
 

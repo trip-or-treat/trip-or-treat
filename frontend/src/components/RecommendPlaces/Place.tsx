@@ -9,7 +9,7 @@ interface Props {
 const Place = ({ name, overview, imageThumbnail }: Props) => {
   return (
     <Wrapper>
-      <StyledImageThumbnail imageThumbnail={imageThumbnail} />
+      <StyledImageThumbnail src={imageThumbnail} />
       <StyledTextInner>
         <StyledName>{name}</StyledName>
         <StyledOverview>{overview.slice(0, overview.indexOf('.') + 1)}</StyledOverview>
@@ -56,13 +56,12 @@ const StyledOverview = styled.p`
   line-height: 1.3;
 `;
 
-const StyledImageThumbnail = styled.div<{ imageThumbnail: string }>`
+const StyledImageThumbnail = styled.img`
   flex: 0 0 auto;
 
   width: 111px;
   height: 108px;
 
-  background-image: url(${(props) => props.imageThumbnail});
   background-size: cover;
   background-position: center;
   border-radius: 30px;
