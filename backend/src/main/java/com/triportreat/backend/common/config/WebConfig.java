@@ -18,8 +18,7 @@ public class WebConfig implements WebMvcConfigurer {
                         "http://triportreat.site",
                         "https://triportreat.site",
                         "http://www.triportreat.site",
-                        "https://www.triportreat.site",
-                        "https://test-cors.org")
+                        "https://www.triportreat.site")
                 .allowedHeaders("*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowCredentials(true)
