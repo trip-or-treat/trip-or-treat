@@ -1,10 +1,8 @@
 package com.triportreat.backend.place.error.handler;
 
+import com.triportreat.backend.common.AbstractException;
 import com.triportreat.backend.common.response.ResponseResult;
 import com.triportreat.backend.place.controller.PlaceController;
-import com.triportreat.backend.place.error.handler.exception.ApiCallFailedException;
-import com.triportreat.backend.place.error.handler.exception.ApiResponseParseException;
-import com.triportreat.backend.place.error.handler.exception.PlaceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -35,20 +33,8 @@ public class PlaceExceptionHandler {
         return ResponseEntity.ok().body(ResponseResult.fail(GET_FAIL.getMessage(), BAD_REQUEST, errors));
     }
 
-    @ExceptionHandler(PlaceNotFoundException.class)
-    protected ResponseEntity<?> placeNotFoundExceptionHandler(PlaceNotFoundException e) {
-        return ResponseEntity.ok()
-                .body(ResponseResult.fail(e.getMessage(), e.getStatus(), null));
-    }
-
-    @ExceptionHandler(ApiCallFailedException.class)
-    protected ResponseEntity<?> apiCallFailedExceptionHandler(ApiCallFailedException e) {
+    @ExceptionHandler(AbstractException.class)
+    protected ResponseEntity<?> abstractExceptionHandler(AbstractException e) {
         return ResponseEntity.ok().body(ResponseResult.fail(e.getMessage(), e.getStatus(), null));
     }
-
-    @ExceptionHandler(ApiResponseParseException.class)
-    protected ResponseEntity<?> apiResponseParseExceptionHandler(ApiResponseParseException e) {
-        return ResponseEntity.ok().body(ResponseResult.fail(e.getMessage(), e.getStatus(), null));
-    }
-
 }
