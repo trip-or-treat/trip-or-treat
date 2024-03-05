@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -16,7 +17,11 @@ public class ContentTypeServiceImpl implements ContentTypeService {
 
     @Override
     public List<ContentTypeResponseDto> getContentTypes() {
-        return contentTypeRepository.findAll().stream().map(ContentTypeResponseDto::toDto).toList();
+        return contentTypeRepository.findAll().stream()
+                .filter(contentType -> !contentType.getName().equals("축제공연행사") &&
+                        !contentType.getName().equals("여행코스"))
+                .map(ContentTypeResponseDto::toDto)
+                .collect(Collectors.toList());
     }
 
 }
