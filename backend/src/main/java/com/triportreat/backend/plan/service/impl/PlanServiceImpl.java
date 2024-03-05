@@ -26,6 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PlanServiceImpl implements PlanService {
 
+    private static final String url = "https://api.triportreat.site/plans/";
+
     private final PlanRepository planRepository;
     private final UserRepository userRepository;
     private final ScheduleRepository scheduleRepository;
@@ -38,7 +40,7 @@ public class PlanServiceImpl implements PlanService {
         User user = userRepository.findById(planCreateRequestDto.getUserId())
                 .orElseThrow(UserNotFoundException::new);
 
-        Plan plan = Plan.toEntity(planCreateRequestDto, user, createPlanCode());
+        Plan plan = Plan.toEntity(planCreateRequestDto, user, url + createPlanCode());
         planRepository.save(plan);
 
         createSchedules(planCreateRequestDto.getSchedules(), plan);
