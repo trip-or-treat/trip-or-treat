@@ -104,8 +104,9 @@ class PlaceServiceImplTest {
         PlaceCommonInfoDto actualPlaceCommonInfoDto = placeService.getPlaceCommonInfo(id);
 
         assertThat(actualPlaceCommonInfoDto).isNotNull();
-        assertThat(actualPlaceCommonInfoDto).isEqualToComparingFieldByField(expectedPlaceCommonInfoDto);
+        assertThat(actualPlaceCommonInfoDto).usingRecursiveComparison().isEqualTo(expectedPlaceCommonInfoDto);
     }
+
 
     @Test
     @DisplayName("장소 공통정보 조회 실패 테스트 - 장소 정보가 존재하지 않음")
