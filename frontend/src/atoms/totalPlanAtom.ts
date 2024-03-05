@@ -1,12 +1,15 @@
 import { atom } from 'recoil';
 
 import { PlaceListTypes } from 'src/@types/api/placeList';
+import { recoilPersist } from 'recoil-persist';
 
 export interface TotalPlan {
   day: number;
   date: string;
   items: PlaceListTypes[];
 }
+
+const { persistAtom } = recoilPersist();
 
 const totalPlanAtom = atom<TotalPlan[]>({
   key: 'totalPlanAtom',
@@ -19,6 +22,7 @@ const totalPlanAtom = atom<TotalPlan[]>({
     { day: 6, date: '02 26', items: [] },
     { day: 7, date: '02 27', items: [] },
   ],
+  effects_UNSTABLE: [persistAtom],
 });
 
 export default totalPlanAtom;
