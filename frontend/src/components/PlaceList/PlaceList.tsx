@@ -7,6 +7,7 @@ import { PlaceListTypes } from 'src/@types/api/placeList';
 import useInfinityScroll from 'src/hooks/api/useInfinityScroll';
 import contentTypeIdAtom from 'src/atoms/contentTypeIdAtom';
 import PlaceCard from './PlaceCard';
+import Loading from '../common/Loading';
 
 interface Props {
   keyword: string;
@@ -28,17 +29,17 @@ const PlaceList = ({ keyword }: Props) => {
     <>
       <Title>장소선택</Title>
       <PlaceListBox>
-        {isLoading && <Loading />}
+        {isLoading && <Loading type="SMALL" />}
 
         {!isLoading && (
           <>
             {data?.pages?.map((items) =>
-              items?.data.map((placeCardItem: PlaceListTypes) => (
+              items.map((placeCardItem: PlaceListTypes) => (
                 <PlaceCard key={placeCardItem.id} placeCardItem={placeCardItem} type="ADD_BUTTON" />
               )),
             )}
             <div ref={observerRef}>
-              <Loading />
+              <Loading type="SMALL" />
             </div>
           </>
         )}
@@ -64,25 +65,4 @@ const PlaceListBox = styled.div`
   margin-top: 25px;
   height: 350px;
   overflow: auto;
-`;
-
-const Loading = styled.div`
-  width: 15px;
-  height: 15px;
-  margin: 10px auto;
-
-  border: 7px solid #dcdcdc;
-  border-bottom: 7px solid ${(props) => props.theme.colors.mainColor};
-  border-radius: 50%;
-
-  animation: load 1.5s linear infinite;
-
-  @keyframes load {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
 `;
