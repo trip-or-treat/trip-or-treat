@@ -55,12 +55,7 @@ class PlanRepositoryTest {
 
         assertThat(schedules.size()).isEqualTo(2);
         assertThat(savedSchedule1.getVisitDate()).isEqualTo(today);
-        assertThat(savedSchedule1.getPlan().getTitle()).isEqualTo("title");
-        assertThat(savedSchedule1.getPlan().getStartDate()).isEqualTo(today);
-        assertThat(savedSchedule1.getPlan().getEndDate()).isEqualTo(nextDay);
-        assertThat(savedSchedule2.getVisitDate()).isEqualTo(nextDay);
-        assertThat(savedSchedule2.getPlan().getTitle()).isEqualTo("title");
-        assertThat(savedSchedule2.getPlan().getStartDate()).isEqualTo(today);
-        assertThat(savedSchedule2.getPlan().getEndDate()).isEqualTo(nextDay);
+        assertThat(savedSchedule1.getPlan()).usingRecursiveComparison().isEqualTo(plan);
+        assertThat(savedSchedule2.getPlan()).usingRecursiveComparison().isEqualTo(plan);
     }
 }
