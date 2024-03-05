@@ -131,6 +131,15 @@ const RegionNameBox = styled.div`
     font-family: 'Pretendard-Regular';
     font-size: 17px;
 
+    &:first-child {
+      width: 150px;
+      height: 20px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: left;
+    }
+
     &:last-child {
       font-size: 10px;
       color: grey;
