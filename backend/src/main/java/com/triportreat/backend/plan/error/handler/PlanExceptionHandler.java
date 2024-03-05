@@ -26,7 +26,7 @@ public class PlanExceptionHandler {
     }
 
     @ExceptionHandler(AbstractException.class)
-    protected ResponseEntity<?> usernameNotFoundExceptionHandler(AbstractException e) {
+    protected ResponseEntity<?> planAbstractExceptionHandler(AbstractException e) {
         return ResponseEntity.ok().body(ResponseResult.fail(e.getMessage(), e.getStatus(), null));
     }
 }
