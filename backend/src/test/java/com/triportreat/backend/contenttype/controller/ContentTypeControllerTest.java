@@ -43,7 +43,7 @@ class ContentTypeControllerTest {
         when(contentTypeService.getContentTypes()).thenReturn(contentTypeResponseDtos);
 
         // then
-        mockMvc.perform(get("/places/content_type")
+        mockMvc.perform(get("/places/content-type")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result", is(true)))
