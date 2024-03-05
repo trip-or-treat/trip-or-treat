@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import { useRegions } from 'src/hooks/api/useRegions';
+import Loading from 'src/components/common/Loading';
 import RegionItem from './RegionItem';
 
 const RegionList = () => {
@@ -8,7 +9,7 @@ const RegionList = () => {
 
   return (
     <Wrapper>
-      {isLoading && <Loading />}
+      {isLoading && <Loading type="MEDIUM" />}
       {isError && <CannotLoading>데이터를 불러오는 데 실패했습니다.</CannotLoading>}
       <ListContainer>
         {!isLoading &&
@@ -31,27 +32,6 @@ const ListContainer = styled.div`
   row-gap: 155px;
 
   justify-content: center;
-`;
-
-const Loading = styled.div`
-  width: 43px;
-  height: 43px;
-  margin: 10px auto;
-
-  border: 7px solid #dcdcdc;
-  border-bottom: 7px solid ${(props) => props.theme.colors.mainColor};
-  border-radius: 50%;
-
-  animation: load 1.5s linear infinite;
-
-  @keyframes load {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
 `;
 
 const CannotLoading = styled.div`
