@@ -1,23 +1,26 @@
 package com.triportreat.backend.place.controller;
 
-import static com.triportreat.backend.common.response.FailMessage.GET_FAIL;
-import static com.triportreat.backend.common.response.SuccessMessage.GET_SUCCESS;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.triportreat.backend.place.domain.PlaceByRegionIdDto;
+import com.triportreat.backend.place.domain.PlaceCommonInfoDto;
 import com.triportreat.backend.place.domain.PlaceSearchCondition;
 import com.triportreat.backend.place.service.PlaceService;
-import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
+
+import static com.triportreat.backend.common.response.FailMessage.GET_FAIL;
+import static com.triportreat.backend.common.response.SuccessMessage.GET_SUCCESS;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(PlaceController.class)
 class PlaceControllerTest {
@@ -109,4 +112,33 @@ class PlaceControllerTest {
                 .andExpect(jsonPath("$.status").value(200))
                 .andExpect(jsonPath("$.data").isEmpty());
     }
+
+    @Test
+    @DisplayName("특정 장소의 공통 정보를 조회하면 응답은 성공한다.")
+    void getPlaceCommonInfo_success() throws Exception {
+        // given
+        Long id = 1L;
+        PlaceCommonInfoDto placeCommonInfoDto = PlaceCommonInfoDto.builder()
+                .name("Test Place")
+                .imageOrigin("image.jpg")
+                .overview("Test Overview")
+                .contentTypeId(1L)
+                .build();
+
+        // when
+        when(placeService.getPlaceCommonInfo(id)).thenReturn(placeCommonInfoDto);
+
+        // then
+        mockMvc.perform(get("/places/common/" + id)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result").value(true))
+                .andExpect(jsonPath("$.message").value(GET_SUCCESS.getMessage()))
+                .andExpect(jsonPath("$.status").value(200))
+                .andExpect(jsonPath("$.data.name").value(placeCommonInfoDto.getName()))
+                .andExpect(jsonPath("$.data.imageOrigin").value(placeCommonInfoDto.getImageOrigin()))
+                .andExpect(jsonPath("$.data.overview").value(placeCommonInfoDto.getOverview()))
+                .andExpect(jsonPath("$.data.contentTypeId").value(placeCommonInfoDto.getContentTypeId()));
+    }
+
 }

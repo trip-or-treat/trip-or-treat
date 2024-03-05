@@ -15,7 +15,7 @@ public class ContentTypeController {
 
     private final ContentTypeService contentTypeService;
 
-    @GetMapping("/places/content_type")
+    @GetMapping("/places/content-type")
     public ResponseEntity<?> getContentTypes() {
         return ResponseEntity.ok().body(
                 ResponseResult.success(GET_SUCCESS.getMessage(), contentTypeService.getContentTypes()));
