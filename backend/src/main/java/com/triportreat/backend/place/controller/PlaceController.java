@@ -34,7 +34,7 @@ public class PlaceController {
                                 placeService.searchPlaceListByCondition(placeSearchCondition, pageable)));
     }
 
-    @GetMapping("/common/{id}")
+    @GetMapping("{id}/info")
     public ResponseEntity<?> getPlaceCommonInfo(@PathVariable("id") Long id) {
         return ResponseEntity.ok().body(
                 ResponseResult.success(GET_SUCCESS.getMessage(), placeService.getPlaceCommonInfo(id))
