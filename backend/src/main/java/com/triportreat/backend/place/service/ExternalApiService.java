@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
+
 @Service
 @RequiredArgsConstructor
 public class ExternalApiService {
@@ -26,7 +28,7 @@ public class ExternalApiService {
     private String serviceKey;
 
     public String callExternalApiForOverView(Long id) {
-        String url = overviewUrl + "&serviceKey=" + serviceKey + "&contentId=" + id + "&overviewYN=Y";
+        URI url = URI.create(overviewUrl + "&serviceKey=" + serviceKey + "&contentId=" + id + "&overviewYN=Y");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -53,4 +55,5 @@ public class ExternalApiService {
 
         return overview;
     }
+
 }
