@@ -1,11 +1,27 @@
 import styled from 'styled-components';
+import { useEffect } from 'react';
+import { useSetRecoilState } from 'recoil';
 
-import { useRegions } from 'src/hooks/api/useRegions';
 import Loading from 'src/components/common/Loading';
+import { useRegions } from 'src/hooks/api/useRegions';
+import { Regions } from 'src/@types/api/regions';
+import regionsAtom from 'src/atoms/regionsAtom';
+
 import RegionItem from './RegionItem';
 
+interface RegionListData {
+  data: { data: Regions[] };
+  isLoading: boolean;
+  isError: boolean;
+}
+
 const RegionList = () => {
-  const { data: regionsData, isLoading, isError } = useRegions();
+  const { data: regionsApi, isLoading, isError }: RegionListData = useRegions();
+  const setRegions = useSetRecoilState(regionsAtom);
+
+  useEffect(() => {
+    if (regionsApi?.data) setRegions(regionsApi.data);
+  }, [regionsApi]);
 
   return (
     <Wrapper>
@@ -13,7 +29,7 @@ const RegionList = () => {
       {isError && <CannotLoading>데이터를 불러오는 데 실패했습니다.</CannotLoading>}
       <ListContainer>
         {!isLoading &&
-          regionsData?.map((data) => (
+          regionsApi?.data.map((data) => (
             <RegionItem key={data.id} src={data.imageThumbnail} name={data.name} />
           ))}
       </ListContainer>
