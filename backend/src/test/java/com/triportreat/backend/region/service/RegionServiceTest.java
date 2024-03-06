@@ -68,7 +68,7 @@ class RegionServiceTest {
         Region region = Region.builder()
                 .id(regionId)
                 .name("지역이름")
-                .imageOrigin("이미지저장경로")
+                .imageThumbnail("이미지저장경로")
                 .overview("지역정보")
                 .latitude(1.1)
                 .longitude(2.2)
@@ -108,7 +108,7 @@ class RegionServiceTest {
         // then
         assertThat(regionDetail.getId()).isEqualTo(regionId);
         assertThat(regionDetail.getName()).isEqualTo("지역이름");
-        assertThat(regionDetail.getImageOrigin()).isEqualTo("이미지저장경로");
+        assertThat(regionDetail.getImageThumbnail()).isEqualTo("이미지저장경로");
         assertThat(regionDetail.getOverview()).isEqualTo("지역정보");
         assertThat(regionDetail.getLatitude()).isEqualTo(1.1);
         assertThat(regionDetail.getLongitude()).isEqualTo(2.2);
