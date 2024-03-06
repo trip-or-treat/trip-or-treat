@@ -129,7 +129,7 @@ class PlaceControllerTest {
         when(placeService.getPlaceCommonInfo(id)).thenReturn(placeCommonInfoDto);
 
         // then
-        mockMvc.perform(get("/places/common/" + id)
+        mockMvc.perform(get("/places/" + id + "/info")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result").value(true))
