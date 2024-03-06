@@ -12,7 +12,7 @@ const Place = ({ name, overview, imageThumbnail }: Props) => {
       <StyledImageThumbnail src={imageThumbnail} />
       <StyledTextInner>
         <StyledName>{name}</StyledName>
-        <StyledOverview>{overview.slice(0, overview.indexOf('.') + 1)}</StyledOverview>
+        <StyledOverview>{overview}</StyledOverview>
       </StyledTextInner>
     </Wrapper>
   );
