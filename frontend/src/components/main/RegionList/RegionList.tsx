@@ -1,11 +1,17 @@
 import styled from 'styled-components';
-
+import { useState } from 'react';
 import { useRegions } from 'src/hooks/api/useRegions';
+import RegionModal from 'src/components/RegionModal';
 import RegionItem from './RegionItem';
 
 const RegionList = () => {
   const { data: regionsData, isLoading, isError } = useRegions();
+  const [isModal, setModal] = useState(false);
+  const [currentId, setCurrentId] = useState(0);
 
+  const onClose = () => {
+    setModal(false);
+  };
   return (
     <Wrapper>
       {isLoading && <Loading />}
@@ -13,9 +19,17 @@ const RegionList = () => {
       <ListContainer>
         {!isLoading &&
           regionsData?.map((data) => (
-            <RegionItem key={data.id} id={data.id} src={data.imageThumbnail} name={data.name} />
+            <RegionItem
+              key={data.id}
+              id={data.id}
+              src={data.imageThumbnail}
+              name={data.name}
+              onOpen={setModal}
+              setCurrentId={setCurrentId}
+            />
           ))}
       </ListContainer>
+      {isModal && <RegionModal id={currentId} onClose={onClose} />}
     </Wrapper>
   );
 };
