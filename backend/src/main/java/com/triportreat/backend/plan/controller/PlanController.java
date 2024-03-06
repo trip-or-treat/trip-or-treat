@@ -20,6 +20,7 @@ public class PlanController {
 
     @PostMapping("/plans")
     public ResponseEntity<?> createPlan(@RequestBody @Valid PlanCreateRequestDto planCreateRequestDto) {
+        planCreateRequestDto.setUserId(1L); // TODO 로그인 기능 구현 완료시 수정 필요
         planService.createPlan(planCreateRequestDto);
         return ResponseEntity.ok().body(ResponseResult.success(POST_SUCCESS.getMessage(), null));
     }

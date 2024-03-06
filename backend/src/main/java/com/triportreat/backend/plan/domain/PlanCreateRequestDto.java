@@ -26,7 +26,6 @@ public class PlanCreateRequestDto {
     @NotNull(message = "여행 종료날짜는 필수 입력값입니다!")
     private LocalDate endDate;
 
-    @NotNull(message = "사용자아이디는 필수 입력값입니다!")
     private Long userId;
 
     @Builder.Default
