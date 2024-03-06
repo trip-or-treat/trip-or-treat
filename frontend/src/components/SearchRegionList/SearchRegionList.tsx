@@ -1,16 +1,32 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
 
 import regionsAtom from 'src/atoms/regionsAtom';
+import RegionModal from '../RegionModal';
 import RegionCard from '../common/RegionCard';
 
 const SearchRegionList = () => {
+  const [isModal, setModal] = useState(false);
+  const [currentId, setCurrentId] = useState(0);
+
+  const onClose = () => {
+    setModal(false);
+  };
+
   const regions = useRecoilValue(regionsAtom);
   return (
     <Wrapper>
       {regions.map((item) => (
-        <RegionCard key={item.id} item={item} type="ADD_BUTTON" />
+        <RegionCard
+          key={item.id}
+          item={item}
+          type="ADD_BUTTON"
+          onOpen={setModal}
+          setCurrentId={setCurrentId}
+        />
       ))}
+      {isModal && <RegionModal id={currentId} src={regions[0].imageThumbnail} onClose={onClose} />}
     </Wrapper>
   );
 };

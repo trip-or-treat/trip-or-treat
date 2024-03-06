@@ -44,29 +44,27 @@ const RegionModal = ({ id, src, onClose }: Props) => {
   }
 
   return (
-    <div>
-      <ModalOverlay>
-        {isLoading ? (
-          <Loading type="LARGE" />
-        ) : (
-          <StyledModalLayout key={RegionsMoreInformationApi.data.id}>
-            <StyledIcon>
-              <Close onClick={onClose} />
-            </StyledIcon>
-            <StyledName>{RegionsMoreInformationApi.data.name}</StyledName>
-            <ImageBox imageOrigin={src} />
-            <Overview>{RegionsMoreInformationApi.data.overview}</Overview>
-            <RecommendPlaces
-              key={RegionsMoreInformationApi.data.id}
-              recommendedPlaces={RegionsMoreInformationApi.data.recommendedPlaces}
-            />
-            <StyledButtonInner>
-              <CommonButton>일정만들기</CommonButton>
-            </StyledButtonInner>
-          </StyledModalLayout>
-        )}
-      </ModalOverlay>
-    </div>
+    <ModalOverlay>
+      {isLoading ? (
+        <Loading type="LARGE" />
+      ) : (
+        <StyledModalLayout key={RegionsMoreInformationApi.data.id}>
+          <StyledIcon>
+            <Close onClick={onClose} />
+          </StyledIcon>
+          <StyledName>{RegionsMoreInformationApi.data.name}</StyledName>
+          <ImageBox imageOrigin={src} />
+          <Overview>{RegionsMoreInformationApi.data.overview}</Overview>
+          <RecommendPlaces
+            key={RegionsMoreInformationApi.data.id}
+            recommendedPlaces={RegionsMoreInformationApi.data.recommendedPlaces}
+          />
+          <StyledButtonInner>
+            <CommonButton>일정만들기</CommonButton>
+          </StyledButtonInner>
+        </StyledModalLayout>
+      )}
+    </ModalOverlay>
   );
 };
 

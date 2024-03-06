@@ -13,9 +13,11 @@ import defaultimg from '../../../assets/images/defaultImg.png';
 interface Props {
   item: Regions;
   type: 'DEFAULT' | 'ADD_BUTTON' | 'DELETE_BUTTON';
+  onOpen?: (modalState: boolean) => void;
+  setCurrentId?: (id: number) => void;
 }
 
-const RegionCard = ({ item, type }: Props) => {
+const RegionCard = ({ item, type, onOpen, setCurrentId }: Props) => {
   const [clickedIdList, setClickedIdList] = useRecoilState(regionClickedIdListAtom);
   const [myRegionList, setMyRegionList] = useRecoilState(myRegionListAtom);
 
@@ -41,7 +43,10 @@ const RegionCard = ({ item, type }: Props) => {
   };
 
   const handleClickModal = () => {
-    // TODO : 지역 상세 Modal open 되도록 처리
+    if (onOpen && setCurrentId) {
+      onOpen(true);
+      setCurrentId(item.id);
+    }
   };
 
   return (

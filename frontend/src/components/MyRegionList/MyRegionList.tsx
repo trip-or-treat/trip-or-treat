@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
 
 import myRegionListAtom from 'src/atoms/myRegionListAtom';
+import RegionModal from '../RegionModal';
 import RegionCard from '../common/RegionCard';
 import { ReactComponent as Plus } from '../../assets/svgs/plus.svg';
 
@@ -19,6 +21,12 @@ const EmptyMyRegionList = () => {
 
 const MyRegionList = () => {
   const myRegionList = useRecoilValue(myRegionListAtom);
+  const [isModal, setModal] = useState(false);
+  const [currentId, setCurrentId] = useState(0);
+
+  const onClose = () => {
+    setModal(false);
+  };
 
   return (
     <Wrapper>
@@ -26,18 +34,33 @@ const MyRegionList = () => {
         <p>내 여행지</p>
         <p>(최대 2개 선택 가능)</p>
       </Title>
-
       <MyRegionLCardBox>
-        <RegionCard item={myRegionList[0]} type="DEFAULT" />
+        <RegionCard
+          item={myRegionList[0]}
+          type="DEFAULT"
+          onOpen={setModal}
+          setCurrentId={setCurrentId}
+        />
 
         {[...myRegionList].slice(1).length < 1 ? (
           <EmptyMyRegionList />
         ) : (
           [...myRegionList]
             .slice(1)
-            .map((item) => <RegionCard key={item.id} item={item} type="DELETE_BUTTON" />)
+            .map((item) => (
+              <RegionCard
+                key={item.id}
+                item={item}
+                type="DELETE_BUTTON"
+                onOpen={setModal}
+                setCurrentId={setCurrentId}
+              />
+            ))
         )}
       </MyRegionLCardBox>
+      {isModal && (
+        <RegionModal id={currentId} src={myRegionList[0].imageThumbnail} onClose={onClose} />
+      )}
     </Wrapper>
   );
 };
