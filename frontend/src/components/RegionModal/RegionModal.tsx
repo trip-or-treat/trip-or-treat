@@ -16,7 +16,6 @@ import RecommendPlaces from '../RecommendPlaces/RecommendPlaces';
 
 interface Props {
   id: number;
-  src: string;
   onClose: () => void;
 }
 
@@ -28,7 +27,7 @@ interface MoreInformation {
   isError: boolean;
 }
 
-const RegionModal = ({ id, src, onClose }: Props) => {
+const RegionModal = ({ id, onClose }: Props) => {
   const {
     data: RegionsMoreInformationApi,
     isLoading,
@@ -55,7 +54,7 @@ const RegionModal = ({ id, src, onClose }: Props) => {
             <Close onClick={onClose} />
           </StyledIcon>
           <StyledName>{RegionsMoreInformationApi.data.name}</StyledName>
-          <ImageBox imageOrigin={src} />
+          <ImageBox imageOrigin={RegionsMoreInformationApi.data.imageThumbnail} />
           <Overview>{RegionsMoreInformationApi.data.overview}</Overview>
           <RecommendPlaces
             key={RegionsMoreInformationApi.data.id}

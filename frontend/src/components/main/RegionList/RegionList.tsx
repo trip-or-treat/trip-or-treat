@@ -1,14 +1,15 @@
 import styled from 'styled-components';
-import { useEffect, useState } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useEffect } from 'react';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import Loading from 'src/components/common/Loading';
 import RegionModal from 'src/components/RegionModal';
 import { useRegions } from 'src/hooks/api/useRegions';
 import { Regions } from 'src/@types/api/regions';
+import regionIdAtom from 'src/atoms/regionIdAtom';
 import regionsAtom from 'src/atoms/regionsAtom';
+import modalStateAtom from 'src/atoms/modalStateAtom';
 import createScheduleAtom from 'src/atoms/createScheduleAtom';
-
 import RegionItem from './RegionItem';
 
 interface RegionListData {
@@ -21,8 +22,8 @@ const RegionList = () => {
   const { data: regionsApi, isLoading, isError }: RegionListData = useRegions();
   const setRegions = useSetRecoilState(regionsAtom);
   const setCreateSchedule = useSetRecoilState(createScheduleAtom);
-  const [isModal, setModal] = useState(false);
-  const [currentId, setCurrentId] = useState(0);
+  const [isModal, setModal] = useRecoilState(modalStateAtom);
+  const currentId = useRecoilValue(regionIdAtom);
 
   useEffect(() => {
     if (regionsApi?.data) {
@@ -42,23 +43,10 @@ const RegionList = () => {
       <ListContainer>
         {!isLoading &&
           regionsApi?.data.map((data) => (
-            <RegionItem
-              key={data.id}
-              id={data.id}
-              src={data.imageThumbnail}
-              name={data.name}
-              onOpen={setModal}
-              setCurrentId={setCurrentId}
-            />
+            <RegionItem key={data.id} id={data.id} src={data.imageThumbnail} name={data.name} />
           ))}
       </ListContainer>
-      {isModal && (
-        <RegionModal
-          id={currentId}
-          src={regionsApi.data[currentId - 1].imageThumbnail}
-          onClose={onClose}
-        />
-      )}
+      {isModal && <RegionModal id={currentId} onClose={onClose} />}
     </Wrapper>
   );
 };

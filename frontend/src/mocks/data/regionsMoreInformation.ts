@@ -4,7 +4,7 @@ export const regionsMoreInformationData: RegionsMoreInformation[] = [
   {
     id: 1,
     name: '서울',
-    imageOrigin:
+    imageThumbnail:
       'https://images.unsplash.com/photo-1705615427946-847174bd8cf3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     overview:
       '서울은 한국의 수도로서 역사적·문화적으로도 중요한 도시입니다. 현대적인 도시인 서울은 다양한 관광지, 음식 문화, 쇼핑 센터 등을 제공하여 방문객들에게 풍성한 경험을 선사합니다. 또한 정치와 경제의 중심지로서 국내외에서 중요한 역할을 합니다.',

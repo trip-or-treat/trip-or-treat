@@ -1,7 +1,7 @@
 export interface RegionsMoreInformation {
   id: number;
   name: string;
-  imageOrigin: string;
+  imageThumbnail: string;
   overview: string;
   latitude: number;
   longitude: number;

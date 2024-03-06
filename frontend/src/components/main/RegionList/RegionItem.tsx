@@ -1,16 +1,22 @@
 import styled from 'styled-components';
+import { useSetRecoilState } from 'recoil';
+
+import modalStateAtom from 'src/atoms/modalStateAtom';
+import regionIdAtom from 'src/atoms/regionIdAtom';
 
 interface Props {
   id: number;
   src: string;
   name: string;
-  onOpen: (modalState: boolean) => void;
-  setCurrentId: (id: number) => void;
 }
-const RegionItem = ({ id, src, name, onOpen, setCurrentId }: Props) => {
+
+const RegionItem = ({ id, src, name }: Props) => {
+  const setModal = useSetRecoilState(modalStateAtom);
+  const setRegionId = useSetRecoilState(regionIdAtom);
+
   const handleClickModal = () => {
-    onOpen(true);
-    setCurrentId(id);
+    setModal(true);
+    setRegionId(id);
   };
 
   return (

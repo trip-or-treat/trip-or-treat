@@ -1,16 +1,17 @@
-import { useState } from 'react';
 import styled from 'styled-components';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import createScheduleAtom from 'src/atoms/createScheduleAtom';
+import modalStateAtom from 'src/atoms/modalStateAtom';
+import regionIdAtom from 'src/atoms/regionIdAtom';
 import regionsAtom from 'src/atoms/regionsAtom';
 import RegionModal from '../RegionModal';
 import RegionCard from '../common/RegionCard';
 
 const SearchRegionList = () => {
   const setCreateSchedule = useSetRecoilState(createScheduleAtom);
-  const [isModal, setModal] = useState(false);
-  const [currentId, setCurrentId] = useState(0);
+  const [isModal, setModal] = useRecoilState(modalStateAtom);
+  const currentId = useRecoilValue(regionIdAtom);
 
   setCreateSchedule(false);
 
@@ -19,18 +20,13 @@ const SearchRegionList = () => {
   };
 
   const regions = useRecoilValue(regionsAtom);
+
   return (
     <Wrapper>
       {regions.map((item) => (
-        <RegionCard
-          key={item.id}
-          item={item}
-          type="ADD_BUTTON"
-          onOpen={setModal}
-          setCurrentId={setCurrentId}
-        />
+        <RegionCard key={item.id} item={item} type="ADD_BUTTON" />
       ))}
-      {isModal && <RegionModal id={currentId} src={regions[0].imageThumbnail} onClose={onClose} />}
+      {isModal && <RegionModal id={currentId} onClose={onClose} />}
     </Wrapper>
   );
 };
