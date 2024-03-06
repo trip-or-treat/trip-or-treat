@@ -7,6 +7,7 @@ import { useRegionsMoreInformation } from 'src/hooks/api/useRegionsMoreInformati
 import { ReactComponent as Close } from 'src/assets/svgs/close.svg';
 import createScheduleAtom from 'src/atoms/createScheduleAtom';
 import overviewTitleAtom from 'src/atoms/overviewTitleAtom';
+
 import Loading from '../common/Loading';
 import ModalOverlay from '../common/modal/ModalOverlay';
 import ImageBox from '../common/modal/ImageBox';
