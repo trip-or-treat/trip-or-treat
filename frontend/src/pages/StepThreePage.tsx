@@ -1,27 +1,45 @@
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+
 import RegionCategory from 'src/components/RegionCategory';
 import EnterSearch from 'src/components/EnterSearch';
+import PlaceList from 'src/components/PlaceList';
+import DayCategory from 'src/components/DayCategory';
 import ContentTypeFilterItemList from 'src/components/ContentTypeFilterItemList';
-import { useState } from 'react';
-import DayCategory from 'src/components/DayCategory copy';
-import { useRecoilValue } from 'recoil';
+import SelectedPlaceCardList from 'src/components/SelectedPlaceCardList';
+
 import myRegionListAtom from 'src/atoms/myRegionListAtom';
+import totalPlanAtom from 'src/atoms/totalPlanAtom';
+import stepPlanSavedBtnAtom from 'src/atoms/stepPlanSavedBtnAtom';
 
 const StepThreePage = () => {
-  const [curDay, setCurDay] = useState(1);
+  const [keyword, setKeyword] = useState('');
   const myRegionList = useRecoilValue(myRegionListAtom);
+  const totalPlan = useRecoilValue(totalPlanAtom);
+  const setStepPlanSaveBtn = useSetRecoilState(stepPlanSavedBtnAtom);
+
+  useEffect(() => {
+    setStepPlanSaveBtn(totalPlan.map((data) => data.items).every((data) => data.length !== 0));
+  }, [totalPlan]);
 
   return (
     <Wrapper>
       <SearchLayer>
-        <RegionCategory data={myRegionList} />
-        <EnterSearch placeHolder="장소를 검색해보세요!" />
-        <ContentTypeFilterItemList />
+        <section>
+          <RegionCategory data={myRegionList} />
+          <EnterSearch placeHolder="장소를 검색해보세요!" setKeyword={setKeyword} />
+          <ContentTypeFilterItemList />
+        </section>
+
+        <PlaceList keyword={keyword} />
       </SearchLayer>
 
       <DayLayer>
-        <DayCategory curDay={curDay} setCurDay={setCurDay} />
+        <DayCategory />
+        <SelectedPlaceCardList />
       </DayLayer>
+
       <MapLayer>mapLayer</MapLayer>
     </Wrapper>
   );
@@ -39,11 +57,14 @@ const Wrapper = styled.div`
 const SearchLayer = styled.div`
   width: 25%;
   height: inherit;
-  padding: 20px;
   border-left: ${(props) => `1px solid ${props.theme.colors.lightGrey}`};
   border-right: ${(props) => `1px solid ${props.theme.colors.lightGrey}`};
 
   box-sizing: border-box;
+
+  & > section {
+    padding: 20px;
+  }
 `;
 
 const DayLayer = styled.div`
