@@ -7,6 +7,7 @@ import RegionModal from 'src/components/RegionModal';
 import { useRegions } from 'src/hooks/api/useRegions';
 import { Regions } from 'src/@types/api/regions';
 import regionsAtom from 'src/atoms/regionsAtom';
+import createScheduleAtom from 'src/atoms/createScheduleAtom';
 
 import RegionItem from './RegionItem';
 
@@ -19,11 +20,15 @@ interface RegionListData {
 const RegionList = () => {
   const { data: regionsApi, isLoading, isError }: RegionListData = useRegions();
   const setRegions = useSetRecoilState(regionsAtom);
+  const setCreateSchedule = useSetRecoilState(createScheduleAtom);
   const [isModal, setModal] = useState(false);
   const [currentId, setCurrentId] = useState(0);
 
   useEffect(() => {
-    if (regionsApi?.data) setRegions(regionsApi.data);
+    if (regionsApi?.data) {
+      setRegions(regionsApi.data);
+      setCreateSchedule(true);
+    }
   }, [regionsApi]);
 
   const onClose = () => {

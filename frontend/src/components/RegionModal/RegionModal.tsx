@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
-import { useSetRecoilState } from 'recoil';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
 
 import { RegionsMoreInformation } from 'src/@types/api/regionsMoreInformation';
 import { useRegionsMoreInformation } from 'src/hooks/api/useRegionsMoreInformation';
 import { ReactComponent as Close } from 'src/assets/svgs/close.svg';
+import createScheduleAtom from 'src/atoms/createScheduleAtom';
 import overviewTitleAtom from 'src/atoms/overviewTitleAtom';
 import Loading from '../common/Loading';
 import ModalOverlay from '../common/modal/ModalOverlay';
@@ -34,6 +35,7 @@ const RegionModal = ({ id, src, onClose }: Props) => {
     isError,
   }: MoreInformation = useRegionsMoreInformation(id);
   const setTitle = useSetRecoilState(overviewTitleAtom);
+  const iscreateSchedule = useRecoilValue(createScheduleAtom);
 
   useEffect(() => {
     setTitle(false);
@@ -60,7 +62,7 @@ const RegionModal = ({ id, src, onClose }: Props) => {
             recommendedPlaces={RegionsMoreInformationApi.data.recommendedPlaces}
           />
           <StyledButtonInner>
-            <CommonButton>일정만들기</CommonButton>
+            {iscreateSchedule && <CommonButton>일정만들기</CommonButton>}
           </StyledButtonInner>
         </StyledModalLayout>
       )}

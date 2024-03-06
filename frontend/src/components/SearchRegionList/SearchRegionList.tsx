@@ -1,14 +1,18 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
+import createScheduleAtom from 'src/atoms/createScheduleAtom';
 import regionsAtom from 'src/atoms/regionsAtom';
 import RegionModal from '../RegionModal';
 import RegionCard from '../common/RegionCard';
 
 const SearchRegionList = () => {
+  const setCreateSchedule = useSetRecoilState(createScheduleAtom);
   const [isModal, setModal] = useState(false);
   const [currentId, setCurrentId] = useState(0);
+
+  setCreateSchedule(false);
 
   const onClose = () => {
     setModal(false);
