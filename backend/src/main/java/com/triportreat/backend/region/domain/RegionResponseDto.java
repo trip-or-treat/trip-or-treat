@@ -12,7 +12,6 @@ import lombok.*;
 public class RegionResponseDto {
     private Long id;
     private String name;
-    private String imageOrigin;
     private String imageThumbnail;
     private Double latitude;
     private Double longitude;
@@ -21,7 +20,6 @@ public class RegionResponseDto {
         return RegionResponseDto.builder()
                 .id(region.getId())
                 .name(region.getName())
-                .imageOrigin(region.getImageOrigin())
                 .imageThumbnail(region.getImageThumbnail())
                 .latitude(region.getLatitude())
                 .longitude(region.getLongitude())
