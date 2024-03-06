@@ -4,7 +4,7 @@ import { regionsMoreInformationFetcher } from 'src/api/regionsMoreInformation';
 
 export const useRegionsMoreInformation = (id: number) => {
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['RegionsMoreInformation'],
+    queryKey: ['RegionsMoreInformation', id],
     queryFn: () => regionsMoreInformationFetcher(id),
   });
 

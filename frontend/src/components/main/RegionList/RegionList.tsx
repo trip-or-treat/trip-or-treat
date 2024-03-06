@@ -1,8 +1,9 @@
 import styled from 'styled-components';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 
 import Loading from 'src/components/common/Loading';
+import RegionModal from 'src/components/RegionModal';
 import { useRegions } from 'src/hooks/api/useRegions';
 import { Regions } from 'src/@types/api/regions';
 import regionsAtom from 'src/atoms/regionsAtom';
@@ -18,11 +19,17 @@ interface RegionListData {
 const RegionList = () => {
   const { data: regionsApi, isLoading, isError }: RegionListData = useRegions();
   const setRegions = useSetRecoilState(regionsAtom);
+  const [isModal, setModal] = useState(false);
+  const [currentId, setCurrentId] = useState(0);
 
   useEffect(() => {
     if (regionsApi?.data) setRegions(regionsApi.data);
   }, [regionsApi]);
 
+  const onClose = () => {
+    setModal(false);
+  };
+  console.log(currentId);
   return (
     <Wrapper>
       {isLoading && <Loading type="MEDIUM" />}
@@ -30,10 +37,23 @@ const RegionList = () => {
       <ListContainer>
         {!isLoading &&
           regionsApi?.data.map((data) => (
-            <RegionItem key={data.id} src={data.imageThumbnail} name={data.name} />
+            <RegionItem
+              key={data.id}
+              id={data.id}
+              src={data.imageThumbnail}
+              name={data.name}
+              onOpen={setModal}
+              setCurrentId={setCurrentId}
+            />
           ))}
       </ListContainer>
-      {isModal && <RegionModal id={currentId} onClose={onClose} />}
+      {isModal && (
+        <RegionModal
+          id={currentId}
+          src={regionsApi.data[currentId - 1].imageThumbnail}
+          onClose={onClose}
+        />
+      )}
     </Wrapper>
   );
 };

@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import styled from 'styled-components';
 import { useSetRecoilState } from 'recoil';
 
+import { RegionsMoreInformation } from 'src/@types/api/regionsMoreInformation';
 import { useRegionsMoreInformation } from 'src/hooks/api/useRegionsMoreInformation';
 import { ReactComponent as Close } from 'src/assets/svgs/close.svg';
 import overviewTitleAtom from 'src/atoms/overviewTitleAtom';
@@ -14,11 +15,24 @@ import RecommendPlaces from '../RecommendPlaces/RecommendPlaces';
 
 interface Props {
   id: number;
+  src: string;
   onClose: () => void;
 }
 
-const RegionModal = ({ id, onClose }: Props) => {
-  const { data: RegionsMoreInformationData, isLoading, isError } = useRegionsMoreInformation(id);
+interface MoreInformation {
+  data: {
+    data: RegionsMoreInformation;
+  };
+  isLoading: boolean;
+  isError: boolean;
+}
+
+const RegionModal = ({ id, src, onClose }: Props) => {
+  const {
+    data: RegionsMoreInformationApi,
+    isLoading,
+    isError,
+  }: MoreInformation = useRegionsMoreInformation(id);
   const setTitle = useSetRecoilState(overviewTitleAtom);
 
   useEffect(() => {
@@ -35,20 +49,21 @@ const RegionModal = ({ id, onClose }: Props) => {
         {isLoading ? (
           <Loading type="LARGE" />
         ) : (
-          RegionsMoreInformationData?.map((data) => (
-            <StyledModalLayout key={data.id}>
-              <StyledIcon>
-                <Close onClick={onClose} />
-              </StyledIcon>
-              <StyledName>{data.name}</StyledName>
-              <ImageBox imageOrigin={data.imageOrigin} />
-              <Overview>{data.overview}</Overview>
-              <RecommendPlaces key={data.id} recommendedPlaces={data.recommendedPlaces} />
-              <StyledButtonInner>
-                <CommonButton>일정만들기</CommonButton>
-              </StyledButtonInner>
-            </StyledModalLayout>
-          ))
+          <StyledModalLayout key={RegionsMoreInformationApi.data.id}>
+            <StyledIcon>
+              <Close onClick={onClose} />
+            </StyledIcon>
+            <StyledName>{RegionsMoreInformationApi.data.name}</StyledName>
+            <ImageBox imageOrigin={src} />
+            <Overview>{RegionsMoreInformationApi.data.overview}</Overview>
+            <RecommendPlaces
+              key={RegionsMoreInformationApi.data.id}
+              recommendedPlaces={RegionsMoreInformationApi.data.recommendedPlaces}
+            />
+            <StyledButtonInner>
+              <CommonButton>일정만들기</CommonButton>
+            </StyledButtonInner>
+          </StyledModalLayout>
         )}
       </ModalOverlay>
     </div>
