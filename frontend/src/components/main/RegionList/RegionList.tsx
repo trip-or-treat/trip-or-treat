@@ -2,14 +2,15 @@ import styled from 'styled-components';
 import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
-import Loading from 'src/components/common/Loading';
-import RegionModal from 'src/components/RegionModal';
 import { useRegions } from 'src/hooks/api/useRegions';
 import { Regions } from 'src/@types/api/regions';
 import regionIdAtom from 'src/atoms/regionIdAtom';
 import regionsAtom from 'src/atoms/regionsAtom';
 import modalStateAtom from 'src/atoms/modalStateAtom';
 import createScheduleAtom from 'src/atoms/createScheduleAtom';
+
+import Loading from 'src/components/common/Loading';
+import RegionModal from 'src/components/RegionModal';
 import RegionItem from './RegionItem';
 
 interface RegionListData {
@@ -35,7 +36,7 @@ const RegionList = () => {
   const onClose = () => {
     setModal(false);
   };
-  console.log(currentId);
+
   return (
     <Wrapper>
       {isLoading && <Loading type="MEDIUM" />}

@@ -5,6 +5,7 @@ import createScheduleAtom from 'src/atoms/createScheduleAtom';
 import modalStateAtom from 'src/atoms/modalStateAtom';
 import regionIdAtom from 'src/atoms/regionIdAtom';
 import regionsAtom from 'src/atoms/regionsAtom';
+
 import RegionModal from '../RegionModal';
 import RegionCard from '../common/RegionCard';
 
