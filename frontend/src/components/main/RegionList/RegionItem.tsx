@@ -4,7 +4,7 @@ interface Props {
   id: number;
   src: string;
   name: string;
-  onOpen: (ismodal: boolean) => void;
+  onOpen: (modalState: boolean) => void;
   setCurrentId: (id: number) => void;
 }
 const RegionItem = ({ id, src, name, onOpen, setCurrentId }: Props) => {

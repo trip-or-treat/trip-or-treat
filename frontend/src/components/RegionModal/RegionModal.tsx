@@ -2,14 +2,15 @@ import { useEffect } from 'react';
 import styled from 'styled-components';
 import { useSetRecoilState } from 'recoil';
 
-import overviewTitleAtom from 'src/atoms/overviewTitleAtom';
 import { useRegionsMoreInformation } from 'src/hooks/api/useRegionsMoreInformation';
 import { ReactComponent as Close } from 'src/assets/svgs/close.svg';
-import RecommendPlaces from '../RecommendPlaces/RecommendPlaces';
+import overviewTitleAtom from 'src/atoms/overviewTitleAtom';
+import Loading from '../common/Loading';
 import ModalOverlay from '../common/modal/ModalOverlay';
 import ImageBox from '../common/modal/ImageBox';
 import Overview from '../common/modal/Overview';
 import CommonButton from '../common/CommonButton';
+import RecommendPlaces from '../RecommendPlaces/RecommendPlaces';
 
 interface Props {
   id: number;
@@ -17,30 +18,38 @@ interface Props {
 }
 
 const RegionModal = ({ id, onClose }: Props) => {
-  const { data: RegionsMoreInformationData, isError } = useRegionsMoreInformation(id);
+  const { data: RegionsMoreInformationData, isLoading, isError } = useRegionsMoreInformation(id);
   const setTitle = useSetRecoilState(overviewTitleAtom);
 
   useEffect(() => {
     setTitle(false);
   }, []);
 
-  return isError ? null : (
+  if (isError) {
+    onClose();
+  }
+
+  return (
     <div>
       <ModalOverlay>
-        {RegionsMoreInformationData?.map((data) => (
-          <StyledModalLayout key={data.id}>
-            <StyledIcon>
-              <Close onClick={onClose} />
-            </StyledIcon>
-            <StyledName>{data.name}</StyledName>
-            <ImageBox imageOrigin={data.imageOrigin} />
-            <Overview>{data.overview}</Overview>
-            <RecommendPlaces key={data.id} recommendedPlaces={data.recommendedPlaces} />
-            <StyledButtonInner>
-              <CommonButton>일정만들기</CommonButton>
-            </StyledButtonInner>
-          </StyledModalLayout>
-        ))}
+        {isLoading ? (
+          <Loading type="LARGE" />
+        ) : (
+          RegionsMoreInformationData?.map((data) => (
+            <StyledModalLayout key={data.id}>
+              <StyledIcon>
+                <Close onClick={onClose} />
+              </StyledIcon>
+              <StyledName>{data.name}</StyledName>
+              <ImageBox imageOrigin={data.imageOrigin} />
+              <Overview>{data.overview}</Overview>
+              <RecommendPlaces key={data.id} recommendedPlaces={data.recommendedPlaces} />
+              <StyledButtonInner>
+                <CommonButton>일정만들기</CommonButton>
+              </StyledButtonInner>
+            </StyledModalLayout>
+          ))
+        )}
       </ModalOverlay>
     </div>
   );

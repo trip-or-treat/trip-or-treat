@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useState } from 'react';
+
 import { useRegions } from 'src/hooks/api/useRegions';
 import RegionModal from 'src/components/RegionModal';
 import Loading from 'src/components/common/Loading';
@@ -13,6 +14,7 @@ const RegionList = () => {
   const onClose = () => {
     setModal(false);
   };
+
   return (
     <Wrapper>
       {isLoading && <Loading type="MEDIUM" />}
