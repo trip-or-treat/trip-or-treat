@@ -1,13 +1,13 @@
 import { Outlet, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useEffect } from 'react';
 
 import Nav from 'src/components/common/Nav';
 import StepNavBar from 'src/components/StepNavBar';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import regionsAtom from 'src/atoms/regionsAtom';
 import myRegionListAtom from 'src/atoms/myRegionListAtom';
 import regionClickedIdListAtom from 'src/atoms/regionClickedIdListAtom';
-import { useEffect } from 'react';
 
 const StepLayout = () => {
   const { regionId } = useParams();

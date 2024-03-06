@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-
 import { useRecoilValue } from 'recoil';
+
 import regionsAtom from 'src/atoms/regionsAtom';
 import RegionCard from '../common/RegionCard';
 

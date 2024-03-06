@@ -1,7 +1,7 @@
 import { atom } from 'recoil';
+import { recoilPersist } from 'recoil-persist';
 
 import { PlaceListTypes } from 'src/@types/api/placeList';
-import { recoilPersist } from 'recoil-persist';
 
 export interface TotalPlan {
   day: number;

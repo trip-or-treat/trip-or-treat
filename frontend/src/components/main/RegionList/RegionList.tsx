@@ -1,12 +1,12 @@
 import styled from 'styled-components';
-
-import { useRegions } from 'src/hooks/api/useRegions';
-import Loading from 'src/components/common/Loading';
-
-import { Regions } from 'src/@types/api/regions';
 import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
+
+import Loading from 'src/components/common/Loading';
+import { useRegions } from 'src/hooks/api/useRegions';
+import { Regions } from 'src/@types/api/regions';
 import regionsAtom from 'src/atoms/regionsAtom';
+
 import RegionItem from './RegionItem';
 
 interface RegionListData {

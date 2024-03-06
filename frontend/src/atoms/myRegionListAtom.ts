@@ -1,6 +1,7 @@
 import { atom } from 'recoil';
-import { Regions } from 'src/@types/api/regions';
 import { recoilPersist } from 'recoil-persist';
+
+import { Regions } from 'src/@types/api/regions';
 
 const { persistAtom } = recoilPersist();
 
