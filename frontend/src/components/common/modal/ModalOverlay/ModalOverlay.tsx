@@ -18,6 +18,7 @@ const StyledModalOverlay = styled.div`
   top: 0;
   left: 0;
   align-items: center;
+  z-index: 999;
 
   width: 100%;
   height: 100%;
