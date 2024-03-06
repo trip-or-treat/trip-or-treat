@@ -34,7 +34,7 @@ const PlaceList = ({ keyword }: Props) => {
         {!isLoading && (
           <>
             {data?.pages?.map((items) =>
-              items.map((placeCardItem: PlaceListTypes) => (
+              items.data.map((placeCardItem: PlaceListTypes) => (
                 <PlaceCard key={placeCardItem.id} placeCardItem={placeCardItem} type="ADD_BUTTON" />
               )),
             )}
@@ -63,6 +63,6 @@ const Title = styled.div`
 const PlaceListBox = styled.div`
   padding: 0px 20px;
   margin-top: 25px;
-  height: 350px;
+  height: 310px;
   overflow: auto;
 `;

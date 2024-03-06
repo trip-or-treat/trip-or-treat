@@ -1,18 +1,24 @@
 import styled from 'styled-components';
 
 import { useContentType } from 'src/hooks/api/useContentType';
+import { ContentType } from 'src/@types/api/contentType';
 import ContentTypeFilterItem from './ContentTypeFilterItem';
 import Loading from '../common/Loading';
 
+interface ContentTypeFilterItemListData {
+  data: { data: ContentType[] };
+  isLoading: boolean;
+}
+
 const ContentTypeFilterItemList = () => {
-  const { data: contentTypeData, isLoading } = useContentType();
+  const { data: contentTypeData, isLoading }: ContentTypeFilterItemListData = useContentType();
 
   return (
     <Wrapper>
       {isLoading && <Loading type="SMALL" />}
 
       {!isLoading &&
-        contentTypeData?.map((data) => (
+        contentTypeData?.data.map((data) => (
           <ContentTypeFilterItem key={data.id} id={data.id} title={data.name} />
         ))}
     </Wrapper>

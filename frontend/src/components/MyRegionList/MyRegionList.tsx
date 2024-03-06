@@ -20,8 +20,6 @@ const EmptyMyRegionList = () => {
 const MyRegionList = () => {
   const myRegionList = useRecoilValue(myRegionListAtom);
 
-  if (myRegionList.length === 0) return <div />;
-
   return (
     <Wrapper>
       <Title>

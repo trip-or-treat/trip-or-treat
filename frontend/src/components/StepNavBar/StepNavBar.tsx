@@ -83,6 +83,7 @@ const LinkBox = styled(Link)<{ $isClicked: boolean }>`
 
   transition: transform 0.25s ease-in;
   transform: ${(props) => (props.$isClicked ? 'scale(1.1)' : 'scale(1)')};
+  font-family: 'Pretendard-SemiBold';
 `;
 
 const LinkItem = styled.p`
