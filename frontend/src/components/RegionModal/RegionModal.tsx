@@ -62,7 +62,7 @@ const RegionModal = ({ id, onClose }: Props) => {
             recommendedPlaces={RegionsMoreInformationApi.data.recommendedPlaces}
           />
           <StyledButtonInner>
-            {iscreateSchedule && <CommonButton>일정만들기</CommonButton>}
+            {iscreateSchedule ? <CommonButton>일정만들기</CommonButton> : <StyledFooter />}
           </StyledButtonInner>
         </StyledModalLayout>
       )}
@@ -112,4 +112,9 @@ const StyledIcon = styled.div`
   height: 21px;
 
   cursor: pointer;
+`;
+
+const StyledFooter = styled.div`
+  width: 280px;
+  height: 60px;
 `;
