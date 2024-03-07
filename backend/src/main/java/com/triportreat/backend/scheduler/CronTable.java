@@ -1,5 +1,6 @@
 package com.triportreat.backend.scheduler;
 
+import com.triportreat.backend.common.cache.RedisService;
 import com.triportreat.backend.scheduler.dto.OpenApiPlaceResponseDto;
 import com.triportreat.backend.scheduler.dto.OpenApiPlaceResponseDto.Item;
 import com.triportreat.backend.scheduler.service.OpenApiService;
@@ -18,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class CronTable {
 
+    private final RedisService redisService;
     private final OpenApiService openApiService;
     private final RestTemplate restTemplate;
 
@@ -30,14 +32,22 @@ public class CronTable {
     @Value("${openapi.key}")
     private String serviceKey;
 
-    @Scheduled(cron = "${schedule.cron}")
+    @Scheduled(cron = "${schedule.place-data.cron}")
     public void updatePlaceData() {
         if (isRunnable) {
             Integer totalCount = getTotalCount();
 
             List<Item> items = getPlaces(totalCount);
             openApiService.upsertPlaces(items);
-            log.info("Place 데이터 업데이트 완료");
+            log.info("Place 데이터 업데이트 종료");
+        }
+    }
+
+    @Scheduled(cron = "${schedule.place-views.cron}")
+    public void updatePlaceViewCounts() {
+        if (isRunnable) {
+            redisService.updatePlaceViewCounts();
+            log.info("Place 조회수 업데이트 종료");
         }
     }
 
