@@ -35,6 +35,7 @@ const RegionList = () => {
 
   const onClose = () => {
     setModal(false);
+    document.body.style.overflowY = 'auto';
   };
 
   return (

@@ -6,7 +6,16 @@ interface Props {
 }
 
 const ModalOverlay = ({ children }: Props) => {
-  return <StyledModalOverlay>{children}</StyledModalOverlay>;
+  const onBodyOverflow = () => {
+    document.body.style.overflowY = 'hidden';
+  };
+
+  return (
+    <>
+      {onBodyOverflow()}
+      <StyledModalOverlay>{children}</StyledModalOverlay>;
+    </>
+  );
 };
 
 export default ModalOverlay;

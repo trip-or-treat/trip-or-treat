@@ -18,6 +18,7 @@ const SearchRegionList = () => {
 
   const onClose = () => {
     setModal(false);
+    document.body.style.overflowY = 'auto';
   };
 
   const regions = useRecoilValue(regionsAtom);
