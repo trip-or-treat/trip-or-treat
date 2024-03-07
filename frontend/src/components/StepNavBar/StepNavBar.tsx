@@ -32,7 +32,7 @@ const StepNavBar = () => {
         )}
 
         {currentStep === 3 && (
-          <StepNavLinkButton type="ENABLE_AND_DISABLE" path="/result">
+          <StepNavLinkButton type="ENABLE_AND_DISABLE" path="/plans">
             계획 저장
           </StepNavLinkButton>
         )}
@@ -80,10 +80,10 @@ const LinkBox = styled(Link)<{ $isClicked: boolean }>`
   color: ${(props) =>
     props.$isClicked ? props.theme.colors.mainColor : props.theme.colors.darkGrey};
   text-decoration: none;
+  font-family: 'Pretendard-SemiBold';
 
   transition: transform 0.25s ease-in;
   transform: ${(props) => (props.$isClicked ? 'scale(1.1)' : 'scale(1)')};
-  font-family: 'Pretendard-SemiBold';
 `;
 
 const LinkItem = styled.p`
