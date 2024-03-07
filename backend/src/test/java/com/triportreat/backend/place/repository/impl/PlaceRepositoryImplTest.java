@@ -1,6 +1,7 @@
 package com.triportreat.backend.place.repository.impl;
 
 import static com.triportreat.backend.place.entity.QContentType.contentType;
+import static com.triportreat.backend.place.entity.QPlace.place;
 import static com.triportreat.backend.place.entity.QSubCategory.subCategory;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -103,7 +104,7 @@ class PlaceRepositoryImplTest {
         placeSearchCondition.setKeyword(null);
 
         // when
-        BooleanExpression booleanExpression = placeRepositoryImpl.placeNameContains(placeSearchCondition.getKeyword());
+        BooleanExpression booleanExpression = placeRepositoryImpl.keywordContains(placeSearchCondition.getKeyword());
 
         // then
         assertThat(booleanExpression).isEqualTo(null);
@@ -117,11 +118,13 @@ class PlaceRepositoryImplTest {
         placeSearchCondition.setKeyword("키워드");
 
         // when
-        BooleanExpression booleanExpression = placeRepositoryImpl.subCategoryNameContains(
+        BooleanExpression booleanExpression = placeRepositoryImpl.keywordContains(
                 placeSearchCondition.getKeyword());
 
         // then
-        assertThat(booleanExpression).isEqualTo(subCategory.name.contains(placeSearchCondition.getKeyword()));
+        assertThat(booleanExpression).isEqualTo(
+                place.name.contains(placeSearchCondition.getKeyword())
+                        .or(subCategory.name.contains(placeSearchCondition.getKeyword())));
     }
 
     @Test
