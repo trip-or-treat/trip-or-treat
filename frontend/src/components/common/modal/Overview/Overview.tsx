@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { decode } from 'html-entities';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
 
@@ -6,31 +7,33 @@ import overviewTitleAtom from 'src/atoms/overviewTitleAtom';
 import DefaultView from './DefaultView';
 
 interface Props {
-  children: React.ReactNode;
+  overview: string;
 }
 
-const Overview = ({ children }: Props) => {
+const Overview = ({ overview }: Props) => {
   const isTitle = useRecoilValue(overviewTitleAtom);
   const [moreText, setMoreText] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
 
   useEffect(() => {
-    if (typeof children === 'string') {
-      if (children.length > 248) setMoreText(true);
-      if (children.length === 0) setIsEmpty(true);
-    }
+    if (overview.length > 248) setMoreText(true);
+    if (overview.length === 0) setIsEmpty(true);
   }, []);
 
   const closeMoreText = () => {
     setMoreText(false);
   };
 
+  const decodedText = decode(overview)
+    .replace(/<br\s*\/?>/g, '\n')
+    .replace(/\*/g, '');
+
   return (
     <>
       {isTitle && <StyledTitle>개요</StyledTitle>}
       <StyledDescription $isMore={moreText}>
         {isEmpty && <DefaultView />}
-        {!isEmpty && children}
+        {!isEmpty && decodedText}
         {moreText && <StyledMoreToggle onClick={closeMoreText}>...더보기</StyledMoreToggle>}
       </StyledDescription>
     </>

@@ -55,8 +55,8 @@ const RegionModal = ({ id, onClose }: Props) => {
             <Close onClick={onClose} />
           </StyledIcon>
           <StyledName>{RegionsMoreInformationApi.data.name}</StyledName>
-          <ImageBox imageOrigin={RegionsMoreInformationApi.data.imageThumbnail} />
-          <Overview>{RegionsMoreInformationApi.data.overview}</Overview>
+          <ImageBox imageThumbnail={RegionsMoreInformationApi.data.imageThumbnail} />
+          <Overview overview={RegionsMoreInformationApi.data.overview} />
           <RecommendPlaces
             key={RegionsMoreInformationApi.data.id}
             recommendedPlaces={RegionsMoreInformationApi.data.recommendedPlaces}

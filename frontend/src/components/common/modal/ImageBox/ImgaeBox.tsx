@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
 interface Props {
-  imageOrigin: string;
+  imageThumbnail: string;
 }
 
-const ImageBox = ({ imageOrigin }: Props) => {
-  return <StyledImageBox src={imageOrigin} />;
+const ImageBox = ({ imageThumbnail }: Props) => {
+  return <StyledImageBox src={imageThumbnail} />;
 };
 
 export default ImageBox;

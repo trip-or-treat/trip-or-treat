@@ -1,3 +1,4 @@
+import { decode } from 'html-entities';
 import styled from 'styled-components';
 
 interface Props {
@@ -7,12 +8,16 @@ interface Props {
 }
 
 const Place = ({ name, overview, imageThumbnail }: Props) => {
+  const decodedText = decode(overview)
+    .replace(/<br\s*\/?>/g, '')
+    .replace(/\*/g, '');
+
   return (
     <Wrapper>
       <StyledImageThumbnail src={imageThumbnail} />
       <StyledTextInner>
         <StyledName>{name}</StyledName>
-        <StyledOverview>{overview}</StyledOverview>
+        <StyledOverview>{decodedText}</StyledOverview>
       </StyledTextInner>
     </Wrapper>
   );
