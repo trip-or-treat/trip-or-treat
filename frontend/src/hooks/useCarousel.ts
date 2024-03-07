@@ -26,5 +26,5 @@ export const useCarousel = (length: number, size: number) => {
     }
   }, [currentSlide]);
 
-  return { handlePrev, handleNext, slideRef };
+  return { handlePrev, handleNext, slideRef, currentSlide };
 };

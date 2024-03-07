@@ -10,7 +10,7 @@ import { ReactComponent as ChevronRight } from '../../assets/svgs/chevronRight.s
 
 const PlansList = () => {
   const totalPlan = useRecoilValue(totalPlanAtom);
-  const { handlePrev, handleNext, slideRef } = useCarousel(totalPlan.length % 2, 323);
+  const { handlePrev, handleNext, slideRef, currentSlide } = useCarousel(totalPlan.length % 2, 323);
 
   return (
     <>
@@ -26,12 +26,16 @@ const PlansList = () => {
         ))}
       </PlansListWrapper>
 
-      <LeftButton onClick={handlePrev} $length={totalPlan.length}>
-        <ChevronLeft />
-      </LeftButton>
-      <RightButton onClick={handleNext} $length={totalPlan.length}>
-        <ChevronRight />
-      </RightButton>
+      {currentSlide === 1 && (
+        <LeftButton onClick={handlePrev} $length={totalPlan.length}>
+          <ChevronLeft />
+        </LeftButton>
+      )}
+      {currentSlide === 0 && (
+        <RightButton onClick={handleNext} $length={totalPlan.length}>
+          <ChevronRight />
+        </RightButton>
+      )}
     </>
   );
 };
@@ -40,6 +44,7 @@ export default PlansList;
 
 const Wrapper = styled.div`
   overflow: auto;
+
   width: 323px;
   height: 58vh;
 `;
@@ -58,6 +63,7 @@ const MoveButtonBox = styled.button<{ $length: number }>`
   top: 50%;
 
   border: none;
+
   background-color: inherit;
 
   cursor: pointer;
