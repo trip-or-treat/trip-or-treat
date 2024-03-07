@@ -39,7 +39,7 @@ public class OpenApiService{
                         openApiRepository.savePlace(newPlace);
                     }
                     else {
-                        place.update(item);
+                        place.updatePlaceData(item);
                     }
                 });
     }
