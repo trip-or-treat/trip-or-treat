@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import styled from 'styled-components';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
@@ -28,6 +29,10 @@ const MyRegionList = () => {
   const onClose = () => {
     setModal(false);
   };
+
+  useEffect(() => {
+    setModal(false);
+  }, []);
 
   return (
     <Wrapper>
