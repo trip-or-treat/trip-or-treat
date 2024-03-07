@@ -1,19 +1,31 @@
 import styled from 'styled-components';
+import { useSetRecoilState } from 'recoil';
+
+import modalStateAtom from 'src/atoms/modalStateAtom';
+import regionIdAtom from 'src/atoms/regionIdAtom';
 
 interface Props {
+  id: number;
   src: string;
   name: string;
 }
-const RegionItem = ({ src, name }: Props) => {
+
+const RegionItem = ({ id, src, name }: Props) => {
+  const setModal = useSetRecoilState(modalStateAtom);
+  const setRegionId = useSetRecoilState(regionIdAtom);
+
   const handleClickModal = () => {
-    // 클릭 시 지역 모달 열리게
+    setModal(true);
+    setRegionId(id);
   };
 
   return (
-    <Container onClick={handleClickModal}>
-      <RegionImg src={src} />
-      <RegionName>{name}</RegionName>
-    </Container>
+    <div>
+      <Container onClick={handleClickModal}>
+        <RegionImg src={src} />
+        <RegionName>{name}</RegionName>
+      </Container>
+    </div>
   );
 };
 

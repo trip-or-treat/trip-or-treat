@@ -1,4 +1,7 @@
+import { decode } from 'html-entities';
 import styled from 'styled-components';
+
+import defaultImg from 'src/assets/images/defaultImg.png';
 
 interface Props {
   name: string;
@@ -7,12 +10,16 @@ interface Props {
 }
 
 const Place = ({ name, overview, imageThumbnail }: Props) => {
+  const decodedText = decode(overview)
+    .replace(/<br\s*\/?>/g, '')
+    .replace(/\*/g, '');
+
   return (
     <Wrapper>
-      <StyledImageThumbnail imageThumbnail={imageThumbnail} />
+      <StyledImageThumbnail src={imageThumbnail.length === 0 ? defaultImg : imageThumbnail} />
       <StyledTextInner>
         <StyledName>{name}</StyledName>
-        <StyledOverview>{overview.slice(0, overview.indexOf('.') + 1)}</StyledOverview>
+        <StyledOverview>{decodedText}</StyledOverview>
       </StyledTextInner>
     </Wrapper>
   );
@@ -23,7 +30,7 @@ export default Place;
 const Wrapper = styled.div`
   display: flex;
 
-  margin: 30px;
+  margin: 25px 20px 0px 30px;
 `;
 
 const StyledTextInner = styled.div`
@@ -31,6 +38,8 @@ const StyledTextInner = styled.div`
   flex-flow: column;
 
   margin-left: 15px;
+
+  font-size: 17px;
 `;
 
 const StyledName = styled.h2`
@@ -54,13 +63,12 @@ const StyledOverview = styled.p`
   line-height: 1.3;
 `;
 
-const StyledImageThumbnail = styled.div<{ imageThumbnail: string }>`
+const StyledImageThumbnail = styled.img`
   flex: 0 0 auto;
 
   width: 111px;
   height: 108px;
 
-  background-image: url(${(props) => props.imageThumbnail});
   background-size: cover;
   background-position: center;
   border-radius: 30px;
