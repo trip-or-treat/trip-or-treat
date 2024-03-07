@@ -7,7 +7,7 @@ const StepOnePage = () => {
 
   return (
     <div>
-      <div>{myRegionList[0].name}</div>
+      <div>{myRegionList[0]?.name}</div>
     </div>
   );
 };
