@@ -56,7 +56,9 @@ const PlaceCard = ({ placeCardItem, type }: Props) => {
         onClick={type !== 'DRAG_AND_DROP' ? handleClickModal : undefined}
         disabled={type === 'DRAG_AND_DROP'}
       >
-        <ThumbnailImg src={placeCardItem.imageThumbnail || defaultimg} />
+        <div>
+          <ThumbnailImg src={placeCardItem.imageThumbnail || defaultimg} />
+        </div>
         <RegionNameBox>
           <p>{placeCardItem.name}</p>
           <p>{placeCardItem.subCategoryName}</p>
@@ -119,6 +121,7 @@ const ThumbnailImg = styled.img`
   height: 35px;
   margin-right: 15px;
   border-radius: 50%;
+  object-fit: cover;
 `;
 
 const RegionNameBox = styled.div`

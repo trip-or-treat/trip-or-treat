@@ -52,7 +52,9 @@ const RegionCard = ({ item, type }: Props) => {
   return (
     <Wrapper data-id={item.id}>
       <DetailButton onClick={handleClickModal} disabled={type === 'DEFAULT'}>
-        <ThumbnailImg src={item.imageThumbnail || defaultimg} />
+        <div>
+          <ThumbnailImg src={item.imageThumbnail || defaultimg} />
+        </div>
         <RegionName>{item.name}</RegionName>
       </DetailButton>
 
@@ -110,6 +112,7 @@ const ThumbnailImg = styled.img`
   margin-right: 15px;
 
   border-radius: 50%;
+  object-fit: cover;
 `;
 
 const RegionName = styled.p`

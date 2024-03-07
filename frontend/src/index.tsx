@@ -5,11 +5,11 @@ import { ThemeProvider } from 'styled-components';
 import App from './App';
 import GlobalStyle from './styles/GlobalStyle';
 import theme from './styles/theme';
-import { worker } from './mocks/browser';
+// import { worker } from './mocks/browser';
 
-if (process.env.NODE_ENV === 'development') {
-  worker.start({ onUnhandledRequest: 'bypass' });
-}
+// if (process.env.NODE_ENV === 'development') {
+//   worker.start({ onUnhandledRequest: 'bypass' });
+// }
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
