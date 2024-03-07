@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import { Regions } from 'src/@types/api/regions';
 import myRegionListAtom from 'src/atoms/myRegionListAtom';
+import modalStateAtom from 'src/atoms/modalStateAtom';
+import regionIdAtom from 'src/atoms/regionIdAtom';
 import regionClickedIdListAtom from 'src/atoms/regionClickedIdListAtom';
 
 import { ReactComponent as Plus } from '../../../assets/svgs/plus.svg';
@@ -18,6 +20,8 @@ interface Props {
 const RegionCard = ({ item, type }: Props) => {
   const [clickedIdList, setClickedIdList] = useRecoilState(regionClickedIdListAtom);
   const [myRegionList, setMyRegionList] = useRecoilState(myRegionListAtom);
+  const setMoaal = useSetRecoilState(modalStateAtom);
+  const setRegionId = useSetRecoilState(regionIdAtom);
 
   const handleDeleteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const targetButton = e.currentTarget.parentNode?.parentNode as HTMLButtonElement;
@@ -41,7 +45,8 @@ const RegionCard = ({ item, type }: Props) => {
   };
 
   const handleClickModal = () => {
-    // TODO : 지역 상세 Modal open 되도록 처리
+    setMoaal(true);
+    setRegionId(item.id);
   };
 
   return (

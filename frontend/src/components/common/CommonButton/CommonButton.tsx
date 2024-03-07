@@ -22,4 +22,6 @@ const CommonButtonBox = styled.button`
   font-size: 23px;
   font-family: 'Pretendard-Regular';
   color: ${(props) => props.theme.colors.whiteFont};
+
+  cursor: pointer;
 `;

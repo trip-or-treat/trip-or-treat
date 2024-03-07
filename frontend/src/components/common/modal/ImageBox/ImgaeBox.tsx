@@ -1,20 +1,22 @@
 import styled from 'styled-components';
 
+import defaultImg from 'src/assets/images/defaultImg.png';
+
 interface Props {
-  imageOrigin: string;
+  imageThumbnail: string;
 }
 
-const ImageBox = ({ imageOrigin }: Props) => {
-  return <StyledImageBox imageOrigin={imageOrigin} />;
+const ImageBox = ({ imageThumbnail }: Props) => {
+  return <StyledImageBox src={imageThumbnail.length === 0 ? defaultImg : imageThumbnail} />;
 };
 
 export default ImageBox;
 
-const StyledImageBox = styled.div<{ imageOrigin: string }>`
+const StyledImageBox = styled.img`
   width: 457px;
   height: 217px;
+  margin-bottom: 40px;
 
-  background-image: url(${(props) => props.imageOrigin});
   background-size: cover;
   background-position: center;
 

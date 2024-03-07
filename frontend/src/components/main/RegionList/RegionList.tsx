@@ -1,12 +1,16 @@
 import styled from 'styled-components';
 import { useEffect } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
-import Loading from 'src/components/common/Loading';
 import { useRegions } from 'src/hooks/api/useRegions';
 import { Regions } from 'src/@types/api/regions';
+import regionIdAtom from 'src/atoms/regionIdAtom';
 import regionsAtom from 'src/atoms/regionsAtom';
+import modalStateAtom from 'src/atoms/modalStateAtom';
+import createScheduleAtom from 'src/atoms/createScheduleAtom';
 
+import Loading from 'src/components/common/Loading';
+import RegionModal from 'src/components/RegionModal';
 import RegionItem from './RegionItem';
 
 interface RegionListData {
@@ -18,10 +22,26 @@ interface RegionListData {
 const RegionList = () => {
   const { data: regionsApi, isLoading, isError }: RegionListData = useRegions();
   const setRegions = useSetRecoilState(regionsAtom);
+  const setCreateSchedule = useSetRecoilState(createScheduleAtom);
+  const [isModal, setModal] = useRecoilState(modalStateAtom);
+  const currentId = useRecoilValue(regionIdAtom);
 
   useEffect(() => {
-    if (regionsApi?.data) setRegions(regionsApi.data);
+    if (regionsApi?.data) {
+      setRegions(regionsApi.data);
+      setCreateSchedule(true);
+    }
   }, [regionsApi]);
+
+  useEffect(() => {
+    setModal(false);
+    document.body.style.overflowY = 'auto';
+  }, []);
+
+  const onClose = () => {
+    setModal(false);
+    document.body.style.overflowY = 'auto';
+  };
 
   return (
     <Wrapper>
@@ -30,9 +50,10 @@ const RegionList = () => {
       <ListContainer>
         {!isLoading &&
           regionsApi?.data.map((data) => (
-            <RegionItem key={data.id} src={data.imageThumbnail} name={data.name} />
+            <RegionItem key={data.id} id={data.id} src={data.imageThumbnail} name={data.name} />
           ))}
       </ListContainer>
+      {isModal && <RegionModal id={currentId} onClose={onClose} />}
     </Wrapper>
   );
 };
