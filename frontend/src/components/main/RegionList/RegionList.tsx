@@ -33,6 +33,11 @@ const RegionList = () => {
     }
   }, [regionsApi]);
 
+  useEffect(() => {
+    setModal(false);
+    document.body.style.overflowY = 'auto';
+  }, []);
+
   const onClose = () => {
     setModal(false);
     document.body.style.overflowY = 'auto';
