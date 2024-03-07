@@ -84,7 +84,7 @@ public class Place extends BaseTimeEntity {
                 .build();
     }
 
-    public void update(Item item) {
+    public void updatePlaceData(Item item) {
         this.name = item.getName();
         this.address = item.getAddress();
         this.addressDetail = item.getAddressDetail();
@@ -95,5 +95,9 @@ public class Place extends BaseTimeEntity {
         this.latitude = item.getLatitude();
         this.longitude = item.getLongitude();
         this.sigunguCode = item.getSigunguCode();
+    }
+
+    public void updateViews(Long views) {
+        this.views = views;
     }
 }
