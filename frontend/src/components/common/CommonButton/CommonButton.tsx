@@ -3,10 +3,11 @@ import { ReactNode } from 'react';
 
 interface ButtonTextProps {
   children: ReactNode;
+  onClick: () => void;
 }
 
-const CommonButton = ({ children }: ButtonTextProps) => {
-  return <CommonButtonBox>{children}</CommonButtonBox>;
+const CommonButton = ({ onClick, children }: ButtonTextProps) => {
+  return <CommonButtonBox onClick={onClick}>{children}</CommonButtonBox>;
 };
 
 export default CommonButton;
