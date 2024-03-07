@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 
@@ -62,7 +63,13 @@ const RegionModal = ({ id, onClose }: Props) => {
             recommendedPlaces={RegionsMoreInformationApi.data.recommendedPlaces}
           />
           <StyledButtonInner>
-            {iscreateSchedule ? <CommonButton>일정만들기</CommonButton> : <StyledFooter />}
+            {iscreateSchedule ? (
+              <Link to={`date/${RegionsMoreInformationApi.data.id}`}>
+                <CommonButton>일정만들기</CommonButton>
+              </Link>
+            ) : (
+              <StyledFooter />
+            )}
           </StyledButtonInner>
         </StyledModalLayout>
       )}
