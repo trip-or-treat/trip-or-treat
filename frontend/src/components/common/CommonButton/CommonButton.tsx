@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 
 interface ButtonTextProps {
   children: ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const CommonButton = ({ onClick, children }: ButtonTextProps) => {
