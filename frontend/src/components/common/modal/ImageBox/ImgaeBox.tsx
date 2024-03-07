@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 
+import defaultImg from 'src/assets/images/defaultImg.png';
+
 interface Props {
   imageThumbnail: string;
 }
 
 const ImageBox = ({ imageThumbnail }: Props) => {
-  return <StyledImageBox src={imageThumbnail} />;
+  return <StyledImageBox src={imageThumbnail.length === 0 ? defaultImg : imageThumbnail} />;
 };
 
 export default ImageBox;

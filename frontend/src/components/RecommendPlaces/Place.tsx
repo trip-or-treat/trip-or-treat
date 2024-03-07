@@ -1,6 +1,8 @@
 import { decode } from 'html-entities';
 import styled from 'styled-components';
 
+import defaultImg from 'src/assets/images/defaultImg.png';
+
 interface Props {
   name: string;
   overview: string;
@@ -14,7 +16,7 @@ const Place = ({ name, overview, imageThumbnail }: Props) => {
 
   return (
     <Wrapper>
-      <StyledImageThumbnail src={imageThumbnail} />
+      <StyledImageThumbnail src={imageThumbnail.length === 0 ? defaultImg : imageThumbnail} />
       <StyledTextInner>
         <StyledName>{name}</StyledName>
         <StyledOverview>{decodedText}</StyledOverview>

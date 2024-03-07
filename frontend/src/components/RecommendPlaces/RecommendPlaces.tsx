@@ -11,7 +11,6 @@ interface Props {
     imageThumbnail: string;
   }[];
 }
-
 const RecommendPlaces = ({ recommendedPlaces }: Props) => {
   return (
     <StyledModalLayout>
