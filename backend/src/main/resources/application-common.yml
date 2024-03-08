@@ -14,6 +14,9 @@ openapi:
   key: ENC(D5hw5G8H2Ngep4NJFvgNB0ZWylYDw1+805rEsGA0L6zbbgGshGoKb4OiFtwuUjMW6EH6JYNgwu4G0lW7EZiNZ6bV/C+7KfI157qWMO2dBjvisAVV6VEg7ca0c2zZWXTE9g4Fl5wuwuznQhcZDvTrfw==)
 
 schedule:
-  cron: 0 0 2 * * *
+  place-data:
+    cron: 0 30 2 * * *
+  place-views:
+    cron: 0 0 * * * *
   use: true
 
