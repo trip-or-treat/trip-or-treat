@@ -90,6 +90,7 @@ const EmptyPlaceItemWrapper = styled.div`
   font-family: 'Pretendard-Medium';
   font-size: 17px;
   color: ${(props) => props.theme.colors.blackFont};
+  font-family: 'Pretendard-Medium';
 
   img {
     width: 80px;
