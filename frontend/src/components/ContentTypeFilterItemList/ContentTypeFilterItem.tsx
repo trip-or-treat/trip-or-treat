@@ -49,5 +49,6 @@ const Button = styled.button<{ $isClicked: boolean }>`
     props.$isClicked ? props.theme.colors.whiteFont : props.theme.colors.blackFont};
 
   font-size: 12px;
+  font-family: 'Pretendard-Regular';
   cursor: pointer;
 `;

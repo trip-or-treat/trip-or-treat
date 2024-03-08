@@ -75,7 +75,6 @@ const Title = styled.div`
 
       color: ${(props) => props.theme.colors.blackFont};
       font-size: 18px;
-      font-family: 'Pretendard-Regular';
     }
 
     &:last-child {
@@ -97,6 +96,8 @@ const EmptyBox = styled.div`
   font-size: 17px;
 
   p {
+    font-family: 'Pretendard-Regular';
+    line-height: 22px;
     margin: 3px 0px;
 
     &:last-child {
