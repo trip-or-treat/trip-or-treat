@@ -79,21 +79,23 @@ class PlaceServiceImplTest {
     void getPlaceCommonInfo() {
         // given
         Long id = 1L;
-        ContentType contentType = ContentType.builder().id(1L).name("Type1").build(); // ContentType 객체 생성
+        ContentType contentType = ContentType.builder().id(1L).name("Type1").build();
         Place place = Place.builder()
                 .id(id)
                 .name("Test Place")
                 .imageOrigin("image.jpg")
                 .contentType(contentType)
+                .address("test Address")
                 .build();
 
         String overview = "Test Overview";
 
         PlaceCommonInfoDto expectedPlaceCommonInfoDto = PlaceCommonInfoDto.builder()
                 .name("Test Place")
-                .imageOrigin("image.jpg")
+                .imageThumbnail("image.jpg")
                 .overview("Test Overview")
                 .contentTypeId(1L)
+                .address("test Address")
                 .build();
 
         // when
