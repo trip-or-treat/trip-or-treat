@@ -81,15 +81,19 @@ const Wrapper = styled.div`
 const EmptyPlaceItemWrapper = styled.div`
   display: flex;
   flex-direction: column;
+
+  margin-top: 90px;
+
   justify-content: center;
   align-items: center;
-  margin-top: 80px;
+
+  font-family: 'Pretendard-Medium';
   font-size: 17px;
   color: ${(props) => props.theme.colors.blackFont};
 
   img {
-    margin-top: 20px;
     width: 80px;
     height: 80px;
+    margin-top: 20px;
   }
 `;
