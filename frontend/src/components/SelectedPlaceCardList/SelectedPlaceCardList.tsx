@@ -86,6 +86,7 @@ const EmptyPlaceItemWrapper = styled.div`
   margin-top: 80px;
   font-size: 17px;
   color: ${(props) => props.theme.colors.blackFont};
+  font-family: 'Pretendard-Medium';
 
   img {
     margin-top: 20px;
