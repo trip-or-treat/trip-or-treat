@@ -1,20 +1,23 @@
 import styled from 'styled-components';
+import { useState } from 'react';
 
 import EnterSearch from 'src/components/EnterSearch';
 import MyRegionList from 'src/components/MyRegionList';
 import SearchRegionList from 'src/components/SearchRegionList';
 
 const StepTwoPage = () => {
+  const [keyword, setKeyword] = useState('');
+
   return (
     <Wrapper>
       <SearchLayer>
         <MyRegionList />
 
         <section>
-          <EnterSearch placeHolder="여행지를 검색해보세요!" />
+          <EnterSearch placeHolder="여행지를 검색해보세요!" setKeyword={setKeyword} />
         </section>
 
-        <SearchRegionList />
+        <SearchRegionList keyword={keyword} />
       </SearchLayer>
 
       <MapLayer>mapLayer</MapLayer>
