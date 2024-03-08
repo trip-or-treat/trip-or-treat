@@ -1,27 +1,33 @@
 import { RefObject, useCallback, useEffect } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-import { placeListFetcher } from 'src/api/placeList';
-
 interface Props {
   observerRef: RefObject<HTMLElement>;
+  queryKey: string;
   regionId: string | undefined;
-  keyword: string;
-  prevContentTypeId: number | null;
+  fetcherFn: any;
+  keyword?: string;
+  prevContentTypeId?: number | null;
 }
 
-const useInfinityScroll = ({ observerRef, regionId, keyword, prevContentTypeId }: Props) => {
+const useInfinityScroll = ({
+  observerRef,
+  queryKey,
+  regionId,
+  keyword,
+  fetcherFn,
+  prevContentTypeId,
+}: Props) => {
   const { data, isLoading, hasNextPage, fetchNextPage } = useInfiniteQuery({
-    queryKey: ['placeList'],
+    queryKey: [queryKey, keyword, prevContentTypeId, regionId],
     queryFn: async ({ pageParam }) =>
-      placeListFetcher({ pageParam, keyword, prevContentTypeId, regionId }),
+      fetcherFn({ pageParam, keyword, prevContentTypeId, regionId }),
     initialPageParam: 0,
     getNextPageParam: (_lastPage, allPages) => allPages.length + 1,
-    staleTime: 0,
   });
 
   const handleObserver = useCallback(
-    (entries: any) => {
+    (entries: IntersectionObserverEntry[]) => {
       const [target] = entries;
       if (target.isIntersecting && hasNextPage) {
         fetchNextPage();

@@ -46,6 +46,6 @@ const TitleBox = styled.p<{ $isClicked: boolean }>`
   border-bottom: ${(props) =>
     props.$isClicked ? `1px solid ${props.theme.colors.mainColor}` : 'none'};
 
-  font-family: ${(props) => (props.$isClicked ? 'Pretendard-Semi-Bold' : 'Pretendard-Thin')};
+  font-family: ${(props) => (props.$isClicked ? 'Pretendard-SemiBold' : 'Pretendard-Light')};
   font-size: 23px;
 `;

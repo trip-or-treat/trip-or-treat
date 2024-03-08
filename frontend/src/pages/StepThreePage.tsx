@@ -32,7 +32,7 @@ const StepThreePage = () => {
           <ContentTypeFilterItemList />
         </section>
 
-        <PlaceList keyword={keyword} />
+        <PlaceList keyword={keyword} setKeyword={setKeyword} />
       </SearchLayer>
 
       <DayLayer>

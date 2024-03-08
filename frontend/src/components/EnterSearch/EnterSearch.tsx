@@ -60,10 +60,11 @@ const Input = styled.input`
   outline: none;
 
   box-shadow: ${(props) => `0px 4px 4px 0px ${props.theme.colors.lightGrey}`};
-  font-size: 13px;
+  font-size: 14px;
 
   &::placeholder {
     color: ${(props) => props.theme.colors.darkGrey};
+    font-family: 'Pretendard-Regular';
   }
 `;
 
