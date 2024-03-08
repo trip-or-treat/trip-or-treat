@@ -120,9 +120,10 @@ class PlaceControllerTest {
         Long id = 1L;
         PlaceCommonInfoDto placeCommonInfoDto = PlaceCommonInfoDto.builder()
                 .name("Test Place")
-                .imageOrigin("image.jpg")
+                .imageThumbnail("image.jpg")
                 .overview("Test Overview")
                 .contentTypeId(1L)
+                .address("Test Address")
                 .build();
 
         // when
@@ -136,9 +137,9 @@ class PlaceControllerTest {
                 .andExpect(jsonPath("$.message").value(GET_SUCCESS.getMessage()))
                 .andExpect(jsonPath("$.status").value(200))
                 .andExpect(jsonPath("$.data.name").value(placeCommonInfoDto.getName()))
-                .andExpect(jsonPath("$.data.imageOrigin").value(placeCommonInfoDto.getImageOrigin()))
+                .andExpect(jsonPath("$.data.imageThumbnail").value(placeCommonInfoDto.getImageThumbnail()))
                 .andExpect(jsonPath("$.data.overview").value(placeCommonInfoDto.getOverview()))
-                .andExpect(jsonPath("$.data.contentTypeId").value(placeCommonInfoDto.getContentTypeId()));
+                .andExpect(jsonPath("$.data.contentTypeId").value(placeCommonInfoDto.getContentTypeId()))
+                .andExpect(jsonPath("$.data.address").value(placeCommonInfoDto.getAddress()));
     }
-
 }
