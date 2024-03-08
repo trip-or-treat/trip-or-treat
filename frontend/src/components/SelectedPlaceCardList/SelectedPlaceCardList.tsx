@@ -83,7 +83,7 @@ const EmptyPlaceItemWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 50px;
+  margin-top: 80px;
   font-size: 17px;
   color: ${(props) => props.theme.colors.blackFont};
 
