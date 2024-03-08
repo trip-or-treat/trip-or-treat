@@ -15,10 +15,11 @@ public class PlaceByRegionIdDto {
     private Double latitude;
     private Double longitude;
     private Long contentTypeId;
+    private Long views;
 
     @QueryProjection
     public PlaceByRegionIdDto(Long id, String name, String imageThumbnail, String subCategoryName, Double latitude,
-                              Double longitude, Long contentTypeId) {
+                              Double longitude, Long contentTypeId, Long views) {
         this.id = id;
         this.name = name;
         this.imageThumbnail = imageThumbnail;
@@ -26,5 +27,6 @@ public class PlaceByRegionIdDto {
         this.latitude = latitude;
         this.longitude = longitude;
         this.contentTypeId = contentTypeId;
+        this.views = views;
     }
 }

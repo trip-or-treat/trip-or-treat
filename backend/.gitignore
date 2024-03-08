@@ -5,6 +5,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 application-local.yml
+spy.log
 
 ### STS ###
 .apt_generated
