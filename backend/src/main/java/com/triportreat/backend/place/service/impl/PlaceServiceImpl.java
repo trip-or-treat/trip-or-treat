@@ -2,7 +2,7 @@ package com.triportreat.backend.place.service.impl;
 
 import com.triportreat.backend.common.cache.RedisService;
 import com.triportreat.backend.place.domain.PlaceByRegionIdDto;
-import com.triportreat.backend.place.domain.PlaceCommonInfoDto;
+import com.triportreat.backend.place.domain.PlaceInfoDto;
 import com.triportreat.backend.place.domain.PlaceSearchCondition;
 import com.triportreat.backend.place.entity.ContentType;
 import com.triportreat.backend.place.entity.Place;
@@ -11,12 +11,13 @@ import com.triportreat.backend.place.repository.PlaceRepository;
 import com.triportreat.backend.place.repository.PlaceRepositoryCustom;
 import com.triportreat.backend.place.service.ExternalApiService;
 import com.triportreat.backend.place.service.PlaceService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -36,13 +37,13 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     @Transactional(readOnly = true)
-    public PlaceCommonInfoDto getPlaceCommonInfo(Long id) {
+    public PlaceInfoDto getPlaceInfo(Long id) {
         Place place = placeRepository.findById(id).orElseThrow(() -> new PlaceNotFoundException(id));
         ContentType contentType = place.getContentType();
         String overview = externalApiService.callExternalApiForOverView(id);
 
         redisService.increasePlaceView(id, place.getViews());
-        return PlaceCommonInfoDto.toDto(place, contentType, overview);
+        return PlaceInfoDto.toDto(place, contentType, overview);
     }
 }
 

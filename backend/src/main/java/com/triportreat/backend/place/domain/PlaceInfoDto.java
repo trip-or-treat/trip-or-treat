@@ -9,20 +9,20 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class PlaceCommonInfoDto {
+public class PlaceInfoDto {
     private String name;
     private String imageThumbnail;
+    private String address;
     private String overview;
     private Long contentTypeId;
-    private String address;
 
-    public static  PlaceCommonInfoDto toDto(Place place, ContentType contentType, String overview) {
-        return PlaceCommonInfoDto.builder()
+    public static PlaceInfoDto toDto(Place place, ContentType contentType, String overview) {
+        return PlaceInfoDto.builder()
                 .name(place.getName())
                 .imageThumbnail(place.getImageOrigin())
+                .address(place.getAddress())
                 .overview(overview)
                 .contentTypeId(contentType.getId())
-                .address(place.getAddress())
                 .build();
     }
 }
