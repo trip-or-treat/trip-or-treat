@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
+import KaKaoMap from 'src/components/KaKaoMap/KaKaoMap';
 import RegionCategory from 'src/components/RegionCategory';
 import EnterSearch from 'src/components/EnterSearch';
 import PlaceList from 'src/components/PlaceList';
@@ -12,16 +13,25 @@ import SelectedPlaceCardList from 'src/components/SelectedPlaceCardList';
 import myRegionListAtom from 'src/atoms/myRegionListAtom';
 import totalPlanAtom from 'src/atoms/totalPlanAtom';
 import stepPlanSavedBtnAtom from 'src/atoms/stepPlanSavedBtnAtom';
+import curDayAtom from 'src/atoms/curDayAtom';
+import { PlaceListTypes } from 'src/@types/api/placeList';
 
 const StepThreePage = () => {
   const [keyword, setKeyword] = useState('');
+  const [selectedPlaceList, setSelectedPlaceList] = useState<PlaceListTypes[]>([]);
+
   const myRegionList = useRecoilValue(myRegionListAtom);
   const totalPlan = useRecoilValue(totalPlanAtom);
   const setStepPlanSaveBtn = useSetRecoilState(stepPlanSavedBtnAtom);
+  const curDay = useRecoilValue(curDayAtom);
 
   useEffect(() => {
     setStepPlanSaveBtn(totalPlan.map((data) => data.items).every((data) => data.length !== 0));
   }, [totalPlan]);
+
+  useEffect(() => {
+    setSelectedPlaceList(totalPlan[curDay - 1].items);
+  }, [curDay, totalPlan]);
 
   return (
     <Wrapper>
@@ -40,7 +50,9 @@ const StepThreePage = () => {
         <SelectedPlaceCardList />
       </DayLayer>
 
-      <MapLayer>mapLayer</MapLayer>
+      <MapLayer>
+        <KaKaoMap list={selectedPlaceList} curDay={curDay} />
+      </MapLayer>
     </Wrapper>
   );
 };
