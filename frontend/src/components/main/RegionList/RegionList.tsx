@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { useRegions } from 'src/hooks/api/useRegions';
@@ -26,28 +26,6 @@ const RegionList = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [displayRegions, setDisplayRegions] = useState<Regions[]>([]);
 
-  const isConsonantOrVowel = (text: string) => {
-    const pattern = /[ㄱ-ㅎㅏ-ㅣ]/;
-    return pattern.test(text);
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-    if (inputValue === '') {
-      setSearchTerm('');
-    } else {
-      setSearchTerm(inputValue);
-    }
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Backspace' && searchTerm.length === 1) {
-      setDisplayRegions(regionsApi?.data || []);
-    } else if (e.key === 'Backspace' && searchTerm.length > 0) {
-      setSearchTerm(searchTerm.slice(0, searchTerm.length - 1));
-    }
-  };
-
   const setRegions = useSetRecoilState(regionsAtom);
   const setCreateSchedule = useSetRecoilState(createScheduleAtom);
   const [isModal, setModal] = useRecoilState(modalStateAtom);
@@ -62,8 +40,10 @@ const RegionList = () => {
 
   useEffect(() => {
     if (regionsApi?.data) {
-      const filteredRegions = regionsApi?.data.filter((data) => data.name.includes(searchTerm));
-      setDisplayRegions(!isConsonantOrVowel(searchTerm) ? filteredRegions : regionsApi.data);
+      const filteredRegions = regionsApi.data.filter((region) => {
+        return region.name.includes(searchTerm);
+      });
+      setDisplayRegions(filteredRegions);
     }
   }, [regionsApi, searchTerm]);
 
@@ -88,8 +68,7 @@ const RegionList = () => {
           <Input
             type="text"
             value={searchTerm}
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
+            onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="여행지를 검색해보세요!"
           />
         </SearchBar>
@@ -115,6 +94,7 @@ const RegionList = () => {
             ))}
         </List>
       </ListContainer>
+
       {isModal && <RegionModal id={currentId} onClose={onClose} />}
     </div>
   );
