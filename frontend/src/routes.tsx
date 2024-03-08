@@ -7,11 +7,15 @@ import StepThreePage from './pages/StepThreePage';
 import StepTwoPage from './pages/StepTwoPage';
 
 import NotFoundPage from './pages/NotFoundPage';
+import PlansPage from './pages/PlansPage';
 
 const routes = [
   {
     element: <CommonLayout />,
-    children: [{ path: '/', element: <MainPage /> }],
+    children: [
+      { path: '/', element: <MainPage /> },
+      { path: '/plans', element: <PlansPage /> },
+    ],
   },
 
   {

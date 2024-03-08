@@ -56,7 +56,9 @@ const PlaceCard = ({ placeCardItem, type }: Props) => {
         onClick={type !== 'DRAG_AND_DROP' ? handleClickModal : undefined}
         disabled={type === 'DRAG_AND_DROP'}
       >
-        <ThumbnailImg src={placeCardItem.imageThumbnail || defaultimg} />
+        <div>
+          <ThumbnailImg src={placeCardItem.imageThumbnail || defaultimg} />
+        </div>
         <RegionNameBox>
           <p>{placeCardItem.name}</p>
           <p>{placeCardItem.subCategoryName}</p>
@@ -119,6 +121,7 @@ const ThumbnailImg = styled.img`
   height: 35px;
   margin-right: 15px;
   border-radius: 50%;
+  object-fit: cover;
 `;
 
 const RegionNameBox = styled.div`
@@ -128,12 +131,14 @@ const RegionNameBox = styled.div`
   color: ${(props) => props.theme.colors.blackFont};
 
   p {
-    font-family: 'Pretendard-Regular';
+    font-family: 'Pretendard-Medium';
     font-size: 17px;
 
     &:first-child {
       width: 150px;
       height: 20px;
+
+      margin-bottom: 3px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -141,7 +146,8 @@ const RegionNameBox = styled.div`
     }
 
     &:last-child {
-      font-size: 10px;
+      margin-bottom: 5px;
+      font-size: 11px;
       color: grey;
     }
   }

@@ -52,7 +52,9 @@ const RegionCard = ({ item, type }: Props) => {
   return (
     <Wrapper data-id={item.id}>
       <DetailButton onClick={handleClickModal} disabled={type === 'DEFAULT'}>
-        <ThumbnailImg src={item.imageThumbnail || defaultimg} />
+        <div>
+          <ThumbnailImg src={item.imageThumbnail || defaultimg} />
+        </div>
         <RegionName>{item.name}</RegionName>
       </DetailButton>
 
@@ -110,11 +112,13 @@ const ThumbnailImg = styled.img`
   margin-right: 15px;
 
   border-radius: 50%;
+  object-fit: cover;
 `;
 
 const RegionName = styled.p`
   font-size: 18px;
   color: ${(props) => props.theme.colors.blackFont};
+  font-family: 'Pretendard-Medium';
 `;
 
 const DefaultMarker = styled.div`
@@ -124,7 +128,7 @@ const DefaultMarker = styled.div`
   background-color: ${(props) => props.theme.colors.lightGrey};
 
   color: ${(props) => props.theme.colors.blackFont};
-  font-size: 9px;
+  font-size: 11px;
   font-family: 'Pretendard-Medium';
 `;
 
