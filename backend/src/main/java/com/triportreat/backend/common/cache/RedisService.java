@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -28,6 +29,7 @@ public class RedisService {
         }
     }
 
+    @Transactional
     public void updatePlaceViewCounts() {
         try {
             ScanOptions options = ScanOptions.scanOptions().match("*").count(10).build();
@@ -39,7 +41,6 @@ public class RedisService {
                 Long views = Long.parseLong(redisTemplate.opsForValue().getAndDelete(key));
                 Place place = placeRepository.findById(id).orElseThrow(() -> new PlaceNotFoundException(id));
                 place.updateViews(views);
-                placeRepository.save(place);
             }
         } catch (RedisConnectionFailureException e) {
             log.error("Redis 연결 실패 : {}", e.getMessage());
