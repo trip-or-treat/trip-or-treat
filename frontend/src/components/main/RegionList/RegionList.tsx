@@ -25,9 +25,6 @@ const RegionList = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [displayRegions, setDisplayRegions] = useState<Regions[]>([]);
 
-  console.log(regionsApi);
-
-  // 자음 또는 모음인지 확인하는 함수
   const isConsonantOrVowel = (text: string) => {
     const pattern = /[ㄱ-ㅎㅏ-ㅣ]/;
     return pattern.test(text);
@@ -36,18 +33,17 @@ const RegionList = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     if (inputValue === '') {
-      setSearchTerm(''); // 검색어를 비움
+      setSearchTerm('');
     } else {
-      setSearchTerm(inputValue); // 검색어 업데이트
+      setSearchTerm(inputValue);
     }
   };
 
-  // 검색어가 없거나 결과가 없을 때는 전체 데이터 리스트를 보여줌
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Backspace' && searchTerm.length === 1) {
       setDisplayRegions(regionsApi?.data || []);
     } else if (e.key === 'Backspace' && searchTerm.length > 0) {
-      setSearchTerm(searchTerm.slice(0, searchTerm.length - 1)); // 한 글자씩 지움
+      setSearchTerm(searchTerm.slice(0, searchTerm.length - 1));
     }
   };
 
@@ -65,7 +61,6 @@ const RegionList = () => {
 
   useEffect(() => {
     if (regionsApi?.data) {
-      // 검색어에 해당하는 지역 리스트를 필터링하는 함수
       const filteredRegions = regionsApi?.data.filter((data) => data.name.includes(searchTerm));
       setDisplayRegions(!isConsonantOrVowel(searchTerm) ? filteredRegions : regionsApi.data);
     }
@@ -121,29 +116,6 @@ const RegionList = () => {
 
 export default RegionList;
 
-const ListContainer = styled.div`
-  height: 450px;
-`;
-// 지역 리스트
-const List = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, ${(props) => props.theme.size.regionItemSize});
-  column-gap: 55px;
-  row-gap: 155px;
-
-  justify-content: center;
-`;
-
-const CannotLoading = styled.div`
-  height: 70px;
-  margin-top: 50px;
-
-  font-family: 'Pretendard-SemiBold';
-  font-size: 20px;
-  color: ${(props) => props.theme.colors.blackFont};
-  text-align: center;
-`;
-
 const SearchContainer = styled.div`
   text-align: center;
 `;
@@ -163,11 +135,11 @@ const SearchBar = styled.div`
   height: 57px;
   margin: 0 auto 80px auto;
 
-  align-items: center;
-  justify-content: center;
+  box-shadow: 0px 3px 7px -1px darkGray;
   border-radius: 30px;
 
-  box-shadow: 0px 3px 7px -1px darkGray;
+  align-items: center;
+  justify-content: center;
 `;
 
 const IconBox = styled.div`
@@ -187,13 +159,35 @@ const Input = styled.input`
   outline: none;
 `;
 
-const NoSearchResults = styled.div`
-  height: 10px;
+const ListContainer = styled.div`
+  height: 450px;
+`;
 
-  line-height: 29px;
-  text-align: center;
+const List = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, ${(props) => props.theme.size.regionItemSize});
+  column-gap: 55px;
+  row-gap: 155px;
+
+  justify-content: center;
+`;
+
+const CannotLoading = styled.div`
+  height: 70px;
+  margin-top: 50px;
 
   font-family: 'Pretendard-SemiBold';
   font-size: 20px;
   color: ${(props) => props.theme.colors.blackFont};
+  text-align: center;
+`;
+
+const NoSearchResults = styled.div`
+  height: 10px;
+
+  font-family: 'Pretendard-SemiBold';
+  font-size: 20px;
+  color: #676767;
+  line-height: 29px;
+  text-align: center;
 `;
