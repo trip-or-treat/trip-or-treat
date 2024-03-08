@@ -11,16 +11,18 @@ import lombok.*;
 @ToString
 public class PlaceCommonInfoDto {
     private String name;
-    private String imageOrigin;
+    private String imageThumbnail;
     private String overview;
     private Long contentTypeId;
+    private String address;
 
     public static  PlaceCommonInfoDto toDto(Place place, ContentType contentType, String overview) {
         return PlaceCommonInfoDto.builder()
                 .name(place.getName())
-                .imageOrigin(place.getImageOrigin())
+                .imageThumbnail(place.getImageOrigin())
                 .overview(overview)
                 .contentTypeId(contentType.getId())
+                .address(place.getAddress())
                 .build();
     }
 }
