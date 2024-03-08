@@ -1,11 +1,47 @@
 import styled from 'styled-components';
+import { useEffect } from 'react';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { useRegions } from 'src/hooks/api/useRegions';
+import { Regions } from 'src/@types/api/regions';
+import regionIdAtom from 'src/atoms/regionIdAtom';
+import regionsAtom from 'src/atoms/regionsAtom';
+import modalStateAtom from 'src/atoms/modalStateAtom';
+import createScheduleAtom from 'src/atoms/createScheduleAtom';
+
 import Loading from 'src/components/common/Loading';
+import RegionModal from 'src/components/RegionModal';
 import RegionItem from './RegionItem';
 
+interface RegionListData {
+  data: { data: Regions[] };
+  isLoading: boolean;
+  isError: boolean;
+}
+
 const RegionList = () => {
-  const { data: regionsData, isLoading, isError } = useRegions();
+  const { data: regionsApi, isLoading, isError }: RegionListData = useRegions();
+  const setRegions = useSetRecoilState(regionsAtom);
+  const setCreateSchedule = useSetRecoilState(createScheduleAtom);
+  const [isModal, setModal] = useRecoilState(modalStateAtom);
+  const currentId = useRecoilValue(regionIdAtom);
+
+  useEffect(() => {
+    if (regionsApi?.data) {
+      setRegions(regionsApi.data);
+      setCreateSchedule(true);
+    }
+  }, [regionsApi]);
+
+  useEffect(() => {
+    setModal(false);
+    document.body.style.overflowY = 'auto';
+  }, []);
+
+  const onClose = () => {
+    setModal(false);
+    document.body.style.overflowY = 'auto';
+  };
 
   return (
     <Wrapper>
@@ -13,10 +49,11 @@ const RegionList = () => {
       {isError && <CannotLoading>데이터를 불러오는 데 실패했습니다.</CannotLoading>}
       <ListContainer>
         {!isLoading &&
-          regionsData?.map((data) => (
-            <RegionItem key={data.id} src={data.imageThumbnail} name={data.name} />
+          regionsApi?.data.map((data) => (
+            <RegionItem key={data.id} id={data.id} src={data.imageThumbnail} name={data.name} />
           ))}
       </ListContainer>
+      {isModal && <RegionModal id={currentId} onClose={onClose} />}
     </Wrapper>
   );
 };
