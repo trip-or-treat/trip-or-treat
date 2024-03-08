@@ -13,6 +13,7 @@ import Loading from 'src/components/common/Loading';
 import RegionModal from 'src/components/RegionModal';
 import RegionItem from './RegionItem';
 import { ReactComponent as FindIcon } from '../../../assets/svgs/findIcon.svg';
+import DefaultImg from '../../../assets/images/defaultImg.png';
 
 interface RegionListData {
   data: { data: Regions[] };
@@ -105,7 +106,12 @@ const RegionList = () => {
         <List>
           {Array.isArray(displayRegions) &&
             displayRegions.map((data) => (
-              <RegionItem key={data.id} id={data.id} src={data.imageThumbnail} name={data.name} />
+              <RegionItem
+                key={data.id}
+                id={data.id}
+                src={data.imageThumbnail || DefaultImg}
+                name={data.name}
+              />
             ))}
         </List>
       </ListContainer>
