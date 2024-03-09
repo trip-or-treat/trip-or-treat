@@ -19,7 +19,7 @@ public class PlaceInfoDto {
     public static PlaceInfoDto toDto(Place place, ContentType contentType, String overview) {
         return PlaceInfoDto.builder()
                 .name(place.getName())
-                .imageThumbnail(place.getImageOrigin())
+                .imageThumbnail(place.getImageThumbnail())
                 .address(place.getAddress())
                 .overview(overview)
                 .contentTypeId(contentType.getId())

@@ -83,7 +83,7 @@ class PlaceServiceImplTest {
         Place place = Place.builder()
                 .id(id)
                 .name("Test Place")
-                .imageOrigin("image.jpg")
+                .imageThumbnail("image.jpg")
                 .contentType(contentType)
                 .address("test Address")
                 .build();
