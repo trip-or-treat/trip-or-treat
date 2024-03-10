@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
-import KaKaoMap from 'src/components/KaKaoMap/KaKaoMap';
+import KaKaoMap from 'src/components/KaKaoMap';
 import RegionCategory from 'src/components/RegionCategory';
 import EnterSearch from 'src/components/EnterSearch';
 import PlaceList from 'src/components/PlaceList';
