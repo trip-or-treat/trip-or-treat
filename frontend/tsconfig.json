@@ -16,7 +16,8 @@
     "noUnusedLocals": true, //쓰지않는 지역변수 있으면 에러내기
     "noUnusedParameters": true, //쓰지않는 파라미터 있으면 에러내기
     "noImplicitReturns": true, //함수에서 return 빼먹으면 에러내기
-    "removeComments": true //컴파일시 주석제거
+    "removeComments": true, //컴파일시 주석제거
+    "types": ["kakao.maps.d.ts"]
   }
 }
 ///////////////

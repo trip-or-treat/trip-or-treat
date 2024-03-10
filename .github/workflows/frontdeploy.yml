@@ -8,6 +8,7 @@ on:
 
 env:
   working-directory: ./frontend
+  REACT_APP_KAKAO_MAP_KEY: ${{ secrets.REACT_APP_KAKAO_MAP_KEY }}
 
 jobs:
   build:

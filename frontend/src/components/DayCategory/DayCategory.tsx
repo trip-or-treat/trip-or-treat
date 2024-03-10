@@ -90,6 +90,7 @@ const DayButton = styled.button<{ $isClicked: boolean }>`
 const Content = styled.p`
   &:first-child {
     font-size: 12px;
+    font-family: 'Pretendard-Medium';
     margin-bottom: 2px;
   }
 
