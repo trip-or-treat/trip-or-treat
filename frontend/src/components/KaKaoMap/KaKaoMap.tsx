@@ -24,7 +24,7 @@ const KaKaoMap = ({ list, curDay }: Props) => {
   if (list.length === 0) {
     return (
       <Map
-        center={{ lat: myRegionList[0].latitude, lng: myRegionList[0].longitude }}
+        center={{ lat: myRegionList[0]?.latitude, lng: myRegionList[0]?.longitude }}
         style={{ width: '100%', height: '100%' }}
         level={7}
       />

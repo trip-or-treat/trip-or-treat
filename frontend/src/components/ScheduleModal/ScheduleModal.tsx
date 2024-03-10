@@ -24,7 +24,7 @@ const ScheduleModal = () => {
           <Calendar />
         </StyledCalendarInner>
         <StyledButtonInner>
-          <Link to={`../region/${myRegionList[0].id}`}>
+          <Link to={`../region/${myRegionList[0]?.id}`}>
             <CommonButton>날짜 설정하기</CommonButton>
           </Link>
         </StyledButtonInner>
