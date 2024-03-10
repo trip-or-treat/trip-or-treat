@@ -1,11 +1,23 @@
 package com.triportreat.backend.place.service.impl;
 
+import static com.triportreat.backend.place.domain.TourApiPlaceResponseDto.Body;
+import static com.triportreat.backend.place.domain.TourApiPlaceResponseDto.Items;
+import static com.triportreat.backend.place.domain.TourApiPlaceResponseDto.ResponseData;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.BDDMockito.when;
+import static org.mockito.Mockito.mock;
+
 import com.triportreat.backend.common.response.FailMessage;
 import com.triportreat.backend.place.domain.PlaceByRegionIdDto;
 import com.triportreat.backend.place.domain.PlaceCommonInfoDto;
 import com.triportreat.backend.place.domain.PlaceSearchCondition;
+import com.triportreat.backend.place.domain.TourApiPlaceResponseDto;
+import com.triportreat.backend.place.domain.TourApiPlaceResponseDto.Item;
 import com.triportreat.backend.place.entity.ContentType;
 import com.triportreat.backend.place.entity.Place;
+import com.triportreat.backend.place.entity.SubCategory;
 import com.triportreat.backend.place.error.handler.exception.ApiCallFailedException;
 import com.triportreat.backend.place.error.handler.exception.ApiResponseParseException;
 import com.triportreat.backend.place.error.handler.exception.PlaceNotFoundException;
@@ -13,22 +25,17 @@ import com.triportreat.backend.place.repository.PlaceRepository;
 import com.triportreat.backend.place.repository.PlaceRepositoryCustom;
 import com.triportreat.backend.place.service.ExternalApiService;
 import com.triportreat.backend.place.service.PlaceService;
+import com.triportreat.backend.region.entity.Region;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.BDDMockito.when;
-import static org.mockito.Mockito.mock;
 
 @SpringBootTest
 class PlaceServiceImplTest {
@@ -55,7 +62,7 @@ class PlaceServiceImplTest {
         placeSearchCondition.setContentTypeId(14L);
         Pageable pageable = PageRequest.of(0, 10);
 
-        List<PlaceByRegionIdDto> findPlaces = List.of(
+        java.util.List<PlaceByRegionIdDto> findPlaces = List.of(
                 PlaceByRegionIdDto.builder().id(1L).name("경복궁").contentTypeId(14L).build(),
                 PlaceByRegionIdDto.builder().id(2L).name("창덕궁").contentTypeId(14L).build(),
                 PlaceByRegionIdDto.builder().id(3L).name("덕수궁").contentTypeId(14L).build(),
@@ -156,5 +163,144 @@ class PlaceServiceImplTest {
         // then
         Exception exception = assertThrows(ApiResponseParseException.class, () -> placeService.getPlaceCommonInfo(id));
         assertThat(exception.getMessage()).isEqualTo(FailMessage.API_RESPONSE_PARSE_FAILED.getMessage());
+    }
+
+    @Nested
+    @DisplayName("장소 데이터 업데이트")
+    class UpdatePlacesByExternalApi {
+
+        private List<Item> initTourApiResponse() {
+            TourApiPlaceResponseDto dto = new TourApiPlaceResponseDto();
+
+            ResponseData responseData = new ResponseData();
+            dto.setResponse(responseData);
+
+            Body body = new Body();
+            responseData.setBody(body);
+
+            Items items = new Items();
+            body.setItems(items);
+
+            Item item1 = Item.builder()
+                    .id(1L)
+                    .regionId(1L)
+                    .contentTypeId(1L)
+                    .subCategoryId("123")
+                    .name("업데이트할 장소 이름")
+                    .mainCategoryId("A01")
+                    .midCategoryId("B01")
+                    .latitude(37.498095)
+                    .longitude(127.027610)
+                    .build();
+
+            Item item2 = Item.builder()
+                    .id(2L)
+                    .regionId(1L)
+                    .contentTypeId(1L)
+                    .subCategoryId("123")
+                    .name("새로 생성한 장소 이름")
+                    .mainCategoryId("A01")
+                    .midCategoryId("B01")
+                    .latitude(37.498095)
+                    .longitude(127.027610)
+                    .build();
+
+            items.setItem(List.of(item1, item2));
+            return dto.getResponse().getBody().getItems().getItem();
+        }
+
+
+        @Test
+        @DisplayName("장소가 이미 존재한다면 업데이트한다.")
+        void updateExistingPlaces() {
+            // given
+            List<Item> items = initTourApiResponse();
+            Item placeByTourApi = items.get(0);
+
+            Place place = Place.builder()
+                    .id(1L)
+                    .name("기존 장소 이름")
+                    .latitude(37.498095)
+                    .longitude(127.027610)
+                    .views(10L)
+                    .build();
+
+            when(placeRepository.findById(1L)).thenReturn(Optional.ofNullable(place));
+
+            // when
+            Optional<Place> existingPlace = placeRepository.findById(placeByTourApi.getId());
+            existingPlace.ifPresent(p -> p.updateByTourApi(placeByTourApi));
+
+            // then
+            assertThat(existingPlace.get().getName()).isEqualTo("업데이트할 장소 이름");
+            assertThat(existingPlace.get().getViews()).isEqualTo(10L);
+
+        }
+
+        @Test
+        @DisplayName("장소가 존재하지 않는다면 새로 추가한다.")
+        void createNewPlaces() {
+            // given
+            List<Item> items = initTourApiResponse();
+            Item newPlaceByTourApi = items.get(1);
+
+            Region region = Region.builder().id(1L).name("지역 테스트").build();
+            ContentType contentType = ContentType.builder().id(1L).name("관광지타입 테스트").build();
+            SubCategory subCategory = SubCategory.builder().id("A1234").name("소분류 테스트").build();
+
+            when(placeRepository.findById(2L))
+                    .thenReturn(Optional.empty());
+
+            // when
+            Optional<Place> place = placeRepository.findById(newPlaceByTourApi.getId());
+            Place newPlace = Item.toEntity(newPlaceByTourApi, region, contentType, subCategory);
+            placeRepository.save(newPlace);
+
+            //then
+            assertThat(newPlace.getName()).isEqualTo("새로 생성한 장소 이름");
+        }
+
+        @Test
+        @DisplayName("외래키 필드가 하나라도 null이면 저장하지 않는다.")
+        void notSaveIfForeignKeyIsNull() {
+            // given
+            List<Item> items = initTourApiResponse();
+            Item placeByTourApi = items.get(0);
+
+            when(placeRepository.findById(1L)).thenReturn(Optional.empty());
+
+            // when
+            Place newPlace = Item.toEntity(placeByTourApi, null, null, null);
+            placeRepository.save(newPlace);
+            Optional<Place> savedNewPlace = placeRepository.findById(newPlace.getId());
+
+            // then
+            assertThat(savedNewPlace).isEmpty();
+        }
+
+        @Test
+        @DisplayName("관광지타입이 축제공연행사나 여행코스이면 저장하지 않는다")
+        void notSaveIfContentTypeIdIsFestivalOrCourse() {
+            // given
+            List<Item> items = initTourApiResponse();
+            Item placeByTourApi = items.get(0);
+
+            Region region = Region.builder().id(1L).name("지역 테스트").build();
+            ContentType contentType = ContentType.builder().id(15L).name("관광지타입 테스트").build();
+            SubCategory subCategory = SubCategory.builder().id("A1234").name("소분류 테스트").build();
+
+            when(placeRepository.findById(1L)).thenReturn(Optional.empty());
+
+            // when
+            Place newPlace = Item.toEntity(placeByTourApi, region, contentType, subCategory);
+            if (!contentType.getId().equals(15L) && !contentType.getId().equals(25L)) {
+                placeRepository.save(newPlace);
+            }
+            Optional<Place> savedNewPlace = placeRepository.findById(newPlace.getId());
+
+            // then
+            assertThat(savedNewPlace).isEmpty();
+        }
+
     }
 }
