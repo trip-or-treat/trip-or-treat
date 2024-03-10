@@ -74,7 +74,6 @@ const Title = styled.div`
 
 const PlaceListBox = styled.div`
   padding: 0px 20px;
-  margin-top: 25px;
-  height: 310px;
+  height: 370px;
   overflow: auto;
 `;
