@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { useRegions } from 'src/hooks/api/useRegions';
+import { useSearch } from 'src/hooks/useSearch';
 import { Regions } from 'src/@types/api/regions';
 import regionIdAtom from 'src/atoms/regionIdAtom';
 import regionsAtom from 'src/atoms/regionsAtom';
@@ -23,6 +24,7 @@ interface RegionListData {
 
 const RegionList = () => {
   const { data: regionsApi, isLoading, isError }: RegionListData = useRegions();
+
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [displayRegions, setDisplayRegions] = useState<Regions[]>([]);
 
@@ -31,21 +33,14 @@ const RegionList = () => {
   const [isModal, setModal] = useRecoilState(modalStateAtom);
   const currentId = useRecoilValue(regionIdAtom);
 
+  useSearch({ regionsApi, searchTerm, setDisplayRegions });
+
   useEffect(() => {
     if (regionsApi?.data) {
       setRegions(regionsApi.data);
       setCreateSchedule(true);
     }
   }, [regionsApi]);
-
-  useEffect(() => {
-    if (regionsApi?.data) {
-      const filteredRegions = regionsApi.data.filter((region) => {
-        return region.name.includes(searchTerm);
-      });
-      setDisplayRegions(filteredRegions);
-    }
-  }, [regionsApi, searchTerm]);
 
   useEffect(() => {
     setModal(false);
