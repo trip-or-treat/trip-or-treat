@@ -1,7 +1,7 @@
 package com.triportreat.backend.place.controller;
 
 import com.triportreat.backend.place.domain.PlaceByRegionIdDto;
-import com.triportreat.backend.place.domain.PlaceCommonInfoDto;
+import com.triportreat.backend.place.domain.PlaceInfoDto;
 import com.triportreat.backend.place.domain.PlaceSearchCondition;
 import com.triportreat.backend.place.service.PlaceService;
 import org.junit.jupiter.api.DisplayName;
@@ -115,18 +115,19 @@ class PlaceControllerTest {
 
     @Test
     @DisplayName("특정 장소의 공통 정보를 조회하면 응답은 성공한다.")
-    void getPlaceCommonInfo_success() throws Exception {
+    void getPlaceInfo_success() throws Exception {
         // given
         Long id = 1L;
-        PlaceCommonInfoDto placeCommonInfoDto = PlaceCommonInfoDto.builder()
+        PlaceInfoDto placeInfoDto = PlaceInfoDto.builder()
                 .name("Test Place")
-                .imageOrigin("image.jpg")
+                .imageThumbnail("image.jpg")
                 .overview("Test Overview")
                 .contentTypeId(1L)
+                .address("Test Address")
                 .build();
 
         // when
-        when(placeService.getPlaceCommonInfo(id)).thenReturn(placeCommonInfoDto);
+        when(placeService.getPlaceInfo(id)).thenReturn(placeInfoDto);
 
         // then
         mockMvc.perform(get("/places/" + id + "/info")
@@ -135,10 +136,10 @@ class PlaceControllerTest {
                 .andExpect(jsonPath("$.result").value(true))
                 .andExpect(jsonPath("$.message").value(GET_SUCCESS.getMessage()))
                 .andExpect(jsonPath("$.status").value(200))
-                .andExpect(jsonPath("$.data.name").value(placeCommonInfoDto.getName()))
-                .andExpect(jsonPath("$.data.imageOrigin").value(placeCommonInfoDto.getImageOrigin()))
-                .andExpect(jsonPath("$.data.overview").value(placeCommonInfoDto.getOverview()))
-                .andExpect(jsonPath("$.data.contentTypeId").value(placeCommonInfoDto.getContentTypeId()));
+                .andExpect(jsonPath("$.data.name").value(placeInfoDto.getName()))
+                .andExpect(jsonPath("$.data.imageThumbnail").value(placeInfoDto.getImageThumbnail()))
+                .andExpect(jsonPath("$.data.overview").value(placeInfoDto.getOverview()))
+                .andExpect(jsonPath("$.data.contentTypeId").value(placeInfoDto.getContentTypeId()))
+                .andExpect(jsonPath("$.data.address").value(placeInfoDto.getAddress()));
     }
-
 }
