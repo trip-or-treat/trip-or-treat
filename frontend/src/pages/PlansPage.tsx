@@ -11,6 +11,10 @@ import ConfirmSaveModal from 'src/components/ConfirmSaveModal';
 import CommonButton from 'src/components/common/CommonButton';
 import PlansList from 'src/components/PlansList';
 
+const parseName = (name: string) => {
+  return name.length > 5 ? name.slice(0, 2) : name;
+};
+
 const PlansPage = () => {
   const myRegionList = useRecoilValue(myRegionListAtom);
   const totalPlan = useRecoilValue(totalPlanAtom);
@@ -28,7 +32,7 @@ const PlansPage = () => {
         <TitleAndDateBox>
           <ul>
             {myRegionList.map((item) => (
-              <li key={item.id}>{item.name}</li>
+              <li key={item.id}>{parseName(item.name)}</li>
             ))}
           </ul>
           <p> {`${totalPlan[0].date} ~ ${totalPlan[totalPlan.length - 1].date}`}</p>
