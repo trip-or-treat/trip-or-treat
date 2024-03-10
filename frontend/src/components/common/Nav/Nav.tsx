@@ -1,9 +1,18 @@
 import styled from 'styled-components';
+import { useEffect } from 'react';
+import { useSetRecoilState } from 'recoil';
 
+import homeModalAtom from 'src/atoms/homeModalAtom';
 import LogoButton from './LogoButton';
 import MenuButton from './MenuButton';
 
 const Nav = () => {
+  const setIsModal = useSetRecoilState(homeModalAtom);
+
+  useEffect(() => {
+    setIsModal(false);
+  }, []);
+
   return (
     <NavBox>
       <LogoButton />

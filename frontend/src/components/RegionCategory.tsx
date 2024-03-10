@@ -6,6 +6,10 @@ interface Props {
   data: Regions[];
 }
 
+const parseName = (name: string) => {
+  return name.length > 5 ? name.slice(0, 2) : name;
+};
+
 const RegionCategory = ({ data }: Props) => {
   const { regionId } = useParams();
 
@@ -13,7 +17,7 @@ const RegionCategory = ({ data }: Props) => {
     <Wrapper>
       {data.map((item) => (
         <LinkBox key={item.id} to={`/place/${item.id}`} $isClicked={item.id === Number(regionId)}>
-          <TitleBox $isClicked={item.id === Number(regionId)}>{item.name}</TitleBox>
+          <TitleBox $isClicked={item.id === Number(regionId)}>{parseName(item.name)}</TitleBox>
         </LinkBox>
       ))}
     </Wrapper>
@@ -47,5 +51,5 @@ const TitleBox = styled.p<{ $isClicked: boolean }>`
     props.$isClicked ? `1px solid ${props.theme.colors.mainColor}` : 'none'};
 
   font-family: ${(props) => (props.$isClicked ? 'Pretendard-SemiBold' : 'Pretendard-Light')};
-  font-size: 23px;
+  font-size: 21px;
 `;
