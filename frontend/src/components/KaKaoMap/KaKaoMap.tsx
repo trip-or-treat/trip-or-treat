@@ -1,12 +1,12 @@
-// import { Fragment } from 'react';
-import { Map, CustomOverlayMap, Polyline } from 'react-kakao-maps-sdk';
 import styled from 'styled-components';
+import { useRecoilValue } from 'recoil';
+
+import { Map, CustomOverlayMap, Polyline } from 'react-kakao-maps-sdk';
 
 import { Regions } from 'src/@types/api/regions';
-import { ORDER_COLORS } from 'src/constants/color';
 import { PlaceListTypes } from 'src/@types/api/placeList';
 import myRegionListAtom from 'src/atoms/myRegionListAtom';
-import { useRecoilValue } from 'recoil';
+import { ORDER_COLORS } from 'src/constants/color';
 import { ReSetttingMapBounds } from './ResettingMapBounds';
 
 interface Props {
@@ -17,8 +17,8 @@ interface Props {
 const KaKaoMap = ({ list, curDay }: Props) => {
   const myRegionList = useRecoilValue(myRegionListAtom);
   const markerPositions = list.map((info) => ({
-    lat: info.longitude,
-    lng: info.latitude,
+    lat: info.latitude,
+    lng: info.longitude,
   }));
 
   if (list.length === 0) {
@@ -26,26 +26,25 @@ const KaKaoMap = ({ list, curDay }: Props) => {
       <Map
         center={{ lat: myRegionList[0].latitude, lng: myRegionList[0].longitude }}
         style={{ width: '100%', height: '100%' }}
-        level={10}
+        level={7}
       />
     );
   }
 
   return (
-    <Map center={markerPositions[0]} style={{ width: '100%', height: '100%' }} level={7}>
+    <Map center={markerPositions[0]} style={{ width: '100%', height: '100%' }} level={10}>
       {list.map((info, idx) => (
-        // 마커 관련
-        <CustomOverlayMap key={info.id} position={{ lat: info.longitude, lng: info.latitude }}>
-          <Maker className="overlay" $bgColor={ORDER_COLORS[(curDay || 1) - 1]}>
+        <CustomOverlayMap key={info.id} position={{ lat: info.latitude, lng: info.longitude }}>
+          <Marker className="overlay" $bgColor={ORDER_COLORS[(curDay || 1) - 1]}>
             {idx + 1}
-          </Maker>
+          </Marker>
         </CustomOverlayMap>
       ))}
-      {/*  선 관련 */}
       <Polyline
         path={markerPositions}
         strokeColor={ORDER_COLORS[(curDay || 1) - 1]}
         strokeWeight={2}
+        strokeOpacity={0.8}
       />
       {list.length > 1 && <ReSetttingMapBounds points={markerPositions} />}
     </Map>
@@ -54,7 +53,7 @@ const KaKaoMap = ({ list, curDay }: Props) => {
 
 export default KaKaoMap;
 
-const Maker = styled.div<{ $bgColor: string }>`
+const Marker = styled.div<{ $bgColor: string }>`
   display: flex;
   align-items: center;
   justify-content: center;
