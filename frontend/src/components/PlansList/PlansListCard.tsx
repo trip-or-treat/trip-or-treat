@@ -1,9 +1,8 @@
 import styled from 'styled-components';
 
 import { PlaceListTypes } from 'src/@types/api/placeList';
+import { ORDER_COLORS } from 'src/constants/color';
 import defaultImg from '../../assets/images/defaultImg.png';
-
-const INDEX_COLOR = ['#ff595e', '#ff5d8f', '#ffea00', '#70e000', '#1982c4', '#274c77', '#6a4c93'];
 
 interface Props {
   data: PlaceListTypes;
@@ -14,7 +13,7 @@ interface Props {
 const PlansListCard = ({ listIdx, idx, data }: Props) => {
   return (
     <Wrapper>
-      <OrderBox color={INDEX_COLOR[listIdx]}>{idx + 1}</OrderBox>
+      <OrderBox color={ORDER_COLORS[listIdx]}>{idx + 1}</OrderBox>
       <Description>
         <p>{data.name}</p>
         <p>{data.subCategoryName}</p>

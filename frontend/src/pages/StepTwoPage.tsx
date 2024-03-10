@@ -1,23 +1,32 @@
 import styled from 'styled-components';
+import { useState } from 'react';
 
 import EnterSearch from 'src/components/EnterSearch';
 import MyRegionList from 'src/components/MyRegionList';
 import SearchRegionList from 'src/components/SearchRegionList';
+import { useRecoilValue } from 'recoil';
+import myRegionListAtom from 'src/atoms/myRegionListAtom';
+import KaKaoMap from 'src/components/KaKaoMap';
 
 const StepTwoPage = () => {
+  const [keyword, setKeyword] = useState('');
+  const myRegionList = useRecoilValue(myRegionListAtom);
+
   return (
     <Wrapper>
       <SearchLayer>
         <MyRegionList />
 
         <section>
-          <EnterSearch placeHolder="여행지를 검색해보세요!" />
+          <EnterSearch placeHolder="여행지를 검색해보세요!" setKeyword={setKeyword} />
         </section>
 
-        <SearchRegionList />
+        <SearchRegionList keyword={keyword} />
       </SearchLayer>
 
-      <MapLayer>mapLayer</MapLayer>
+      <MapLayer>
+        <KaKaoMap list={myRegionList} />
+      </MapLayer>
     </Wrapper>
   );
 };

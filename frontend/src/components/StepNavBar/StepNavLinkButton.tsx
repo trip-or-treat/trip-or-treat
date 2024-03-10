@@ -30,6 +30,7 @@ export default StepNavLinkButton;
 
 const Wrapper = styled.div<{ $isClicked: boolean }>`
   cursor: ${(props) => (props.$isClicked ? 'pointer' : 'not-allowed')};
+  width: 100px;
 `;
 
 const LinkBox = styled(Link)`
@@ -47,9 +48,9 @@ const LinkBox = styled(Link)`
 
   background-color: ${(props) => props.theme.colors.mainColor};
   color: ${(props) => props.theme.colors.whiteFont};
-
-  font-size: 14px;
+  font-size: 16px;
   text-decoration: none;
+  font-family: 'Pretendard-SemiBold';
   cursor: pointer;
 `;
 

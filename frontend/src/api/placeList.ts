@@ -17,9 +17,10 @@ export const placeListFetcher = async ({
   const { data } = await api.get(`/places?regionId=${regionId}`, {
     params: {
       keyword: keyword === '' ? null : keyword,
-      contentId: prevContentTypeId,
-      pageNo: pageParam,
+      contentTypeId: prevContentTypeId,
+      page: pageParam,
     },
   });
+
   return data;
 };

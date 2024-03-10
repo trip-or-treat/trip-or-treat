@@ -1,8 +1,21 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+
+import homeModalAtom from 'src/atoms/homeModalAtom';
 
 const LogoButton = () => {
-  return <LogoButtonBox to="/">TOT</LogoButtonBox>;
+  const setIsModal = useSetRecoilState(homeModalAtom);
+
+  const handleClick = () => {
+    setIsModal(true);
+  };
+
+  return (
+    <LogoButtonBox to="#" onClick={handleClick}>
+      TOT
+    </LogoButtonBox>
+  );
 };
 
 export default LogoButton;

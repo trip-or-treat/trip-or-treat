@@ -118,6 +118,7 @@ const ThumbnailImg = styled.img`
 const RegionName = styled.p`
   font-size: 18px;
   color: ${(props) => props.theme.colors.blackFont};
+  font-family: 'Pretendard-Medium';
 `;
 
 const DefaultMarker = styled.div`
@@ -127,7 +128,7 @@ const DefaultMarker = styled.div`
   background-color: ${(props) => props.theme.colors.lightGrey};
 
   color: ${(props) => props.theme.colors.blackFont};
-  font-size: 9px;
+  font-size: 11px;
   font-family: 'Pretendard-Medium';
 `;
 
