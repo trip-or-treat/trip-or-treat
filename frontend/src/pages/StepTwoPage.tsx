@@ -4,9 +4,13 @@ import { useState } from 'react';
 import EnterSearch from 'src/components/EnterSearch';
 import MyRegionList from 'src/components/MyRegionList';
 import SearchRegionList from 'src/components/SearchRegionList';
+import { useRecoilValue } from 'recoil';
+import myRegionListAtom from 'src/atoms/myRegionListAtom';
+import KaKaoMap from 'src/components/KaKaoMap';
 
 const StepTwoPage = () => {
   const [keyword, setKeyword] = useState('');
+  const myRegionList = useRecoilValue(myRegionListAtom);
 
   return (
     <Wrapper>
@@ -20,7 +24,9 @@ const StepTwoPage = () => {
         <SearchRegionList keyword={keyword} />
       </SearchLayer>
 
-      <MapLayer>mapLayer</MapLayer>
+      <MapLayer>
+        <KaKaoMap list={myRegionList} />
+      </MapLayer>
     </Wrapper>
   );
 };

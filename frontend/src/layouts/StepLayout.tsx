@@ -1,10 +1,11 @@
+import { useEffect } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { useEffect } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import Nav from 'src/components/common/Nav';
 import StepNavBar from 'src/components/StepNavBar';
+
 import regionsAtom from 'src/atoms/regionsAtom';
 import myRegionListAtom from 'src/atoms/myRegionListAtom';
 import regionClickedIdListAtom from 'src/atoms/regionClickedIdListAtom';
@@ -13,15 +14,15 @@ const StepLayout = () => {
   const { regionId } = useParams();
   const regions = useRecoilValue(regionsAtom);
   const mainRegion = regions.find((region) => region.id === Number(regionId));
-  const [myRegionList, setMyRegionList] = useRecoilState(myRegionListAtom);
+  const setMyRegionList = useSetRecoilState(myRegionListAtom);
   const setClickRegionListId = useSetRecoilState(regionClickedIdListAtom);
 
   useEffect(() => {
-    if (mainRegion && myRegionList.length <= 1) {
+    if (mainRegion) {
       setMyRegionList([mainRegion]);
       setClickRegionListId([mainRegion.id]);
     }
-  }, []);
+  }, [regions]);
 
   return (
     <>

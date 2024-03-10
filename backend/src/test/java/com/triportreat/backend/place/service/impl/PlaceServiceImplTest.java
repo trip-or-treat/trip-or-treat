@@ -2,7 +2,7 @@ package com.triportreat.backend.place.service.impl;
 
 import com.triportreat.backend.common.response.FailMessage;
 import com.triportreat.backend.place.domain.PlaceByRegionIdDto;
-import com.triportreat.backend.place.domain.PlaceCommonInfoDto;
+import com.triportreat.backend.place.domain.PlaceInfoDto;
 import com.triportreat.backend.place.domain.PlaceSearchCondition;
 import com.triportreat.backend.place.entity.ContentType;
 import com.triportreat.backend.place.entity.Place;
@@ -75,25 +75,27 @@ class PlaceServiceImplTest {
     }
 
     @Test
-    @DisplayName("공통 정보 조회 테스트")
-    void getPlaceCommonInfo() {
+    @DisplayName("장소 공통 정보 조회 테스트")
+    void getPlaceInfo() {
         // given
         Long id = 1L;
-        ContentType contentType = ContentType.builder().id(1L).name("Type1").build(); // ContentType 객체 생성
+        ContentType contentType = ContentType.builder().id(1L).name("Type1").build();
         Place place = Place.builder()
                 .id(id)
                 .name("Test Place")
-                .imageOrigin("image.jpg")
+                .imageThumbnail("image.jpg")
                 .contentType(contentType)
+                .address("test Address")
                 .build();
 
         String overview = "Test Overview";
 
-        PlaceCommonInfoDto expectedPlaceCommonInfoDto = PlaceCommonInfoDto.builder()
+        PlaceInfoDto expectedPlaceInfoDto = PlaceInfoDto.builder()
                 .name("Test Place")
-                .imageOrigin("image.jpg")
+                .imageThumbnail("image.jpg")
                 .overview("Test Overview")
                 .contentTypeId(1L)
+                .address("test Address")
                 .build();
 
         // when
@@ -101,16 +103,16 @@ class PlaceServiceImplTest {
         when(externalApiService.callExternalApiForOverView(id)).thenReturn(overview);
 
         // then
-        PlaceCommonInfoDto actualPlaceCommonInfoDto = placeService.getPlaceCommonInfo(id);
+        PlaceInfoDto actualPlaceInfoDto = placeService.getPlaceInfo(id);
 
-        assertThat(actualPlaceCommonInfoDto).isNotNull();
-        assertThat(actualPlaceCommonInfoDto).usingRecursiveComparison().isEqualTo(expectedPlaceCommonInfoDto);
+        assertThat(actualPlaceInfoDto).isNotNull();
+        assertThat(actualPlaceInfoDto).usingRecursiveComparison().isEqualTo(expectedPlaceInfoDto);
     }
 
 
     @Test
     @DisplayName("장소 공통정보 조회 실패 테스트 - 장소 정보가 존재하지 않음")
-    void getPlaceCommonInfo_notExist() {
+    void getPlaceInfo_notExist() {
         // given
         Long id = 1L;
 
@@ -118,13 +120,13 @@ class PlaceServiceImplTest {
         when(placeRepository.findById(id)).thenReturn(Optional.empty());
 
         // then
-        Exception exception = assertThrows(PlaceNotFoundException.class, () -> placeService.getPlaceCommonInfo(id));
+        Exception exception = assertThrows(PlaceNotFoundException.class, () -> placeService.getPlaceInfo(id));
         assertThat(exception.getMessage()).isEqualTo(FailMessage.PLACE_NOT_FOUND.getMessage() + id);
     }
 
     @Test
     @DisplayName("장소 공통정보 조회 실패 테스트 - 외부 API 호출 실패")
-    void getPlaceCommonInfo_ApiCallFailed() {
+    void getPlaceInfo_ApiCallFailed() {
         // given
         Long id = 1L;
         Place place = mock(Place.class);
@@ -136,13 +138,13 @@ class PlaceServiceImplTest {
         when(externalApiService.callExternalApiForOverView(id)).thenThrow(new ApiCallFailedException());
 
         // then
-        Exception exception = assertThrows(ApiCallFailedException.class, () -> placeService.getPlaceCommonInfo(id));
+        Exception exception = assertThrows(ApiCallFailedException.class, () -> placeService.getPlaceInfo(id));
         assertThat(exception.getMessage()).isEqualTo(FailMessage.API_CALL_FAILED.getMessage());
     }
 
     @Test
     @DisplayName("장소 공통정보 조회 실패 테스트 - 외부 API 응답 처리 실패")
-    void getPlaceCommonInfo_ApiResponseParseFailed() {
+    void getPlaceInfo_ApiResponseParseFailed() {
         // given
         Long id = 1L;
         Place place = mock(Place.class);
@@ -154,7 +156,7 @@ class PlaceServiceImplTest {
         when(externalApiService.callExternalApiForOverView(id)).thenThrow(ApiResponseParseException.class);
 
         // then
-        Exception exception = assertThrows(ApiResponseParseException.class, () -> placeService.getPlaceCommonInfo(id));
+        Exception exception = assertThrows(ApiResponseParseException.class, () -> placeService.getPlaceInfo(id));
         assertThat(exception.getMessage()).isEqualTo(FailMessage.API_RESPONSE_PARSE_FAILED.getMessage());
     }
 }
