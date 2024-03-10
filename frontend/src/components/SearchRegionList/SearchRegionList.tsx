@@ -9,7 +9,13 @@ import regionsAtom from 'src/atoms/regionsAtom';
 import RegionModal from '../RegionModal';
 import RegionCard from '../common/RegionCard';
 
-const SearchRegionList = () => {
+interface Props {
+  keyword: string;
+}
+
+const SearchRegionList = ({ keyword }: Props) => {
+  const regions = useRecoilValue(regionsAtom);
+  const filtered = regions.filter((data) => data.name === keyword);
   const setCreateSchedule = useSetRecoilState(createScheduleAtom);
   const [isModal, setModal] = useRecoilState(modalStateAtom);
   const currentId = useRecoilValue(regionIdAtom);
@@ -21,11 +27,13 @@ const SearchRegionList = () => {
     document.body.style.overflowY = 'auto';
   };
 
-  const regions = useRecoilValue(regionsAtom);
+  if (filtered.length === 0 && keyword !== '') {
+    alert(`${keyword}에 대한 일치하는 정보가 없습니다`);
+  }
 
   return (
     <Wrapper>
-      {regions.map((item) => (
+      {(filtered.length === 0 ? regions : filtered).map((item) => (
         <RegionCard key={item.id} item={item} type="ADD_BUTTON" />
       ))}
       {isModal && <RegionModal id={currentId} onClose={onClose} />}
