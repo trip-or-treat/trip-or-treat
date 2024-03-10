@@ -35,9 +35,9 @@ public class PlaceController {
     }
 
     @GetMapping("/{id}/info")
-    public ResponseEntity<?> getPlaceCommonInfo(@PathVariable("id") Long id) {
+    public ResponseEntity<?> getPlaceInfo(@PathVariable("id") Long id) {
         return ResponseEntity.ok().body(
-                ResponseResult.success(GET_SUCCESS.getMessage(), placeService.getPlaceCommonInfo(id))
+                ResponseResult.success(GET_SUCCESS.getMessage(), placeService.getPlaceInfo(id))
         );
     }
 }

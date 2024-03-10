@@ -2,7 +2,7 @@ package com.triportreat.backend.place.service.impl;
 
 import com.triportreat.backend.common.cache.RedisService;
 import com.triportreat.backend.place.domain.PlaceByRegionIdDto;
-import com.triportreat.backend.place.domain.PlaceCommonInfoDto;
+import com.triportreat.backend.place.domain.PlaceInfoDto;
 import com.triportreat.backend.place.domain.PlaceSearchCondition;
 import com.triportreat.backend.place.domain.TourApiPlaceResponseDto.Item;
 import com.triportreat.backend.place.entity.ContentType;
@@ -48,13 +48,13 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     @Transactional(readOnly = true)
-    public PlaceCommonInfoDto getPlaceCommonInfo(Long id) {
+    public PlaceInfoDto getPlaceInfo(Long id) {
         Place place = placeRepository.findById(id).orElseThrow(() -> new PlaceNotFoundException(id));
         ContentType contentType = place.getContentType();
         String overview = externalApiService.callExternalApiForOverView(id);
 
         redisService.increasePlaceView(id, place.getViews());
-        return PlaceCommonInfoDto.toDto(place, contentType, overview);
+        return PlaceInfoDto.toDto(place, contentType, overview);
     }
 
     @Override
