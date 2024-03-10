@@ -23,7 +23,7 @@ const StartButtonBox = styled.button`
 
   width: 340px;
   height: 55px;
-  margin: auto auto 150px auto;
+  margin: auto auto 130px auto;
 
   background-color: ${(props) => props.theme.colors.mainColor};
   border: none;
