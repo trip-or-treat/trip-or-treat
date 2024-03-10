@@ -12,7 +12,8 @@ public enum FailMessage {
     API_RESPONSE_PARSE_FAILED("외부 API 응답 처리에 실패하였습니다."),
     USER_NOT_FOUND("사용자가 존재하지 않습니다!"),
     PLACE_NOT_FOUND("장소가 존재하지 않습니다!"),
-    VALIDATION_FAILED("유효성 검증에 실패하였습니다!");
+    VALIDATION_FAILED("유효성 검증에 실패하였습니다!"),
+    PLAN_NOT_FOUND("계획이 존재하지 않습니다!");
 
     private final String message;
 
