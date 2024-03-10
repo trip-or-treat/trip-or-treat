@@ -1,14 +1,19 @@
-package com.triportreat.backend.scheduler.dto;
+package com.triportreat.backend.place.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.triportreat.backend.place.entity.ContentType;
+import com.triportreat.backend.place.entity.Place;
+import com.triportreat.backend.place.entity.SubCategory;
+import com.triportreat.backend.region.entity.Region;
 import jakarta.validation.constraints.NotEmpty;
 import java.util.List;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class OpenApiPlaceResponseDto {
+public class TourApiPlaceResponseDto {
     @JsonProperty("response")
     @NotEmpty
     private ResponseData response;
@@ -48,6 +53,7 @@ public class OpenApiPlaceResponseDto {
     }
 
     @Getter @Setter
+    @Builder
     public static class Item {
         @JsonProperty("contentid")
         private Long id;
@@ -82,14 +88,33 @@ public class OpenApiPlaceResponseDto {
         @JsonProperty("firstimage2")
         private String imageThumbnail;
 
-        @JsonProperty("mapx")
+        @JsonProperty("mapy")
         private Double latitude;
 
-        @JsonProperty("mapy")
+        @JsonProperty("mapx")
         private Double longitude;
 
         @JsonProperty("sigungucode")
         private Integer sigunguCode;
+
+        public static Place toEntity(Item item, Region region, ContentType contentType, SubCategory subCategory) {
+            return Place.builder()
+                    .id(item.getId())
+                    .region(region)
+                    .contentType(contentType)
+                    .subCategory(subCategory)
+                    .address(item.getAddress())
+                    .addressDetail(item.getAddressDetail())
+                    .name(item.getName())
+                    .mainCategoryId(item.getMainCategoryId())
+                    .midCategoryId(item.getMidCategoryId())
+                    .imageOrigin(item.getImageOrigin())
+                    .imageThumbnail(item.getImageThumbnail())
+                    .latitude(item.getLatitude())
+                    .longitude(item.getLongitude())
+                    .sigunguCode(item.getSigunguCode())
+                    .build();
+        }
     }
 }
 
