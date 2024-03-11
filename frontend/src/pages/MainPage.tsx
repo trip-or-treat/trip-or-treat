@@ -3,7 +3,6 @@ import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
 import Banner from 'src/components/main/Banner';
-import SearchText from 'src/components/main/Search';
 import RegionList from 'src/components/main/RegionList';
 
 import homeModalAtom from 'src/atoms/homeModalAtom';
@@ -21,7 +20,6 @@ const MainPage = () => {
   return (
     <Wrapper>
       <Banner />
-      <SearchText />
       <RegionList />
     </Wrapper>
   );
