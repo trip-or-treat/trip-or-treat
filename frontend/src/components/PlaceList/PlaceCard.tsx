@@ -7,6 +7,7 @@ import totalPlanAtom from 'src/atoms/totalPlanAtom';
 import placeClickedIdListAtom from 'src/atoms/placeClickedIdListAtom';
 import curDayAtom from 'src/atoms/curDayAtom';
 
+import { useParams } from 'react-router-dom';
 import { ReactComponent as Plus } from '../../assets/svgs/plus.svg';
 import { ReactComponent as Minus } from '../../assets/svgs/minus.svg';
 import { ReactComponent as Bars } from '../../assets/svgs/bars.svg';
@@ -21,6 +22,7 @@ const PlaceCard = ({ placeCardItem, type }: Props) => {
   const [clickedIdList, setClickedIdList] = useRecoilState(placeClickedIdListAtom);
   const [totalPlan, setTotalPlan] = useRecoilState(totalPlanAtom);
   const curDay = useRecoilValue(curDayAtom);
+  const { regionId } = useParams();
 
   const isClicked =
     clickedIdList && clickedIdList[curDay - 1]?.map((data) => data.id).includes(placeCardItem.id);
@@ -39,7 +41,7 @@ const PlaceCard = ({ placeCardItem, type }: Props) => {
 
   const handleAddClick = (newItem: PlaceListTypes) => {
     const copyData = [...totalPlan];
-    const updatedItem = [...totalPlan[curDay - 1].items, newItem];
+    const updatedItem = [...totalPlan[curDay - 1].items, { ...newItem, regionId }];
     copyData[curDay - 1] = { ...copyData[curDay - 1], items: updatedItem };
 
     setTotalPlan(copyData);

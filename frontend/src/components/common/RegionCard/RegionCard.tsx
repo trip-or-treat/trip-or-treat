@@ -8,6 +8,7 @@ import modalStateAtom from 'src/atoms/modalStateAtom';
 import regionIdAtom from 'src/atoms/regionIdAtom';
 import regionClickedIdListAtom from 'src/atoms/regionClickedIdListAtom';
 
+import totalPlanAtom from 'src/atoms/totalPlanAtom';
 import { ReactComponent as Plus } from '../../../assets/svgs/plus.svg';
 import { ReactComponent as Minus } from '../../../assets/svgs/minus.svg';
 import defaultimg from '../../../assets/images/defaultImg.png';
@@ -22,13 +23,21 @@ const RegionCard = ({ item, type }: Props) => {
   const [myRegionList, setMyRegionList] = useRecoilState(myRegionListAtom);
   const setMoaal = useSetRecoilState(modalStateAtom);
   const setRegionId = useSetRecoilState(regionIdAtom);
+  const [totalPlan, setTotalPlan] = useRecoilState(totalPlanAtom);
 
   const handleDeleteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const targetButton = e.currentTarget.parentNode?.parentNode as HTMLButtonElement;
-    const targetCardId = Number(targetButton.dataset.id);
+    const targetCardId = Number(targetButton.dataset?.id);
     const filterItemData = myRegionList.filter((data) => data.id !== targetCardId);
 
-    setClickedIdList(filterItemData.map((data) => data.id));
+    const updatedTotalPlan = totalPlan.map((dayPlan) => ({
+      ...dayPlan,
+      items: dayPlan.items.filter((data) => Number(data.regionId) !== targetCardId),
+    }));
+
+    setTotalPlan(updatedTotalPlan);
+
+    setClickedIdList(filterItemData.map((data) => data?.id));
     setMyRegionList(filterItemData);
   };
 
@@ -70,8 +79,8 @@ const RegionCard = ({ item, type }: Props) => {
         {type === 'ADD_BUTTON' && (
           <IconButton
             onClick={() => handleAddClick(item)}
-            disabled={clickedIdList.includes(item.id)}
-            $isClicked={clickedIdList.includes(item.id)}
+            disabled={clickedIdList.includes(item?.id)}
+            $isClicked={clickedIdList.includes(item?.id)}
           >
             <Plus />
           </IconButton>
