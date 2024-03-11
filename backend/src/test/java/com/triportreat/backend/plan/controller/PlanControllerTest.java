@@ -45,84 +45,89 @@ class PlanControllerTest {
     @MockBean
     PlanService planService;
 
-    private PlanCreateRequestDto createPlanRequestDtoBeforeTest() {
-        List<SchedulePlaceCreateRequestDto> schedulePlaceRequests1 = List.of(
-                SchedulePlaceCreateRequestDto.builder()
-                        .placeId(1L)
-                        .visitOrder(1)
-                        .memo("memo")
-                        .expense(1000L)
-                        .build(),
-                SchedulePlaceCreateRequestDto.builder().placeId(1L)
-                        .visitOrder(2)
-                        .memo("memo")
-                        .expense(2000L)
-                        .build());
+    @Nested
+    @DisplayName("계획 저장")
+    class CreatePlan {
 
-        List<SchedulePlaceCreateRequestDto> schedulePlaceRequests2 = List.of(
-                SchedulePlaceCreateRequestDto.builder()
-                        .placeId(3L)
-                        .visitOrder(3)
-                        .memo("memo")
-                        .expense(3000L)
-                        .build(),
-                SchedulePlaceCreateRequestDto.builder().placeId(1L)
-                        .visitOrder(4)
-                        .memo("memo")
-                        .expense(4000L)
-                        .build());
+        @Test
+        @DisplayName("성공")
+        void createPlan() throws Exception {
+            // given
+            PlanCreateRequestDto planCreateRequestDto = createPlanRequestDtoBeforeTest();
 
-        List<ScheduleCreateRequestDto> scheduleRequests = List.of(
-                ScheduleCreateRequestDto.builder().date(LocalDate.now()).schedulePlaces(schedulePlaceRequests1).build(),
-                ScheduleCreateRequestDto.builder().date(LocalDate.now().plusDays(1)).schedulePlaces(schedulePlaceRequests2).build());
+            // when
+            doNothing().when(planService).createPlan(planCreateRequestDto);
 
-        return PlanCreateRequestDto.builder()
-                .userId(1L)
-                .title("title")
-                .startDate(LocalDate.now())
-                .endDate(LocalDate.now().plusDays(1))
-                .schedules(scheduleRequests)
-                .build();
-    }
+            // then
+            mockMvc.perform(post("/plans")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(planCreateRequestDto)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status", equalTo(200)))
+                    .andExpect(jsonPath("$.message", equalTo(POST_SUCCESS.getMessage())))
+                    .andExpect(jsonPath("$.result", equalTo(true)))
+                    .andExpect(jsonPath("$.data", equalTo(null)));
+        }
 
-    @Test
-    @DisplayName("계획저장 컨트롤러 메소드 테스트")
-    void createPlan() throws Exception {
-        // given
-        PlanCreateRequestDto planCreateRequestDto = createPlanRequestDtoBeforeTest();
+        @Test()
+        @DisplayName("실패 - 유효성 검증 실패")
+        void createPlan_UserNotFoundException() throws Exception {
+            // given
+            PlanCreateRequestDto planCreateRequestDto = createPlanRequestDtoBeforeTest();
+            planCreateRequestDto.setTitle("");
 
-        // when
-        doNothing().when(planService).createPlan(planCreateRequestDto);
+            // when
+            doNothing().when(planService).createPlan(planCreateRequestDto);
 
-        // then
-        mockMvc.perform(post("/plans")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(planCreateRequestDto)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.status", equalTo(200)))
-                .andExpect(jsonPath("$.message", equalTo(POST_SUCCESS.getMessage())))
-                .andExpect(jsonPath("$.result", equalTo(true)))
-                .andExpect(jsonPath("$.data", equalTo(null)));
-    }
+            // then
+            mockMvc.perform(post("/plans")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(planCreateRequestDto)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status", equalTo(400)))
+                    .andExpect(jsonPath("$.message", equalTo(VALIDATION_FAILED.getMessage())))
+                    .andExpect(jsonPath("$.result", equalTo(false)));
+        }
 
-    @Test()
-    @DisplayName("계획저장 컨트롤러 메소드 유효성 검증 실패 예외발생테스트")
-    void createPlan_UserNotFoundException() throws Exception {
-        // given
-        PlanCreateRequestDto planCreateRequestDto = createPlanRequestDtoBeforeTest();
-        planCreateRequestDto.setTitle("");
+        private PlanCreateRequestDto createPlanRequestDtoBeforeTest() {
+            List<SchedulePlaceCreateRequestDto> schedulePlaceRequests1 = List.of(
+                    SchedulePlaceCreateRequestDto.builder()
+                            .placeId(1L)
+                            .visitOrder(1)
+                            .memo("memo")
+                            .expense(1000L)
+                            .build(),
+                    SchedulePlaceCreateRequestDto.builder().placeId(1L)
+                            .visitOrder(2)
+                            .memo("memo")
+                            .expense(2000L)
+                            .build());
 
-        // when
-        doNothing().when(planService).createPlan(planCreateRequestDto);
+            List<SchedulePlaceCreateRequestDto> schedulePlaceRequests2 = List.of(
+                    SchedulePlaceCreateRequestDto.builder()
+                            .placeId(3L)
+                            .visitOrder(3)
+                            .memo("memo")
+                            .expense(3000L)
+                            .build(),
+                    SchedulePlaceCreateRequestDto.builder().placeId(1L)
+                            .visitOrder(4)
+                            .memo("memo")
+                            .expense(4000L)
+                            .build());
 
-        // then
-        mockMvc.perform(post("/plans")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(planCreateRequestDto)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.status", equalTo(400)))
-                .andExpect(jsonPath("$.message", equalTo(VALIDATION_FAILED.getMessage())))
-                .andExpect(jsonPath("$.result", equalTo(false)));
+            List<ScheduleCreateRequestDto> scheduleRequests = List.of(
+                    ScheduleCreateRequestDto.builder().date(LocalDate.now()).schedulePlaces(schedulePlaceRequests1).build(),
+                    ScheduleCreateRequestDto.builder().date(LocalDate.now().plusDays(1)).schedulePlaces(schedulePlaceRequests2).build());
+
+            return PlanCreateRequestDto.builder()
+                    .userId(1L)
+                    .title("title")
+                    .startDate(LocalDate.now())
+                    .endDate(LocalDate.now().plusDays(1))
+                    .schedules(scheduleRequests)
+                    .build();
+        }
     }
 
     @Nested

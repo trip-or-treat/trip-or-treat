@@ -61,83 +61,88 @@ class PlanServiceTest {
     @MockBean
     SchedulePlaceRepository schedulePlaceRepository;
 
-    private PlanCreateRequestDto createPlanRequestDtoBeforeTest() {
-        List<SchedulePlaceCreateRequestDto> schedulePlaceRequests1 = List.of(
-                SchedulePlaceCreateRequestDto.builder().placeId(1L).build(),
-                SchedulePlaceCreateRequestDto.builder().placeId(2L).build());
+    @Nested
+    @DisplayName("계획 저장")
+    class CreatePlan {
 
-        List<SchedulePlaceCreateRequestDto> schedulePlaceRequests2 = List.of(
-                SchedulePlaceCreateRequestDto.builder().placeId(3L).build(),
-                SchedulePlaceCreateRequestDto.builder().placeId(4L).build());
+        @Test
+        @DisplayName("성공")
+        void createPlan() {
+            // given
+            PlanCreateRequestDto planCreateRequestDto = createPlanRequestDto();
 
-        List<ScheduleCreateRequestDto> scheduleRequests = List.of(
-                ScheduleCreateRequestDto.builder().date(LocalDate.now()).schedulePlaces(schedulePlaceRequests1).build(),
-                ScheduleCreateRequestDto.builder().date(LocalDate.now().plusDays(1)).schedulePlaces(schedulePlaceRequests2).build());
+            User user = User.builder().id(planCreateRequestDto.getUserId()).build();
+            Plan plan = Plan.builder().id(1L).title(planCreateRequestDto.getTitle()).build();
 
-        return PlanCreateRequestDto.builder()
-                .userId(1L)
-                .schedules(scheduleRequests)
-                .build();
-    }
+            // when
+            when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+            when(planRepository.save(any(Plan.class))).thenReturn(plan);
+            when(placeRepository.findById(anyLong())).thenReturn(Optional.of(Place.builder().id(1L).build()));
+            when(placeRepository.findById(anyLong())).thenReturn(Optional.of(Place.builder().id(2L).build()));
+            when(placeRepository.findById(anyLong())).thenReturn(Optional.of(Place.builder().id(3L).build()));
+            when(placeRepository.findById(anyLong())).thenReturn(Optional.of(Place.builder().id(4L).build()));
 
-    @Test
-    @DisplayName("계획 저장 서비스 메소드 테스트")
-    void createPlan() {
-        // given
-        PlanCreateRequestDto planCreateRequestDto = createPlanRequestDtoBeforeTest();
+            planService.createPlan(planCreateRequestDto);
 
-        User user = User.builder().id(planCreateRequestDto.getUserId()).build();
-        Plan plan = Plan.builder().id(1L).title(planCreateRequestDto.getTitle()).build();
+            // then
+            verify(schedulePlaceRepository, times(4)).save(any(SchedulePlace.class));
+            verify(scheduleRepository, times(2)).save(any(Schedule.class));
+            verify(planRepository, times(1)).save(any(Plan.class));
+        }
 
-        // when
-        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
-        when(planRepository.save(any(Plan.class))).thenReturn(plan);
-        when(placeRepository.findById(anyLong())).thenReturn(Optional.of(Place.builder().id(1L).build()));
-        when(placeRepository.findById(anyLong())).thenReturn(Optional.of(Place.builder().id(2L).build()));
-        when(placeRepository.findById(anyLong())).thenReturn(Optional.of(Place.builder().id(3L).build()));
-        when(placeRepository.findById(anyLong())).thenReturn(Optional.of(Place.builder().id(4L).build()));
+        @Test
+        @DisplayName("실패 - 사용자가 존재하지 않을시 예외발생")
+        void createPlan_UserNotFoundException() {
+            // given
+            PlanCreateRequestDto planCreateRequestDto = createPlanRequestDto();
 
-        planService.createPlan(planCreateRequestDto);
+            // when
+            when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        // then
-        verify(schedulePlaceRepository, times(4)).save(any(SchedulePlace.class));
-        verify(scheduleRepository, times(2)).save(any(Schedule.class));
-        verify(planRepository, times(1)).save(any(Plan.class));
-    }
+            // then
+            assertThatThrownBy(() -> planService.createPlan(planCreateRequestDto))
+                    .isInstanceOf(UserNotFoundException.class)
+                    .hasMessage(USER_NOT_FOUND.getMessage());
+        }
 
-    @Test
-    @DisplayName("계획저장할 때 사용자가 존재하지 않을시 예외발생")
-    void createPlan_UserNotFoundException() {
-        // given
-        PlanCreateRequestDto planCreateRequestDto = createPlanRequestDtoBeforeTest();
+        @Test
+        @DisplayName("실패 - 선택한 장소가 존재하지 않을시 예외발생")
+        void createPlan_PlaceNotFoundException() {
+            // given
+            PlanCreateRequestDto planCreateRequestDto = createPlanRequestDto();
 
-        // when
-        when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
+            User user = User.builder().id(planCreateRequestDto.getUserId()).build();
+            Plan plan = Plan.builder().id(1L).title(planCreateRequestDto.getTitle()).build();
 
-        // then
-        assertThatThrownBy(() -> planService.createPlan(planCreateRequestDto))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessage(USER_NOT_FOUND.getMessage());
-    }
+            // when
+            when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+            when(planRepository.save(any(Plan.class))).thenReturn(plan);
+            when(placeRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-    @Test
-    @DisplayName("계획저장할 때 선택한 장소가 존재하지 않을시 예외발생")
-    void createPlan_PlaceNotFoundException() {
-        // given
-        PlanCreateRequestDto planCreateRequestDto = createPlanRequestDtoBeforeTest();
+            // then
+            assertThatThrownBy(() -> planService.createPlan(planCreateRequestDto))
+                    .isInstanceOf(PlaceNotFoundException.class)
+                    .hasMessage(PLACE_NOT_FOUND.getMessage());
+        }
 
-        User user = User.builder().id(planCreateRequestDto.getUserId()).build();
-        Plan plan = Plan.builder().id(1L).title(planCreateRequestDto.getTitle()).build();
+        private PlanCreateRequestDto createPlanRequestDto() {
+            List<SchedulePlaceCreateRequestDto> schedulePlaceRequests1 = List.of(
+                    SchedulePlaceCreateRequestDto.builder().placeId(1L).build(),
+                    SchedulePlaceCreateRequestDto.builder().placeId(2L).build());
 
-        // when
-        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
-        when(planRepository.save(any(Plan.class))).thenReturn(plan);
-        when(placeRepository.findById(anyLong())).thenReturn(Optional.empty());
+            List<SchedulePlaceCreateRequestDto> schedulePlaceRequests2 = List.of(
+                    SchedulePlaceCreateRequestDto.builder().placeId(3L).build(),
+                    SchedulePlaceCreateRequestDto.builder().placeId(4L).build());
 
-        // then
-        assertThatThrownBy(() -> planService.createPlan(planCreateRequestDto))
-                .isInstanceOf(PlaceNotFoundException.class)
-                .hasMessage(PLACE_NOT_FOUND.getMessage());
+            List<ScheduleCreateRequestDto> scheduleRequests = List.of(
+                    ScheduleCreateRequestDto.builder().date(LocalDate.now()).schedulePlaces(schedulePlaceRequests1).build(),
+                    ScheduleCreateRequestDto.builder().date(LocalDate.now().plusDays(1)).schedulePlaces(schedulePlaceRequests2).build());
+
+            return PlanCreateRequestDto.builder()
+                    .userId(1L)
+                    .schedules(scheduleRequests)
+                    .build();
+        }
     }
 
     @Nested
