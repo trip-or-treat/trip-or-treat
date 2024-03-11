@@ -12,11 +12,11 @@ import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 import com.triportreat.backend.place.entity.Place;
 import com.triportreat.backend.place.repository.PlaceRepository;
-import com.triportreat.backend.plan.domain.PlanCreateRequestDto;
+import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanDetailResponseDto;
 import com.triportreat.backend.plan.domain.ScheduleDetailResponseDto;
-import com.triportreat.backend.plan.domain.SchedulePlaceCreateRequestDto;
-import com.triportreat.backend.plan.domain.ScheduleCreateRequestDto;
+import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceCreateRequestDto;
+import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleCreateRequestDto;
 import com.triportreat.backend.plan.domain.SchedulePlaceDetailResponseDto;
 import com.triportreat.backend.plan.entity.Plan;
 import com.triportreat.backend.plan.entity.Schedule;

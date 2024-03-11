@@ -15,11 +15,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.triportreat.backend.plan.domain.PlanCreateRequestDto;
+import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanDetailResponseDto;
-import com.triportreat.backend.plan.domain.ScheduleCreateRequestDto;
+import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleCreateRequestDto;
 import com.triportreat.backend.plan.domain.ScheduleDetailResponseDto;
-import com.triportreat.backend.plan.domain.SchedulePlaceCreateRequestDto;
+import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceCreateRequestDto;
 import com.triportreat.backend.plan.domain.SchedulePlaceDetailResponseDto;
 import com.triportreat.backend.plan.error.exception.PlanNotFoundException;
 import com.triportreat.backend.plan.service.PlanService;
