@@ -90,6 +90,4 @@ const DayLayer = styled.div`
 const MapLayer = styled.div`
   width: 48%;
   height: inherit;
-
-  background-color: darkgoldenrod;
 `;

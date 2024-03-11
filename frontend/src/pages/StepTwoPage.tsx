@@ -7,8 +7,8 @@ import MyRegionList from 'src/components/MyRegionList';
 import SearchRegionList from 'src/components/SearchRegionList';
 import KaKaoMap from 'src/components/KaKaoMap';
 
-import myRegionListAtom from 'src/atoms/myRegionListAtom';
 import curDayAtom from 'src/atoms/curDayAtom';
+import myRegionListAtom from 'src/atoms/myRegionListAtom';
 
 const StepTwoPage = () => {
   const [keyword, setKeyword] = useState('');
@@ -63,6 +63,4 @@ const SearchLayer = styled.div`
 const MapLayer = styled.div`
   width: 75%;
   height: inherit;
-
-  background-color: darkgoldenrod;
 `;

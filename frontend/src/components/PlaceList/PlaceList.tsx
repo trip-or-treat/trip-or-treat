@@ -43,7 +43,7 @@ const PlaceList = ({ keyword, setKeyword }: Props) => {
   }, [keyword, data]);
 
   return (
-    <>
+    <Wrapper>
       <Title>장소선택</Title>
       <PlaceListBox>
         {isLoading && <Loading type="SMALL" />}
@@ -59,17 +59,21 @@ const PlaceList = ({ keyword, setKeyword }: Props) => {
           </>
         )}
       </PlaceListBox>
-    </>
+    </Wrapper>
   );
 };
 
 export default PlaceList;
 
+const Wrapper = styled.div`
+  height: calc(100vh - 310px);
+  overflow: auto;
+`;
+
 const Title = styled.div`
   text-align: center;
   padding-bottom: 10px;
   border-bottom: ${(props) => `0.1px solid ${props.theme.colors.darkGrey}`};
-
   font-size: 16px;
   font-family: 'Pretendard-SemiBold';
   color: #6f6d6d;
@@ -77,6 +81,4 @@ const Title = styled.div`
 
 const PlaceListBox = styled.div`
   padding: 0px 20px;
-  height: 370px;
-  overflow: auto;
 `;

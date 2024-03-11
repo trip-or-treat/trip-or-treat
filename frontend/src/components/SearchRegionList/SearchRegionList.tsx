@@ -47,7 +47,8 @@ const Wrapper = styled.div`
   overflow-y: auto;
 
   width: 100%;
-  height: 288px;
+  height: calc(100vh - 395px);
+
   padding: 0px 20px;
   margin-bottom: 5px;
 
