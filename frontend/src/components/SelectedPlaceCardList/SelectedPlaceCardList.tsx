@@ -42,14 +42,14 @@ const SelectedPlaceCardList = () => {
 
   return (
     <Wrapper>
-      {filteredCurDay[0].items.length === 0 && <EmptyPlaceItem />}
+      {filteredCurDay[0]?.items.length === 0 && <EmptyPlaceItem />}
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="dragList">
           {(provided) => (
             <ul ref={provided.innerRef} {...provided.droppableProps}>
               {filteredCurDay.map((itemArr) => (
                 <React.Fragment key={itemArr.date}>
-                  {itemArr.items.map((item, index) => (
+                  {itemArr?.items?.map((item, index) => (
                     <Draggable key={item.id} draggableId={String(item.id)} index={index}>
                       {(magic) => (
                         <li
