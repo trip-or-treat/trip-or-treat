@@ -55,9 +55,9 @@ class PlanControllerTest {
             // given
             PlanCreateRequestDto planCreateRequestDto = createPlanRequestDtoBeforeTest();
 
-            // when
             doNothing().when(planService).createPlan(planCreateRequestDto);
 
+            // when
             // then
             mockMvc.perform(post("/plans")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -76,9 +76,9 @@ class PlanControllerTest {
             PlanCreateRequestDto planCreateRequestDto = createPlanRequestDtoBeforeTest();
             planCreateRequestDto.setTitle("");
 
-            // when
             doNothing().when(planService).createPlan(planCreateRequestDto);
 
+            // when
             // then
             mockMvc.perform(post("/plans")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -140,9 +140,9 @@ class PlanControllerTest {
             // given
             PlanDetailResponseDto planDetail = createPlanDetailResponseDto();
 
-            // when
             when(planService.getPlanDetail(anyLong())).thenReturn(planDetail);
 
+            // when
             // then
             mockMvc.perform(get("/plans/{id}", 1L))
                     .andExpect(status().isOk())
@@ -163,9 +163,9 @@ class PlanControllerTest {
         @DisplayName("실패 - 계획 정보 없음")
         void getPlanDetail_PlanNotFound() throws Exception {
             // given
-            // when
             when(planService.getPlanDetail(anyLong())).thenThrow(PlanNotFoundException.class);
 
+            // when
             // then
             mockMvc.perform(get("/plans/{id}", 1L))
                     .andExpect(status().isOk())

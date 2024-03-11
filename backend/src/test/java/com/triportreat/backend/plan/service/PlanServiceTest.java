@@ -27,6 +27,7 @@ import com.triportreat.backend.plan.error.exception.UserNotFoundException;
 import com.triportreat.backend.plan.repository.PlanRepository;
 import com.triportreat.backend.plan.repository.SchedulePlaceRepository;
 import com.triportreat.backend.plan.repository.ScheduleRepository;
+import com.triportreat.backend.plan.service.impl.PlanServiceImpl;
 import com.triportreat.backend.user.entity.User;
 import com.triportreat.backend.user.repository.UserRepository;
 import java.time.LocalDate;
@@ -36,29 +37,30 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class PlanServiceTest {
 
-    @Autowired
-    PlanService planService;
+    @InjectMocks
+    PlanServiceImpl planService;
 
-    @MockBean
+    @Mock
     PlanRepository planRepository;
 
-    @MockBean
+    @Mock
     UserRepository userRepository;
 
-    @MockBean
+    @Mock
     ScheduleRepository scheduleRepository;
 
-    @MockBean
+    @Mock
     PlaceRepository placeRepository;
 
-    @MockBean
+    @Mock
     SchedulePlaceRepository schedulePlaceRepository;
 
     @Nested
@@ -70,11 +72,9 @@ class PlanServiceTest {
         void createPlan() {
             // given
             PlanCreateRequestDto planCreateRequestDto = createPlanRequestDto();
-
             User user = User.builder().id(planCreateRequestDto.getUserId()).build();
             Plan plan = Plan.builder().id(1L).title(planCreateRequestDto.getTitle()).build();
 
-            // when
             when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
             when(planRepository.save(any(Plan.class))).thenReturn(plan);
             when(placeRepository.findById(anyLong())).thenReturn(Optional.of(Place.builder().id(1L).build()));
@@ -82,6 +82,7 @@ class PlanServiceTest {
             when(placeRepository.findById(anyLong())).thenReturn(Optional.of(Place.builder().id(3L).build()));
             when(placeRepository.findById(anyLong())).thenReturn(Optional.of(Place.builder().id(4L).build()));
 
+            // when
             planService.createPlan(planCreateRequestDto);
 
             // then
@@ -96,9 +97,9 @@ class PlanServiceTest {
             // given
             PlanCreateRequestDto planCreateRequestDto = createPlanRequestDto();
 
-            // when
             when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
+            // when
             // then
             assertThatThrownBy(() -> planService.createPlan(planCreateRequestDto))
                     .isInstanceOf(UserNotFoundException.class)
@@ -110,15 +111,14 @@ class PlanServiceTest {
         void createPlan_PlaceNotFoundException() {
             // given
             PlanCreateRequestDto planCreateRequestDto = createPlanRequestDto();
-
             User user = User.builder().id(planCreateRequestDto.getUserId()).build();
             Plan plan = Plan.builder().id(1L).title(planCreateRequestDto.getTitle()).build();
 
-            // when
             when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
             when(planRepository.save(any(Plan.class))).thenReturn(plan);
             when(placeRepository.findById(anyLong())).thenReturn(Optional.empty());
 
+            // when
             // then
             assertThatThrownBy(() -> planService.createPlan(planCreateRequestDto))
                     .isInstanceOf(PlaceNotFoundException.class)
@@ -156,8 +156,9 @@ class PlanServiceTest {
             Plan plan = createPlan();
             PlanDetailResponseDto expectedPlanDetail = createExpectedPlanDetail(plan);
 
-            // when
             when(planRepository.findById(anyLong())).thenReturn(Optional.of(plan));
+
+            // when
             PlanDetailResponseDto planDetail = planService.getPlanDetail(1L);
 
             // then
@@ -171,9 +172,9 @@ class PlanServiceTest {
             // given
             Plan plan = createPlan();
 
-            // when
             when(planRepository.findById(anyLong())).thenReturn(Optional.empty());
 
+            // when
             // then
             assertThatThrownBy(() -> planService.getPlanDetail(plan.getId()))
                     .isInstanceOf(PlanNotFoundException.class)
