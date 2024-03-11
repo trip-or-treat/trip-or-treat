@@ -42,6 +42,9 @@ class PlanControllerTest {
     @Autowired
     MockMvc mockMvc;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     @MockBean
     PlanService planService;
 
@@ -61,7 +64,7 @@ class PlanControllerTest {
             // then
             mockMvc.perform(post("/plans")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(planCreateRequestDto)))
+                    .content(objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(planCreateRequestDto)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.status", equalTo(200)))
                     .andExpect(jsonPath("$.message", equalTo(POST_SUCCESS.getMessage())))
@@ -82,7 +85,7 @@ class PlanControllerTest {
             // then
             mockMvc.perform(post("/plans")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(planCreateRequestDto)))
+                    .content(objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(planCreateRequestDto)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.status", equalTo(400)))
                     .andExpect(jsonPath("$.message", equalTo(VALIDATION_FAILED.getMessage())))
