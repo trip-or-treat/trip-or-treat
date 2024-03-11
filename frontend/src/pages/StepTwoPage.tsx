@@ -1,16 +1,23 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import EnterSearch from 'src/components/EnterSearch';
 import MyRegionList from 'src/components/MyRegionList';
 import SearchRegionList from 'src/components/SearchRegionList';
-import { useRecoilValue } from 'recoil';
-import myRegionListAtom from 'src/atoms/myRegionListAtom';
 import KaKaoMap from 'src/components/KaKaoMap';
+
+import myRegionListAtom from 'src/atoms/myRegionListAtom';
+import curDayAtom from 'src/atoms/curDayAtom';
 
 const StepTwoPage = () => {
   const [keyword, setKeyword] = useState('');
   const myRegionList = useRecoilValue(myRegionListAtom);
+  const setCurDay = useSetRecoilState(curDayAtom);
+
+  useEffect(() => {
+    setCurDay(1);
+  }, []);
 
   return (
     <Wrapper>
@@ -41,7 +48,7 @@ const Wrapper = styled.div`
 `;
 
 const SearchLayer = styled.div`
-  width: 30%;
+  width: 25%;
   height: inherit;
   border-left: ${(props) => `1px solid ${props.theme.colors.lightGrey}`};
   border-right: ${(props) => `1px solid ${props.theme.colors.lightGrey}`};
@@ -54,7 +61,7 @@ const SearchLayer = styled.div`
 `;
 
 const MapLayer = styled.div`
-  width: 70%;
+  width: 75%;
   height: inherit;
 
   background-color: darkgoldenrod;
