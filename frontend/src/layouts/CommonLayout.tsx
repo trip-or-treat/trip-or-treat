@@ -16,7 +16,13 @@ const CommonLayout = () => {
     <>
       <Nav />
       <Outlet />
-      {isModal && <AlertModal onClose={onClose} />}
+      {isModal && (
+        <AlertModal path="/" onButtonText="홈으로" offButtonText="닫기" onClose={onClose}>
+          계획 생성을 중단하시겠습니까?
+          <br />
+          변경사항은 저장되지 않습니다.
+        </AlertModal>
+      )}
     </>
   );
 };

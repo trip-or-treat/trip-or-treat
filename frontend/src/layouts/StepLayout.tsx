@@ -11,7 +11,6 @@ import homeModalAtom from 'src/atoms/homeModalAtom';
 
 import Nav from 'src/components/common/Nav';
 import StepNavBar from 'src/components/StepNavBar';
-import LoginModal from 'src/components/LoginModal';
 import AlertModal from 'src/components/AlertModal';
 
 const StepLayout = () => {
@@ -46,9 +45,15 @@ const StepLayout = () => {
       <Main>
         <Outlet />
       </Main>
-      {isModal && <AlertModal onClose={onClose} />}
+      {isModal && (
+        <AlertModal path="/" onButtonText="홈으로" offButtonText="닫기" onClose={onClose}>
+          계획 생성을 중단하시겠습니까?
+          <br />
+          변경사항은 저장되지 않습니다.
+        </AlertModal>
+      )}
       {isDateSelect && (
-        <LoginModal
+        <AlertModal
           path={`/date/${regionId}`}
           onButtonText="변경하기"
           offButtonText="닫기"
@@ -57,7 +62,7 @@ const StepLayout = () => {
           일정을 변경하시겠습니까?
           <br />
           선택사항은 저장되지 않습니다.
-        </LoginModal>
+        </AlertModal>
       )}
     </>
   );
