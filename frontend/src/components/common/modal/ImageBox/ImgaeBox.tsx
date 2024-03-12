@@ -15,7 +15,6 @@ export default ImageBox;
 const StyledImageBox = styled.img`
   width: 457px;
   height: 217px;
-  margin-bottom: 40px;
 
   background-size: cover;
   background-position: center;
