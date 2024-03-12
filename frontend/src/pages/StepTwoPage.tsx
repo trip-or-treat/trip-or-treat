@@ -10,6 +10,8 @@ import KaKaoMap from 'src/components/KaKaoMap';
 import curDayAtom from 'src/atoms/curDayAtom';
 import myRegionListAtom from 'src/atoms/myRegionListAtom';
 
+import FailDataPage from './FailDataPage';
+
 const StepTwoPage = () => {
   const [keyword, setKeyword] = useState('');
   const myRegionList = useRecoilValue(myRegionListAtom);
@@ -18,6 +20,8 @@ const StepTwoPage = () => {
   useEffect(() => {
     setCurDay(1);
   }, []);
+
+  if (!myRegionList) return <FailDataPage />;
 
   return (
     <Wrapper>

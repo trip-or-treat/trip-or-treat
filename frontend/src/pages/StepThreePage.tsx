@@ -15,6 +15,7 @@ import totalPlanAtom from 'src/atoms/totalPlanAtom';
 import stepPlanSavedBtnAtom from 'src/atoms/stepPlanSavedBtnAtom';
 import curDayAtom from 'src/atoms/curDayAtom';
 import { PlaceListTypes } from 'src/@types/api/placeList';
+import FailDataPage from './FailDataPage';
 
 const StepThreePage = () => {
   const [keyword, setKeyword] = useState('');
@@ -32,6 +33,13 @@ const StepThreePage = () => {
   useEffect(() => {
     setSelectedPlaceList(totalPlan[curDay - 1]?.items);
   }, [curDay, totalPlan]);
+
+  if (!totalPlan[0] || !myRegionList)
+    return (
+      <Wrapper>
+        <FailDataPage />
+      </Wrapper>
+    );
 
   return (
     <Wrapper>

@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom';
 import regionsAtom from 'src/atoms/regionsAtom';
 import regionClickedIdListAtom from 'src/atoms/regionClickedIdListAtom';
 import { useEffect } from 'react';
+import FailDataPage from './FailDataPage';
 
 const StepOnePage = () => {
   const { regionId } = useParams();
@@ -24,6 +25,8 @@ const StepOnePage = () => {
       setClickRegionListId([mainRegion.id]);
     }
   }, [regionId]);
+
+  if (!myRegionList) return <FailDataPage />;
 
   return (
     <Wrapper>
