@@ -154,6 +154,11 @@ table {
 	background-color:${(props) => props.theme.colors.lightGrey};
 	color: ${(props) => props.theme.colors.whiteFont}
 }
+
+.react-datepicker__day--keyboard-selected, .react-datepicker__month-text--keyboard-selected, .react-datepicker__quarter-text--keyboard-selected, .react-datepicker__year-text--keyboard-selected {
+	background-color: unset;
+}
+
 .react-datepicker__day--in-range {
 	background-color:${(props) => props.theme.colors.mainColor};
 	color: ${(props) => props.theme.colors.whiteFont}
