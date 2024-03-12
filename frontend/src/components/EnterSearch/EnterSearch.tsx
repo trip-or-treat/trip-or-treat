@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
-
 import { useSetRecoilState } from 'recoil';
+
 import contentTypeIdAtom from 'src/atoms/contentTypeIdAtom';
+
 import { ReactComponent as FindIcon } from '../../assets/svgs/findIcon.svg';
 import { ReactComponent as RotateIcon } from '../../assets/svgs/rotate.svg';
 
