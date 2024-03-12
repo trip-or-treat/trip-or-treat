@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import React from 'react';
 import theme from 'src/styles/theme';
 
 import ModalOverlay from '../common/modal/ModalOverlay';
@@ -7,19 +8,23 @@ import CloseButton from '../common/modal/CloseButton';
 
 interface Props {
   onClose: () => void;
+  children: React.ReactNode;
+  onButtonText: string;
+  offButtonText: string;
+  path: string;
 }
 
-const LoginModal = ({ onClose }: Props) => {
+const LoginModal = ({ children, onButtonText, offButtonText, path, onClose }: Props) => {
   return (
     <ModalOverlay>
       <StyledModalLayout>
-        <StyledModalText>저장하려면 로그인이 필요해요!</StyledModalText>
+        <StyledModalText>{children}</StyledModalText>
         <StyledButtonInner>
-          <LinkButton path="/login" color={theme.colors.mainColor}>
-            로그인
+          <LinkButton path={path} color={theme.colors.mainColor}>
+            {onButtonText}
           </LinkButton>
           <CloseButton onClick={onClose} color={theme.colors.darkGrey}>
-            닫기
+            {offButtonText}
           </CloseButton>
         </StyledButtonInner>
       </StyledModalLayout>
