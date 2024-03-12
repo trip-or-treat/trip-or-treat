@@ -9,6 +9,7 @@ import regionIdAtom from 'src/atoms/regionIdAtom';
 import regionClickedIdListAtom from 'src/atoms/regionClickedIdListAtom';
 
 import totalPlanAtom from 'src/atoms/totalPlanAtom';
+import placeClickedIdListAtom from 'src/atoms/placeClickedIdListAtom';
 import { ReactComponent as Plus } from '../../../assets/svgs/plus.svg';
 import { ReactComponent as Minus } from '../../../assets/svgs/minus.svg';
 import defaultimg from '../../../assets/images/defaultImg.png';
@@ -19,7 +20,8 @@ interface Props {
 }
 
 const RegionCard = ({ item, type }: Props) => {
-  const [clickedIdList, setClickedIdList] = useRecoilState(regionClickedIdListAtom);
+  const [regionClickedIdList, setRegionClickedIdList] = useRecoilState(regionClickedIdListAtom);
+  const [placeClickedIdList, setPlaceClickedIdList] = useRecoilState(placeClickedIdListAtom);
   const [myRegionList, setMyRegionList] = useRecoilState(myRegionListAtom);
   const setMoaal = useSetRecoilState(modalStateAtom);
   const setRegionId = useSetRecoilState(regionIdAtom);
@@ -35,9 +37,14 @@ const RegionCard = ({ item, type }: Props) => {
       items: dayPlan.items.filter((data) => Number(data.regionId) !== targetCardId),
     }));
 
-    setTotalPlan(updatedTotalPlan);
+    const filteredPlaceIdLists = placeClickedIdList.map((idList) => {
+      const filtered = idList.filter((data) => Number(data.regionId) !== targetCardId);
+      return filtered;
+    });
 
-    setClickedIdList(filterItemData.map((data) => data?.id));
+    setTotalPlan(updatedTotalPlan);
+    setPlaceClickedIdList(filteredPlaceIdLists);
+    setRegionClickedIdList(filterItemData.map((data) => data?.id));
     setMyRegionList(filterItemData);
   };
 
@@ -49,7 +56,7 @@ const RegionCard = ({ item, type }: Props) => {
 
     const newRegionList = [...myRegionList, newItem];
 
-    setClickedIdList(newRegionList.map((data) => data.id));
+    setRegionClickedIdList(newRegionList.map((data) => data.id));
     setMyRegionList((prev) => [...prev, newItem]);
   };
 
@@ -79,8 +86,8 @@ const RegionCard = ({ item, type }: Props) => {
         {type === 'ADD_BUTTON' && (
           <IconButton
             onClick={() => handleAddClick(item)}
-            disabled={clickedIdList.includes(item?.id)}
-            $isClicked={clickedIdList.includes(item?.id)}
+            disabled={regionClickedIdList.includes(item?.id)}
+            $isClicked={regionClickedIdList.includes(item?.id)}
           >
             <Plus />
           </IconButton>

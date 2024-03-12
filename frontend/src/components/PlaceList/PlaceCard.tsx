@@ -25,7 +25,7 @@ const PlaceCard = ({ placeCardItem, type }: Props) => {
   const { regionId } = useParams();
 
   const isClicked =
-    clickedIdList && clickedIdList[curDay - 1]?.map((data) => data.id).includes(placeCardItem.id);
+    clickedIdList && clickedIdList[curDay - 1]?.map((data) => data.id).includes(placeCardItem?.id);
 
   const handleDeleteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const targetId = Number((e.currentTarget.parentNode?.parentNode as HTMLElement)?.dataset.id);
@@ -36,7 +36,7 @@ const PlaceCard = ({ placeCardItem, type }: Props) => {
     copyData[curDay - 1] = { ...copyData[curDay - 1], items: updatedItem };
 
     setTotalPlan(copyData);
-    setClickedIdList(copyData.map((data) => data.items));
+    setClickedIdList(copyData?.map((data) => data.items));
   };
 
   const handleAddClick = (newItem: PlaceListTypes) => {
