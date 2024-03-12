@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import React from 'react';
 
 import createScheduleAtom from 'src/atoms/createScheduleAtom';
 import modalStateAtom from 'src/atoms/modalStateAtom';
@@ -11,9 +12,10 @@ import RegionCard from '../common/RegionCard';
 
 interface Props {
   keyword: string;
+  setKeyword: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const SearchRegionList = ({ keyword }: Props) => {
+const SearchRegionList = ({ keyword, setKeyword }: Props) => {
   const regions = useRecoilValue(regionsAtom);
   const filtered = regions.filter((data) => data.name === keyword);
   const setCreateSchedule = useSetRecoilState(createScheduleAtom);
@@ -29,6 +31,7 @@ const SearchRegionList = ({ keyword }: Props) => {
 
   if (filtered.length === 0 && keyword !== '') {
     alert(`${keyword}에 대한 일치하는 정보가 없습니다`);
+    setKeyword('');
   }
 
   return (
