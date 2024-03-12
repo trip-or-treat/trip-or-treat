@@ -18,10 +18,10 @@ const ContentTypeFilterItemList = () => {
   const setContentType = useSetRecoilState(contentTypelistAtom);
 
   useEffect(() => {
-    if (!isLoading && contentTypeData?.data) {
+    if (contentTypeData?.data) {
       setContentType(contentTypeData.data);
     }
-  }, []);
+  }, [contentTypeData]);
 
   return (
     <Wrapper>
