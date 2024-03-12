@@ -21,7 +21,7 @@ const PlaceList = ({ keyword, setKeyword }: Props) => {
   const { regionId } = useParams();
   const [prevContentTypeId, setContentTypeId] = useRecoilState(contentTypeIdAtom);
 
-  const { data, isLoading } = useInfinityScroll({
+  const { data, isLoading, hasNextPage } = useInfinityScroll({
     observerRef,
     queryKey: 'placeList',
     regionId,
@@ -55,7 +55,11 @@ const PlaceList = ({ keyword, setKeyword }: Props) => {
                 <PlaceCard key={placeCardItem.id} placeCardItem={placeCardItem} type="ADD_BUTTON" />
               )),
             )}
-            <div ref={observerRef}>{isLoading && <Loading type="SMALL" />}</div>
+            {hasNextPage && (
+              <div ref={observerRef}>
+                <Loading type="SMALL" />
+              </div>
+            )}
           </>
         )}
       </PlaceListBox>
@@ -66,7 +70,7 @@ const PlaceList = ({ keyword, setKeyword }: Props) => {
 export default PlaceList;
 
 const Wrapper = styled.div`
-  height: calc(100vh - 310px);
+  height: calc(100vh - 320px);
   overflow: auto;
 `;
 
