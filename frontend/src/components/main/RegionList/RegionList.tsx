@@ -141,7 +141,7 @@ const Input = styled.input`
 `;
 
 const ListContainer = styled.div`
-  height: 450px;
+  height: 1300px;
 `;
 
 const List = styled.div`
