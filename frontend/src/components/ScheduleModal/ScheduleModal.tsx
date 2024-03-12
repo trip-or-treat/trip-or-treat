@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import myRegionListAtom from 'src/atoms/myRegionListAtom';
 import createScheduleAtom from 'src/atoms/createScheduleAtom';
+import dateSelectStateAtom from 'src/atoms/dateSelectStateAtom';
 
 import ModalOverlay from '../common/modal/ModalOverlay';
 import Calendar from '../Calender/Calender';
@@ -14,8 +15,10 @@ import { CommonButtonBox } from '../common/CommonButton/CommonButton';
 const ScheduleModal = () => {
   const myRegionList = useRecoilValue(myRegionListAtom);
   const [disabled, setDisabled] = useRecoilState(createScheduleAtom);
+  const setDateSelect = useSetRecoilState(dateSelectStateAtom);
 
   useEffect(() => {
+    setDateSelect(false);
     setDisabled(true);
   }, []);
 

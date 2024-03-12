@@ -3,14 +3,16 @@ import { Outlet, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
-import Nav from 'src/components/common/Nav';
-import StepNavBar from 'src/components/StepNavBar';
-
-import AlertModal from 'src/components/AlertModal';
 import regionsAtom from 'src/atoms/regionsAtom';
+import dateSelectStateAtom from 'src/atoms/dateSelectStateAtom';
 import myRegionListAtom from 'src/atoms/myRegionListAtom';
 import regionClickedIdListAtom from 'src/atoms/regionClickedIdListAtom';
 import homeModalAtom from 'src/atoms/homeModalAtom';
+
+import Nav from 'src/components/common/Nav';
+import StepNavBar from 'src/components/StepNavBar';
+import LoginModal from 'src/components/LoginModal';
+import AlertModal from 'src/components/AlertModal';
 
 const StepLayout = () => {
   const { regionId } = useParams();
@@ -18,11 +20,16 @@ const StepLayout = () => {
   const [myRegionList, setMyRegionList] = useRecoilState(myRegionListAtom);
   const [isModal, setIsModal] = useRecoilState(homeModalAtom);
   const setClickRegionListId = useSetRecoilState(regionClickedIdListAtom);
+  const [isDateSelect, setDateSelect] = useRecoilState(dateSelectStateAtom);
 
   const mainRegion = regions.find((region) => region.id === Number(regionId));
 
   const onClose = () => {
     setIsModal(false);
+  };
+
+  const CloseDate = () => {
+    setDateSelect(false);
   };
 
   useEffect(() => {
@@ -40,6 +47,18 @@ const StepLayout = () => {
         <Outlet />
       </Main>
       {isModal && <AlertModal onClose={onClose} />}
+      {isDateSelect && (
+        <LoginModal
+          path={`/date/${regionId}`}
+          onButtonText="변경하기"
+          offButtonText="닫기"
+          onClose={CloseDate}
+        >
+          일정을 변경하시겠습니까?
+          <br />
+          선택사항은 저장되지 않습니다.
+        </LoginModal>
+      )}
     </>
   );
 };

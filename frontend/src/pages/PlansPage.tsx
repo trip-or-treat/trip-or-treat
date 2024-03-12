@@ -48,7 +48,11 @@ const PlansPage = () => {
         </ButtonBox>
       </Wrapper>
       {isLoggedIn && open && <ConfirmSaveModal onClose={onClose} />}
-      {!isLoggedIn && open && <LoginModal onClose={onClose} />}
+      {!isLoggedIn && open && (
+        <LoginModal onButtonText="로그인" offButtonText="닫기" path="/login" onClose={onClose}>
+          저장하려면 로그인이 필요해요!
+        </LoginModal>
+      )}
     </Main>
   );
 };

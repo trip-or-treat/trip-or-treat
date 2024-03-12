@@ -1,5 +1,7 @@
+import { useSetRecoilState } from 'recoil';
 import { Link, useLocation } from 'react-router-dom';
-import styled from 'styled-components';
+import { styled, css } from 'styled-components';
+import dateSelectStateAtom from 'src/atoms/dateSelectStateAtom';
 import StepNavLinkButton from './StepNavLinkButton';
 
 const STEP_NAV_DATA = [
@@ -12,15 +14,29 @@ const StepNavBar = () => {
   const { pathname } = useLocation();
   const [currentPath, regionId] = pathname.split('/').slice(1);
   const currentStep = STEP_NAV_DATA.find((item) => item.path === currentPath)?.step;
+  const setDateSelect = useSetRecoilState(dateSelectStateAtom);
+
+  const onClick = () => {
+    if (currentStep === 2 || currentStep === 3) {
+      setDateSelect(true);
+    }
+  };
 
   return (
     <Nav>
       {STEP_NAV_DATA.map((item, idx) => (
         <NavItem key={item.step}>
-          <LinkBox to={`${item.path}/${regionId}`} $isClicked={idx + 1 === currentStep}>
-            <LinkItem>{`step${idx + 1}`}</LinkItem>
-            <LinkItem>{item.content}</LinkItem>
-          </LinkBox>
+          {idx === 0 ? (
+            <ExtendBox $isClicked={idx + 1 === currentStep} onClick={onClick}>
+              <LinkItem>{`step${idx + 1}`}</LinkItem>
+              <LinkItem>{item.content}</LinkItem>
+            </ExtendBox>
+          ) : (
+            <ExtendLinkBox to={`${item.path}/${regionId}`} $isClicked={idx + 1 === currentStep}>
+              <LinkItem>{`step${idx + 1}`}</LinkItem>
+              <LinkItem>{item.content}</LinkItem>
+            </ExtendLinkBox>
+          )}
         </NavItem>
       ))}
 
@@ -71,7 +87,7 @@ const ButtonBox = styled.div`
   bottom: 50px;
 `;
 
-const LinkBox = styled(Link)<{ $isClicked: boolean }>`
+const stepInner = css<{ $isClicked: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -88,4 +104,12 @@ const LinkBox = styled(Link)<{ $isClicked: boolean }>`
 
 const LinkItem = styled.p`
   margin: 5px 0px;
+`;
+
+const ExtendLinkBox = styled(Link)<{ $isClicked: boolean }>`
+  ${stepInner}
+`;
+
+const ExtendBox = styled.div<{ $isClicked: boolean }>`
+  ${stepInner}
 `;
