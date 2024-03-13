@@ -37,7 +37,7 @@ const StepNavBar = () => {
               <LinkItem>{item.content}</LinkItem>
             </ExtendBox>
           ) : (
-            <ExtendLinkBox to={`${item.path}/${curRegionId}`} $isClicked={idx + 1 === curRegionId}>
+            <ExtendLinkBox to={`${item.path}/${curRegionId}`} $isClicked={idx + 1 === curStep}>
               <LinkItem>{`step${idx + 1}`}</LinkItem>
               <LinkItem>{item.content}</LinkItem>
             </ExtendLinkBox>
