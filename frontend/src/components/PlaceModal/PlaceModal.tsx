@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { usePlaceInfo } from 'src/hooks/api/usePlaceInfo';
 import { PlaceInfo } from 'src/@types/api/placeInfo';
 import { ReactComponent as Close } from 'src/assets/svgs/close.svg';
-import palceIdAtom from 'src/atoms/placeIdAtom';
+import placeIdAtom from 'src/atoms/placeIdAtom';
 import overviewTitleAtom from 'src/atoms/overviewTitleAtom';
 import contentTypelistAtom from 'src/atoms/contentTypeListAtom';
 
@@ -27,7 +27,7 @@ interface Info {
 }
 
 const PlaceModal = ({ onClose }: Props) => {
-  const { id: currentId, name: content } = useRecoilValue(palceIdAtom);
+  const { id: currentId, name: content } = useRecoilValue(placeIdAtom);
   const { data: placeInfoApi, isLoading, isError }: Info = usePlaceInfo(currentId);
   const setTitle = useSetRecoilState(overviewTitleAtom);
   const contentTypeList = useRecoilValue(contentTypelistAtom);

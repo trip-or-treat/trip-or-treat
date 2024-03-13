@@ -7,7 +7,7 @@ import totalPlanAtom from 'src/atoms/totalPlanAtom';
 import placeClickedIdListAtom from 'src/atoms/placeClickedIdListAtom';
 import curDayAtom from 'src/atoms/curDayAtom';
 import modalStateAtom from 'src/atoms/modalStateAtom';
-import palceIdAtom from 'src/atoms/placeIdAtom';
+import placeIdAtom from 'src/atoms/placeIdAtom';
 
 import { ReactComponent as Plus } from '../../assets/svgs/plus.svg';
 import { ReactComponent as Minus } from '../../assets/svgs/minus.svg';
@@ -49,7 +49,7 @@ const PlaceCard = ({ placeCardItem, type }: Props) => {
   };
 
   const setModal = useSetRecoilState(modalStateAtom);
-  const setPlace = useSetRecoilState(palceIdAtom);
+  const setPlace = useSetRecoilState(placeIdAtom);
 
   const handleClickModal = () => {
     setPlace({ id: placeCardItem.id, name: placeCardItem.subCategoryName });

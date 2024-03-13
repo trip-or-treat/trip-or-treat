@@ -2,9 +2,9 @@ import { atom } from 'recoil';
 
 import { ContentType } from 'src/@types/api/contentType';
 
-const palceIdAtom = atom<ContentType>({
+const placeIdAtom = atom<ContentType>({
   key: 'palceIdAtom',
   default: { id: 0, name: '' },
 });
 
-export default palceIdAtom;
+export default placeIdAtom;
