@@ -21,7 +21,7 @@ const PlaceList = ({ keyword, setKeyword }: Props) => {
   const { regionId } = useParams();
   const [prevContentTypeId, setContentTypeId] = useRecoilState(contentTypeIdAtom);
 
-  const { data, isLoading, hasNextPage } = useInfinityScroll({
+  const { data, isLoading } = useInfinityScroll({
     observerRef,
     queryKey: 'placeList',
     regionId,
@@ -55,7 +55,7 @@ const PlaceList = ({ keyword, setKeyword }: Props) => {
                 <PlaceCard key={placeCardItem.id} placeCardItem={placeCardItem} type="ADD_BUTTON" />
               )),
             )}
-            {hasNextPage && (
+            {data?.pages[data.pages.length - 1].data.length >= 10 && (
               <div ref={observerRef}>
                 <Loading type="SMALL" />
               </div>
