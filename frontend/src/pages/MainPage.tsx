@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import styled from 'styled-components';
 
 import Banner from 'src/components/main/Banner';
 import RegionList from 'src/components/main/RegionList';
+import FloattingBtn from 'src/components/main/FloattingBtn';
 
 import homeModalAtom from 'src/atoms/homeModalAtom';
 import useInitData from 'src/hooks/useInitData';
@@ -18,13 +18,12 @@ const MainPage = () => {
   }, [isModal]);
 
   return (
-    <Wrapper>
+    <div>
+      <FloattingBtn />
       <Banner />
       <RegionList />
-    </Wrapper>
+    </div>
   );
 };
 
 export default MainPage;
-
-const Wrapper = styled.div``;
