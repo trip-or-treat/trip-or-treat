@@ -33,7 +33,7 @@ const useInfinityScroll = ({
         fetchNextPage();
       }
     },
-    [fetchNextPage, hasNextPage],
+    [fetchNextPage, hasNextPage, keyword],
   );
 
   useEffect(() => {
@@ -51,7 +51,7 @@ const useInfinityScroll = ({
     };
   }, [fetchNextPage, hasNextPage, handleObserver]);
 
-  return { data, isLoading, hasNextPage };
+  return { data, isLoading };
 };
 
 export default useInfinityScroll;
