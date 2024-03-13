@@ -10,6 +10,7 @@ import LoginModal from 'src/components/LoginModal';
 import ConfirmSaveModal from 'src/components/ConfirmSaveModal';
 import CommonButton from 'src/components/common/CommonButton';
 import PlansList from 'src/components/PlansList';
+import FailDataPage from './FailDataPage';
 
 const parseName = (name: string) => {
   return name.length > 5 ? name.slice(0, 2) : name;
@@ -26,16 +27,14 @@ const PlansPage = () => {
     setOpen(false);
   };
 
+  if (!totalPlan[0]) return <FailDataPage />;
+
   return (
     <Main>
       <Wrapper>
         <TitleAndDateBox>
-          <ul>
-            {myRegionList.map((item) => (
-              <li key={item.id}>{parseName(item.name)}</li>
-            ))}
-          </ul>
-          <p> {`${totalPlan[0].date} ~ ${totalPlan[totalPlan.length - 1].date}`}</p>
+          <ul>{myRegionList?.map((item) => <li key={item.id}>{parseName(item.name)}</li>)}</ul>
+          <p> {`${totalPlan[0]?.date} ~ ${totalPlan[totalPlan.length - 1]?.date}`}</p>
         </TitleAndDateBox>
 
         <PlansList />
@@ -54,7 +53,6 @@ const PlansPage = () => {
 };
 
 export default PlansPage;
-
 const Main = styled.main`
   position: fixed;
 

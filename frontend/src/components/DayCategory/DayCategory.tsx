@@ -5,7 +5,7 @@ import curDayAtom from 'src/atoms/curDayAtom';
 import totalPlanAtom from 'src/atoms/totalPlanAtom';
 
 const getDate = (date: string) => {
-  return date.split(' ').join('.').slice(5);
+  return date?.split(' ').join('.').slice(5);
 };
 
 const DayCategory = () => {
@@ -16,11 +16,11 @@ const DayCategory = () => {
     <>
       <SelectedDayTitle>
         <p>{`DAY ${curDay}`}</p>
-        <p>{getDate(totalPlan[curDay - 1].date)}</p>
+        <p>{getDate(totalPlan[curDay - 1]?.date)}</p>
       </SelectedDayTitle>
 
       <DayButtonBox>
-        {totalPlan.map((item) => (
+        {totalPlan?.map((item) => (
           <DayButton
             key={item.day}
             onClick={() => setCurDay(item.day)}

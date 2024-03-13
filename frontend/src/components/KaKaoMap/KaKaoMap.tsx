@@ -15,13 +15,14 @@ interface Props {
 }
 
 const KaKaoMap = ({ list, curDay }: Props) => {
+  if (!list) return <div />;
   const myRegionList = useRecoilValue(myRegionListAtom);
-  const markerPositions = list.map((info) => ({
+  const markerPositions = list?.map((info) => ({
     lat: info.latitude,
     lng: info.longitude,
   }));
 
-  if (list.length === 0) {
+  if (list?.length === 0) {
     return (
       <Map
         center={{ lat: myRegionList[0]?.latitude, lng: myRegionList[0]?.longitude }}

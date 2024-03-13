@@ -1,34 +1,27 @@
-import styled from 'styled-components';
 import { Link, useParams } from 'react-router-dom';
+import styled from 'styled-components';
+
 import { Regions } from 'src/@types/api/regions';
 
 interface Props {
-  data: Regions[];
+  item: Regions;
 }
 
 const parseName = (name: string) => {
   return name.length > 5 ? name.slice(0, 2) : name;
 };
 
-const RegionCategory = ({ data }: Props) => {
+const RegionCategoryCard = ({ item }: Props) => {
   const { regionId } = useParams();
 
   return (
-    <Wrapper>
-      {data.map((item) => (
-        <LinkBox key={item.id} to={`/place/${item.id}`} $isClicked={item.id === Number(regionId)}>
-          <TitleBox $isClicked={item.id === Number(regionId)}>{parseName(item.name)}</TitleBox>
-        </LinkBox>
-      ))}
-    </Wrapper>
+    <LinkBox key={item.id} to={`/place/${item.id}`} $isClicked={item.id === Number(regionId)}>
+      <TitleBox $isClicked={item.id === Number(regionId)}>{parseName(item.name)}</TitleBox>
+    </LinkBox>
   );
 };
 
-export default RegionCategory;
-
-const Wrapper = styled.ul`
-  display: flex;
-`;
+export default RegionCategoryCard;
 
 const LinkBox = styled(Link)<{ $isClicked: boolean }>`
   display: flex;

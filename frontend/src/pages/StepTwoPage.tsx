@@ -1,16 +1,27 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import EnterSearch from 'src/components/EnterSearch';
 import MyRegionList from 'src/components/MyRegionList';
 import SearchRegionList from 'src/components/SearchRegionList';
-import { useRecoilValue } from 'recoil';
-import myRegionListAtom from 'src/atoms/myRegionListAtom';
 import KaKaoMap from 'src/components/KaKaoMap';
+
+import curDayAtom from 'src/atoms/curDayAtom';
+import myRegionListAtom from 'src/atoms/myRegionListAtom';
+
+import FailDataPage from './FailDataPage';
 
 const StepTwoPage = () => {
   const [keyword, setKeyword] = useState('');
   const myRegionList = useRecoilValue(myRegionListAtom);
+  const setCurDay = useSetRecoilState(curDayAtom);
+
+  useEffect(() => {
+    setCurDay(1);
+  }, []);
+
+  if (!myRegionList) return <FailDataPage />;
 
   return (
     <Wrapper>
@@ -21,7 +32,7 @@ const StepTwoPage = () => {
           <EnterSearch placeHolder="여행지를 검색해보세요!" setKeyword={setKeyword} />
         </section>
 
-        <SearchRegionList keyword={keyword} />
+        <SearchRegionList keyword={keyword} setKeyword={setKeyword} />
       </SearchLayer>
 
       <MapLayer>
@@ -41,7 +52,7 @@ const Wrapper = styled.div`
 `;
 
 const SearchLayer = styled.div`
-  width: 30%;
+  width: 25%;
   height: inherit;
   border-left: ${(props) => `1px solid ${props.theme.colors.lightGrey}`};
   border-right: ${(props) => `1px solid ${props.theme.colors.lightGrey}`};
@@ -54,8 +65,6 @@ const SearchLayer = styled.div`
 `;
 
 const MapLayer = styled.div`
-  width: 70%;
+  width: 75%;
   height: inherit;
-
-  background-color: darkgoldenrod;
 `;
