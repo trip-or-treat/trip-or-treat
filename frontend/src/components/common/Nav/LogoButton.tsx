@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 
 import homeModalAtom from 'src/atoms/homeModalAtom';
@@ -11,7 +12,7 @@ const LogoButton = () => {
   };
 
   return (
-    <LogoButtonBox href="/" onClick={handleClick}>
+    <LogoButtonBox to="#" onClick={handleClick}>
       TOT
     </LogoButtonBox>
   );
@@ -19,7 +20,7 @@ const LogoButton = () => {
 
 export default LogoButton;
 
-const LogoButtonBox = styled.a`
+const LogoButtonBox = styled(Link)`
   float: left;
 
   width: ${(props) => props.theme.width.leftNavWidth};
