@@ -16,10 +16,11 @@ export default FloattingBtn;
 
 const StyledBtn = styled.button`
   position: fixed;
+  right: 3%;
+  bottom: 5%;
 
   width: 60px;
   height: 60px;
-  margin: 30% 0 0 88%;
 
   background-color: white;
   border: none;
