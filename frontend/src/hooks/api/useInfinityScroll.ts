@@ -51,7 +51,7 @@ const useInfinityScroll = ({
     };
   }, [fetchNextPage, hasNextPage, handleObserver]);
 
-  return { data, isLoading };
+  return { data, isLoading, hasNextPage };
 };
 
 export default useInfinityScroll;
