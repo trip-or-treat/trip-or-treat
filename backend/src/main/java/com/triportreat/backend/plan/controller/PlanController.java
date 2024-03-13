@@ -4,7 +4,7 @@ import static com.triportreat.backend.common.response.SuccessMessage.GET_SUCCESS
 import static com.triportreat.backend.common.response.SuccessMessage.POST_SUCCESS;
 
 import com.triportreat.backend.common.response.ResponseResult;
-import com.triportreat.backend.plan.domain.PlanCreateRequestDto;
+import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
 import com.triportreat.backend.plan.service.PlanService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
