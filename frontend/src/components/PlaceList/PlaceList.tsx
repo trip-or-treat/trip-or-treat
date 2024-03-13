@@ -55,7 +55,7 @@ const PlaceList = ({ keyword, setKeyword }: Props) => {
                 <PlaceCard key={placeCardItem.id} placeCardItem={placeCardItem} type="ADD_BUTTON" />
               )),
             )}
-            {data?.pages[data.pages.length - 1].data.length >= 10 && (
+            {hasNextPage && (
               <div ref={observerRef}>
                 <Loading type="SMALL" />
               </div>
