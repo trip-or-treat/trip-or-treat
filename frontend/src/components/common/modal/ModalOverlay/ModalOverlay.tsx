@@ -13,7 +13,7 @@ const ModalOverlay = ({ children }: Props) => {
   return (
     <>
       {onBodyOverflow()}
-      <StyledModalOverlay>{children}</StyledModalOverlay>;
+      <StyledModalOverlay>{children}</StyledModalOverlay>
     </>
   );
 };
