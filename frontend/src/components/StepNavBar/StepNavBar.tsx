@@ -1,7 +1,9 @@
 import { useSetRecoilState } from 'recoil';
 import { Link, useLocation } from 'react-router-dom';
 import { styled, css } from 'styled-components';
+
 import dateSelectStateAtom from 'src/atoms/dateSelectStateAtom';
+
 import StepNavLinkButton from './StepNavLinkButton';
 
 const STEP_NAV_DATA = [
@@ -41,13 +43,13 @@ const StepNavBar = () => {
       ))}
 
       <ButtonBox>
-        {currentStep === 2 && (
-          <StepNavLinkButton type="ENABLE_ONLY" path={`/place/${regionId}`}>
+        {curStep === 2 && (
+          <StepNavLinkButton type="ENABLE_ONLY" path={`/place/${curRegionId}`}>
             다음
           </StepNavLinkButton>
         )}
 
-        {currentStep === 3 && (
+        {curStep === 3 && (
           <StepNavLinkButton type="ENABLE_AND_DISABLE" path="/plans">
             계획 저장
           </StepNavLinkButton>

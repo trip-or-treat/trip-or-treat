@@ -126,6 +126,7 @@ const SearchBar = styled.div`
 const IconBox = styled.div`
   svg {
     width: 20px;
+    cursor: pointer;
   }
 `;
 
@@ -141,7 +142,7 @@ const Input = styled.input`
 `;
 
 const ListContainer = styled.div`
-  height: 450px;
+  height: 1300px;
 `;
 
 const List = styled.div`

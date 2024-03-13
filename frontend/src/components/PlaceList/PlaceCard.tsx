@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import React from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { useParams } from 'react-router-dom';
 
 import { PlaceListTypes } from 'src/@types/api/placeList';
 import totalPlanAtom from 'src/atoms/totalPlanAtom';
@@ -21,9 +22,10 @@ const PlaceCard = ({ placeCardItem, type }: Props) => {
   const [clickedIdList, setClickedIdList] = useRecoilState(placeClickedIdListAtom);
   const [totalPlan, setTotalPlan] = useRecoilState(totalPlanAtom);
   const curDay = useRecoilValue(curDayAtom);
+  const { regionId } = useParams();
 
   const isClicked =
-    clickedIdList && clickedIdList[curDay - 1]?.map((data) => data.id).includes(placeCardItem.id);
+    clickedIdList && clickedIdList[curDay - 1]?.map((data) => data.id).includes(placeCardItem?.id);
 
   const handleDeleteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const targetId = Number((e.currentTarget.parentNode?.parentNode as HTMLElement)?.dataset.id);
@@ -34,12 +36,12 @@ const PlaceCard = ({ placeCardItem, type }: Props) => {
     copyData[curDay - 1] = { ...copyData[curDay - 1], items: updatedItem };
 
     setTotalPlan(copyData);
-    setClickedIdList(copyData.map((data) => data.items));
+    setClickedIdList(copyData?.map((data) => data.items));
   };
 
   const handleAddClick = (newItem: PlaceListTypes) => {
     const copyData = [...totalPlan];
-    const updatedItem = [...totalPlan[curDay - 1].items, newItem];
+    const updatedItem = [...totalPlan[curDay - 1].items, { ...newItem, regionId }];
     copyData[curDay - 1] = { ...copyData[curDay - 1], items: updatedItem };
 
     setTotalPlan(copyData);

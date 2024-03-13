@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import KaKaoMap from 'src/components/KaKaoMap';
-import RegionCategory from 'src/components/RegionCategory';
+import RegionCategory from 'src/components/RegionCategoryList/RegionCategoryList';
 import EnterSearch from 'src/components/EnterSearch';
 import PlaceList from 'src/components/PlaceList';
 import DayCategory from 'src/components/DayCategory';
@@ -15,6 +15,7 @@ import totalPlanAtom from 'src/atoms/totalPlanAtom';
 import stepPlanSavedBtnAtom from 'src/atoms/stepPlanSavedBtnAtom';
 import curDayAtom from 'src/atoms/curDayAtom';
 import { PlaceListTypes } from 'src/@types/api/placeList';
+import FailDataPage from './FailDataPage';
 
 const StepThreePage = () => {
   const [keyword, setKeyword] = useState('');
@@ -26,12 +27,19 @@ const StepThreePage = () => {
   const curDay = useRecoilValue(curDayAtom);
 
   useEffect(() => {
-    setStepPlanSaveBtn(totalPlan.map((data) => data.items).every((data) => data.length !== 0));
+    setStepPlanSaveBtn(totalPlan.map((data) => data?.items).every((data) => data.length !== 0));
   }, [totalPlan]);
 
   useEffect(() => {
-    setSelectedPlaceList(totalPlan[curDay - 1].items);
+    setSelectedPlaceList(totalPlan[curDay - 1]?.items);
   }, [curDay, totalPlan]);
+
+  if (!totalPlan[0] || !myRegionList)
+    return (
+      <Wrapper>
+        <FailDataPage />
+      </Wrapper>
+    );
 
   return (
     <Wrapper>
@@ -80,7 +88,7 @@ const SearchLayer = styled.div`
 `;
 
 const DayLayer = styled.div`
-  width: 30%;
+  width: 27%;
   height: inherit;
   padding: 20px;
 
@@ -88,8 +96,6 @@ const DayLayer = styled.div`
 `;
 
 const MapLayer = styled.div`
-  width: 45%;
+  width: 48%;
   height: inherit;
-
-  background-color: darkgoldenrod;
 `;

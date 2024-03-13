@@ -7,6 +7,10 @@ spring:
     hibernate:
       naming:
         physical-strategy: com.triportreat.backend.common.CustomCamelCaseToUnderscoresNamingStrategy
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
 
 openapi:
   place-data-url: ENC(LLU9kjm25zSyg5yOyVPUXOv+5S90hpA4nf361o39gyCQseJX2RDJrDMSLPujhrq/TCmjv2PKnveaorj78K1640eKP91zTpiwzfJWOl1bB8nQWOJBxaiYZemCEBlBrF0xG5j/N898ydeUWrWl12uuJw==)
