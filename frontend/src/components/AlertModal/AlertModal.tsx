@@ -7,11 +7,11 @@ import LinkButton from '../common/modal/LinkButton';
 import CloseButton from '../common/modal/CloseButton';
 
 interface Props {
-  onClose: () => void;
   children: React.ReactNode;
   onButtonText: string;
   offButtonText: string;
   path: string;
+  onClose: () => void;
 }
 
 const AlertModal = ({ children, onButtonText, offButtonText, path, onClose }: Props) => {
