@@ -1,8 +1,9 @@
-import { useSetRecoilState } from 'recoil';
 import { Link, useLocation } from 'react-router-dom';
 import { styled, css } from 'styled-components';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
 
 import dateSelectStateAtom from 'src/atoms/dateSelectStateAtom';
+import myRegionListAtom from 'src/atoms/myRegionListAtom';
 
 import StepNavLinkButton from './StepNavLinkButton';
 
@@ -13,13 +14,15 @@ const STEP_NAV_DATA = [
 ];
 
 const StepNavBar = () => {
+  const myRegionList = useRecoilValue(myRegionListAtom);
+  const curRegionId = myRegionList[0]?.id;
   const { pathname } = useLocation();
-  const [currentPath, regionId] = pathname.split('/').slice(1);
-  const currentStep = STEP_NAV_DATA.find((item) => item.path === currentPath)?.step;
+  const [currentPath] = pathname.split('/').slice(1);
+  const curStep = STEP_NAV_DATA.find((data) => data.path === currentPath)?.step;
   const setDateSelect = useSetRecoilState(dateSelectStateAtom);
 
   const onClick = () => {
-    if (currentStep === 2 || currentStep === 3) {
+    if (curStep === 2 || curStep === 3) {
       setDateSelect(true);
     }
   };
@@ -29,12 +32,12 @@ const StepNavBar = () => {
       {STEP_NAV_DATA.map((item, idx) => (
         <NavItem key={item.step}>
           {idx === 0 ? (
-            <ExtendBox $isClicked={idx + 1 === currentStep} onClick={onClick}>
+            <ExtendBox $isClicked={idx + 1 === curStep} onClick={onClick}>
               <LinkItem>{`step${idx + 1}`}</LinkItem>
               <LinkItem>{item.content}</LinkItem>
             </ExtendBox>
           ) : (
-            <ExtendLinkBox to={`${item.path}/${regionId}`} $isClicked={idx + 1 === currentStep}>
+            <ExtendLinkBox to={`${item.path}/${curRegionId}`} $isClicked={idx + 1 === curRegionId}>
               <LinkItem>{`step${idx + 1}`}</LinkItem>
               <LinkItem>{item.content}</LinkItem>
             </ExtendLinkBox>

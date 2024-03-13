@@ -1,12 +1,8 @@
-import { useEffect } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 
-import regionsAtom from 'src/atoms/regionsAtom';
 import dateSelectStateAtom from 'src/atoms/dateSelectStateAtom';
-import myRegionListAtom from 'src/atoms/myRegionListAtom';
-import regionClickedIdListAtom from 'src/atoms/regionClickedIdListAtom';
 import homeModalAtom from 'src/atoms/homeModalAtom';
 
 import Nav from 'src/components/common/Nav';
@@ -15,13 +11,8 @@ import AlertModal from 'src/components/AlertModal';
 
 const StepLayout = () => {
   const { regionId } = useParams();
-  const regions = useRecoilValue(regionsAtom);
-  const [myRegionList, setMyRegionList] = useRecoilState(myRegionListAtom);
   const [isModal, setIsModal] = useRecoilState(homeModalAtom);
-  const setClickRegionListId = useSetRecoilState(regionClickedIdListAtom);
   const [isDateSelect, setDateSelect] = useRecoilState(dateSelectStateAtom);
-
-  const mainRegion = regions.find((region) => region.id === Number(regionId));
 
   const onClose = () => {
     setIsModal(false);
@@ -30,13 +21,6 @@ const StepLayout = () => {
   const CloseDate = () => {
     setDateSelect(false);
   };
-
-  useEffect(() => {
-    if (mainRegion && myRegionList.length < 1) {
-      setMyRegionList([mainRegion]);
-      setClickRegionListId([mainRegion.id]);
-    }
-  }, [regionId]);
 
   return (
     <>
