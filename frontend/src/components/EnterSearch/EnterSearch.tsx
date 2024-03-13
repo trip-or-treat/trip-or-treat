@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+
+import contentTypeIdAtom from 'src/atoms/contentTypeIdAtom';
 
 import { ReactComponent as FindIcon } from '../../assets/svgs/findIcon.svg';
+import { ReactComponent as RotateIcon } from '../../assets/svgs/rotate.svg';
 
 interface Props {
   placeHolder: string;
@@ -10,30 +15,58 @@ interface Props {
 
 const EnterSearch = ({ placeHolder, setKeyword }: Props) => {
   const [value, setValue] = useState('');
+  const { regionId } = useParams();
+  const setContentTypeId = useSetRecoilState(contentTypeIdAtom);
+
+  useEffect(() => {
+    setValue('');
+  }, [regionId]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (value.trim() === '') {
-      alert('검색어를 입력해주세요');
-      if (setKeyword) setKeyword(value);
-      setValue('');
-      return;
-    }
-
     if (setKeyword) setKeyword(value);
-    setValue('');
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      if (value.trim() === '') {
+        e.preventDefault();
+        alert('검색어를 입력해주세요');
+        setValue('');
+        if (setKeyword) setKeyword('');
+      }
+    }
+  };
+
+  const handleRotate = () => {
+    if (setKeyword) setKeyword('');
+    setContentTypeId(null);
+    setValue('');
+  };
+
+  const handleSearch = () => {
+    if (value.trim() === '') {
+      alert('검색어를 입력해주세요');
+    }
+  };
+
   return (
     <Form onSubmit={handleSubmit}>
-      <Input placeholder={placeHolder} value={value} onChange={handleChange} />
-      <Button>
+      <Button onClick={handleSearch}>
         <FindIcon />
+      </Button>
+      <Input
+        placeholder={placeHolder}
+        value={value}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+      />
+      <Button onClick={handleRotate}>
+        <RotateIcon />
       </Button>
     </Form>
   );
@@ -53,7 +86,7 @@ const Input = styled.input`
   width: 90%;
 
   padding: 15px;
-  padding-left: 20px;
+  padding-left: 15%;
 
   border: none;
   border-radius: 35px;
@@ -70,9 +103,7 @@ const Input = styled.input`
 
 const Button = styled.button`
   position: absolute;
-  top: 10px;
-  right: 10px;
-
+  top: 9px;
   padding: 5px;
 
   border: none;
@@ -84,5 +115,14 @@ const Button = styled.button`
   svg {
     width: 20px;
     height: 15px;
+    fill: ${(props) => props.theme.colors.darkGrey};
+  }
+
+  &:first-child {
+    left: 10px;
+  }
+
+  &:last-child {
+    right: 10px;
   }
 `;

@@ -126,6 +126,7 @@ const SearchBar = styled.div`
 const IconBox = styled.div`
   svg {
     width: 20px;
+    cursor: pointer;
   }
 `;
 

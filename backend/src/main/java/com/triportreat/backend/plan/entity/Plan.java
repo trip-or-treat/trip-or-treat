@@ -1,7 +1,7 @@
 package com.triportreat.backend.plan.entity;
 
 import com.triportreat.backend.common.BaseTimeEntity;
-import com.triportreat.backend.plan.domain.PlanCreateRequestDto;
+import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
 import com.triportreat.backend.user.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

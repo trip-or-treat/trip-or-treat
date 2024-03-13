@@ -45,7 +45,7 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
                         contentTypeIdEquals(placeSearchCondition.getContentTypeId()),
                         keywordContains(placeSearchCondition.getKeyword())
                 )
-                .orderBy(place.views.desc())
+                .orderBy(place.views.desc(), place.id.asc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

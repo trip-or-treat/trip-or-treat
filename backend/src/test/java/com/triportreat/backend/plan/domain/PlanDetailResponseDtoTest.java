@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 class PlanDetailResponseDtoTest {
 
     @Test
-    @DisplayName("계획상세정보 Dto 변환")
     void toDto() {
         // given
         Plan plan = Plan.builder()

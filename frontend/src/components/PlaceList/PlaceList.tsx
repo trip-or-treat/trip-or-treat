@@ -21,7 +21,7 @@ interface Props {
 const PlaceList = ({ keyword, setKeyword }: Props) => {
   const observerRef = useRef(null);
   const { regionId } = useParams();
-  const prevContentTypeId = useRecoilValue(contentTypeIdAtom);
+  const [prevContentTypeId, setContentTypeId] = useRecoilState(contentTypeIdAtom);
 
   const { data, isLoading } = useInfinityScroll({
     observerRef,
@@ -33,11 +33,16 @@ const PlaceList = ({ keyword, setKeyword }: Props) => {
   });
 
   useEffect(() => {
+    setKeyword('');
+    setContentTypeId(null);
+  }, [regionId]);
+
+  useEffect(() => {
     if (data?.pages[0]?.data.length === 0) {
       alert('데이터가 없습니다.');
       setKeyword('');
     }
-  }, [keyword, prevContentTypeId, isLoading]);
+  }, [keyword, data]);
 
   const [isModal, setModal] = useRecoilState(modalStateAtom);
 
@@ -46,7 +51,7 @@ const PlaceList = ({ keyword, setKeyword }: Props) => {
   };
 
   return (
-    <>
+    <Wrapper>
       <Title>장소선택</Title>
       <PlaceListBox>
         {isLoading && <Loading type="SMALL" />}
@@ -57,24 +62,30 @@ const PlaceList = ({ keyword, setKeyword }: Props) => {
                 <PlaceCard key={placeCardItem.id} placeCardItem={placeCardItem} type="ADD_BUTTON" />
               )),
             )}
-            <div ref={observerRef}>
-              <Loading type="SMALL" />
-            </div>
+            {data?.pages[data.pages.length - 1].data.length >= 10 && (
+              <div ref={observerRef}>
+                <Loading type="SMALL" />
+              </div>
+            )}
           </>
         )}
       </PlaceListBox>
       {isModal && <PlaceModal onClose={onClose} />}
-    </>
+    </Wrapper>
   );
 };
 
 export default PlaceList;
 
+const Wrapper = styled.div`
+  height: calc(100vh - 320px);
+  overflow: auto;
+`;
+
 const Title = styled.div`
   text-align: center;
   padding-bottom: 10px;
   border-bottom: ${(props) => `0.1px solid ${props.theme.colors.darkGrey}`};
-
   font-size: 16px;
   font-family: 'Pretendard-SemiBold';
   color: #6f6d6d;
@@ -82,6 +93,4 @@ const Title = styled.div`
 
 const PlaceListBox = styled.div`
   padding: 0px 20px;
-  height: 370px;
-  overflow: auto;
 `;
