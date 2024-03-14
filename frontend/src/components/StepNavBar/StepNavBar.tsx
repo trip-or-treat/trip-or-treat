@@ -117,4 +117,5 @@ const ExtendLinkBox = styled(Link)<{ $isClicked: boolean }>`
 
 const ExtendBox = styled.div<{ $isClicked: boolean }>`
   ${stepInner}
+  cursor: pointer;
 `;
