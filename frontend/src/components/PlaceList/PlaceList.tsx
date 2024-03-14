@@ -1,15 +1,17 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { PlaceListTypes } from 'src/@types/api/placeList';
 import useInfinityScroll from 'src/hooks/api/useInfinityScroll';
 import { placeListFetcher } from 'src/api/placeList';
 import contentTypeIdAtom from 'src/atoms/contentTypeIdAtom';
+import modalStateAtom from 'src/atoms/modalStateAtom';
 
 import PlaceCard from './PlaceCard';
 import Loading from '../common/Loading';
+import PlaceModal from '../PlaceModal';
 
 interface Props {
   keyword: string;
@@ -42,12 +44,17 @@ const PlaceList = ({ keyword, setKeyword }: Props) => {
     }
   }, [keyword, data]);
 
+  const [isModal, setModal] = useRecoilState(modalStateAtom);
+
+  const onClose = () => {
+    setModal(false);
+  };
+
   return (
     <Wrapper>
       <Title>장소선택</Title>
       <PlaceListBox>
         {isLoading && <Loading type="SMALL" />}
-
         {!isLoading && (
           <>
             {data?.pages?.map((items) =>
@@ -63,6 +70,7 @@ const PlaceList = ({ keyword, setKeyword }: Props) => {
           </>
         )}
       </PlaceListBox>
+      {isModal && <PlaceModal onClose={onClose} />}
     </Wrapper>
   );
 };

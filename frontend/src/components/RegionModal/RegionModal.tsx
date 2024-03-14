@@ -56,8 +56,12 @@ const RegionModal = ({ id, onClose }: Props) => {
             <Close onClick={onClose} />
           </StyledIcon>
           <StyledName>{RegionsMoreInformationApi.data.name}</StyledName>
-          <ImageBox imageThumbnail={RegionsMoreInformationApi.data.imageThumbnail} />
-          <Overview overview={RegionsMoreInformationApi.data.overview} />
+          <StyledImageBoxInner>
+            <ImageBox imageThumbnail={RegionsMoreInformationApi.data.imageThumbnail} />
+          </StyledImageBoxInner>
+          <StyledOverviewInner>
+            <Overview overview={RegionsMoreInformationApi.data.overview} />
+          </StyledOverviewInner>
           <RecommendPlaces
             key={RegionsMoreInformationApi.data.id}
             recommendedPlaces={RegionsMoreInformationApi.data.recommendedPlaces}
@@ -119,6 +123,14 @@ const StyledIcon = styled.div`
   height: 21px;
 
   cursor: pointer;
+`;
+
+const StyledImageBoxInner = styled.div`
+  margin-bottom: 40px;
+`;
+
+const StyledOverviewInner = styled.div`
+  margin-bottom: 110px;
 `;
 
 const StyledFooter = styled.div`

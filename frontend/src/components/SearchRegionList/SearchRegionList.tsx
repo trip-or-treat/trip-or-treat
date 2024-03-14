@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import React from 'react';
 
@@ -22,7 +23,9 @@ const SearchRegionList = ({ keyword, setKeyword }: Props) => {
   const [isModal, setModal] = useRecoilState(modalStateAtom);
   const currentId = useRecoilValue(regionIdAtom);
 
-  setCreateSchedule(false);
+  useEffect(() => {
+    setCreateSchedule(false);
+  }, []);
 
   const onClose = () => {
     setModal(false);

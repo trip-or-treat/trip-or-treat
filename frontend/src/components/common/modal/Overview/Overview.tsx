@@ -48,7 +48,6 @@ const StyledDescription = styled.p<{ $isMore: boolean }>`
 
   width: 455px;
   height: 142px;
-  margin-bottom: 110px;
 
   text-overflow: ellipsis;
   text-align: left;

@@ -1,12 +1,14 @@
 import styled from 'styled-components';
 import React from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { useParams } from 'react-router-dom';
 
 import { PlaceListTypes } from 'src/@types/api/placeList';
 import totalPlanAtom from 'src/atoms/totalPlanAtom';
 import placeClickedIdListAtom from 'src/atoms/placeClickedIdListAtom';
 import curDayAtom from 'src/atoms/curDayAtom';
+import modalStateAtom from 'src/atoms/modalStateAtom';
+import placeIdAtom from 'src/atoms/placeIdAtom';
 
 import { ReactComponent as Plus } from '../../assets/svgs/plus.svg';
 import { ReactComponent as Minus } from '../../assets/svgs/minus.svg';
@@ -48,8 +50,12 @@ const PlaceCard = ({ placeCardItem, type }: Props) => {
     setClickedIdList(copyData?.map((data) => data.items));
   };
 
+  const setModal = useSetRecoilState(modalStateAtom);
+  const setPlace = useSetRecoilState(placeIdAtom);
+
   const handleClickModal = () => {
-    // TODO : 지역 상세 Modal open 되도록 처리
+    setPlace({ id: placeCardItem.id, name: placeCardItem.subCategoryName });
+    setModal(true);
   };
 
   return (
