@@ -12,16 +12,31 @@ import modalStateAtom from 'src/atoms/modalStateAtom';
 import PlaceCard from './PlaceCard';
 import Loading from '../common/Loading';
 import PlaceModal from '../PlaceModal';
+import GhostImg from '../../assets/images/ghost.png';
 
 interface Props {
   keyword: string;
   setKeyword: React.Dispatch<React.SetStateAction<string>>;
 }
 
+export const NotFoundResult = () => {
+  return (
+    <NotFoundResultBox>
+      <p>찾으시는 정보가 없습니다.</p>
+      <img src={GhostImg} alt="고스트 이미지" />
+    </NotFoundResultBox>
+  );
+};
+
 const PlaceList = ({ keyword, setKeyword }: Props) => {
   const observerRef = useRef(null);
   const { regionId } = useParams();
   const [prevContentTypeId, setContentTypeId] = useRecoilState(contentTypeIdAtom);
+  const [isModal, setModal] = useRecoilState(modalStateAtom);
+
+  const onClose = () => {
+    setModal(false);
+  };
 
   const { data, isLoading } = useInfinityScroll({
     observerRef,
@@ -37,24 +52,12 @@ const PlaceList = ({ keyword, setKeyword }: Props) => {
     setContentTypeId(null);
   }, [regionId]);
 
-  useEffect(() => {
-    if (data?.pages[0]?.data.length === 0) {
-      alert('데이터가 없습니다.');
-      setKeyword('');
-    }
-  }, [keyword, data]);
-
-  const [isModal, setModal] = useRecoilState(modalStateAtom);
-
-  const onClose = () => {
-    setModal(false);
-  };
-
   return (
     <Wrapper>
       <Title>장소선택</Title>
       <PlaceListBox>
         {isLoading && <Loading type="SMALL" />}
+        {data?.pages[0]?.data.length === 0 && <NotFoundResult />}
         {!isLoading && (
           <>
             {data?.pages?.map((items) =>
@@ -93,4 +96,16 @@ const Title = styled.div`
 
 const PlaceListBox = styled.div`
   padding: 0px 20px;
+`;
+
+const NotFoundResultBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 25px 0px;
+  img {
+    margin-left: 10px;
+    width: 50px;
+    height: 50px;
+  }
 `;

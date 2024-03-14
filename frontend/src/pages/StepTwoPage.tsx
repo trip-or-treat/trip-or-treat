@@ -32,7 +32,7 @@ const StepTwoPage = () => {
           <EnterSearch placeHolder="여행지를 검색해보세요!" setKeyword={setKeyword} />
         </section>
 
-        <SearchRegionList keyword={keyword} setKeyword={setKeyword} />
+        <SearchRegionList keyword={keyword} />
       </SearchLayer>
 
       <MapLayer>
