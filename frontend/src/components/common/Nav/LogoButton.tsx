@@ -1,14 +1,18 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 
 import homeModalAtom from 'src/atoms/homeModalAtom';
 
 const LogoButton = () => {
+  const isMain = useLocation().pathname === '/';
   const setIsModal = useSetRecoilState(homeModalAtom);
 
   const handleClick = () => {
-    setIsModal(true);
+    if (isMain) {
+      window.scrollTo(0, 0);
+    }
+    if (!isMain) setIsModal(true);
   };
 
   return (

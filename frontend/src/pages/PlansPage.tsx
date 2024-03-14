@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import myRegionListAtom from 'src/atoms/myRegionListAtom';
 import totalPlanAtom from 'src/atoms/totalPlanAtom';
 
-import LoginModal from 'src/components/LoginModal';
+import AlertModal from 'src/components/AlertModal';
 import ConfirmSaveModal from 'src/components/ConfirmSaveModal';
 import CommonButton from 'src/components/common/CommonButton';
 import PlansList from 'src/components/PlansList';
@@ -47,7 +47,11 @@ const PlansPage = () => {
         </ButtonBox>
       </Wrapper>
       {isLoggedIn && open && <ConfirmSaveModal onClose={onClose} />}
-      {!isLoggedIn && open && <LoginModal onClose={onClose} />}
+      {!isLoggedIn && open && (
+        <AlertModal onButtonText="로그인" offButtonText="닫기" path="/login" onClose={onClose}>
+          저장하려면 로그인이 필요해요!
+        </AlertModal>
+      )}
     </Main>
   );
 };

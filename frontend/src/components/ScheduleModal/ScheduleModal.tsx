@@ -1,13 +1,26 @@
-import { useRecoilValue } from 'recoil';
+import { useEffect } from 'react';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+
 import myRegionListAtom from 'src/atoms/myRegionListAtom';
+import createScheduleAtom from 'src/atoms/createScheduleAtom';
+import dateSelectStateAtom from 'src/atoms/dateSelectStateAtom';
+
 import ModalOverlay from '../common/modal/ModalOverlay';
 import Calendar from '../Calender/Calender';
 import CommonButton from '../common/CommonButton';
+import { CommonButtonBox } from '../common/CommonButton/CommonButton';
 
 const ScheduleModal = () => {
   const myRegionList = useRecoilValue(myRegionListAtom);
+  const [disabled, setDisabled] = useRecoilState(createScheduleAtom);
+  const setDateSelect = useSetRecoilState(dateSelectStateAtom);
+
+  useEffect(() => {
+    setDateSelect(false);
+    setDisabled(true);
+  }, []);
 
   return (
     <ModalOverlay>
@@ -24,9 +37,13 @@ const ScheduleModal = () => {
           <Calendar />
         </StyledCalendarInner>
         <StyledButtonInner>
-          <Link to={`../region/${myRegionList[0]?.id}`}>
-            <CommonButton>날짜 설정하기</CommonButton>
-          </Link>
+          {disabled ? (
+            <StyledDisabled>날짜 설정하기</StyledDisabled>
+          ) : (
+            <Link to={`../region/${myRegionList[0]?.id}`}>
+              <CommonButton>날짜 설정하기</CommonButton>
+            </Link>
+          )}
         </StyledButtonInner>
       </StyledModalLayout>
     </ModalOverlay>
@@ -77,4 +94,11 @@ const StyledCalendarInner = styled.div`
 const StyledButtonInner = styled.div`
   position: relative;
   text-align: center;
+`;
+
+const StyledDisabled = styled(CommonButtonBox)`
+  background-color: ${(props) => props.theme.colors.lightGrey};
+  color: ${(props) => props.theme.colors.whiteFont};
+
+  cursor: default;
 `;

@@ -22,7 +22,7 @@ const useInfinityScroll = ({
     queryKey: [queryKey, keyword, prevContentTypeId, regionId],
     queryFn: async ({ pageParam }) =>
       fetcherFn({ pageParam, keyword, prevContentTypeId, regionId }),
-    initialPageParam: 0,
+    initialPageParam: 1,
     getNextPageParam: (_lastPage, allPages) => allPages.length + 1,
   });
 

@@ -3,15 +3,20 @@ import DatePicker from 'react-datepicker';
 import { useSetRecoilState } from 'recoil';
 import { ko } from 'date-fns/locale';
 
+import createScheduleAtom from 'src/atoms/createScheduleAtom';
 import totalPlanAtom from 'src/atoms/totalPlanAtom';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
 const Calendar = () => {
+  const defaultMaxDate = new Date();
+  defaultMaxDate.setFullYear(defaultMaxDate.getFullYear() + 1);
+
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
-  const [maxDate, setMaxDate] = useState<Date | null>(null);
+  const [maxDate, setMaxDate] = useState<Date>(defaultMaxDate);
   const setPlan = useSetRecoilState(totalPlanAtom);
+  const setActivate = useSetRecoilState(createScheduleAtom);
 
   const isAfterYesterday = (date: Date): boolean => {
     const yesterday = new Date();
@@ -52,6 +57,7 @@ const Calendar = () => {
     const [start, end] = dates;
 
     if (startDate !== start) {
+      setActivate(true);
       setStartDate(start);
 
       const sevenDaysLater = new Date(start.getTime());
@@ -63,15 +69,15 @@ const Calendar = () => {
     }
 
     if (start && end) {
-      setMaxDate(null);
+      setMaxDate(defaultMaxDate);
       setPlan(setDateData(start, end));
+      setActivate(false);
     }
   };
 
   return (
     <DatePicker
       locale={ko}
-      dateFormat="yyyy.MM.dd"
       inline
       selectsRange
       monthsShown={2}
@@ -81,9 +87,9 @@ const Calendar = () => {
       endDate={endDate}
       onChange={onChange}
       dayClassName={(date: Date) => {
-        if (isSaturday(date) && isAfterYesterday(date) && maxDate === null)
+        if (isSaturday(date) && isAfterYesterday(date) && date <= maxDate)
           return 'react-datepicker__day--sat';
-        if (isSunday(date) && isAfterYesterday(date) && maxDate === null)
+        if (isSunday(date) && isAfterYesterday(date) && date <= maxDate)
           return 'react-datepicker__day--sun';
 
         return null;

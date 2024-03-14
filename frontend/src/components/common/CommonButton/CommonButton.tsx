@@ -12,7 +12,7 @@ const CommonButton = ({ onClick, children }: ButtonTextProps) => {
 
 export default CommonButton;
 
-const CommonButtonBox = styled.button`
+export const CommonButtonBox = styled.button`
   width: 280px;
   height: 60px;
 
