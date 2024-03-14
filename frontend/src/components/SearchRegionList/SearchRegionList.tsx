@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import createScheduleAtom from 'src/atoms/createScheduleAtom';
@@ -9,13 +9,13 @@ import regionsAtom from 'src/atoms/regionsAtom';
 
 import RegionModal from '../RegionModal';
 import RegionCard from '../common/RegionCard';
+import { NotFoundResult } from '../PlaceList/PlaceList';
 
 interface Props {
   keyword: string;
-  setKeyword: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const SearchRegionList = ({ keyword, setKeyword }: Props) => {
+const SearchRegionList = ({ keyword }: Props) => {
   const regions = useRecoilValue(regionsAtom);
   const filtered = regions.filter((data) => data.name === keyword);
   const setCreateSchedule = useSetRecoilState(createScheduleAtom);
@@ -31,14 +31,10 @@ const SearchRegionList = ({ keyword, setKeyword }: Props) => {
     document.body.style.overflowY = 'auto';
   };
 
-  if (filtered.length === 0 && keyword !== '') {
-    alert(`${keyword}에 대한 일치하는 정보가 없습니다`);
-    setKeyword('');
-  }
-
   return (
     <Wrapper>
-      {(filtered.length === 0 ? regions : filtered).map((item) => (
+      {filtered.length === 0 && keyword !== '' && <NotFoundResult />}
+      {(filtered.length === 0 && keyword === '' ? regions : filtered).map((item) => (
         <RegionCard key={item.id} item={item} type="ADD_BUTTON" />
       ))}
       {isModal && <RegionModal id={currentId} onClose={onClose} />}
