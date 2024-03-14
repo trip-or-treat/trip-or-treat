@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 
 import { PlaceListTypes } from 'src/@types/api/placeList';
 import useInfinityScroll from 'src/hooks/api/useInfinityScroll';

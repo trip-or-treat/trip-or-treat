@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import React from 'react';
 
 import createScheduleAtom from 'src/atoms/createScheduleAtom';
 import modalStateAtom from 'src/atoms/modalStateAtom';
