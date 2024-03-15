@@ -1,6 +1,8 @@
 package com.triportreat.backend.dummy;
 
+import com.triportreat.backend.place.domain.ReviewRequestDto;
 import com.triportreat.backend.place.entity.Place;
+import com.triportreat.backend.place.entity.Review;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceCreateRequestDto;
@@ -8,6 +10,7 @@ import com.triportreat.backend.plan.entity.Plan;
 import com.triportreat.backend.plan.entity.Schedule;
 import com.triportreat.backend.plan.entity.SchedulePlace;
 import com.triportreat.backend.user.entity.User;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -72,6 +75,26 @@ public class DummyObject {
                 .memo("memo")
                 .visitOrder(visitOrder)
                 .expense(1000L)
+                .build();
+    }
+
+    protected Review createMockReview(Long id, User user) {
+        return Review.builder()
+                .id(id)
+                .user(user)
+                .tip("testTip")
+                .content("testContent")
+                .score(5.0F)
+                .build();
+    }
+
+    protected ReviewRequestDto createReviewRequestDto(Long userId, Long placeId) {
+        return ReviewRequestDto.builder()
+                .userId(userId)
+                .placeId(placeId)
+                .content("testContent")
+                .tip("testTip")
+                .score(5.0F)
                 .build();
     }
 }
