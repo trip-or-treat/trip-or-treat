@@ -58,7 +58,7 @@ const PlaceModal = ({ onClose }: Props) => {
           </StyledName>
           <StyledContentType>{findContentName()}</StyledContentType>
           <StyledImageBoxInner>
-            <ImageBox imageThumbnail={placeInfoApi.data.imageThumbnail} />
+            <ImageBox image={placeInfoApi.data.imageThumbnail} />
           </StyledImageBoxInner>
           <Address address={placeInfoApi.data.address} />
           <Overview overview={placeInfoApi.data.overview} />

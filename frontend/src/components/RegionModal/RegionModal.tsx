@@ -57,7 +57,7 @@ const RegionModal = ({ id, onClose }: Props) => {
           </StyledIcon>
           <StyledName>{RegionsMoreInformationApi.data.name}</StyledName>
           <StyledImageBoxInner>
-            <ImageBox imageThumbnail={RegionsMoreInformationApi.data.imageThumbnail} />
+            <ImageBox image={RegionsMoreInformationApi.data.imageThumbnail} />
           </StyledImageBoxInner>
           <StyledOverviewInner>
             <Overview overview={RegionsMoreInformationApi.data.overview} />
