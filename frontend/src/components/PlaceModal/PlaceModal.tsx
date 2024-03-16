@@ -49,9 +49,9 @@ const PlaceModal = ({ onClose }: Props) => {
             {placeInfoApi.data.name}
             <StyledContent>{content}</StyledContent>
           </StyledName>
-          <StyledContentType>업데이트</StyledContentType>
+          <StyledContentType>{placeInfoApi.data.contentTypeName}</StyledContentType>
           <StyledImageBoxInner>
-            <ImageBox image={placeInfoApi.data.imageThumbnail} />
+            <ImageBox image={placeInfoApi.data.imageOrigin} />
           </StyledImageBoxInner>
           <Address address={placeInfoApi.data.address} />
           <Overview overview={placeInfoApi.data.overview} />
