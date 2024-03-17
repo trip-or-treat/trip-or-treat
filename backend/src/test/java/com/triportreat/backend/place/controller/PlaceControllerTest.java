@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static com.triportreat.backend.common.response.FailMessage.GET_FAIL;
+import static com.triportreat.backend.common.response.FailMessage.VALIDATION_FAILED;
 import static com.triportreat.backend.common.response.SuccessMessage.GET_SUCCESS;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -52,7 +52,7 @@ class PlaceControllerTest {
                 .param("regionId", String.valueOf(placeSearchCondition.getRegionId())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result").value(false))
-                .andExpect(jsonPath("$.message").value(GET_FAIL.getMessage()))
+                .andExpect(jsonPath("$.message").value(VALIDATION_FAILED.getMessage()))
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.data").isMap());
     }
