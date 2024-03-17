@@ -10,8 +10,9 @@ import lombok.Data;
 public class ReviewRequestDto {
 
     private Long userId;
+    @NotNull(message = "placeId는 필수 입력값입니다.")
     private Long placeId;
-    @NotEmpty(message = "내용은 비워둘 수 없습니다.")
+    @NotEmpty(message = "내용은 필수 입력값입니다.")
     private String content;
     private String tip;
     @NotNull(message = "별점은 필수 입력값입니다.")
