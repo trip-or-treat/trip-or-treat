@@ -24,3 +24,15 @@ schedule:
     cron: 0 0 * * * *
   use: true
 
+jwt:
+  secret-key: ENC(O8/a9kuqe3iVJr4QgiSmjO6mQPhQZI7F2PslZFbxWZTFzlpc16PJu+NH7EZ70z5xpW/rYTIaXmm82zzN/98UPgOCsnaS6yrg5DGd2abCgMj2VtH0ofmBLchUwgjuU/PiEclnZSm65aA=)
+  access-token:
+    expiration-time: 1800000
+  refresh-token:
+    expiration-time: 86400000
+
+kakao:
+  client-id : ENC(0Bob+87fPKE6UNuE2Pp2XQeQU+fGvXBJ)
+  redirect-uri : https://api.triportreat.site/oauth/login
+  token-uri : https://kauth.kakao.com/oauth/token
+  user-info-uri : https://kapi.kakao.com/v2/user/me
