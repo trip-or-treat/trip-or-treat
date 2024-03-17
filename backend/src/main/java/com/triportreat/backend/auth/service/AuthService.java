@@ -1,6 +1,5 @@
 package com.triportreat.backend.auth.service;
 
-import com.triportreat.backend.auth.domain.KakaoLoginRequestDto;
 import com.triportreat.backend.auth.domain.KakaoTokenResponseDto;
 import com.triportreat.backend.auth.domain.KakaoUserInfoResponseDto;
 import com.triportreat.backend.auth.domain.KakaoUserInfoResponseDto.KakaoAccount;
@@ -38,9 +37,9 @@ public class AuthService {
     @Value("${kakao.user-info-uri}")
     private String userInfoUri;
 
-    public void loginByKakao(KakaoLoginRequestDto loginRequestInfo, HttpServletResponse response) {
+    public void loginByKakao(String code, HttpServletResponse response) {
         //카카오 엑세스토큰 발급
-        String kakaoAccessToken = getKakaoAccessToken(loginRequestInfo.getCode());
+        String kakaoAccessToken = getKakaoAccessToken(code);
 
         //카카오 사용자정보 조회
         KakaoAccount userInfo = getUserInfo(kakaoAccessToken);
