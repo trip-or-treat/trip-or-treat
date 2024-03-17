@@ -1,6 +1,6 @@
 package com.triportreat.backend.common.config;
 
-import com.triportreat.backend.auth.AuthUserArgumentResolver;
+import com.triportreat.backend.auth.utils.AuthUserArgumentResolver;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;

@@ -1,10 +1,10 @@
 package com.triportreat.backend.auth.service;
 
-import com.triportreat.backend.auth.JwtProvider;
 import com.triportreat.backend.auth.domain.KakaoLoginRequestDto;
 import com.triportreat.backend.auth.domain.KakaoTokenResponseDto;
 import com.triportreat.backend.auth.domain.KakaoUserInfoResponseDto;
 import com.triportreat.backend.auth.domain.KakaoUserInfoResponseDto.KakaoAccount;
+import com.triportreat.backend.auth.utils.JwtProvider;
 import com.triportreat.backend.user.entity.User;
 import com.triportreat.backend.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;

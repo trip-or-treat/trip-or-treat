@@ -1,4 +1,4 @@
-package com.triportreat.backend.auth;
+package com.triportreat.backend.auth.utils;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;

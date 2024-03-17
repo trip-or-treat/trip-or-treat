@@ -1,4 +1,4 @@
-package com.triportreat.backend.auth;
+package com.triportreat.backend.auth.utils;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

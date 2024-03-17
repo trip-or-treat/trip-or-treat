@@ -2,7 +2,7 @@ package com.triportreat.backend.auth.filter;
 
 import static org.springframework.util.PatternMatchUtils.simpleMatch;
 
-import com.triportreat.backend.auth.JwtProvider;
+import com.triportreat.backend.auth.utils.JwtProvider;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
