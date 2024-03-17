@@ -25,14 +25,14 @@ schedule:
   use: true
 
 jwt:
-  secret-key: ENC(O8/a9kuqe3iVJr4QgiSmjO6mQPhQZI7F2PslZFbxWZTFzlpc16PJu+NH7EZ70z5xpW/rYTIaXmm82zzN/98UPgOCsnaS6yrg5DGd2abCgMj2VtH0ofmBLchUwgjuU/PiEclnZSm65aA=)
+  secret-key: ENC(/FWeATqMxlqMoSYRHNMKlRx7H2ylpdvHsfg1iQ4nQnUtAD31Ha/kYFF0LVtnKfh7T4aFHi52TvoJMdNqr+KmBDpWvPA+48OaznrhQUnEya/+HB/Dhp8Y0fDKPjkMNbgSsQ5wjF0NfJc=)
   access-token:
     expiration-time: 1800000
   refresh-token:
     expiration-time: 86400000
 
 kakao:
-  client-id : ENC(0Bob+87fPKE6UNuE2Pp2XQeQU+fGvXBJ)
+  client-id : ENC(GBKh+s++Qe/ttBfiJHgMxR9Tj+cZMT2KmUWfbA5m62m8381g5pheb3HAb4yHTCOt)
   redirect-uri : https://api.triportreat.site/oauth/login
   token-uri : https://kauth.kakao.com/oauth/token
   user-info-uri : https://kapi.kakao.com/v2/user/me
