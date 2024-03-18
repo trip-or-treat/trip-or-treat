@@ -84,7 +84,7 @@ public class DummyObject {
                 .user(user)
                 .tip("testTip")
                 .content("testContent")
-                .score(5.0F)
+                .score(5)
                 .build();
     }
 
@@ -94,7 +94,7 @@ public class DummyObject {
                 .placeId(placeId)
                 .content("testContent")
                 .tip("testTip")
-                .score(5.0F)
+                .score(5)
                 .build();
     }
 }
