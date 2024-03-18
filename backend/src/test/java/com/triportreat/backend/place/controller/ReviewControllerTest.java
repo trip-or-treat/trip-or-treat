@@ -65,7 +65,7 @@ public class ReviewControllerTest {
                 .imageThumbnail("testImage")
                 .content("testContent")
                 .tip("testTip")
-                .score(4.0f)
+                .score(4)
                 .createdDate(LocalDateTime.now())
                 .build();
 
@@ -74,7 +74,7 @@ public class ReviewControllerTest {
                 .placeId(1L)
                 .content("testContent")
                 .tip("testTip")
-                .score(5.0F)
+                .score(5)
                 .build();
     }
 

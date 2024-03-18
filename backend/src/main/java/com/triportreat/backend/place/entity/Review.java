@@ -34,7 +34,7 @@ public class Review extends BaseTimeEntity {
     private String content;
 
     @Column(nullable = false)
-    private Float score;
+    private Integer score;
 
     public static Review toEntity(ReviewRequestDto reviewRequestDto, User user, Place place) {
         return Review.builder()
