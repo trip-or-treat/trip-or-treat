@@ -171,7 +171,7 @@ public class ReviewControllerTest {
                     .andExpect(jsonPath("$.result").value(false))
                     .andExpect(jsonPath("$.message").value(VALIDATION_FAILED.getMessage()))
                     .andExpect(jsonPath("$.status").value(400))
-                    .andExpect(jsonPath("$.data.content").value("내용은 비워둘 수 없습니다."))
+                    .andExpect(jsonPath("$.data.content").value("내용은 필수 입력값입니다."))
                     .andExpect(jsonPath("$.data.score").value("별점은 필수 입력값입니다."));
         }
     }
