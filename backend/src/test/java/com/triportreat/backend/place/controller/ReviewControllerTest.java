@@ -1,5 +1,12 @@
 package com.triportreat.backend.place.controller;
 
+import com.triportreat.backend.auth.filter.JwtAuthenticationFilter;
+import com.triportreat.backend.auth.filter.JwtExceptionFilter;
+import com.triportreat.backend.auth.utils.AuthUserArgumentResolver;
+import com.triportreat.backend.common.config.WebConfig;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collections;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.triportreat.backend.place.domain.ReviewListDto;
 import com.triportreat.backend.place.domain.ReviewRequestDto;
@@ -12,13 +19,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collections;
 
 import static com.triportreat.backend.common.response.FailMessage.PLACE_NOT_FOUND;
 import static com.triportreat.backend.common.response.FailMessage.VALIDATION_FAILED;
@@ -31,7 +36,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ReviewController.class)
+@WebMvcTest(controllers = ReviewController.class,
+        excludeFilters = @ComponentScan.Filter(
+                type = FilterType.ASSIGNABLE_TYPE,
+                classes = {JwtExceptionFilter.class,
+                        JwtAuthenticationFilter.class,
+                        AuthUserArgumentResolver.class,
+                        WebConfig.class}))
 public class ReviewControllerTest {
 
     @Autowired
