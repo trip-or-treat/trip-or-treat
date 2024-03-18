@@ -124,7 +124,7 @@ public class ReviewControllerTest {
         @DisplayName("성공")
         void createReview() throws Exception {
 
-            mockMvc.perform(post("/places/review")
+            mockMvc.perform(post("/reviews")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(reviewRequestDto)))
                     .andExpect(status().isOk())
@@ -142,7 +142,7 @@ public class ReviewControllerTest {
             doThrow(new PlaceNotFoundException(reviewRequestDto.getPlaceId())).when(reviewService).createReview(reviewRequestDto);
 
             //when & then
-            mockMvc.perform(post("/places/review")
+            mockMvc.perform(post("/reviews")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(reviewRequestDto)))
                     .andExpect(status().isOk())
@@ -164,14 +164,14 @@ public class ReviewControllerTest {
                     .score(null)
                     .build();
             //when & then
-            mockMvc.perform(post("/places/review")
+            mockMvc.perform(post("/reviews")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(reviewRequestDto)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.result").value(false))
                     .andExpect(jsonPath("$.message").value(VALIDATION_FAILED.getMessage()))
                     .andExpect(jsonPath("$.status").value(400))
-                    .andExpect(jsonPath("$.data.content").value("내용은 비워둘 수 없습니다."))
+                    .andExpect(jsonPath("$.data.content").value("내용은 필수 입력값입니다."))
                     .andExpect(jsonPath("$.data.score").value("별점은 필수 입력값입니다."));
         }
     }
