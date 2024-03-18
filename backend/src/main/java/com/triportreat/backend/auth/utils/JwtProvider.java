@@ -73,7 +73,6 @@ public class JwtProvider {
 
     public void setAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
         Cookie containsRefreshToken = new Cookie(REFRESH_TOKEN_NAME, refreshToken);
-        containsRefreshToken.setDomain(".triportreat.site");
         containsRefreshToken.setPath("/");
         containsRefreshToken.setHttpOnly(true);
         containsRefreshToken.setSecure(true);

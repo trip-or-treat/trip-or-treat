@@ -33,6 +33,7 @@ jwt:
 
 kakao:
   client-id : ENC(GBKh+s++Qe/ttBfiJHgMxR9Tj+cZMT2KmUWfbA5m62m8381g5pheb3HAb4yHTCOt)
-  redirect-uri : https://api.triportreat.site/oauth/login
+#  프론트쪽 배포가 완료되면 https://triportreat.site/login으로 변경
+  redirect-uri : http://localhost:3000/login
   token-uri : https://kauth.kakao.com/oauth/token
   user-info-uri : https://kapi.kakao.com/v2/user/me
