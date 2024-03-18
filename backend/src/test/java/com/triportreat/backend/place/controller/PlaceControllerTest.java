@@ -1,6 +1,5 @@
 package com.triportreat.backend.place.controller;
 
-import static com.triportreat.backend.common.response.FailMessage.GET_FAIL;
 import static com.triportreat.backend.common.response.FailMessage.VALIDATION_FAILED;
 import static com.triportreat.backend.common.response.SuccessMessage.GET_SUCCESS;
 import static org.mockito.Mockito.when;
