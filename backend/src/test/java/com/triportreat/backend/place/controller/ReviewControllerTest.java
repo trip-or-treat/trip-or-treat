@@ -1,28 +1,39 @@
 package com.triportreat.backend.place.controller;
 
-import com.triportreat.backend.place.domain.ReviewListDto;
-import com.triportreat.backend.place.service.ReviewListService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collections;
-
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ReviewController.class)
+import com.triportreat.backend.auth.filter.JwtAuthenticationFilter;
+import com.triportreat.backend.auth.filter.JwtExceptionFilter;
+import com.triportreat.backend.auth.utils.AuthUserArgumentResolver;
+import com.triportreat.backend.common.config.WebConfig;
+import com.triportreat.backend.place.domain.ReviewListDto;
+import com.triportreat.backend.place.service.ReviewListService;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collections;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+
+@WebMvcTest(controllers = ReviewController.class,
+        excludeFilters = @ComponentScan.Filter(
+                type = FilterType.ASSIGNABLE_TYPE,
+                classes = {JwtExceptionFilter.class,
+                        JwtAuthenticationFilter.class,
+                        AuthUserArgumentResolver.class,
+                        WebConfig.class}))
 public class ReviewControllerTest {
 
     @Autowired
