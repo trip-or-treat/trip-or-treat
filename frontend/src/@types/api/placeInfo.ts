@@ -1,7 +1,8 @@
 export interface PlaceInfo {
   name: string;
-  imageThumbnail: string;
+  imageOrigin: string;
   address: string;
   overview: string;
   contentTypeId: number;
+  contentTypeName: string;
 }

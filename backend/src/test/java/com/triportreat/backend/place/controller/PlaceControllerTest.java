@@ -1,6 +1,7 @@
 package com.triportreat.backend.place.controller;
 
 import static com.triportreat.backend.common.response.FailMessage.GET_FAIL;
+import static com.triportreat.backend.common.response.FailMessage.VALIDATION_FAILED;
 import static com.triportreat.backend.common.response.SuccessMessage.GET_SUCCESS;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -63,7 +64,7 @@ class PlaceControllerTest {
                 .param("regionId", String.valueOf(placeSearchCondition.getRegionId())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result").value(false))
-                .andExpect(jsonPath("$.message").value(GET_FAIL.getMessage()))
+                .andExpect(jsonPath("$.message").value(VALIDATION_FAILED.getMessage()))
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.data").isMap());
     }
@@ -131,10 +132,11 @@ class PlaceControllerTest {
         Long id = 1L;
         PlaceInfoDto placeInfoDto = PlaceInfoDto.builder()
                 .name("Test Place")
-                .imageThumbnail("image.jpg")
+                .imageOrigin("image.jpg")
                 .overview("Test Overview")
                 .contentTypeId(1L)
                 .address("Test Address")
+                .contentTypeName("Test Name")
                 .build();
 
         // when
@@ -148,9 +150,10 @@ class PlaceControllerTest {
                 .andExpect(jsonPath("$.message").value(GET_SUCCESS.getMessage()))
                 .andExpect(jsonPath("$.status").value(200))
                 .andExpect(jsonPath("$.data.name").value(placeInfoDto.getName()))
-                .andExpect(jsonPath("$.data.imageThumbnail").value(placeInfoDto.getImageThumbnail()))
+                .andExpect(jsonPath("$.data.imageOrigin").value(placeInfoDto.getImageOrigin()))
                 .andExpect(jsonPath("$.data.overview").value(placeInfoDto.getOverview()))
                 .andExpect(jsonPath("$.data.contentTypeId").value(placeInfoDto.getContentTypeId()))
-                .andExpect(jsonPath("$.data.address").value(placeInfoDto.getAddress()));
+                .andExpect(jsonPath("$.data.address").value(placeInfoDto.getAddress()))
+                .andExpect(jsonPath("$.data.contentTypeName").value(placeInfoDto.getContentTypeName()));
     }
 }

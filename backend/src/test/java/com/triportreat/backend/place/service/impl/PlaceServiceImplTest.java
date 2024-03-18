@@ -1,20 +1,10 @@
 package com.triportreat.backend.place.service.impl;
 
-import static com.triportreat.backend.place.domain.TourApiPlaceResponseDto.Body;
-import static com.triportreat.backend.place.domain.TourApiPlaceResponseDto.Items;
-import static com.triportreat.backend.place.domain.TourApiPlaceResponseDto.ResponseData;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.BDDMockito.when;
-import static org.mockito.Mockito.mock;
-
 import com.triportreat.backend.common.response.FailMessage;
 import com.triportreat.backend.place.domain.PlaceByRegionIdDto;
 import com.triportreat.backend.place.domain.PlaceInfoDto;
 import com.triportreat.backend.place.domain.PlaceSearchCondition;
 import com.triportreat.backend.place.domain.TourApiPlaceResponseDto;
-import com.triportreat.backend.place.domain.TourApiPlaceResponseDto.Item;
 import com.triportreat.backend.place.entity.ContentType;
 import com.triportreat.backend.place.entity.Place;
 import com.triportreat.backend.place.entity.SubCategory;
@@ -26,8 +16,6 @@ import com.triportreat.backend.place.repository.PlaceRepositoryCustom;
 import com.triportreat.backend.place.service.ExternalApiService;
 import com.triportreat.backend.place.service.PlaceService;
 import com.triportreat.backend.region.entity.Region;
-import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -36,6 +24,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
+import java.util.Optional;
+
+import static com.triportreat.backend.place.domain.TourApiPlaceResponseDto.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.BDDMockito.when;
+import static org.mockito.Mockito.mock;
 
 @SpringBootTest
 class PlaceServiceImplTest {
@@ -90,7 +88,7 @@ class PlaceServiceImplTest {
         Place place = Place.builder()
                 .id(id)
                 .name("Test Place")
-                .imageThumbnail("image.jpg")
+                .imageOrigin("image.jpg")
                 .contentType(contentType)
                 .address("test Address")
                 .build();
@@ -99,19 +97,20 @@ class PlaceServiceImplTest {
 
         PlaceInfoDto expectedPlaceInfoDto = PlaceInfoDto.builder()
                 .name("Test Place")
-                .imageThumbnail("image.jpg")
+                .imageOrigin("image.jpg")
                 .overview("Test Overview")
                 .contentTypeId(1L)
                 .address("test Address")
+                .contentTypeName("Type1")
                 .build();
 
         // when
         when(placeRepository.findById(id)).thenReturn(Optional.of(place));
         when(externalApiService.callExternalApiForOverView(id)).thenReturn(overview);
 
-        // then
         PlaceInfoDto actualPlaceInfoDto = placeService.getPlaceInfo(id);
 
+        // then
         assertThat(actualPlaceInfoDto).isNotNull();
         assertThat(actualPlaceInfoDto).usingRecursiveComparison().isEqualTo(expectedPlaceInfoDto);
     }

@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum SuccessMessage {
         GET_SUCCESS("조회에 성공하였습니다."),
-        POST_SUCCESS("계획 저장에 성공하였습니다."),
+        POST_SUCCESS("저장에 성공하였습니다."),
         LOGIN_SUCCESS("로그인에 성공하였습니다.");
 
         private final String message;
@@ -13,5 +13,4 @@ public enum SuccessMessage {
         SuccessMessage(String message) {
             this.message = message;
         }
-
 }
