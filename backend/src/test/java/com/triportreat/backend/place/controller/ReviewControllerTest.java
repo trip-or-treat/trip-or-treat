@@ -124,7 +124,7 @@ public class ReviewControllerTest {
         @DisplayName("성공")
         void createReview() throws Exception {
 
-            mockMvc.perform(post("/places/review")
+            mockMvc.perform(post("/reviews")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(reviewRequestDto)))
                     .andExpect(status().isOk())
@@ -142,7 +142,7 @@ public class ReviewControllerTest {
             doThrow(new PlaceNotFoundException(reviewRequestDto.getPlaceId())).when(reviewService).createReview(reviewRequestDto);
 
             //when & then
-            mockMvc.perform(post("/places/review")
+            mockMvc.perform(post("/reviews")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(reviewRequestDto)))
                     .andExpect(status().isOk())
@@ -164,7 +164,7 @@ public class ReviewControllerTest {
                     .score(null)
                     .build();
             //when & then
-            mockMvc.perform(post("/places/review")
+            mockMvc.perform(post("/reviews")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(reviewRequestDto)))
                     .andExpect(status().isOk())
