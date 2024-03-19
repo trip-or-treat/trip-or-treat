@@ -190,7 +190,7 @@ const CloseBtn = styled.button`
 
   border-radius: 5px;
   border: none;
-  background-color: tomato;
+  background-color: ${(props) => props.theme.colors.mainColor};
 
   color: white;
   cursor: pointer;
