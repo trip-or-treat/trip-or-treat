@@ -28,8 +28,8 @@ public class WebConfig implements WebMvcConfigurer {
                         "https://www.triportreat.site")
                 .allowedHeaders("*")
                 .exposedHeaders("Authorization")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowCredentials(true)
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .maxAge(3600);
     }
 

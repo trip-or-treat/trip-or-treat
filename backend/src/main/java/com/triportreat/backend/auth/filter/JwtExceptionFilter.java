@@ -47,9 +47,20 @@ public class JwtExceptionFilter implements Filter {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.setStatus(OK.value());
-        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Origin",
+                "http://localhost:3000, "
+                        + "https://localhost:3000, "
+                        + "http://localhost:8080, "
+                        + "https://localhost:8080, "
+                        + "http://triportreat.site, "
+                        + "https://triportreat.site, "
+                        + "http://www.triportreat.site, "
+                        + "https://www.triportreat.site");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE");
+        response.setHeader("Access-Control-Allow-Headers", "*");
+        response.setHeader("Access-Control-Expose-Headers", "Authorization");
         response.setHeader("Access-Control-Max-Age", "3600");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
         try {
             ResponseResult result = ResponseResult.fail(e.getMessage(), UNAUTHORIZED, null);
             String jsonResponse = objectMapper.writeValueAsString(result);
