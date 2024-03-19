@@ -1,6 +1,5 @@
 package com.triportreat.backend.auth.filter;
 
-import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,10 +45,6 @@ public class JwtExceptionFilter implements Filter {
     public void jwtExceptionHandler(HttpServletResponse response, JwtException e) {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.setStatus(OK.value());
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE");
-        response.setHeader("Access-Control-Max-Age", "3600");
         try {
             ResponseResult result = ResponseResult.fail(e.getMessage(), UNAUTHORIZED, null);
             String jsonResponse = objectMapper.writeValueAsString(result);
