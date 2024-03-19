@@ -49,7 +49,7 @@ const ContentsWrapper = styled.div<ContentsWrapperProps>`
   height: ${(props) => (props.$isOpenMemo ? '200px' : '0px')};
   width: 100%;
 
-  border: ${(props) => (props.$isOpenMemo ? '1px solid rgba(0, 0, 0, 0.3);' : 'none')};
+  border: ${(props) => (props.$isOpenMemo ? '1px solid rgba(0, 0, 0, 0.3)' : 'none')};
   border-radius: 5px;
 
   background-color: white;

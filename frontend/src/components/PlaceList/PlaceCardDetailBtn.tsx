@@ -38,8 +38,10 @@ export default PlaceCardDetailBtn;
 const DetailButton = styled.button`
   display: flex;
   align-items: center;
+
   width: 70%;
   border: none;
+
   background-color: inherit;
   cursor: pointer;
 `;
@@ -47,8 +49,10 @@ const DetailButton = styled.button`
 const ThumbnailImg = styled.img`
   width: 35px;
   height: 35px;
+
   margin-right: 15px;
   border-radius: 50%;
+
   object-fit: cover;
 `;
 
@@ -56,6 +60,7 @@ const RegionNameBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+
   color: ${(props) => props.theme.colors.blackFont};
 
   p {
@@ -63,18 +68,20 @@ const RegionNameBox = styled.div`
     font-size: 17px;
 
     &:first-child {
+      overflow: hidden;
       width: 150px;
       height: 20px;
 
       margin-bottom: 3px;
-      overflow: hidden;
-      text-overflow: ellipsis;
+
       white-space: nowrap;
+      text-overflow: ellipsis;
       text-align: left;
     }
 
     &:last-child {
       margin-bottom: 5px;
+
       font-size: 11px;
       color: grey;
     }
