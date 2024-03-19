@@ -23,7 +23,13 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter implements Filter {
 
-    private static final String[] whitelist = {"/", "/places/*", "/regions/*", "/plans/share/*", "/login"};
+    private static final String[] whitelist = {
+            "/",
+            "/places", "/places/*",
+            "/regions", "/regions/*",
+            "/plans/share/*",
+            "/login"
+    };
 
     private final JwtProvider jwtProvider;
 
