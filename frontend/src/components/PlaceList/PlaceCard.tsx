@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useParams } from 'react-router-dom';
+import { DraggableProvided } from 'react-beautiful-dnd';
 
 import { PlaceListTypes } from 'src/@types/api/placeList';
 import totalPlanAtom from 'src/atoms/totalPlanAtom';
@@ -15,7 +16,7 @@ import DragPlaceCard from './DragPlaceCard';
 interface Props {
   placeCardItem: PlaceListTypes;
   type: 'ADD_BUTTON' | 'DELETE_BUTTON' | 'DRAG_AND_DROP';
-  magic?: any;
+  magic?: DraggableProvided | undefined;
 }
 
 const PlaceCard = ({ placeCardItem, type, magic }: Props) => {

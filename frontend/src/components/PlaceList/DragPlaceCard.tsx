@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { DraggableProvided } from 'react-beautiful-dnd';
 
 import { PlaceListTypes } from 'src/@types/api/placeList';
 import totalPlanAtom from 'src/atoms/totalPlanAtom';
@@ -17,7 +18,7 @@ import Accordion from '../Accordion';
 
 interface Props {
   placeCardItem: PlaceListTypes;
-  magic: any;
+  magic: DraggableProvided | undefined;
 }
 
 const DragPlaceCard = ({ placeCardItem, magic }: Props) => {
@@ -99,7 +100,7 @@ const DragPlaceCard = ({ placeCardItem, magic }: Props) => {
         <IconButton onClick={handleDeleteClick}>
           <Minus />
         </IconButton>
-        <IconButton {...magic.dragHandleProps}>
+        <IconButton {...magic?.dragHandleProps}>
           <Bars />
         </IconButton>
       </Wrapper>
@@ -141,19 +142,24 @@ export default DragPlaceCard;
 export const Wrapper = styled.div`
   display: flex;
   align-items: center;
+
   width: 100%;
   height: 60px;
+
   border: none;
   background-color: white;
 `;
 
 export const IconButton = styled.button<{ $isClicked?: boolean }>`
   position: relative;
+
   width: 20px;
   height: 20px;
   margin-left: 10px;
+
   border: none;
   background-color: inherit;
+
   cursor: pointer;
 
   svg {
@@ -166,9 +172,12 @@ export const IconButton = styled.button<{ $isClicked?: boolean }>`
 
 const ContentBox = styled.div`
   position: relative;
+
   width: 100%;
   height: 200px;
+
   padding: 25px 20px;
+
   box-sizing: border-box;
 `;
 
@@ -176,10 +185,13 @@ const CloseBtn = styled.button`
   position: absolute;
   bottom: 15px;
   left: 45%;
+
   padding: 5px 15px;
-  background-color: tomato;
+
   border-radius: 5px;
   border: none;
+  background-color: tomato;
+
   color: white;
   cursor: pointer;
 `;
@@ -192,8 +204,10 @@ const Form = styled.form`
 const Label = styled.label`
   display: flex;
   align-items: center;
-  font-size: 13px;
+
   margin: 10px 0px;
+
+  font-size: 13px;
 
   p {
     width: 50px;
@@ -201,14 +215,16 @@ const Label = styled.label`
 
   input,
   textarea {
-    outline: none;
     margin: 0px 5px 0px 15px;
-    border: 1px solid rgba(0, 0, 0, 0.3);
     padding: 3px;
 
+    border: 1px solid rgba(0, 0, 0, 0.3);
+
+    outline: none;
+
     &::placeholder {
-      font-size: 11px;
       display: flex;
+      font-size: 11px;
     }
   }
 

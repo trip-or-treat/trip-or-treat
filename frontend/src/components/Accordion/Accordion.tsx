@@ -28,10 +28,10 @@ const Accordion = ({ curScreenY, isOpenMemo, children }: Props) => {
 export default Accordion;
 
 const Container = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  position: relative;
 `;
 
 const Header = styled.div`
