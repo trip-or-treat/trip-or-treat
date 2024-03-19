@@ -139,7 +139,7 @@ const DragPlaceCard = ({ placeCardItem, magic }: Props) => {
 
 export default DragPlaceCard;
 
-export const Wrapper = styled.div`
+const Wrapper = styled.div`
   display: flex;
   align-items: center;
 
@@ -150,7 +150,7 @@ export const Wrapper = styled.div`
   background-color: white;
 `;
 
-export const IconButton = styled.button<{ $isClicked?: boolean }>`
+const IconButton = styled.button<{ $isClicked?: boolean }>`
   position: relative;
 
   width: 20px;

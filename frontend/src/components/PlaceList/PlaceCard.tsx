@@ -66,7 +66,7 @@ const PlaceCard = ({ placeCardItem, type, magic }: Props) => {
 
 export default PlaceCard;
 
-export const Wrapper = styled.div`
+const Wrapper = styled.div`
   display: flex;
   align-items: center;
 
@@ -84,7 +84,7 @@ const IconButtonBox = styled.div`
   width: 30%;
 `;
 
-export const IconButton = styled.button<{ $isClicked?: boolean }>`
+const IconButton = styled.button<{ $isClicked?: boolean }>`
   position: relative;
 
   width: 20px;
