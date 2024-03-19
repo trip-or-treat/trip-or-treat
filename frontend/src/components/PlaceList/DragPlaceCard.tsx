@@ -111,6 +111,7 @@ const DragPlaceCard = ({ placeCardItem, magic }: Props) => {
             <p>예상경비</p>
             <input
               id="expense"
+              maxLength={11}
               placeholder="ex) 3,000"
               onChange={expenseChange}
               value={expense.toLocaleString()}
