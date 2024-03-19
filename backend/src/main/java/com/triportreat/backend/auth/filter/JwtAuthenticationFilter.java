@@ -45,6 +45,12 @@ public class JwtAuthenticationFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
+        if (httpRequest.getMethod().equals("OPTIONS")) {
+            log.info("프리플라이트 요청이면 필터 통과");
+            chain.doFilter(request, response);
+            return;
+        }
+
         if (isInWhitelist(httpRequest.getRequestURI())) {
             log.info("화이트리스트 검증");
             chain.doFilter(request, response);
