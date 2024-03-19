@@ -45,6 +45,12 @@ public class JwtAuthenticationFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
+        if (httpRequest.getMethod().equals("OPTIONS")) {
+            log.info("프리플라이트 요청이면 필터 통과");
+            chain.doFilter(request, response);
+            return;
+        }
+
         if (isInWhitelist(httpRequest.getRequestURI())) {
             log.info("화이트리스트 검증");
             chain.doFilter(request, response);
@@ -54,6 +60,7 @@ public class JwtAuthenticationFilter implements Filter {
         try {
             log.info("액세스 토큰 검증");
             String accessToken = jwtProvider.extractAccessToken(httpRequest);
+            log.info("액세스 토큰 정보 : {}", accessToken);
             if (jwtProvider.isValid(accessToken)) {
                 log.info("액세스 토큰 검증완료");
                 chain.doFilter(request, response);
