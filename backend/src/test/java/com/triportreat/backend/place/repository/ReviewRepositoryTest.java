@@ -50,7 +50,7 @@ public class ReviewRepositoryTest {
                 .id(1L)
                 .content("review1")
                 .tip("tip1")
-                .score(5.0f)
+                .score(5)
                 .place(place)
                 .build();
         reviewRepository.save(review1);
@@ -59,7 +59,7 @@ public class ReviewRepositoryTest {
                 .id(2L)
                 .content("review2")
                 .tip("tip2")
-                .score(3.0f)
+                .score(3)
                 .place(place)
                 .build();
         reviewRepository.save(review2);

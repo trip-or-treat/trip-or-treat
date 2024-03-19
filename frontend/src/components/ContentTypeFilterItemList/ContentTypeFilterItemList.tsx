@@ -1,10 +1,7 @@
 import styled from 'styled-components';
-import { useSetRecoilState } from 'recoil';
-import { useEffect } from 'react';
 
 import { useContentType } from 'src/hooks/api/useContentType';
 import { ContentType } from 'src/@types/api/contentType';
-import contentTypelistAtom from 'src/atoms/contentTypeListAtom';
 import ContentTypeFilterItem from './ContentTypeFilterItem';
 import Loading from '../common/Loading';
 
@@ -15,13 +12,6 @@ interface ContentTypeFilterItemListData {
 
 const ContentTypeFilterItemList = () => {
   const { data: contentTypeData, isLoading }: ContentTypeFilterItemListData = useContentType();
-  const setContentType = useSetRecoilState(contentTypelistAtom);
-
-  useEffect(() => {
-    if (contentTypeData?.data) {
-      setContentType(contentTypeData.data);
-    }
-  }, [contentTypeData]);
 
   return (
     <Wrapper>

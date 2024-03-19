@@ -11,26 +11,36 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.triportreat.backend.auth.filter.JwtAuthenticationFilter;
+import com.triportreat.backend.auth.filter.JwtExceptionFilter;
+import com.triportreat.backend.auth.utils.AuthUserArgumentResolver;
+import com.triportreat.backend.common.config.WebConfig;
 import com.triportreat.backend.region.domain.RecommendedPlaceResponseDto;
 import com.triportreat.backend.region.domain.RegionDetailResponseDto;
 import com.triportreat.backend.region.domain.RegionResponseDto;
 import com.triportreat.backend.region.error.exception.RecommendedPlacesNotFoundException;
 import com.triportreat.backend.region.error.exception.RegionNotFoundException;
 import com.triportreat.backend.region.service.RegionService;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
-
-
-@WebMvcTest(controllers = RegionController.class)
 @AutoConfigureMockMvc
+@WebMvcTest(controllers = RegionController.class,
+        excludeFilters = @ComponentScan.Filter(
+                type = FilterType.ASSIGNABLE_TYPE,
+                classes = {JwtExceptionFilter.class,
+                        JwtAuthenticationFilter.class,
+                        AuthUserArgumentResolver.class,
+                        WebConfig.class}))
 class RegionControllerTest {
 
     @Autowired

@@ -1,15 +1,9 @@
 package com.triportreat.backend.place.entity;
 
 import com.triportreat.backend.common.BaseTimeEntity;
+import com.triportreat.backend.place.domain.ReviewRequestDto;
 import com.triportreat.backend.user.entity.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,6 +34,15 @@ public class Review extends BaseTimeEntity {
     private String content;
 
     @Column(nullable = false)
-    private Float score;
+    private Integer score;
 
+    public static Review toEntity(ReviewRequestDto reviewRequestDto, User user, Place place) {
+        return Review.builder()
+                .user(user)
+                .place(place)
+                .content(reviewRequestDto.getContent())
+                .tip(reviewRequestDto.getTip())
+                .score(reviewRequestDto.getScore())
+                .build();
+    }
 }

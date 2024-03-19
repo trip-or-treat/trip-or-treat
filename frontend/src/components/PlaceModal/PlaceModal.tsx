@@ -7,7 +7,6 @@ import { PlaceInfo } from 'src/@types/api/placeInfo';
 import { ReactComponent as Close } from 'src/assets/svgs/close.svg';
 import placeIdAtom from 'src/atoms/placeIdAtom';
 import overviewTitleAtom from 'src/atoms/overviewTitleAtom';
-import contentTypelistAtom from 'src/atoms/contentTypeListAtom';
 
 import ModalOverlay from '../common/modal/ModalOverlay';
 import ImageBox from '../common/modal/ImageBox';
@@ -30,12 +29,6 @@ const PlaceModal = ({ onClose }: Props) => {
   const { id: currentId, name: content } = useRecoilValue(placeIdAtom);
   const { data: placeInfoApi, isLoading, isError }: Info = usePlaceInfo(currentId);
   const setTitle = useSetRecoilState(overviewTitleAtom);
-  const contentTypeList = useRecoilValue(contentTypelistAtom);
-
-  const findContentName = (): string | undefined => {
-    const target = contentTypeList.find((type) => type.id === placeInfoApi.data.contentTypeId);
-    return target?.name;
-  };
 
   if (isError) {
     onClose();
@@ -56,9 +49,9 @@ const PlaceModal = ({ onClose }: Props) => {
             {placeInfoApi.data.name}
             <StyledContent>{content}</StyledContent>
           </StyledName>
-          <StyledContentType>{findContentName()}</StyledContentType>
+          <StyledContentType>{placeInfoApi.data.contentTypeName}</StyledContentType>
           <StyledImageBoxInner>
-            <ImageBox imageThumbnail={placeInfoApi.data.imageThumbnail} />
+            <ImageBox image={placeInfoApi.data.imageOrigin} />
           </StyledImageBoxInner>
           <Address address={placeInfoApi.data.address} />
           <Overview overview={placeInfoApi.data.overview} />
