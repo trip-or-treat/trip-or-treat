@@ -60,7 +60,6 @@ public class JwtAuthenticationFilter implements Filter {
         try {
             log.info("액세스 토큰 검증");
             String accessToken = jwtProvider.extractAccessToken(httpRequest);
-            log.info("액세스 토큰 정보 : {}", accessToken);
             if (jwtProvider.isValid(accessToken)) {
                 log.info("액세스 토큰 검증완료");
                 chain.doFilter(request, response);
