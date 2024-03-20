@@ -68,7 +68,6 @@ public class JwtAuthenticationFilter implements Filter {
         } catch (ExpiredJwtException e) {
             log.info("액세스 토큰 만료, 리프레시 토큰 검증");
             String refreshToken = jwtProvider.extractRefreshToken(httpRequest);
-            log.info("리프레시 토큰 정보 : {}", refreshToken);
             if (jwtProvider.isValid(refreshToken)) {
                 log.info("리프레시 토큰 검증완료");
                 String newAccessToken = jwtProvider.reIssueAccessToken(refreshToken);
