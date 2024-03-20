@@ -9,7 +9,7 @@ public class AuthenticateFailException extends AbstractException {
 
     @Override
     public HttpStatus getStatus() {
-        return HttpStatus.BAD_REQUEST;
+        return HttpStatus.UNAUTHORIZED;
     }
 
     @Override
