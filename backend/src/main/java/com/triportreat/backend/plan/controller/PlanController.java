@@ -1,8 +1,8 @@
 package com.triportreat.backend.plan.controller;
 
 import static com.triportreat.backend.common.response.SuccessMessage.GET_SUCCESS;
+import static com.triportreat.backend.common.response.SuccessMessage.PATCH_SUCCESS;
 import static com.triportreat.backend.common.response.SuccessMessage.POST_SUCCESS;
-import static com.triportreat.backend.common.response.SuccessMessage.PUT_SUCCESS;
 import static com.triportreat.backend.plan.domain.PlanRequestDto.PlanUpdateRequestDto;
 
 import com.triportreat.backend.auth.utils.Auth;
@@ -48,7 +48,7 @@ public class PlanController {
         planUpdateRequestDto.setPlanId(id);
 
         planService.updatePlan(planUpdateRequestDto);
-        return ResponseEntity.ok().body(ResponseResult.success(PUT_SUCCESS.getMessage(), null));
+        return ResponseEntity.ok().body(ResponseResult.success(PATCH_SUCCESS.getMessage(), null));
     }
 
 }
