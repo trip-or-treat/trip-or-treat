@@ -75,7 +75,7 @@ public class JwtExceptionFilter implements Filter {
             response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE");
             response.setHeader("Access-Control-Max-Age", "3600");
         }
-        
+
         try {
             ResponseResult result = ResponseResult.fail(e.getMessage(), UNAUTHORIZED, null);
             String jsonResponse = objectMapper.writeValueAsString(result);
