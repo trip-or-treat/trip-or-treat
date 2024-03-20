@@ -16,6 +16,7 @@ import java.util.Optional;
 import javax.crypto.SecretKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -72,14 +73,16 @@ public class JwtProvider {
     }
 
     public void setAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
-        Cookie containsRefreshToken = new Cookie(REFRESH_TOKEN_NAME, refreshToken);
-        containsRefreshToken.setPath("/");
-        containsRefreshToken.setHttpOnly(true);
-        containsRefreshToken.setSecure(true);
-        containsRefreshToken.setMaxAge(3600 * 24);
+        ResponseCookie cookie = ResponseCookie.from(REFRESH_TOKEN_NAME, refreshToken)
+                .path("/")
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .maxAge(3600 * 24)
+                .build();
 
         response.addHeader(AUTH_FIELD, AUTH_TYPE + accessToken);
-        response.addCookie(containsRefreshToken);
+        response.addHeader("Set-Cookie", cookie.toString());
     }
 
     public String extractAccessToken(HttpServletRequest request) {
@@ -113,10 +116,10 @@ public class JwtProvider {
             return true;
         } catch (SignatureException e) {
             log.info("토큰이 유효하지 않습니다.");
-            throw new SignatureException("토큰이 유효하지 않습니다.");
+            throw new SignatureException("토큰이 유효하지 않습니다. 시그니쳐 검증에 실패하였습니다!");
         } catch (MalformedJwtException e) {
             log.info("토큰이 올바르지 않습니다.");
-            throw new MalformedJwtException("토큰이 올바르지 않습니다.");
+            throw new MalformedJwtException("토큰이 올바르지 않습니다. 토큰이 변조되었습니다!");
         } catch (ExpiredJwtException e) {
             log.info("토큰이 만료되었습니다.");
             throw new ExpiredJwtException(e.getHeader(), e.getClaims(), "토큰이 만료되었습니다.");
