@@ -8,6 +8,7 @@ import StepTwoPage from './pages/StepTwoPage';
 
 import NotFoundPage from './pages/NotFoundPage';
 import PlansPage from './pages/PlansPage';
+import KaKaoLogin from './components/KaKaoLogin';
 
 const routes = [
   {
@@ -30,6 +31,10 @@ const routes = [
   {
     element: <CommonLayout />,
     children: [{ path: '/*', element: <NotFoundPage /> }],
+  },
+  {
+    path: '/login',
+    element: <KaKaoLogin />,
   },
 ];
 
