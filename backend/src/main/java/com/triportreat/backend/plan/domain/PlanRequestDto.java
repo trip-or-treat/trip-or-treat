@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -66,6 +67,56 @@ public class PlanRequestDto {
     @AllArgsConstructor
     @ToString
     public static class SchedulePlaceCreateRequestDto {
+
+        @NotNull(message = "장소아이디는 필수 입력값입니다!")
+        private Long placeId;
+
+        @Size(max = 65535, message = "메모의 최대길이는 65535자입니다!")
+        private String memo;
+
+        @NotNull(message = "방문순서는 필수 입력값입니다!")
+        @Min(value = 1, message = "순서는 최소 1부터입니다!")
+        private Integer visitOrder;
+
+        @Min(value = 0, message = "경비는 최소 0원부터입니다!")
+        private Long expense;
+    }
+
+    @Getter
+    @Setter
+    public static class PlanUpdateRequestDto {
+
+        private Long userId;
+
+        private Long planId;
+
+        @NotEmpty(message = "제목은 필수 입력값입니다!")
+        private String title;
+
+        @Builder.Default
+        @Valid
+        @Size(min = 1, message = "스케쥴은 최소 하루는 있어야 합니다!")
+        private List<ScheduleUpdateRequestDto> schedules = new ArrayList<>();
+    }
+
+    @Getter
+    @Setter
+    public static class ScheduleUpdateRequestDto {
+
+        @NotNull(message = "스케쥴아이디는 필수 입력값입니다!")
+        private Long scheduleId;
+
+        @Builder.Default
+        @Valid
+        @Size(min = 1, message = "방문장소는 최소 1곳입니다!")
+        private List<SchedulePlaceUpdateRequestDto> schedulePlaces = new ArrayList<>();
+    }
+
+    @Getter
+    @Setter
+    public static class SchedulePlaceUpdateRequestDto {
+
+        private Optional<Long> schedulePlaceId;
 
         @NotNull(message = "장소아이디는 필수 입력값입니다!")
         private Long placeId;
