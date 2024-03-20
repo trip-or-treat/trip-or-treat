@@ -16,7 +16,6 @@ import java.util.Optional;
 import javax.crypto.SecretKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -73,16 +72,14 @@ public class JwtProvider {
     }
 
     public void setAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
-        ResponseCookie cookie = ResponseCookie.from(REFRESH_TOKEN_NAME, refreshToken)
-                .path("/")
-                .httpOnly(true)
-                .secure(true)
-                .sameSite("None")
-                .maxAge(3600 * 24)
-                .build();
+        Cookie containsRefreshToken = new Cookie(REFRESH_TOKEN_NAME, refreshToken);
+        containsRefreshToken.setPath("/");
+        containsRefreshToken.setHttpOnly(true);
+        containsRefreshToken.setSecure(true);
+        containsRefreshToken.setMaxAge(3600 * 24);
 
         response.addHeader(AUTH_FIELD, AUTH_TYPE + accessToken);
-        response.addHeader("Set-Cookie", cookie.toString());
+        response.addCookie(containsRefreshToken);
     }
 
     public String extractAccessToken(HttpServletRequest request) {
