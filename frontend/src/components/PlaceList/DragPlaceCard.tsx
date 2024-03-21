@@ -11,7 +11,7 @@ import isOpeningMemoAtom from 'src/atoms/isOpeningMemoAtom';
 
 import { ReactComponent as Minus } from '../../assets/svgs/minus.svg';
 import { ReactComponent as Bars } from '../../assets/svgs/bars.svg';
-import { ReactComponent as Pen } from '../../assets/svgs/pen.svg';
+import { ReactComponent as Memo } from '../../assets/svgs/memo.svg';
 
 import PlaceCardDetailBtn from './PlaceCardDetailBtn';
 import Accordion from '../Accordion';
@@ -78,11 +78,21 @@ const DragPlaceCard = ({ placeCardItem, magic }: Props) => {
   };
 
   const handleClickMemo = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setCurScreenY(e.nativeEvent.screenY);
+    const currentTarget = e.currentTarget.parentNode as HTMLElement;
+
+    if (e.currentTarget.parentNode !== null) {
+      const targetId = currentTarget.dataset.id;
+      const targetItem = totalPlan[curDay - 1].items.find((data) => data.id === Number(targetId));
+      setMemo(targetItem?.memo ?? '');
+      setExpense(targetItem?.expense ?? 0);
+    }
+
     if (!isOpeningMemo) {
       setIsOpenMemo(true);
       setIsOpeningMemo(true);
     }
+
+    setCurScreenY(e.nativeEvent.screenY);
   };
 
   useEffect(() => {
@@ -95,7 +105,7 @@ const DragPlaceCard = ({ placeCardItem, magic }: Props) => {
         <PlaceCardDetailBtn placeCardItem={placeCardItem} />
 
         <IconButton onClick={handleClickMemo}>
-          <Pen />
+          <Memo />
         </IconButton>
         <IconButton onClick={handleDeleteClick}>
           <Minus />
