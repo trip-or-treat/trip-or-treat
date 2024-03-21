@@ -180,6 +180,7 @@ public class ReviewControllerTest {
         @Test
         @DisplayName("실패 - 유효성 검증 실패")
         void createReview_ValidationFail() throws Exception {
+
             //given
             reviewRequestDto = ReviewRequestDto.builder()
                     .userId(1L)
