@@ -299,7 +299,6 @@ public class ReviewControllerTest {
                     .andExpect(jsonPath("$.status").value(400))
                     .andExpect(jsonPath("$.data.placeId").value("placeId는 필수입니다."))
                     .andExpect(jsonPath("$.data.content").value("내용은 필수 입력값입니다."))
-                    .andExpect(jsonPath("$.data.content").value("내용은 필수 입력값입니다."))
                     .andExpect(jsonPath("$.data.score").value("별점은 필수 입력값입니다."));
         }
     }
