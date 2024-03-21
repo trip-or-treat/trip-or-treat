@@ -1,20 +1,5 @@
 package com.triportreat.backend.place.controller;
 
-import com.triportreat.backend.place.domain.PlaceByRegionIdDto;
-import com.triportreat.backend.place.domain.PlaceInfoDto;
-import com.triportreat.backend.place.domain.PlaceSearchCondition;
-import com.triportreat.backend.place.service.PlaceService;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.List;
-
 import static com.triportreat.backend.common.response.FailMessage.VALIDATION_FAILED;
 import static com.triportreat.backend.common.response.SuccessMessage.GET_SUCCESS;
 import static org.mockito.Mockito.when;
@@ -22,7 +7,33 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(PlaceController.class)
+import com.triportreat.backend.auth.filter.JwtAuthenticationFilter;
+import com.triportreat.backend.auth.filter.JwtExceptionFilter;
+import com.triportreat.backend.auth.utils.AuthUserArgumentResolver;
+import com.triportreat.backend.common.config.WebConfig;
+import com.triportreat.backend.place.domain.PlaceByRegionIdDto;
+import com.triportreat.backend.place.domain.PlaceInfoDto;
+import com.triportreat.backend.place.domain.PlaceSearchCondition;
+import com.triportreat.backend.place.service.PlaceService;
+import java.util.List;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+
+@WebMvcTest(controllers = PlaceController.class,
+            excludeFilters = @ComponentScan.Filter(
+                    type = FilterType.ASSIGNABLE_TYPE,
+                    classes = {JwtExceptionFilter.class,
+                            JwtAuthenticationFilter.class,
+                            AuthUserArgumentResolver.class,
+                            WebConfig.class}))
 class PlaceControllerTest {
 
     @Autowired

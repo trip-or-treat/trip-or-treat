@@ -7,4 +7,6 @@ export interface PlaceListTypes {
   longitude: number;
   contentTypeId: number;
   regionId?: string;
+  memo?: string;
+  expense?: number;
 }

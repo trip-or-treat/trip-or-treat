@@ -1,6 +1,10 @@
 package com.triportreat.backend.place.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.triportreat.backend.auth.filter.JwtAuthenticationFilter;
+import com.triportreat.backend.auth.filter.JwtExceptionFilter;
+import com.triportreat.backend.auth.utils.AuthUserArgumentResolver;
+import com.triportreat.backend.common.config.WebConfig;
 import com.triportreat.backend.place.domain.ReviewListDto;
 import com.triportreat.backend.place.domain.ReviewRequestDto;
 import com.triportreat.backend.place.domain.ReviewUpdateRequestDto;
@@ -15,6 +19,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -36,7 +42,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ReviewController.class)
+@WebMvcTest(controllers = ReviewController.class,
+        excludeFilters = @ComponentScan.Filter(
+                type = FilterType.ASSIGNABLE_TYPE,
+                classes = {JwtExceptionFilter.class,
+                        JwtAuthenticationFilter.class,
+                        AuthUserArgumentResolver.class,
+                        WebConfig.class}))
 public class ReviewControllerTest {
 
     @Autowired
@@ -60,7 +72,7 @@ public class ReviewControllerTest {
                 .imageThumbnail("testImage")
                 .content("testContent")
                 .tip("testTip")
-                .score(4.0f)
+                .score(4)
                 .createdDate(LocalDateTime.now())
                 .build();
 
@@ -69,14 +81,14 @@ public class ReviewControllerTest {
                 .placeId(1L)
                 .content("testContent")
                 .tip("testTip")
-                .score(5.0F)
+                .score(5)
                 .build();
 
         reviewUpdateRequestDto = ReviewUpdateRequestDto.builder()
                 .placeId(1L)
                 .content("testContent")
                 .tip("testTip")
-                .score(3.0F)
+                .score(3)
                 .build();
     }
 
@@ -137,7 +149,7 @@ public class ReviewControllerTest {
         @DisplayName("성공")
         void createReview() throws Exception {
 
-            mockMvc.perform(post("/places/review")
+            mockMvc.perform(post("/reviews")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(reviewRequestDto)))
                     .andExpect(status().isOk())
@@ -155,7 +167,7 @@ public class ReviewControllerTest {
             doThrow(new PlaceNotFoundException(reviewRequestDto.getPlaceId())).when(reviewService).createReview(reviewRequestDto);
 
             //when & then
-            mockMvc.perform(post("/places/review")
+            mockMvc.perform(post("/reviews")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(reviewRequestDto)))
                     .andExpect(status().isOk())
@@ -168,7 +180,6 @@ public class ReviewControllerTest {
         @Test
         @DisplayName("실패 - 유효성 검증 실패")
         void createReview_ValidationFail() throws Exception {
-
             //given
             reviewRequestDto = ReviewRequestDto.builder()
                     .userId(1L)
@@ -178,7 +189,7 @@ public class ReviewControllerTest {
                     .score(null)
                     .build();
             //when & then
-            mockMvc.perform(post("/places/review")
+            mockMvc.perform(post("/reviews")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(reviewRequestDto)))
                     .andExpect(status().isOk())
@@ -286,6 +297,7 @@ public class ReviewControllerTest {
                     .andExpect(jsonPath("$.message").value(VALIDATION_FAILED.getMessage()))
                     .andExpect(jsonPath("$.status").value(400))
                     .andExpect(jsonPath("$.data.placeId").value("placeId는 필수입니다."))
+                    .andExpect(jsonPath("$.data.content").value("내용은 필수 입력값입니다."))
                     .andExpect(jsonPath("$.data.content").value("내용은 필수 입력값입니다."))
                     .andExpect(jsonPath("$.data.score").value("별점은 필수 입력값입니다."));
         }

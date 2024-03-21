@@ -18,5 +18,5 @@ public class ReviewUpdateRequestDto {
     private final String content;
     private final String tip;
     @NotNull(message = "별점은 필수 입력값입니다.")
-    private final Float score;
+    private final Integer score;
 }

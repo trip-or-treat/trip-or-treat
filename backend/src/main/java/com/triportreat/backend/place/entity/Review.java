@@ -34,7 +34,7 @@ public class Review extends BaseTimeEntity {
     private String content;
 
     @Column(nullable = false)
-    private Float score;
+    private Integer score;
 
     public static Review toEntity(ReviewRequestDto reviewRequestDto, User user, Place place) {
         return Review.builder()
@@ -46,7 +46,7 @@ public class Review extends BaseTimeEntity {
                 .build();
     }
 
-    public void reviewUpdate(String content, String tip, Float score) {
+    public void reviewUpdate(String content, String tip, Integer score) {
         this.content = content;
         this.tip = tip;
         this.score = score;

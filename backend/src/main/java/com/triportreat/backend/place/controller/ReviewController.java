@@ -24,7 +24,7 @@ public class ReviewController {
         return ResponseEntity.ok().body(ResponseResult.success(GET_SUCCESS.getMessage(), reviewService.getReviewList(id, pageable)));
     }
 
-    @PostMapping("/places/review")
+    @PostMapping("/reviews")
     public ResponseEntity<?> postReview(@Valid @RequestBody ReviewRequestDto reviewRequestDto) {
         reviewRequestDto.setUserId(1L); // TODO 로그인 기능 구현 완료시 수정 필요
         reviewService.createReview(reviewRequestDto);
