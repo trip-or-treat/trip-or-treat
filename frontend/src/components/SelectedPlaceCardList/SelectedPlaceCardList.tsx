@@ -52,12 +52,8 @@ const SelectedPlaceCardList = () => {
                   {itemArr?.items?.map((item, index) => (
                     <Draggable key={item.id} draggableId={String(item.id)} index={index}>
                       {(magic) => (
-                        <li
-                          ref={magic.innerRef}
-                          {...magic.draggableProps}
-                          {...magic.dragHandleProps}
-                        >
-                          <PlaceCard placeCardItem={item} type="DRAG_AND_DROP" />
+                        <li ref={magic.innerRef} {...magic.draggableProps}>
+                          <PlaceCard placeCardItem={item} type="DRAG_AND_DROP" magic={magic} />
                         </li>
                       )}
                     </Draggable>
