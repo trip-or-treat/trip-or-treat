@@ -12,7 +12,9 @@ public enum FailMessage {
     USER_NOT_FOUND("사용자가 존재하지 않습니다!"),
     PLACE_NOT_FOUND("장소가 존재하지 않습니다!"),
     VALIDATION_FAILED("유효성 검증에 실패하였습니다!"),
-    PLAN_NOT_FOUND("계획이 존재하지 않습니다!");
+    PLAN_NOT_FOUND("계획이 존재하지 않습니다!"),
+    REVIEW_NOT_FOUND("리뷰가 존재하지 않습니다!"),
+    REVIEW_NOT_BELONG_TO_PLACE("리뷰가 해당 장소에 속하지 않습니다!");
 
     private final String message;
 
