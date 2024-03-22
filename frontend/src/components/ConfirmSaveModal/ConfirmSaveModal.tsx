@@ -6,6 +6,8 @@ import { useMutation } from '@tanstack/react-query';
 import theme from 'src/styles/theme';
 import totalPlanAtom from 'src/atoms/totalPlanAtom';
 import myRegionListAtom from 'src/atoms/myRegionListAtom';
+import { planTitleAtom } from 'src/atoms/plan';
+
 import { useSaveTotalPlan } from 'src/hooks/api/useSaveTotalPlan';
 import { SchedulesType } from 'src/@types/api/schedules';
 
@@ -20,14 +22,16 @@ interface Props {
 const ConfirmSaveModal = ({ onClose }: Props) => {
   const totalPlan = useRecoilValue(totalPlanAtom);
   const myRegionList = useRecoilValue(myRegionListAtom);
+  const title = useRecoilValue(planTitleAtom);
+
   const navigate = useNavigate();
   const schedules = totalPlan.map(({ date, items }) => ({
     date,
     schedulePlaces: items.map((item, idx) => ({
       placeId: item.id,
       visitOrder: idx + 1,
-      memo: '메모',
-      expense: 0,
+      memo: item.memo ?? '',
+      expense: item.expense ?? 0,
     })),
   }));
 
@@ -45,11 +49,13 @@ const ConfirmSaveModal = ({ onClose }: Props) => {
 
   const handleSave = () => {
     const result = {
-      title: `${myRegionList.map((data) => data.name).join('-')} 여행코스`,
+      title: title || '여행자님의 여행계획',
       startDate: totalPlan[0].date,
       endDate: totalPlan[totalPlan.length - 1].date,
+      regions: myRegionList.map((data) => data.id),
       schedules,
     };
+
     mutate(result);
   };
 
