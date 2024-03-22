@@ -6,11 +6,12 @@ interface Props {
   path: string;
   color: string;
   children: React.ReactNode;
+  onClick?: () => void;
 }
 
-const LinkButton = ({ path, color, children }: Props) => {
+const LinkButton = ({ path, color, children, onClick }: Props) => {
   return (
-    <StyledLinkButton to={path} color={color}>
+    <StyledLinkButton to={path} color={color} onClick={onClick}>
       {children}
     </StyledLinkButton>
   );

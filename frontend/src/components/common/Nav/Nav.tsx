@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import homeModalAtom from 'src/atoms/homeModalAtom';
-import loginStateAtom from 'src/atoms/loginStateAtom';
+import loginStateAtom from 'src/atoms/Login/loginStateAtom';
 
 import KAKAO_AUTH_URL from 'src/components/KaKaoLogin/KakaoPath';
 import LogoButton from './LogoButton';
@@ -12,6 +13,7 @@ import MenuButton from './MenuButton';
 const Nav = () => {
   const setIsModal = useSetRecoilState(homeModalAtom);
   const [isLogin, setLogin] = useRecoilState(loginStateAtom);
+  const location = useLocation().pathname;
 
   useEffect(() => {
     if (localStorage.getItem('accessToken')) {
@@ -20,7 +22,11 @@ const Nav = () => {
     setIsModal(false);
   }, []);
 
-  const logout = () => {
+  useEffect(() => {
+    localStorage.setItem('prevPage', location);
+  }, [location]);
+
+  const onLogout = () => {
     alert('로그아웃 되었습니다.');
     localStorage.removeItem('accessToken');
     setLogin(false);
@@ -31,7 +37,7 @@ const Nav = () => {
       {isLogin ? (
         <>
           <LogoButton />
-          <MenuButton path="/" onClick={logout}>
+          <MenuButton path="/" onClick={onLogout}>
             로그아웃
           </MenuButton>
           <MenuButton path="/">마이페이지</MenuButton>
