@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import styled from 'styled-components';
+import { useMatch } from 'react-router-dom';
 
 import { ReactComponent as MyInfoIcon } from '../../../assets/svgs/myInfo.svg';
 import { ReactComponent as MyPlanIcon } from '../../../assets/svgs/myPlan.svg';
@@ -10,11 +11,15 @@ interface Props {
 }
 
 const MyPageTitle = ({ children }: Props) => {
+  const matchToInfo = useMatch('/mypage/myInfo');
+  const matchToPlan = useMatch('/mypage/myPlan');
+  const matchToReview = useMatch('/mypage/myReview');
+
   return (
     <Title>
-      {children === '회원정보수정' && <MyInfoIcon />}
-      {children === '내 여행계획' && <MyPlanIcon />}
-      {children === '내 리뷰 목록' && <MyReviewIcon />}
+      {matchToInfo !== null && <MyInfoIcon />}
+      {matchToPlan !== null && <MyPlanIcon />}
+      {matchToReview !== null && <MyReviewIcon />}
       {children}
     </Title>
   );

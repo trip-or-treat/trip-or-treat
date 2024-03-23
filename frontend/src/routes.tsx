@@ -40,9 +40,9 @@ const routes = [
   {
     element: <MyPageLayout />,
     children: [
-      { path: '/myInfo', element: <MyInfoPage /> },
-      { path: '/myPlan', element: <MyPlanPage /> },
-      { path: '/myReview', element: <MyReviewPage /> },
+      { path: '/mypage/myInfo', element: <MyInfoPage /> },
+      { path: '/mypage/myPlan', element: <MyPlanPage /> },
+      { path: '/mypage/myReview', element: <MyReviewPage /> },
     ],
   },
 ];

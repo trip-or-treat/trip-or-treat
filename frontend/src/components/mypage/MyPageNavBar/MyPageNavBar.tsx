@@ -4,9 +4,9 @@ import styled from 'styled-components';
 const MyPageNavBar = () => {
   return (
     <NavBox>
-      <NavItem to="/myInfo">회원정보수정</NavItem>
-      <NavItem to="/myPlan">내 여행계획</NavItem>
-      <NavItem to="/myReview">내 리뷰 목록</NavItem>
+      <NavItem to="/mypage/myInfo">회원정보수정</NavItem>
+      <NavItem to="/mypage/myPlan">내 여행계획</NavItem>
+      <NavItem to="/mypage/myReview">내 리뷰 목록</NavItem>
     </NavBox>
   );
 };
@@ -14,12 +14,13 @@ const MyPageNavBar = () => {
 export default MyPageNavBar;
 
 const NavBox = styled.div`
+  position: fixed;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 
-  margin: 130px 0 0 18%;
+  margin-left: 15%;
   width: 170px;
   height: 150px;
 
