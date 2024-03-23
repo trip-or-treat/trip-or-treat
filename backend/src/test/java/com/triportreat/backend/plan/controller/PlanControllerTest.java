@@ -2,10 +2,13 @@ package com.triportreat.backend.plan.controller;
 
 import static com.triportreat.backend.common.response.FailMessage.AUTHENTICATION_FAILED;
 import static com.triportreat.backend.common.response.FailMessage.PLAN_NOT_FOUND;
+import static com.triportreat.backend.common.response.FailMessage.USER_NOT_FOUND;
 import static com.triportreat.backend.common.response.FailMessage.VALIDATION_FAILED;
 import static com.triportreat.backend.common.response.SuccessMessage.GET_SUCCESS;
 import static com.triportreat.backend.common.response.SuccessMessage.PATCH_SUCCESS;
 import static com.triportreat.backend.common.response.SuccessMessage.POST_SUCCESS;
+import static com.triportreat.backend.plan.domain.PlanSearchValue.COMING_YN_FALSE;
+import static com.triportreat.backend.plan.domain.PlanSearchValue.SEARCH_TYPE_REGION;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -31,6 +34,7 @@ import com.triportreat.backend.common.config.WebConfig;
 import com.triportreat.backend.common.error.exception.AuthenticateFailException;
 import com.triportreat.backend.dummy.DummyObject;
 import com.triportreat.backend.plan.domain.PlanResponseDto.PlanDetailResponseDto;
+import com.triportreat.backend.plan.domain.PageResponseDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanUpdateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleCreateRequestDto;
@@ -38,10 +42,13 @@ import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceCreateReq
 import com.triportreat.backend.plan.domain.PlanResponseDto.RegionResponseDto;
 import com.triportreat.backend.plan.domain.PlanResponseDto.ScheduleDetailResponseDto;
 import com.triportreat.backend.plan.domain.PlanResponseDto.SchedulePlaceDetailResponseDto;
+import com.triportreat.backend.plan.domain.PlanResponseDto.PlanListResponseDto;
 import com.triportreat.backend.plan.error.exception.PlanNotFoundException;
+import com.triportreat.backend.plan.error.exception.UserNotFoundException;
 import com.triportreat.backend.plan.service.PlanService;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -52,6 +59,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -308,6 +318,71 @@ class PlanControllerTest extends DummyObject {
                     .andExpect(jsonPath("$.result", equalTo(false)))
                     .andExpect(jsonPath("$.data").doesNotExist());
         }
+    }
 
+    @Nested
+    @DisplayName("내 계획 목록 검색 및 조회")
+    class SearchPlans {
+
+        @Test
+        @DisplayName("성공")
+        void searchPlans_Success() throws Exception {
+            // given
+            List<PlanListResponseDto> content = List.of(
+                    PlanListResponseDto.builder()
+                            .planId(1L)
+                            .title("계획1")
+                            .regions(List.of("서울", "인천", "대전"))
+                            .startDate(LocalDate.now().minusDays(3))
+                            .endDate(LocalDate.now().minusDays(1))
+                            .createdDate(LocalDateTime.now().minusDays(7))
+                            .build(),
+                    PlanListResponseDto.builder()
+                            .planId(2L)
+                            .title("계획2")
+                            .regions(List.of("서울", "인천", "대전"))
+                            .startDate(LocalDate.now().minusDays(3))
+                            .endDate(LocalDate.now().minusDays(1))
+                            .createdDate(LocalDateTime.now().minusDays(7))
+                            .build());
+
+            Pageable pageable = PageRequest.of(0, 10);
+            long total = 2L;
+            PageImpl<PlanListResponseDto> response = new PageImpl<>(content, pageable, total);
+            PageResponseDto<PlanListResponseDto> pageResponse = new PageResponseDto<>(response);
+
+            when(planService.searchPlans(any(), any(), anyLong())).thenReturn(pageResponse);
+
+            // when
+            // then
+            mockMvc.perform(get("/plans")
+                            .param("type", SEARCH_TYPE_REGION)
+                            .param("keyword", "서울")
+                            .param("comingYn", COMING_YN_FALSE))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.result").value(true))
+                    .andExpect(jsonPath("$.message").value(GET_SUCCESS.getMessage()))
+                    .andExpect(jsonPath("$.status").value(200))
+                    .andExpect(jsonPath("$.data.contents.size()").value(2));
+        }
+
+        @Test
+        @DisplayName("실패 - 사용자가 존재하지 않음")
+        void searchPlans_UserNotFound() throws Exception {
+            // given
+            when(planService.searchPlans(any(), any(), anyLong())).thenThrow(UserNotFoundException.class);
+
+            // when
+            // then
+            mockMvc.perform(get("/plans")
+                            .param("type", SEARCH_TYPE_REGION)
+                            .param("keyword", "서울")
+                            .param("comingYn", COMING_YN_FALSE))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.result").value(false))
+                    .andExpect(jsonPath("$.message").value(USER_NOT_FOUND.getMessage()))
+                    .andExpect(jsonPath("$.status").value(500))
+                    .andExpect(jsonPath("$.data").isEmpty());
+        }
     }
 }
