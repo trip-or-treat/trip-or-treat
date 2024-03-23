@@ -36,13 +36,13 @@ public class DummyObject {
     }
 
     protected Plan createMockPlan(Long id) {
-        return createMockPlan(id, null, null, null, null, null);
+        return createMockPlan(id, null, null, null, null, null, null);
     }
 
-    protected Plan createMockPlan(Long id, User user, Set<PlanRegion> regions, List<Schedule> schedules, LocalDate startDate, LocalDate endDate) {
+    protected Plan createMockPlan(Long id, String title, User user, Set<PlanRegion> regions, List<Schedule> schedules, LocalDate startDate, LocalDate endDate) {
         return Plan.builder()
                 .id(id)
-                .title("Plan")
+                .title(title)
                 .user(user)
                 .regions(regions)
                 .schedules(schedules)
