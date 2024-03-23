@@ -4,8 +4,8 @@ import MyPlanList from 'src/components/mypage/MyPlanList';
 import MyPageTitle from 'src/components/mypage/MyPageTitle';
 import SearchToggle from 'src/components/mypage/SearchToggle';
 import PlanListCategory from 'src/components/mypage/PlanListCategory';
-import { CommonContainer } from 'src/components/mypage/CommonContainer';
-import { FilterButtonStyle } from 'src/components/common/FilterButtonStyle';
+import { CommonContainer } from 'src/styles/CommonContainer';
+import { FilterButtonStyle } from 'src/styles/FilterButtonStyle';
 
 const MY_PLANS_DATA = [
   {
@@ -123,12 +123,7 @@ const MyPlanPage = () => {
 
 export default MyPlanPage;
 
-const Wrapper = styled.div`
-  width: 750px;
-  max-height: 100vh;
-
-  overflow-y: auto;
-`;
+const Wrapper = styled.div``;
 
 const SearchBox = styled.div`
   display: flex;
@@ -151,7 +146,6 @@ const FilterBox = styled.div`
   display: flex;
 `;
 
-// 리팩토링: 필터 재사용
 const Button = styled.button<{ $isClicked: boolean }>`
   ${FilterButtonStyle};
 

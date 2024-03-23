@@ -19,9 +19,7 @@ const MyPageLayout = () => {
 export default MyPageLayout;
 
 const Main = styled.main`
-  position: fixed;
-
-  margin-top: -150px;
-  margin-left: 33%;
-  height: calc(100vh - ${(props) => props.theme.height.topNavHeight});
+  width: 800px;
+  margin-top: 110px;
+  margin-left: 34%;
 `;

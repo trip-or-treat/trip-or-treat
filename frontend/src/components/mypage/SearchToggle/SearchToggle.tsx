@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { CommonContainer } from '../CommonContainer';
+import { CommonContainer } from '../../../styles/CommonContainer';
 import { ReactComponent as DropDownIcon } from '../../../assets/svgs/dropDown.svg';
 
 const SearchToggle = () => {

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { CommonContainer } from '../CommonContainer';
+import { CommonContainer } from '../../../styles/CommonContainer';
 import { ReactComponent as DeleteIcon } from '../../../assets/svgs/delete.svg';
 
 interface Props {
@@ -32,8 +32,7 @@ export default MyPlanList;
 const PlanContainer = styled.div`
   ${CommonContainer}
 
-  border-radius: 35px;
-  box-shadow: 0px 2px 4px 0px ${(props) => props.theme.colors.lightGrey};
+  border-bottom: solid 1px ${(props) => props.theme.colors.lightGrey};
 
   cursor: pointer;
 
@@ -48,23 +47,28 @@ const PlanContainer = styled.div`
 `;
 
 const Index = styled.div`
-  width: 30px;
+  width: 40px;
+  text-align: center;
 `;
 
 const PlanTitle = styled.div`
-  width: 235px;
+  width: 215px;
+  padding-left: 20px;
 `;
 
 const Region = styled.div`
   width: 130px;
+  padding-left: 20px;
 `;
 
 const Period = styled.div`
-  width: 200px;
+  width: 198px;
   font-size: 12px;
+  text-align: center;
 `;
 
 const CreatedAt = styled.div`
-  width: 90px;
+  width: 115px;
   font-size: 12px;
+  text-align: center;
 `;

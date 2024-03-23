@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { CommonContainer } from '../CommonContainer';
+import { CommonContainer } from '../../../styles/CommonContainer';
 
 const PlanListCategory = () => {
   return (
@@ -21,31 +21,32 @@ const Container = styled.div`
   ${CommonContainer}
 
   border-bottom: solid 1px ${(props) => props.theme.colors.lightGrey};
+  text-align: center;
 `;
 
 const Index = styled.div`
-  width: 5%;
+  width: 40px;
   padding-right: 8px;
 
   border-right: solid 1px ${(props) => props.theme.colors.lightGrey};
 `;
 
 const Title = styled.div`
-  width: 38%;
+  width: 227px;
   border-right: solid 1px ${(props) => props.theme.colors.lightGrey};
 `;
 
 const Region = styled.div`
-  width: 25%;
+  width: 149px;
   border-right: solid 1px ${(props) => props.theme.colors.lightGrey};
 `;
 
 const Period = styled.div`
-  width: 33%;
+  width: 197px;
   border-right: solid 1px ${(props) => props.theme.colors.lightGrey};
 `;
 
 const CreatedDate = styled.div`
-  width: 25%;
-  margin-left: -20px;
+  width: 110px;
+  /* margin-left: -30px; */
 `;

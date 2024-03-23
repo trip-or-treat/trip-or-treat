@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { ReactComponent as StarFilled } from '../../../assets/svgs/starFilled.svg';
 import { ReactComponent as StarEmpty } from '../../../assets/svgs/starEmpty.svg';
 import { ReactComponent as EditIcon } from '../../../assets/svgs/edit.svg';
-import { CommonContainer } from '../CommonContainer';
+import { CommonContainer } from '../../../styles/CommonContainer';
 
 interface Props {
   idx: number;
@@ -49,8 +49,7 @@ const ReviewContainer = styled.div`
 
   justify-content: space-between;
 
-  border-radius: 35px;
-  box-shadow: 0px 2px 4px 0px ${(props) => props.theme.colors.lightGrey};
+  border-bottom: solid 1px ${(props) => props.theme.colors.lightGrey};
 
   svg {
     width: 25px;
@@ -68,6 +67,7 @@ const PlaceBox = styled.div`
 
 const Index = styled.div`
   width: 35px;
+  text-align: center;
 `;
 
 const Review = styled.div`

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { CommonContainer } from '../CommonContainer';
+import { CommonContainer } from '../../../styles/CommonContainer';
 
 const ReviewListCategory = () => {
   return (
@@ -21,6 +21,7 @@ const Container = styled.div`
   ${CommonContainer}
 
   border-bottom: solid 1px ${(props) => props.theme.colors.lightGrey};
+  text-align: center;
 `;
 
 const Index = styled.div`
@@ -31,23 +32,23 @@ const Index = styled.div`
 `;
 
 const Review = styled.div`
-  width: 260px;
+  width: 265px;
 
   border-right: solid 1px ${(props) => props.theme.colors.lightGrey};
 `;
 
 const Place = styled.div`
-  width: 160px;
+  width: 185px;
 
   border-right: solid 1px ${(props) => props.theme.colors.lightGrey};
 `;
 
 const Score = styled.div`
-  width: 115px;
+  width: 120px;
 
   border-right: solid 1px ${(props) => props.theme.colors.lightGrey};
 `;
 
 const CreatedDate = styled.div`
-  width: 90px;
+  width: 105px;
 `;

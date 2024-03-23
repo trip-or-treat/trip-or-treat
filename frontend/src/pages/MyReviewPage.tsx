@@ -7,7 +7,7 @@ import MyReviewList from 'src/components/mypage/MyReviewList';
 const MY_REVIEW_DATA = [
   {
     placeId: '1',
-    review: '사람이 너무너무 많아요 근데 볼거리가 진짜 많아서 추천해요!',
+    review: '사람이 너무너무 많아요 ',
     place: '망원 한강공원ㅇㅇㅇㅇㅇㅇㅇㅇ',
     score: 5,
     createdAt: '2024-03-14',
@@ -73,5 +73,5 @@ const MyReviewPage = () => {
 export default MyReviewPage;
 
 const Wrapper = styled.div`
-  width: 750px;
+  width: 800px;
 `;

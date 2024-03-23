@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
 import contentTypeIdAtom from 'src/atoms/contentTypeIdAtom';
-import { FilterButtonStyle } from '../common/FilterButtonStyle';
+import { FilterButtonStyle } from '../../styles/FilterButtonStyle';
 
 interface Props {
   id: number;
