@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import defaultImg from 'src/assets/images/defaultImg.png';
 
 interface Props {
-  imageThumbnail: string;
+  image: string;
 }
 
-const ImageBox = ({ imageThumbnail }: Props) => {
-  return <StyledImageBox src={imageThumbnail.length === 0 ? defaultImg : imageThumbnail} />;
+const ImageBox = ({ image }: Props) => {
+  return <StyledImageBox src={image.length === 0 ? defaultImg : image} />;
 };
 
 export default ImageBox;

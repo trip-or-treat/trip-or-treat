@@ -20,6 +20,10 @@ spring:
         format_sql: false
         show_sql: false
 
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+
   cache:
     type: redis
   data:

@@ -8,18 +8,22 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
+import com.triportreat.backend.auth.filter.JwtAuthenticationFilter;
+import com.triportreat.backend.auth.filter.JwtExceptionFilter;
+import com.triportreat.backend.auth.utils.AuthUserArgumentResolver;
+import com.triportreat.backend.common.config.WebConfig;
 import com.triportreat.backend.plan.domain.PlanDetailResponseDto;
+import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleCreateRequestDto;
-import com.triportreat.backend.plan.domain.ScheduleDetailResponseDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceCreateRequestDto;
+import com.triportreat.backend.plan.domain.ScheduleDetailResponseDto;
 import com.triportreat.backend.plan.domain.SchedulePlaceDetailResponseDto;
 import com.triportreat.backend.plan.error.exception.PlanNotFoundException;
 import com.triportreat.backend.plan.service.PlanService;
@@ -32,11 +36,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(controllers = PlanController.class)
 @AutoConfigureMockMvc
+@WebMvcTest(controllers = PlanController.class,
+        excludeFilters = @ComponentScan.Filter(
+                type = FilterType.ASSIGNABLE_TYPE,
+                classes = {JwtExceptionFilter.class,
+                        JwtAuthenticationFilter.class,
+                        AuthUserArgumentResolver.class,
+                        WebConfig.class}))
 class PlanControllerTest {
 
     @Autowired

@@ -20,7 +20,7 @@ public class ReviewListDto {
     private String imageThumbnail;
     private String content;
     private String tip;
-    private Float score;
+    private Integer score;
     private LocalDateTime createdDate;
 
     public static ReviewListDto toDto(Review review, User user) {

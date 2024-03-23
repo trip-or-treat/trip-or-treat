@@ -5,10 +5,15 @@ import { Link } from 'react-router-dom';
 interface ButtonTextProps {
   path: string;
   children: ReactNode;
+  onClick?: () => void;
 }
 
-const MenuButton = ({ path, children }: ButtonTextProps) => {
-  return <MenuButtonBox to={path}>{children}</MenuButtonBox>;
+const MenuButton = ({ path, children, onClick }: ButtonTextProps) => {
+  return (
+    <MenuButtonBox to={path} onClick={onClick}>
+      {children}
+    </MenuButtonBox>
+  );
 };
 
 export default MenuButton;

@@ -24,3 +24,16 @@ schedule:
     cron: 0 0 * * * *
   use: true
 
+jwt:
+  secret-key: ENC(/FWeATqMxlqMoSYRHNMKlRx7H2ylpdvHsfg1iQ4nQnUtAD31Ha/kYFF0LVtnKfh7T4aFHi52TvoJMdNqr+KmBDpWvPA+48OaznrhQUnEya/+HB/Dhp8Y0fDKPjkMNbgSsQ5wjF0NfJc=)
+  access-token:
+    expiration-time: 1800000
+  refresh-token:
+    expiration-time: 86400000
+
+kakao:
+  client-id : ENC(GBKh+s++Qe/ttBfiJHgMxR9Tj+cZMT2KmUWfbA5m62m8381g5pheb3HAb4yHTCOt)
+#  프론트쪽 배포가 완료되면 https://triportreat.site/login으로 변경
+  redirect-uri : https://localhost:3000/login
+  token-uri : https://kauth.kakao.com/oauth/token
+  user-info-uri : https://kapi.kakao.com/v2/user/me

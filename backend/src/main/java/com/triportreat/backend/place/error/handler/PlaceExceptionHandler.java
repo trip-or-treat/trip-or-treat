@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.triportreat.backend.common.response.FailMessage.GET_FAIL;
 import static com.triportreat.backend.common.response.FailMessage.UNKNOWN_ERROR;
+import static com.triportreat.backend.common.response.FailMessage.VALIDATION_FAILED;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -30,7 +30,7 @@ public class PlaceExceptionHandler {
         Map<String, String> errors = e.getBindingResult().getFieldErrors()
                 .stream()
                 .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
-        return ResponseEntity.ok().body(ResponseResult.fail(GET_FAIL.getMessage(), BAD_REQUEST, errors));
+        return ResponseEntity.ok().body(ResponseResult.fail(VALIDATION_FAILED.getMessage(), BAD_REQUEST, errors));
     }
 
     @ExceptionHandler(AbstractException.class)

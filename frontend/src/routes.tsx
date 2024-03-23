@@ -8,6 +8,7 @@ import StepTwoPage from './pages/StepTwoPage';
 
 import NotFoundPage from './pages/NotFoundPage';
 import PlansPage from './pages/PlansPage';
+import KaKaoLogin from './components/KaKaoLogin';
 
 import MyPageLayout from './layouts/MyPageLayout';
 import MyInfoPage from './pages/MyInfoPage';
@@ -44,6 +45,11 @@ const routes = [
       { path: '/mypage/myPlan', element: <MyPlanPage /> },
       { path: '/mypage/myReview', element: <MyReviewPage /> },
     ],
+  },
+  
+  {
+    path: '/login',
+    element: <KaKaoLogin />,
   },
 ];
 
