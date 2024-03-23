@@ -10,7 +10,6 @@ import com.triportreat.backend.plan.entity.Plan;
 import com.triportreat.backend.plan.entity.Schedule;
 import com.triportreat.backend.plan.entity.SchedulePlace;
 import com.triportreat.backend.user.entity.User;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -34,6 +33,16 @@ public class DummyObject {
                 .build();
     }
 
+    protected Plan createMockPlan(User user) {
+        return Plan.builder()
+                .id(1L)
+                .title("Plan")
+                .user(user)
+                .startDate(LocalDate.now())
+                .endDate(LocalDate.now().plusDays(1))
+                .build();
+    }
+
     protected Schedule createMockSchedule(Long id, LocalDate visitDate, List<SchedulePlace> schedulePlaces) {
         return Schedule.builder()
                 .id(id)
@@ -42,11 +51,28 @@ public class DummyObject {
                 .build();
     }
 
+    protected Schedule createMockSchedule(Plan plan) {
+        return Schedule.builder()
+                .id(1L)
+                .plan(plan)
+                .visitDate(LocalDate.now())
+                .build();
+    }
+
     protected SchedulePlace createMockSchedulePlace(Long id, Long placeId, int visitOrder) {
         return SchedulePlace.builder()
                 .id(id)
                 .place(Place.builder().id(placeId).build())
                 .visitOrder(visitOrder)
+                .memo("memo")
+                .expense(1000L)
+                .build();
+    }
+
+    protected SchedulePlace createMockSchedulePlace(Schedule schedule) {
+        return SchedulePlace.builder()
+                .schedule(schedule)
+                .visitOrder(1)
                 .memo("memo")
                 .expense(1000L)
                 .build();
@@ -95,6 +121,16 @@ public class DummyObject {
                 .content("testContent")
                 .tip("testTip")
                 .score(5)
+                .build();
+    }
+
+    protected Place createMockPlace(Long id) {
+        return Place.builder()
+                .id(id)
+                .name("place")
+                .latitude(1.0)
+                .longitude(1.0)
+                .views(0L)
                 .build();
     }
 }
