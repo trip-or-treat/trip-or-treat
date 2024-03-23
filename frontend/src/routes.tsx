@@ -46,7 +46,7 @@ const routes = [
       { path: '/mypage/myReview', element: <MyReviewPage /> },
     ],
   },
-  
+
   {
     path: '/login',
     element: <KaKaoLogin />,
