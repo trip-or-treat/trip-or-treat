@@ -1,39 +1,59 @@
 import styled from 'styled-components';
+import { useRecoilValue } from 'recoil';
 
-import { TotalPlan } from 'src/atoms/totalPlanAtom';
-
-import { Regions } from 'src/@types/api/regions';
+import regionsAtom from 'src/atoms/regionsAtom';
+import { SchedulesType } from 'src/@types/api/schedules';
 import PlanTitle from './PlanTitle';
 
 interface Props {
-  totalPlan: TotalPlan[];
-  myRegionList: Regions[];
+  startDate: string;
+  endDate: string;
+  regions: number[];
+  schedules: {
+    date: string;
+    schedulePlaces: {
+      name: string;
+      imageThumbnail: string;
+      subCategoryName: string;
+      placeId: number;
+      visitOrder: number;
+      memo: string;
+      expense: number;
+    }[];
+  }[];
 }
 
 const parseName = (name: string) => {
   return name.length > 5 ? name.slice(0, 2) : name;
 };
 
-const calculateExpense = (totalPlan: TotalPlan[]) => {
-  const dailyExpenses = totalPlan.map((data) =>
-    data.items.map((info) => info.expense ?? 0).reduce((a, c) => a + c, 0),
+const calculateExpense = (schedules: SchedulesType['schedules']) => {
+  const dailyExpenses = schedules.map(({ schedulePlaces }) =>
+    schedulePlaces.map((info) => info.expense ?? 0).reduce((a, c) => a + c, 0),
   );
   const totalExpense = dailyExpenses.reduce((a, c) => a + c, 0);
   return totalExpense.toLocaleString();
 };
 
-const PlanNavBar = ({ totalPlan, myRegionList }: Props) => {
+const PlanNavBar = ({ startDate, endDate, regions, schedules }: Props) => {
+  const data = useRecoilValue(regionsAtom);
+  const result = data.filter((item) => regions.includes(item.id));
+
   return (
     <Wrapper>
       <section>
         <RegionListAndDateBox>
-          <Ul>{myRegionList?.map((item) => <Li key={item.id}>{parseName(item.name)}</Li>)}</Ul>
-          <P> {`${totalPlan[0]?.date} ~ ${totalPlan[totalPlan.length - 1]?.date}`}</P>
+          <Ul>
+            {result.map((item) => (
+              <Li key={item.id}>{parseName(item.name)}</Li>
+            ))}
+          </Ul>
+          <P> {`${startDate} ~ ${endDate}`}</P>
         </RegionListAndDateBox>
       </section>
       <PlanTitle />
 
-      <TotalExpenseBox>{`총 경비 : ${calculateExpense(totalPlan)}원`}</TotalExpenseBox>
+      <TotalExpenseBox>{`총 경비 : ${calculateExpense(schedules)}원`}</TotalExpenseBox>
     </Wrapper>
   );
 };

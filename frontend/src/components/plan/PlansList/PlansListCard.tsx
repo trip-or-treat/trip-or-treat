@@ -1,11 +1,20 @@
 import styled from 'styled-components';
 
-import { PlaceListTypes } from 'src/@types/api/placeList';
 import { ORDER_COLORS } from 'src/constants/color';
 import defaultImg from '../../../assets/images/defaultImg.png';
 
+export interface SchedulePlacesType {
+  name: string;
+  subCategoryName: string;
+  imageThumbnail: string;
+  placeId: number;
+  visitOrder: number;
+  memo: string;
+  expense: number;
+}
+
 interface Props {
-  data: PlaceListTypes;
+  data: SchedulePlacesType;
   idx: number;
   listIdx: number;
 }

@@ -23,6 +23,19 @@ const PlansPage = () => {
   const totalPlan = useRecoilValue(totalPlanAtom);
   const isLoggedIn = useRecoilValue(loginStateAtom);
 
+  const schedules = totalPlan.map(({ date, items }) => ({
+    date,
+    schedulePlaces: items.map((item, idx) => ({
+      name: item.name,
+      imageThumbnail: item.imageThumbnail,
+      subCategoryName: item.subCategoryName,
+      placeId: item.id,
+      visitOrder: idx + 1,
+      memo: item.memo ?? '',
+      expense: item.expense ?? 0,
+    })),
+  }));
+
   const onClose = () => {
     setOpen(false);
   };
@@ -32,8 +45,13 @@ const PlansPage = () => {
   return (
     <Main>
       <Wrapper>
-        <PlanNavBar totalPlan={totalPlan} myRegionList={myRegionList} />
-        <PlansList totalPlan={totalPlan} />
+        <PlanNavBar
+          startDate={totalPlan[0].date}
+          endDate={totalPlan[totalPlan.length - 1].date}
+          regions={myRegionList.map((data) => data.id)}
+          schedules={schedules}
+        />
+        <PlansList schedules={schedules} />
 
         <ButtonBox>
           <CommonButton onClick={() => setOpen(true)}>저장할래요!</CommonButton>

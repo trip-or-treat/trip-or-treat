@@ -1,46 +1,64 @@
 import styled from 'styled-components';
 
-import { TotalPlan } from 'src/atoms/totalPlanAtom';
 import { useCarousel } from 'src/hooks/useCarousel';
-
-import { PlaceListTypes } from 'src/@types/api/placeList';
-import PlansListCard from './PlansListCard';
 
 import { ReactComponent as ChevronLeft } from '../../../assets/svgs/chevronLeft.svg';
 import { ReactComponent as ChevronRight } from '../../../assets/svgs/chevronRight.svg';
+import PlansListCard from './PlansListCard';
 
 interface Props {
-  totalPlan: TotalPlan[];
+  schedules: {
+    date: string;
+    schedulePlaces: {
+      name: string;
+      imageThumbnail: string;
+      subCategoryName: string;
+      placeId: number;
+      visitOrder: number;
+      memo: string;
+      expense: number;
+    }[];
+  }[];
 }
 
-const calculateDailyExpense = (items: PlaceListTypes[]) => {
-  const totalExpense = items.reduce((total, item) => total + (item.expense ?? 0), 0);
+export interface SchedulePlacesType {
+  name: string;
+  imageThumbnail: string;
+  subCategoryName: string;
+  placeId: number;
+  visitOrder: number;
+  memo: string;
+  expense: number;
+}
+
+const calculateDailyExpense = (schedulePlaces: SchedulePlacesType[]) => {
+  const totalExpense = schedulePlaces.reduce((total, item) => total + (item.expense ?? 0), 0);
   return totalExpense.toLocaleString();
 };
 
-const PlansList = ({ totalPlan }: Props) => {
-  const { handlePrev, handleNext, slideRef, currentSlide } = useCarousel(totalPlan.length % 2, 150);
+const PlansList = ({ schedules }: Props) => {
+  const { handlePrev, handleNext, slideRef, currentSlide } = useCarousel(schedules.length % 2, 150);
 
   return (
     <>
-      <Wrapper ref={slideRef} $length={totalPlan.length}>
-        {totalPlan.map(({ day, items }, listIdx) => (
-          <PlanListBox key={day}>
-            <DayTitle>{`${day}일차 경비 : ${calculateDailyExpense(items)}원`}</DayTitle>
-            {items.map((data, idx) => (
-              <PlansListCard key={data.id} listIdx={listIdx} idx={idx} data={data} />
+      <Wrapper ref={slideRef} $length={schedules.length}>
+        {schedules.map(({ date, schedulePlaces }, listIdx) => (
+          <PlanListBox key={date}>
+            <DayTitle>{`${listIdx + 1}일차 경비 : ${calculateDailyExpense(schedulePlaces)}원`}</DayTitle>
+            {schedulePlaces.map((data, idx) => (
+              <PlansListCard key={data.placeId} listIdx={listIdx} idx={idx} data={data} />
             ))}
           </PlanListBox>
         ))}
       </Wrapper>
 
       {currentSlide === 1 && (
-        <LeftButton onClick={handlePrev} $length={totalPlan.length}>
+        <LeftButton onClick={handlePrev} $length={schedules.length}>
           <ChevronLeft />
         </LeftButton>
       )}
       {currentSlide === 0 && (
-        <RightButton onClick={handleNext} $length={totalPlan.length}>
+        <RightButton onClick={handleNext} $length={schedules.length}>
           <ChevronRight />
         </RightButton>
       )}
