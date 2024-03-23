@@ -4,7 +4,7 @@ import com.triportreat.backend.plan.entity.Plan;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PlanRepository extends JpaRepository<Plan, Long> {
+public interface PlanRepository extends JpaRepository<Plan, Long>, PlanRepositoryCustom {
 
     boolean existsByIdAndUserId(Long id, Long userId);
 
