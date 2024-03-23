@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -129,5 +130,22 @@ public class PlanResponseDto {
                     .longitude(schedulePlace.getPlace().getLongitude())
                     .build();
         }
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @ToString
+    public static class PlanListResponseDto {
+        private Long planId;
+        private String title;
+        private LocalDate startDate;
+        private LocalDate endDate;
+        private LocalDateTime createdDate;
+
+        @Builder.Default
+        private List<String> regions = new ArrayList<>();
     }
 }

@@ -1,5 +1,7 @@
 package com.triportreat.backend.plan.domain;
 
+import static com.triportreat.backend.plan.domain.PlanSearchValue.*;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -36,6 +38,9 @@ public class PlanRequestDto {
         private LocalDate endDate;
 
         private Long userId;
+
+        @Builder.Default
+        private List<Long> regions = new ArrayList<>();
 
         @Builder.Default
         @Valid
@@ -142,5 +147,24 @@ public class PlanRequestDto {
 
         @Min(value = 0, message = "경비는 최소 0원부터입니다!")
         private Long expense;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @ToString
+    public static class PlanSearchRequestDto {
+        @Builder.Default
+        private String type = SEARCH_TYPE_TITLE;
+
+        private String keyword;
+
+        @Builder.Default
+        private String comingYn = COMING_YN_TRUE;
+
+        @Builder.Default
+        private int year = RECENT_6_MONTH;
     }
 }
