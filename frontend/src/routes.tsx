@@ -9,6 +9,11 @@ import StepTwoPage from './pages/StepTwoPage';
 import NotFoundPage from './pages/NotFoundPage';
 import PlansPage from './pages/PlansPage';
 
+import MyPageLayout from './layouts/MyPageLayout';
+import MyInfoPage from './pages/MyInfoPage';
+import MyPlanPage from './pages/MyPlanPage';
+import MyReviewPage from './pages/MyReviewPage';
+
 const routes = [
   {
     element: <CommonLayout />,
@@ -30,6 +35,15 @@ const routes = [
   {
     element: <CommonLayout />,
     children: [{ path: '/*', element: <NotFoundPage /> }],
+  },
+
+  {
+    element: <MyPageLayout />,
+    children: [
+      { path: '/myInfo', element: <MyInfoPage /> },
+      { path: '/myPlan', element: <MyPlanPage /> },
+      { path: '/myReview', element: <MyReviewPage /> },
+    ],
   },
 ];
 
