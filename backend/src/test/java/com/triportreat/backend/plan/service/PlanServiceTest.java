@@ -23,9 +23,9 @@ import com.triportreat.backend.place.entity.Place;
 import com.triportreat.backend.place.entity.SubCategory;
 import com.triportreat.backend.place.repository.PlaceRepository;
 import com.triportreat.backend.plan.domain.PlanResponseDto.PlanDetailResponseDto;
+import com.triportreat.backend.common.response.PageResponseDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanUpdateRequestDto;
-import com.triportreat.backend.plan.domain.PageResponseDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanSearchRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceCreateRequestDto;
@@ -190,7 +190,7 @@ class PlanServiceTest extends DummyObject {
                     createMockSchedule(1L, null, schedulePlaces1, LocalDate.now()),
                     createMockSchedule(2L, null, schedulePlaces2, LocalDate.now().plusDays(1)));
             User user = createMockUser(1L, "user1");
-            Plan plan = createMockPlan(1L, user, regions, schedules, null, null);
+            Plan plan = createMockPlan(1L, "계획", user, regions, schedules, null, null);
 
             when(planRepository.findByIdAndUserId(anyLong(), any())).thenReturn(Optional.of(plan));
 
@@ -245,7 +245,7 @@ class PlanServiceTest extends DummyObject {
             List<Schedule> mockSchedules = new ArrayList<>();
             mockSchedules.add(mockSchedule);
 
-            Plan mockPlan = createMockPlan(1L, null, null, mockSchedules, null, null);
+            Plan mockPlan = createMockPlan(1L, "계획", null, null, mockSchedules, null, null);
 
             when(planRepository.existsByIdAndUserId(anyLong(), anyLong())).thenReturn(true);
             when(planRepository.findById(anyLong())).thenReturn(Optional.ofNullable(mockPlan));
@@ -344,7 +344,7 @@ class PlanServiceTest extends DummyObject {
             List<Schedule> mockSchedules = new ArrayList<>();
             mockSchedules.add(mockSchedule);
 
-            Plan mockPlan = createMockPlan(1L, null, null, mockSchedules, null, null);
+            Plan mockPlan = createMockPlan(1L, "계획", null, null, mockSchedules, null, null);
 
             when(planRepository.existsByIdAndUserId(anyLong(), anyLong())).thenReturn(true);
             when(planRepository.findById(anyLong())).thenReturn(Optional.ofNullable(mockPlan));

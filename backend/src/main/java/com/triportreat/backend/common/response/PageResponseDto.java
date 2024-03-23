@@ -1,4 +1,4 @@
-package com.triportreat.backend.plan.domain;
+package com.triportreat.backend.common.response;
 
 import java.util.ArrayList;
 import java.util.List;
