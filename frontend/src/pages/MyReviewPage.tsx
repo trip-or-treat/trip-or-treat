@@ -23,28 +23,28 @@ const MY_REVIEW_DATA = [
     placeId: '3',
     review: '사람이 너무너무 많아요 근데 볼거리가 진짜 많아서 추천해요!',
     place: '망원 한강공원',
-    score: 5,
+    score: 2,
     createdAt: '2024-03-14',
   },
   {
     placeId: '4',
     review: '사람이 너무너무 많아요 근데 볼거리가 진짜 많아서 추천해요!',
     place: '망원 한강공원',
-    score: 5,
+    score: 1,
     createdAt: '2024-03-14',
   },
   {
     placeId: '5',
     review: '사람이 너무너무 많아요 근데 볼거리가 진짜 많아서 추천해요!',
     place: '망원 한강공원',
-    score: 5,
+    score: 4,
     createdAt: '2024-03-14',
   },
   {
     placeId: '6',
     review: '사람이 너무너무 많아요 근데 볼거리가 진짜 많아서 추천해요!',
     place: '망원 한강공원',
-    score: 5,
+    score: 3,
     createdAt: '2024-03-14',
   },
 ];
@@ -54,10 +54,11 @@ const MyReviewPage = () => {
     <Wrapper>
       <MyPageTitle>내 리뷰 목록</MyPageTitle>
       <ReviewListCategory />
-      {MY_REVIEW_DATA.map((data) => {
+      {MY_REVIEW_DATA.map((data, idx) => {
         return (
           <MyReviewList
             key={data.placeId}
+            idx={idx + 1}
             review={data.review}
             place={data.place}
             score={data.score}
