@@ -4,6 +4,7 @@ import com.triportreat.backend.common.error.exception.AuthenticateFailException;
 import com.triportreat.backend.place.entity.Place;
 import com.triportreat.backend.place.repository.PlaceRepository;
 import com.triportreat.backend.plan.domain.PlanResponseDto.PlanDetailResponseDto;
+import com.triportreat.backend.plan.domain.PageResponseDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanUpdateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleCreateRequestDto;
@@ -12,6 +13,8 @@ import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceUpdateReq
 import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleUpdateRequestDto;
 import com.triportreat.backend.plan.domain.PlanResponseDto.ScheduleDetailResponseDto;
 import com.triportreat.backend.plan.domain.PlanResponseDto.SchedulePlaceDetailResponseDto;
+import com.triportreat.backend.plan.domain.PlanRequestDto.PlanSearchRequestDto;
+import com.triportreat.backend.plan.domain.PlanResponseDto.PlanListResponseDto;
 import com.triportreat.backend.plan.entity.Plan;
 import com.triportreat.backend.plan.entity.Schedule;
 import com.triportreat.backend.plan.entity.SchedulePlace;
@@ -30,9 +33,12 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -111,6 +117,19 @@ public class PlanServiceImpl implements PlanService {
                     }
             );
         });
+    }
+
+    @Override
+    public PageResponseDto<PlanListResponseDto> searchPlans(PlanSearchRequestDto condition, Pageable pageable, Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new UserNotFoundException();
+        }
+
+        PageResponseDto<PlanListResponseDto> pageResponse = new PageResponseDto<>(planRepository.searchPlans(condition, pageable, userId));
+
+        log.info("검색결과 {}", pageResponse);
+
+        return pageResponse;
     }
 
     private void createSchedules(List<ScheduleCreateRequestDto> schedulesRequests, Plan plan) {
