@@ -124,7 +124,8 @@ export default MyPlanPage;
 
 const Wrapper = styled.div`
   width: 750px;
-  height: auto;
+  max-height: 100vh; /* Ensure the wrapper doesn't exceed the viewport height */
+  overflow-y: auto;
 `;
 
 const SearchBox = styled.div`
@@ -154,9 +155,4 @@ const Button = styled.button<{ $isClicked: boolean }>`
 
   height: 30px;
   margin: 0 10px 10px 0;
-
-  background-color: ${(props) =>
-    props.$isClicked ? props.theme.colors.mainColor : props.theme.colors.whiteFont};
-  color: ${(props) =>
-    props.$isClicked ? props.theme.colors.whiteFont : props.theme.colors.blackFont};
 `;

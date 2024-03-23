@@ -1,17 +1,25 @@
-export const FilterButtonStyle = `
-display: flex;
-justify-content: center;
-align-items: center;
+import { css } from 'styled-components';
 
-padding: 10px;
+export const FilterButtonStyle = css<{ $isClicked: boolean }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-border-radius: 25px;
-border: none;
+  padding: 10px;
 
-outline: none;
-box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 25px;
+  border: none;
 
-font-size: 12px;
-font-family: 'Pretendard-Regular';
-cursor: pointer;
+  outline: none;
+  box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.2);
+
+  background-color: ${(props) =>
+    props.$isClicked ? props.theme.colors.mainColor : props.theme.colors.whiteFont};
+  color: ${(props) =>
+    props.$isClicked ? props.theme.colors.whiteFont : props.theme.colors.blackFont};
+
+  font-size: 12px;
+  font-family: 'Pretendard-Regular';
+
+  cursor: pointer;
 `;

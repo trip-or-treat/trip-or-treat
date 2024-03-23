@@ -34,9 +34,4 @@ export default ContentTypeFilterItem;
 
 const Button = styled.button<{ $isClicked: boolean }>`
   ${FilterButtonStyle};
-
-  background-color: ${(props) =>
-    props.$isClicked ? props.theme.colors.mainColor : props.theme.colors.whiteFont};
-  color: ${(props) =>
-    props.$isClicked ? props.theme.colors.whiteFont : props.theme.colors.blackFont};
 `;
