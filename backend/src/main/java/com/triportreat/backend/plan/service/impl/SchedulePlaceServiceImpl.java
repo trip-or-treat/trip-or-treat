@@ -1,5 +1,6 @@
 package com.triportreat.backend.plan.service.impl;
 
+import com.triportreat.backend.common.error.exception.AuthenticateFailException;
 import com.triportreat.backend.plan.error.exception.SchedulePlaceNotFoundException;
 import com.triportreat.backend.plan.repository.SchedulePlaceRepository;
 import com.triportreat.backend.plan.service.SchedulePlaceService;

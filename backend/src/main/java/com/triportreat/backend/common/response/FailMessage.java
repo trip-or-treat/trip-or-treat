@@ -13,6 +13,7 @@ public enum FailMessage {
     PLACE_NOT_FOUND("장소가 존재하지 않습니다!"),
     VALIDATION_FAILED("유효성 검증에 실패하였습니다!"),
     PLAN_NOT_FOUND("계획이 존재하지 않습니다!"),
+    AUTHENTICATION_FAILED("사용자 정보가 일치하지 않습니다!"),
     SCHEDULE_PLACE_NOT_FOUND("스케줄-장소가 존재하지 않습니다!");
 
     private final String message;
