@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import { CommonContainer } from '../CommonContainer';
 
 const PlanListCategory = () => {
@@ -19,14 +20,13 @@ export default PlanListCategory;
 const Container = styled.div`
   ${CommonContainer}
 
-  margin-bottom: 7px;
-
   border-bottom: solid 1px ${(props) => props.theme.colors.lightGrey};
 `;
 
 const Index = styled.div`
   width: 5%;
   padding-right: 8px;
+
   border-right: solid 1px ${(props) => props.theme.colors.lightGrey};
 `;
 

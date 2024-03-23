@@ -48,15 +48,13 @@ const ReviewContainer = styled.div`
   ${CommonContainer}
 
   justify-content: space-between;
-  margin-bottom: 7px;
 
   border-radius: 35px;
-  box-shadow: 0px 3px 4px 0px ${(props) => props.theme.colors.lightGrey};
-
-  cursor: pointer;
+  box-shadow: 0px 2px 4px 0px ${(props) => props.theme.colors.lightGrey};
 
   svg {
     width: 25px;
+    cursor: pointer;
   }
 `;
 
@@ -96,6 +94,7 @@ const Score = styled.div`
 
   svg {
     width: 16px;
+    cursor: default;
   }
 `;
 

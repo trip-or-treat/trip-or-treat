@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import { CommonContainer } from '../CommonContainer';
 
 const ReviewListCategory = () => {
@@ -18,8 +19,6 @@ export default ReviewListCategory;
 
 const Container = styled.div`
   ${CommonContainer}
-
-  margin-bottom: 7px;
 
   border-bottom: solid 1px ${(props) => props.theme.colors.lightGrey};
 `;

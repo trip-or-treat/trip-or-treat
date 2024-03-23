@@ -1,6 +1,7 @@
+import styled from 'styled-components';
+
 import MyPlanList from 'src/components/mypage/MyPlanList';
 import MyPageTitle from 'src/components/mypage/MyPageTitle';
-import styled from 'styled-components';
 import SearchToggle from 'src/components/mypage/SearchToggle';
 import PlanListCategory from 'src/components/mypage/PlanListCategory';
 import { CommonContainer } from 'src/components/mypage/CommonContainer';
@@ -124,7 +125,8 @@ export default MyPlanPage;
 
 const Wrapper = styled.div`
   width: 750px;
-  max-height: 100vh; /* Ensure the wrapper doesn't exceed the viewport height */
+  max-height: 100vh;
+
   overflow-y: auto;
 `;
 

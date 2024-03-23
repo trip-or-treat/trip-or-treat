@@ -32,10 +32,8 @@ export default MyPlanList;
 const PlanContainer = styled.div`
   ${CommonContainer}
 
-  margin-bottom: 7px;
-
   border-radius: 35px;
-  box-shadow: 0px 3px 4px 0px ${(props) => props.theme.colors.lightGrey};
+  box-shadow: 0px 2px 4px 0px ${(props) => props.theme.colors.lightGrey};
 
   cursor: pointer;
 
@@ -63,12 +61,10 @@ const Region = styled.div`
 
 const Period = styled.div`
   width: 200px;
-
   font-size: 12px;
 `;
 
 const CreatedAt = styled.div`
   width: 90px;
-
   font-size: 12px;
 `;

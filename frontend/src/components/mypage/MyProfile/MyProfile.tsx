@@ -18,15 +18,18 @@ export default MyProfile;
 const ProfileBox = styled.div`
   display: flex;
   flex-direction: column;
-  text-align: center;
   justify-content: center;
+
   margin: 0 auto 20px auto;
+
+  text-align: center;
 `;
 
 const ProfileImg = styled.img<{ src: string }>`
   width: 130px;
   height: 130px;
   padding: 10px;
+
   border: solid 0.7px darkGray;
   border-radius: 50%;
 `;
