@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 
 import theme from 'src/styles/theme';
 import { useSaveTotalPlan } from 'src/hooks/api/useSaveTotalPlan';
@@ -11,7 +11,6 @@ import { planTitleAtom } from 'src/atoms/plan';
 import totalPlanAtom from 'src/atoms/totalPlanAtom';
 import myRegionListAtom from 'src/atoms/myRegionListAtom';
 
-import useInitData from 'src/hooks/useInitData';
 import ModalOverlay from '../common/modal/ModalOverlay';
 import CloseButton from '../common/modal/CloseButton';
 import { StyledButton } from '../common/modal/LinkButton/LinkButton';
@@ -22,7 +21,7 @@ interface Props {
 
 const ConfirmSaveModal = ({ onClose }: Props) => {
   const navigate = useNavigate();
-  const [title, setTitle] = useRecoilState(planTitleAtom);
+  const title = useRecoilValue(planTitleAtom);
   const totalPlan = useRecoilValue(totalPlanAtom);
   const myRegionList = useRecoilValue(myRegionListAtom);
 
@@ -40,8 +39,6 @@ const ConfirmSaveModal = ({ onClose }: Props) => {
     mutationFn: (payload: SchedulesType) => useSaveTotalPlan(payload),
     onSuccess: () => {
       alert('성공적으로 저장이 완료되었습니다!');
-      useInitData();
-      setTitle('');
       navigate('/myPage');
     },
     onError: () => {
