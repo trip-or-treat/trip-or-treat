@@ -28,8 +28,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.triportreat.backend.common.response.FailMessage.*;
-import static com.triportreat.backend.common.response.FailMessage.PLACE_NOT_FOUND;
-import static com.triportreat.backend.common.response.FailMessage.USER_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -231,7 +229,6 @@ public class ReviewServiceImplTest extends DummyObject {
             assertThatThrownBy(() -> reviewService.updateReview(review.getId(), reviewUpdateRequestDto))
                     .isInstanceOf(ReviewNotBelongPlaceException.class)
                     .hasMessageContaining(REVIEW_NOT_BELONG_TO_PLACE.getMessage());
-
         }
     }
 
