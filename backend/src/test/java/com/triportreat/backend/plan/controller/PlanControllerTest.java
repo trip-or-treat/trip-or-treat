@@ -1,14 +1,23 @@
 package com.triportreat.backend.plan.controller;
 
+import static com.triportreat.backend.common.response.FailMessage.AUTHENTICATION_FAILED;
 import static com.triportreat.backend.common.response.FailMessage.PLAN_NOT_FOUND;
 import static com.triportreat.backend.common.response.FailMessage.VALIDATION_FAILED;
 import static com.triportreat.backend.common.response.SuccessMessage.GET_SUCCESS;
+import static com.triportreat.backend.common.response.SuccessMessage.PATCH_SUCCESS;
 import static com.triportreat.backend.common.response.SuccessMessage.POST_SUCCESS;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -19,8 +28,12 @@ import com.triportreat.backend.auth.filter.JwtAuthenticationFilter;
 import com.triportreat.backend.auth.filter.JwtExceptionFilter;
 import com.triportreat.backend.auth.utils.AuthUserArgumentResolver;
 import com.triportreat.backend.common.config.WebConfig;
+import com.triportreat.backend.common.error.exception.AuthenticateFailException;
+import com.triportreat.backend.common.response.ResponseResult;
+import com.triportreat.backend.dummy.DummyObject;
 import com.triportreat.backend.plan.domain.PlanDetailResponseDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
+import com.triportreat.backend.plan.domain.PlanRequestDto.PlanUpdateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceCreateRequestDto;
 import com.triportreat.backend.plan.domain.ScheduleDetailResponseDto;
@@ -52,13 +65,13 @@ import org.springframework.test.web.servlet.MockMvc;
 class PlanControllerTest {
 
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @Autowired
     ObjectMapper objectMapper;
 
     @MockBean
-    PlanService planService;
+    private PlanService planService;
 
     @Nested
     @DisplayName("계획 저장")
@@ -207,5 +220,81 @@ class PlanControllerTest {
                     .schedules(scheduleDetail)
                     .build();
         }
+    }
+
+    @Nested
+    @DisplayName("계획 수정")
+    class UpdatePlan extends DummyObject {
+
+        @Test
+        @DisplayName("성공")
+        void updatePlan() throws Exception {
+            // given
+            Long id = 1L;
+            Long userId = 1L;
+            PlanUpdateRequestDto planUpdateRequestDto = createPlanUpdateRequestDto();
+
+            doNothing().when(planService).updatePlan(userId, id, planUpdateRequestDto);
+
+            // when
+            planService.updatePlan(userId, id, planUpdateRequestDto);
+
+            // then
+            mockMvc.perform(patch("/plans/{id}", id)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(planUpdateRequestDto)))
+                    .andExpect(result -> verify(planService).updatePlan(userId, id, planUpdateRequestDto))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.result", equalTo(true)))
+                    .andExpect(jsonPath("$.status", equalTo(OK.value())))
+                    .andExpect(jsonPath("$.message", equalTo(PATCH_SUCCESS.getMessage())))
+                    .andExpect(jsonPath("$.data", equalTo(null)));
+        }
+
+        @Test
+        @DisplayName("실패 - 계획과 사용자 불일치")
+        void updatePlan_validatePlanOwner() throws Exception {
+            // given
+            Long id = 1L;
+            Long userId = 2L;
+            PlanUpdateRequestDto planUpdateRequestDto = createPlanUpdateRequestDto();
+
+            doThrow(new AuthenticateFailException()).when(planService).updatePlan(id, userId, planUpdateRequestDto);
+
+            // when
+            try {
+                planService.updatePlan(userId, id, planUpdateRequestDto);
+            } catch (AuthenticateFailException e) {
+
+                //then
+                ResponseResult.fail(e.getMessage(), e.getStatus(), null);
+
+                assertThat(e.getMessage()).isEqualTo(AUTHENTICATION_FAILED.getMessage());
+                assertThat(e.getStatus()).isEqualTo(UNAUTHORIZED);
+            }
+        }
+
+        @Test
+        @DisplayName("실패 - 계획 정보 없음")
+        void updatePlan_PlanNotFound() throws Exception {
+            // given
+            Long id = 2L;
+            Long userId = 1L;
+            PlanUpdateRequestDto planUpdateRequestDto = createPlanUpdateRequestDto();
+
+            doThrow(PlanNotFoundException.class).when(planService).updatePlan(userId, id, planUpdateRequestDto);
+
+            // when
+            try {
+                planService.updatePlan(userId, id, planUpdateRequestDto);
+            } catch (PlanNotFoundException e) {
+                // then
+                ResponseResult.fail(e.getMessage(), e.getStatus(), null);
+
+                assertThat(e.getMessage()).isEqualTo(PLAN_NOT_FOUND.getMessage());
+                assertThat(e.getStatus()).isEqualTo(INTERNAL_SERVER_ERROR);
+            }
+        }
+
     }
 }

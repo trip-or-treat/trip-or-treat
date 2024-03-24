@@ -84,6 +84,10 @@ public class PlanRequestDto {
 
     @Getter
     @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @ToString
     public static class PlanUpdateRequestDto {
 
         private Long userId;
@@ -101,6 +105,10 @@ public class PlanRequestDto {
 
     @Getter
     @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @ToString
     public static class ScheduleUpdateRequestDto {
 
         @NotNull(message = "스케쥴아이디는 필수 입력값입니다!")
@@ -114,6 +122,10 @@ public class PlanRequestDto {
 
     @Getter
     @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @ToString
     public static class SchedulePlaceUpdateRequestDto {
 
         private Optional<Long> schedulePlaceId;

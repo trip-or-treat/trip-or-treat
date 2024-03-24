@@ -1,20 +1,26 @@
 package com.triportreat.backend.plan.service;
 
+import static com.triportreat.backend.common.response.FailMessage.AUTHENTICATION_FAILED;
 import static com.triportreat.backend.common.response.FailMessage.PLACE_NOT_FOUND;
 import static com.triportreat.backend.common.response.FailMessage.PLAN_NOT_FOUND;
+import static com.triportreat.backend.common.response.FailMessage.SCHEDULE_NOT_FOUND;
+import static com.triportreat.backend.common.response.FailMessage.SCHEDULE_PLACE_NOT_FOUND;
 import static com.triportreat.backend.common.response.FailMessage.USER_NOT_FOUND;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 
+import com.triportreat.backend.common.error.exception.AuthenticateFailException;
 import com.triportreat.backend.dummy.DummyObject;
 import com.triportreat.backend.place.entity.Place;
 import com.triportreat.backend.place.repository.PlaceRepository;
-import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanDetailResponseDto;
+import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
+import com.triportreat.backend.plan.domain.PlanRequestDto.PlanUpdateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceCreateRequestDto;
 import com.triportreat.backend.plan.entity.Plan;
@@ -22,6 +28,8 @@ import com.triportreat.backend.plan.entity.Schedule;
 import com.triportreat.backend.plan.entity.SchedulePlace;
 import com.triportreat.backend.plan.error.exception.PlaceNotFoundException;
 import com.triportreat.backend.plan.error.exception.PlanNotFoundException;
+import com.triportreat.backend.plan.error.exception.ScheduleNotFoundException;
+import com.triportreat.backend.plan.error.exception.SchedulePlaceNotFoundException;
 import com.triportreat.backend.plan.error.exception.UserNotFoundException;
 import com.triportreat.backend.plan.repository.PlanRepository;
 import com.triportreat.backend.plan.repository.SchedulePlaceRepository;
@@ -186,6 +194,119 @@ class PlanServiceTest extends DummyObject {
             assertThatThrownBy(() -> planService.getPlanDetail(plan.getId()))
                     .isInstanceOf(PlanNotFoundException.class)
                     .hasMessage(PLAN_NOT_FOUND.getMessage());
+        }
+    }
+
+    @Nested
+    @DisplayName("계획 수정")
+    class UpdatePlan {
+
+        @Test
+        @DisplayName("성공")
+        void updatePlan_CreateNewSchedulePlace() {
+            // given
+            Long id = 1L;
+            Long userId = 1L;
+            PlanUpdateRequestDto mockUpdateRequestDto = createPlanUpdateRequestDto();
+
+            List<SchedulePlace> mockSchedulePlaces = List.of(createMockSchedulePlace(1L, 1L, 1));
+            List<Schedule> mockSchedules = List.of(createMockSchedule(1L, LocalDate.now(), mockSchedulePlaces));
+            Plan mockPlan = createMockPlan(1L, mockSchedules);
+
+
+            when(planRepository.existsByIdAndUserId(anyLong(), anyLong())).thenReturn(true);
+            when(planRepository.findById(anyLong())).thenReturn(Optional.ofNullable(mockPlan));
+            when(scheduleRepository.findById(anyLong())).thenReturn(Optional.of(createMockSchedule(1L, LocalDate.now(), mockSchedulePlaces)));
+            when(schedulePlaceRepository.findById(anyLong())).thenReturn(Optional.of(createMockSchedulePlace(1L, 1L, 1)));
+            when(placeRepository.findById(anyLong())).thenReturn(Optional.of(Place.builder().id(1L).build()));
+            when(schedulePlaceRepository.save(any(SchedulePlace.class))).thenReturn(createMockSchedulePlace(2L, 2L, 2));
+
+            // when
+            planService.updatePlan(userId, id, mockUpdateRequestDto);
+
+            // then
+            verify(planRepository, times(1)).existsByIdAndUserId(anyLong(), anyLong());
+            verify(planRepository, times(1)).findById(anyLong());
+            verify(scheduleRepository, times(1)).findById(anyLong());
+            verify(schedulePlaceRepository, times(1)).findById(anyLong());
+            verify(placeRepository, times(1)).findById(anyLong());
+            verify(schedulePlaceRepository, times(1)).save(any(SchedulePlace.class));
+
+            assertThat(planRepository.findById(id).get().getTitle()).isEqualTo(mockUpdateRequestDto.getTitle());
+        }
+
+        @Test
+        @DisplayName("실패 - 사용자ID와 계획ID로 일치하는 계획 정보 없음")
+        void updatePlan_AuthenticationFailed() {
+            // given
+            Long id = 1L;
+            Long userId = 1L;
+            PlanUpdateRequestDto mockRequestDto = createPlanUpdateRequestDto();
+
+            when(planRepository.existsByIdAndUserId(anyLong(), anyLong())).thenReturn(false);
+
+            // when
+            // then
+            assertThatThrownBy(() -> planService.updatePlan(userId, id, mockRequestDto))
+                    .isInstanceOf(AuthenticateFailException.class)
+                    .hasMessage(AUTHENTICATION_FAILED.getMessage());
+        }
+
+        @Test
+        @DisplayName("실패 - 계획 정보 없음")
+        void updatePlan_PlanNotFound() {
+            // given
+            Long id = 1L;
+            Long userId = 1L;
+            PlanUpdateRequestDto mockRequestDto = createPlanUpdateRequestDto();
+
+            when(planRepository.existsByIdAndUserId(anyLong(), anyLong())).thenReturn(true);
+            when(planRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+            // when
+            // then
+            assertThatThrownBy(() -> planService.updatePlan(userId, id, mockRequestDto))
+                    .isInstanceOf(PlanNotFoundException.class)
+                    .hasMessage(PLAN_NOT_FOUND.getMessage());
+        }
+
+        @Test
+        @DisplayName("실패 - 스케쥴 정보 없음")
+        void updatePlan_ScheduleNotFound() {
+            // given
+            Long id = 1L;
+            Long userId = 1L;
+            PlanUpdateRequestDto mockRequestDto = createPlanUpdateRequestDto();
+
+            when(planRepository.existsByIdAndUserId(anyLong(), anyLong())).thenReturn(true);
+            when(planRepository.findById(anyLong())).thenReturn(Optional.of(createMockPlan(1L, null)));
+            when(scheduleRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+            // when
+            // then
+            assertThatThrownBy(() -> planService.updatePlan(userId, id, mockRequestDto))
+                    .isInstanceOf(ScheduleNotFoundException.class)
+                    .hasMessage(SCHEDULE_NOT_FOUND.getMessage());
+        }
+
+        @Test
+        @DisplayName("실패 - 스케줄-장소 정보 없음")
+        void updatePlan_SchedulePlaceNotFound() {
+            // given
+            Long id = 1L;
+            Long userId = 1L;
+            PlanUpdateRequestDto mockRequestDto = createPlanUpdateRequestDto();
+
+            when(planRepository.existsByIdAndUserId(anyLong(), anyLong())).thenReturn(true);
+            when(planRepository.findById(anyLong())).thenReturn(Optional.of(createMockPlan(1L, null)));
+            when(scheduleRepository.findById(anyLong())).thenReturn(Optional.of(createMockSchedule(1L, LocalDate.now(), null)));
+            when(schedulePlaceRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+            // when
+            // then
+            assertThatThrownBy(() -> planService.updatePlan(userId, id, mockRequestDto))
+                    .isInstanceOf(SchedulePlaceNotFoundException.class)
+                    .hasMessage(SCHEDULE_PLACE_NOT_FOUND.getMessage());
         }
     }
 }
