@@ -1,16 +1,15 @@
 package com.triportreat.backend.place.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.triportreat.backend.auth.filter.JwtAuthenticationFilter;
 import com.triportreat.backend.auth.filter.JwtExceptionFilter;
 import com.triportreat.backend.auth.utils.AuthUserArgumentResolver;
 import com.triportreat.backend.common.config.WebConfig;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collections;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.triportreat.backend.place.domain.MyReviewListDto;
 import com.triportreat.backend.place.domain.ReviewListDto;
 import com.triportreat.backend.place.domain.ReviewRequestDto;
 import com.triportreat.backend.place.error.handler.exception.PlaceNotFoundException;
+import com.triportreat.backend.place.error.handler.exception.UserNotFoundException;
 import com.triportreat.backend.place.service.ReviewService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,14 +21,23 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.triportreat.backend.common.response.FailMessage.PLACE_NOT_FOUND;
-import static com.triportreat.backend.common.response.FailMessage.VALIDATION_FAILED;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import static com.triportreat.backend.common.response.FailMessage.*;
+import static com.triportreat.backend.common.response.SuccessMessage.GET_SUCCESS;
 import static com.triportreat.backend.common.response.SuccessMessage.POST_SUCCESS;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -56,6 +64,7 @@ public class ReviewControllerTest {
 
     private ReviewListDto reviewListDto;
     private ReviewRequestDto reviewRequestDto;
+    private List<MyReviewListDto> myReviewListDto;
 
     @BeforeEach
     public void setUp() {
@@ -76,6 +85,10 @@ public class ReviewControllerTest {
                 .tip("testTip")
                 .score(5)
                 .build();
+
+        myReviewListDto = List.of(
+                MyReviewListDto.builder().id(1L).placeName("place1").build(),
+                MyReviewListDto.builder().id(2L).placeName("place2").build());
     }
 
     @Nested
@@ -184,6 +197,65 @@ public class ReviewControllerTest {
                     .andExpect(jsonPath("$.status").value(400))
                     .andExpect(jsonPath("$.data.content").value("내용은 필수 입력값입니다."))
                     .andExpect(jsonPath("$.data.score").value("별점은 필수 입력값입니다."));
+        }
+    }
+
+    @Nested
+    @DisplayName("내 리뷰 목록 조회")
+    class GetMyReviewList{
+
+        @Test
+        @DisplayName("성공")
+        public void getMyReviewList() throws Exception {
+
+            //given
+            when(reviewService.getMyReviewList(anyLong(), any(Pageable.class))).thenReturn(myReviewListDto);
+
+            //when & then
+            mockMvc.perform(get("/reviews/{id}", 1L)
+                    .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.result").value(true))
+                    .andExpect(jsonPath("$.message").value(GET_SUCCESS.getMessage()))
+                    .andExpect(jsonPath("$.status").value(200))
+                    .andExpect(jsonPath("$.data[0].id").value(1L))
+                    .andExpect(jsonPath("$.data[0].placeName").value("place1"))
+                    .andExpect(jsonPath("$.data[1].id").value(2L))
+                    .andExpect(jsonPath("$.data[1].placeName").value("place2"));
+        }
+
+        @Test
+        @DisplayName("성공 - 빈 값 반환")
+        public void getMyReviewList_Empty() throws Exception {
+
+            //given
+            when(reviewService.getMyReviewList(anyLong(), any(Pageable.class))).thenReturn(Collections.emptyList());
+
+            //when & then
+            mockMvc.perform(get("/reviews/{id}", 1L)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.result").value(true))
+                    .andExpect(jsonPath("$.message").value(GET_SUCCESS.getMessage()))
+                    .andExpect(jsonPath("$.status").value(200))
+                    .andExpect(jsonPath("$.data").isEmpty());
+        }
+
+        @Test
+        @DisplayName("실패 - 유저 정보가 없는 경우 예외 발생")
+        public void getMyReviewList_UserNotFoundException() throws Exception {
+
+            //given
+            when(reviewService.getMyReviewList(anyLong(), any(Pageable.class))).thenThrow(UserNotFoundException.class);
+
+            //when & then
+            mockMvc.perform(get("/reviews/{id}", 1L)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.result").value(false))
+                    .andExpect(jsonPath("$.message").value(USER_NOT_FOUND.getMessage()))
+                    .andExpect(jsonPath("$.status").value(500))
+                    .andExpect(jsonPath("$.data").isEmpty());
         }
     }
 }
