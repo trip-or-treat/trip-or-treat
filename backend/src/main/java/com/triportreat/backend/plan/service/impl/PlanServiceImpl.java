@@ -46,7 +46,6 @@ public class PlanServiceImpl implements PlanService {
     @Override
     public void validatePlanOwner(Long id, Long userId) {
         if (!planRepository.existsByIdAndUserId(id, userId)) {
-            System.out.println("PlanServiceImpl.validatePlanOwner");
             throw new AuthenticateFailException();
         }
     }
