@@ -46,6 +46,7 @@ public class PlanServiceImpl implements PlanService {
     @Override
     public void validatePlanOwner(Long id, Long userId) {
         if (!planRepository.existsByIdAndUserId(id, userId)) {
+            System.out.println("PlanServiceImpl.validatePlanOwner");
             throw new AuthenticateFailException();
         }
     }
@@ -71,7 +72,9 @@ public class PlanServiceImpl implements PlanService {
 
     @Transactional
     @Override
-    public void updatePlan(PlanUpdateRequestDto planUpdateRequestDto) {
+    public void updatePlan(Long id, Long userId, PlanUpdateRequestDto planUpdateRequestDto) {
+        validatePlanOwner(id, userId);
+
         Plan plan = planRepository.findById(planUpdateRequestDto.getPlanId())
                 .orElseThrow(PlanNotFoundException::new);
         plan.updateTitle(planUpdateRequestDto.getTitle());

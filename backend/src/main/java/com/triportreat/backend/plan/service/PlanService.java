@@ -12,5 +12,5 @@ public interface PlanService {
 
     PlanDetailResponseDto getPlanDetail(Long id);
 
-    void updatePlan(PlanUpdateRequestDto planUpdateRequestDto);
+    void updatePlan(Long id, Long userId, PlanUpdateRequestDto planUpdateRequestDto);
 }
