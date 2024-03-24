@@ -10,6 +10,11 @@ import NotFoundPage from './pages/NotFoundPage';
 import PlansPage from './pages/PlansPage';
 import KaKaoLogin from './components/KaKaoLogin';
 
+import MyPageLayout from './layouts/MyPageLayout';
+import MyInfoPage from './pages/MyInfoPage';
+import MyPlanPage from './pages/MyPlanPage';
+import MyReviewPage from './pages/MyReviewPage';
+
 const routes = [
   {
     element: <CommonLayout />,
@@ -32,6 +37,16 @@ const routes = [
     element: <CommonLayout />,
     children: [{ path: '/*', element: <NotFoundPage /> }],
   },
+
+  {
+    element: <MyPageLayout />,
+    children: [
+      { path: '/mypage/myInfo', element: <MyInfoPage /> },
+      { path: '/mypage/myPlan', element: <MyPlanPage /> },
+      { path: '/mypage/myReview', element: <MyReviewPage /> },
+    ],
+  },
+
   {
     path: '/login',
     element: <KaKaoLogin />,

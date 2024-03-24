@@ -4,9 +4,12 @@ import com.triportreat.backend.dummy.DummyObject;
 import com.triportreat.backend.place.domain.MyReviewListDto;
 import com.triportreat.backend.place.domain.ReviewListDto;
 import com.triportreat.backend.place.domain.ReviewRequestDto;
+import com.triportreat.backend.place.domain.ReviewUpdateRequestDto;
 import com.triportreat.backend.place.entity.Place;
 import com.triportreat.backend.place.entity.Review;
 import com.triportreat.backend.place.error.handler.exception.PlaceNotFoundException;
+import com.triportreat.backend.place.error.handler.exception.ReviewNotBelongPlaceException;
+import com.triportreat.backend.place.error.handler.exception.ReviewNotFoundException;
 import com.triportreat.backend.place.error.handler.exception.UserNotFoundException;
 import com.triportreat.backend.place.repository.PlaceRepository;
 import com.triportreat.backend.place.repository.ReviewRepository;
@@ -24,6 +27,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 
+import static com.triportreat.backend.common.response.FailMessage.*;
 import static com.triportreat.backend.common.response.FailMessage.PLACE_NOT_FOUND;
 import static com.triportreat.backend.common.response.FailMessage.USER_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -150,6 +154,88 @@ public class ReviewServiceImplTest extends DummyObject {
     }
 
     @Nested
+    @DisplayName("리뷰 수정")
+    class UpdateReview {
+
+        @Test
+        @DisplayName("성공")
+        public void updateReview() {
+
+            //given
+            User user = createMockUser(1L, "testUser");
+            Place place = Place.builder().id(1L).build();
+            Review review = createMockReview(1L, user, place);
+
+            ReviewUpdateRequestDto reviewUpdateRequestDto = createReviewUpdateRequestDto(place.getId());
+
+            when(placeRepository.findById(reviewUpdateRequestDto.getPlaceId())).thenReturn(Optional.of(place));
+            when(reviewRepository.findById(review.getId())).thenReturn(Optional.of(review));
+
+            //when
+            reviewService.updateReview(review.getId(), reviewUpdateRequestDto);
+
+            //then
+            assertThat(review.getPlace().getId()).isEqualTo(1L);
+            assertThat(review.getContent()).isEqualTo("newContent");
+            assertThat(review.getTip()).isEqualTo("newTip");
+            assertThat(review.getScore()).isEqualTo(1);
+        }
+
+        @Test
+        @DisplayName("실패 - 장소 정보가 없을시 없을시 예외발생")
+        public void updateReview_PlaceNotFoundException() {
+
+            //given
+            Place place = Place.builder().id(1L).build();
+            ReviewUpdateRequestDto reviewUpdateRequestDto = createReviewUpdateRequestDto(place.getId());
+
+            //when & then
+            assertThatThrownBy(() -> reviewService.updateReview(place.getId(), reviewUpdateRequestDto))
+                    .isInstanceOf(PlaceNotFoundException.class)
+                    .hasMessageContaining(PLACE_NOT_FOUND.getMessage() + place.getId());
+        }
+
+        @Test
+        @DisplayName("실패 - 수정할 리뷰가 존재하지 않을시 예외발생")
+        public void updateReview_ReviewNotFoundException() {
+
+            //given
+            Place place = Place.builder().id(1L).build();
+            ReviewUpdateRequestDto reviewUpdateRequestDto = createReviewUpdateRequestDto(place.getId());
+
+            when(placeRepository.findById(reviewUpdateRequestDto.getPlaceId())).thenReturn(Optional.of(place));
+
+            //when & then
+            assertThatThrownBy(() -> reviewService.updateReview(place.getId(), reviewUpdateRequestDto))
+                    .isInstanceOf(ReviewNotFoundException.class)
+                    .hasMessageContaining(REVIEW_NOT_FOUND.getMessage());
+        }
+
+        @Test
+        @DisplayName("실패 - 리뷰가 요청된 장소에 속하지 않을시 예외발생")
+        public void updateReview_ReviewNotBelongPlaceException() {
+
+            //given
+            Place place1 = Place.builder().id(1L).build();
+            User user = createMockUser(1L, "testUser");
+            Review review = createMockReview(1L, user, place1);
+
+            //when
+            Place place2 = Place.builder().id(2L).build();
+            ReviewUpdateRequestDto reviewUpdateRequestDto = createReviewUpdateRequestDto(place2.getId());
+
+            when(placeRepository.findById(reviewUpdateRequestDto.getPlaceId())).thenReturn(Optional.of(place2));
+            when(reviewRepository.findById(review.getId())).thenReturn(Optional.of(review));
+
+            //then
+            assertThatThrownBy(() -> reviewService.updateReview(review.getId(), reviewUpdateRequestDto))
+                    .isInstanceOf(ReviewNotBelongPlaceException.class)
+                    .hasMessageContaining(REVIEW_NOT_BELONG_TO_PLACE.getMessage());
+
+        }
+    }
+
+    @Nested
     @DisplayName("내 리뷰 목록 조회")
     class GetMyReviewList {
 
@@ -189,7 +275,7 @@ public class ReviewServiceImplTest extends DummyObject {
             when(userRepository.existsById(user.getId())).thenReturn(false);
 
             //when & then
-            assertThatThrownBy(() -> reviewService.getMyReviewList(user.getId(), null))
+            assertThatThrownBy(() -> reviewService.getMyReviewList(user.getId(), Pageable.unpaged()))
                     .isInstanceOf(UserNotFoundException.class)
                     .hasMessageContaining(USER_NOT_FOUND.getMessage());
         }

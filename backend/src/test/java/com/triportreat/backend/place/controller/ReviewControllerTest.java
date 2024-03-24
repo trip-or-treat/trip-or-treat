@@ -8,7 +8,10 @@ import com.triportreat.backend.common.config.WebConfig;
 import com.triportreat.backend.place.domain.MyReviewListDto;
 import com.triportreat.backend.place.domain.ReviewListDto;
 import com.triportreat.backend.place.domain.ReviewRequestDto;
+import com.triportreat.backend.place.domain.ReviewUpdateRequestDto;
 import com.triportreat.backend.place.error.handler.exception.PlaceNotFoundException;
+import com.triportreat.backend.place.error.handler.exception.ReviewNotBelongPlaceException;
+import com.triportreat.backend.place.error.handler.exception.ReviewNotFoundException;
 import com.triportreat.backend.place.error.handler.exception.UserNotFoundException;
 import com.triportreat.backend.place.service.ReviewService;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,15 +34,14 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.triportreat.backend.common.response.FailMessage.*;
-import static com.triportreat.backend.common.response.SuccessMessage.GET_SUCCESS;
-import static com.triportreat.backend.common.response.SuccessMessage.POST_SUCCESS;
+import static com.triportreat.backend.common.response.SuccessMessage.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -64,6 +66,7 @@ public class ReviewControllerTest {
 
     private ReviewListDto reviewListDto;
     private ReviewRequestDto reviewRequestDto;
+    private ReviewUpdateRequestDto reviewUpdateRequestDto;
     private List<MyReviewListDto> myReviewListDto;
 
     @BeforeEach
@@ -84,6 +87,13 @@ public class ReviewControllerTest {
                 .content("testContent")
                 .tip("testTip")
                 .score(5)
+                .build();
+
+        reviewUpdateRequestDto = ReviewUpdateRequestDto.builder()
+                .placeId(1L)
+                .content("testContent")
+                .tip("testTip")
+                .score(3)
                 .build();
 
         myReviewListDto = List.of(
@@ -179,6 +189,7 @@ public class ReviewControllerTest {
         @Test
         @DisplayName("실패 - 유효성 검증 실패")
         void createReview_ValidationFail() throws Exception {
+
             //given
             reviewRequestDto = ReviewRequestDto.builder()
                     .userId(1L)
@@ -195,6 +206,107 @@ public class ReviewControllerTest {
                     .andExpect(jsonPath("$.result").value(false))
                     .andExpect(jsonPath("$.message").value(VALIDATION_FAILED.getMessage()))
                     .andExpect(jsonPath("$.status").value(400))
+                    .andExpect(jsonPath("$.data.content").value("내용은 필수 입력값입니다."))
+                    .andExpect(jsonPath("$.data.score").value("별점은 필수 입력값입니다."));
+        }
+    }
+
+    @Nested
+    @DisplayName("리뷰 수정")
+    class UpdateReview {
+
+        @Test
+        @DisplayName("성공")
+        public void updateReview() throws Exception {
+
+            mockMvc.perform(put("/reviews/{id}", 1L)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(reviewUpdateRequestDto)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.result").value(true))
+                    .andExpect(jsonPath("$.message").value(PUT_SUCCESS.getMessage()))
+                    .andExpect(jsonPath("$.status").value(200))
+                    .andExpect(jsonPath("$.data").isEmpty());
+        }
+
+        @Test
+        @DisplayName("실패 - 장소 정보가 없을시 예외 발생")
+        public void updateReview_PlaceNotFoundException() throws Exception {
+
+            //given
+            doThrow(new PlaceNotFoundException(reviewUpdateRequestDto.getPlaceId())).when(reviewService).updateReview(anyLong(), any(ReviewUpdateRequestDto.class));
+
+            //when & then
+            mockMvc.perform(put("/reviews/{id}", 1L)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(reviewUpdateRequestDto)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.result").value(false))
+                    .andExpect(jsonPath("$.message").value(PLACE_NOT_FOUND.getMessage()+reviewUpdateRequestDto.getPlaceId()))
+                    .andExpect(result -> assertTrue(result.getResolvedException() instanceof PlaceNotFoundException))
+                    .andExpect(jsonPath("$.status").value(400))
+                    .andExpect(jsonPath("$.data").isEmpty());
+        }
+
+        @Test
+        @DisplayName("실패 - 리뷰 정보가 없을시 예외 발생")
+        public void updateReview_ReviewNotFoundException() throws Exception {
+
+            //given
+            doThrow(new ReviewNotFoundException()).when(reviewService).updateReview(anyLong(), any(ReviewUpdateRequestDto.class));
+
+            //when & then
+            mockMvc.perform(put("/reviews/{id}", 1L)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(reviewUpdateRequestDto)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.result").value(false))
+                    .andExpect(jsonPath("$.message").value(REVIEW_NOT_FOUND.getMessage()))
+                    .andExpect(result -> assertTrue(result.getResolvedException() instanceof ReviewNotFoundException))
+                    .andExpect(jsonPath("$.status").value(400))
+                    .andExpect(jsonPath("$.data").isEmpty());
+        }
+
+        @Test
+        @DisplayName("실패 - 리뷰가 요청된 장소에 속하지 않을시 예외발생")
+        public void updateReview_ReviewNotBelongPlaceException() throws Exception {
+
+            //given
+            doThrow(new ReviewNotBelongPlaceException()).when(reviewService).updateReview(anyLong(), any(ReviewUpdateRequestDto.class));
+
+            //when & then
+            mockMvc.perform(put("/reviews/{id}", 1L)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(reviewUpdateRequestDto)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.result").value(false))
+                    .andExpect(jsonPath("$.message").value(REVIEW_NOT_BELONG_TO_PLACE.getMessage()))
+                    .andExpect(result -> assertTrue(result.getResolvedException() instanceof ReviewNotBelongPlaceException))
+                    .andExpect(jsonPath("$.status").value(400))
+                    .andExpect(jsonPath("$.data").isEmpty());
+        }
+
+        @Test
+        @DisplayName("실패 - 유효성 검증 실패")
+        void updateReview_ValidationFail() throws Exception {
+
+            //given
+            reviewUpdateRequestDto = ReviewUpdateRequestDto.builder()
+                    .placeId(null)
+                    .content("")
+                    .tip("testTip")
+                    .score(null)
+                    .build();
+
+            //when & then
+            mockMvc.perform(put("/reviews/{id}", 1L)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(reviewUpdateRequestDto)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.result").value(false))
+                    .andExpect(jsonPath("$.message").value(VALIDATION_FAILED.getMessage()))
+                    .andExpect(jsonPath("$.status").value(400))
+                    .andExpect(jsonPath("$.data.placeId").value("placeId는 필수입니다."))
                     .andExpect(jsonPath("$.data.content").value("내용은 필수 입력값입니다."))
                     .andExpect(jsonPath("$.data.score").value("별점은 필수 입력값입니다."));
         }

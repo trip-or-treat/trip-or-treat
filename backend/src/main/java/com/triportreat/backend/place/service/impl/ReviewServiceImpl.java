@@ -4,9 +4,12 @@ package com.triportreat.backend.place.service.impl;
 import com.triportreat.backend.place.domain.MyReviewListDto;
 import com.triportreat.backend.place.domain.ReviewListDto;
 import com.triportreat.backend.place.domain.ReviewRequestDto;
+import com.triportreat.backend.place.domain.ReviewUpdateRequestDto;
 import com.triportreat.backend.place.entity.Place;
 import com.triportreat.backend.place.entity.Review;
 import com.triportreat.backend.place.error.handler.exception.PlaceNotFoundException;
+import com.triportreat.backend.place.error.handler.exception.ReviewNotBelongPlaceException;
+import com.triportreat.backend.place.error.handler.exception.ReviewNotFoundException;
 import com.triportreat.backend.place.error.handler.exception.UserNotFoundException;
 import com.triportreat.backend.place.repository.PlaceRepository;
 import com.triportreat.backend.place.repository.ReviewRepository;
@@ -68,6 +71,22 @@ public class ReviewServiceImpl implements ReviewService {
             Place place = review.getPlace();
             return MyReviewListDto.toDto(review, place);
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void updateReview(Long id, ReviewUpdateRequestDto reviewUpdateRequestDto) {
+        Place place = placeRepository.findById(reviewUpdateRequestDto.getPlaceId())
+                .orElseThrow(() -> new PlaceNotFoundException(reviewUpdateRequestDto.getPlaceId()));
+
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(ReviewNotFoundException::new);
+
+        if(!review.getPlace().equals(place)) {
+            throw new ReviewNotBelongPlaceException();
+        }
+
+        review.reviewUpdate(reviewUpdateRequestDto.getContent(), reviewUpdateRequestDto.getTip(), reviewUpdateRequestDto.getScore());
     }
 }
 

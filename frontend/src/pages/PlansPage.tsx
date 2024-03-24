@@ -5,23 +5,36 @@ import styled from 'styled-components';
 
 import myRegionListAtom from 'src/atoms/myRegionListAtom';
 import totalPlanAtom from 'src/atoms/totalPlanAtom';
+import loginStateAtom from 'src/atoms/loginStateAtom';
 
 import AlertModal from 'src/components/AlertModal';
 import ConfirmSaveModal from 'src/components/ConfirmSaveModal';
 import CommonButton from 'src/components/common/CommonButton';
-import PlansList from 'src/components/PlansList';
+import PlanNavBar from 'src/components/plan/PlanNavBar';
+import PlansList from 'src/components/plan/PlansList';
+
 import FailDataPage from './FailDataPage';
 
-const parseName = (name: string) => {
-  return name.length > 5 ? name.slice(0, 2) : name;
-};
-
 const PlansPage = () => {
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+
   const myRegionList = useRecoilValue(myRegionListAtom);
   const totalPlan = useRecoilValue(totalPlanAtom);
-  const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
-  const isLoggedIn = false;
+  const isLoggedIn = useRecoilValue(loginStateAtom);
+
+  const schedules = totalPlan.map(({ date, items }) => ({
+    date,
+    schedulePlaces: items.map((item, idx) => ({
+      name: item.name,
+      imageThumbnail: item.imageThumbnail,
+      subCategoryName: item.subCategoryName,
+      placeId: item.id,
+      visitOrder: idx + 1,
+      memo: item.memo ?? '',
+      expense: item.expense ?? 0,
+    })),
+  }));
 
   const onClose = () => {
     setOpen(false);
@@ -32,12 +45,13 @@ const PlansPage = () => {
   return (
     <Main>
       <Wrapper>
-        <TitleAndDateBox>
-          <ul>{myRegionList?.map((item) => <li key={item.id}>{parseName(item.name)}</li>)}</ul>
-          <p> {`${totalPlan[0]?.date} ~ ${totalPlan[totalPlan.length - 1]?.date}`}</p>
-        </TitleAndDateBox>
-
-        <PlansList />
+        <PlanNavBar
+          startDate={totalPlan[0].date}
+          endDate={totalPlan[totalPlan.length - 1].date}
+          regions={myRegionList.map((data) => data.id)}
+          schedules={schedules}
+        />
+        <PlansList schedules={schedules} />
 
         <ButtonBox>
           <CommonButton onClick={() => setOpen(true)}>저장할래요!</CommonButton>
@@ -57,54 +71,34 @@ const PlansPage = () => {
 };
 
 export default PlansPage;
+
 const Main = styled.main`
   position: fixed;
 
-  height: calc(100vh - ${(props) => props.theme.height.topNavHeight});
   width: 100vw;
+  height: calc(100vh - ${(props) => props.theme.height.topNavHeight});
+
   margin-top: ${(props) => props.theme.height.topNavHeight};
-  padding: 50px 75px;
+  padding: 40px 75px;
 
   box-sizing: border-box;
 `;
 
 const Wrapper = styled.div`
   overflow: hidden;
-`;
-
-const TitleAndDateBox = styled.div`
-  display: flex;
-  align-items: flex-end;
-  width: 30%;
-
-  ul {
-    display: flex;
-  }
-
-  p {
-    font-size: 15px;
-    font-family: 'Pretendard-Medium';
-    color: ${(props) => props.theme.colors.darkGrey};
-  }
-
-  li {
-    margin-right: 20px;
-
-    color: ${(props) => props.theme.colors.blackFont};
-    font-size: 25px;
-    font-family: 'Pretendard-Bold';
-  }
+  justify-content: center;
 `;
 
 const ButtonBox = styled.div`
   display: flex;
   justify-content: center;
 
-  margin-top: 50px;
+  margin-top: 40px;
 
   button {
     width: 200px;
     height: 50px;
+
     margin: 0px 10px;
 
     font-size: 18px;
