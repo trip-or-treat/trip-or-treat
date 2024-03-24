@@ -72,4 +72,43 @@ public class ReviewRepositoryTest {
         assertThat(reviews.get(0).getContent()).isEqualTo("review1");
         assertThat(reviews).hasSize(2);
     }
+
+    @Test
+    @DisplayName("유저 id에 따른 리뷰 조회")
+    public void findByUserIdTest() {
+
+        //given
+        User user = User.builder()
+                .id(1L)
+                .nickname("test name")
+                .build();
+        userRepository.save(user);
+
+        Review review1 = Review.builder()
+                .id(1L)
+                .content("review1")
+                .tip("tip1")
+                .score(5)
+                .user(user)
+                .build();
+        reviewRepository.save(review1);
+
+        Review review2 = Review.builder()
+                .id(2L)
+                .content("review2")
+                .tip("tip2")
+                .score(3)
+                .user(user)
+                .build();
+        reviewRepository.save(review2);
+
+        //when
+        Pageable pageable = PageRequest.of(0, 10);
+        List<Review> reviews = reviewRepository.findByUserId(user.getId(), pageable);
+
+        //then
+        assertThat(reviews).hasSize(2);
+        assertThat(reviews.get(0).getContent()).isEqualTo("review1");
+        assertThat(reviews.get(1).getContent()).isEqualTo("review2");
+    }
 }
