@@ -1,6 +1,7 @@
 package com.triportreat.backend.place.service.impl;
 
 
+import com.triportreat.backend.place.domain.MyReviewListDto;
 import com.triportreat.backend.place.domain.ReviewListDto;
 import com.triportreat.backend.place.domain.ReviewRequestDto;
 import com.triportreat.backend.place.entity.Place;
@@ -51,6 +52,22 @@ public class ReviewServiceImpl implements ReviewService {
 
         Review review = Review.toEntity(reviewRequestDto, user, place);
         reviewRepository.save(review);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<MyReviewListDto> getMyReviewList(Long id, Pageable pageable) {
+
+        if (!userRepository.existsById(id)) {
+            throw new UserNotFoundException();
+        }
+
+        List<Review> reviews = reviewRepository.findByUserId(id, pageable);
+
+        return reviews.stream().map(review -> {
+            Place place = review.getPlace();
+            return MyReviewListDto.toDto(review, place);
+        }).collect(Collectors.toList());
     }
 }
 
