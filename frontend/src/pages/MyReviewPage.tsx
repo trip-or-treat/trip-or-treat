@@ -47,6 +47,34 @@ const MY_REVIEW_DATA = [
     score: 3,
     createdAt: '2024-03-14',
   },
+  {
+    placeId: '7',
+    review: '사람이 너무너무 많아요 근데 볼거리가 진짜 많아서 추천해요!',
+    place: '망원 한강공원',
+    score: 2,
+    createdAt: '2024-03-14',
+  },
+  {
+    placeId: '8',
+    review: '사람이 너무너무 많아요 근데 볼거리가 진짜 많아서 추천해요!',
+    place: '망원 한강공원',
+    score: 1,
+    createdAt: '2024-03-14',
+  },
+  {
+    placeId: '9',
+    review: '사람이 너무너무 많아요 근데 볼거리가 진짜 많아서 추천해요!',
+    place: '망원 한강공원',
+    score: 4,
+    createdAt: '2024-03-14',
+  },
+  {
+    placeId: '10',
+    review: '사람이 너무너무 많아요 근데 볼거리가 진짜 많아서 추천해요!',
+    place: '망원 한강공원',
+    score: 3,
+    createdAt: '2024-03-14',
+  },
 ];
 
 const MyReviewPage = () => {
