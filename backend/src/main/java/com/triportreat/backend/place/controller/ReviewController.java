@@ -30,4 +30,9 @@ public class ReviewController {
         reviewService.createReview(reviewRequestDto);
         return ResponseEntity.ok().body(ResponseResult.success(POST_SUCCESS.getMessage(), null));
     }
+
+    @GetMapping("/reviews/{id}")
+    public ResponseEntity<?> getMyReviewList(@PathVariable Long id, @PageableDefault(size = 10) Pageable pageable) {
+        return ResponseEntity.ok().body(ResponseResult.success(GET_SUCCESS.getMessage(), reviewService.getMyReviewList(id, pageable)));
+    }
 }
