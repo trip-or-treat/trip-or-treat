@@ -1,6 +1,7 @@
 package com.triportreat.backend.place.service.impl;
 
 import com.triportreat.backend.dummy.DummyObject;
+import com.triportreat.backend.place.domain.MyReviewListDto;
 import com.triportreat.backend.place.domain.ReviewListDto;
 import com.triportreat.backend.place.domain.ReviewRequestDto;
 import com.triportreat.backend.place.entity.Place;
@@ -23,6 +24,8 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 
+import static com.triportreat.backend.common.response.FailMessage.PLACE_NOT_FOUND;
+import static com.triportreat.backend.common.response.FailMessage.USER_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -33,7 +36,7 @@ import static org.mockito.Mockito.when;
 public class ReviewServiceImplTest extends DummyObject {
 
     @InjectMocks
-    private ReviewServiceImpl reviewListService;
+    private ReviewServiceImpl reviewService;
 
     @Mock
     private ReviewRepository reviewRepository;
@@ -53,13 +56,14 @@ public class ReviewServiceImplTest extends DummyObject {
         public void getReviewList() {
             //given
             User user = createMockUser(1L, "testUser");
-            List<Review> reviews = List.of(createMockReview(1L, user), createMockReview(2L, user));
+            Place place = Place.builder().id(1L).build();
+            List<Review> reviews = List.of(createMockReview(1L, user, place), createMockReview(2L, user, place));
 
             when(reviewRepository.findByPlaceId(1L, Pageable.unpaged())).thenReturn(reviews);
             when(placeRepository.existsById(1L)).thenReturn(true);
 
             //when
-            List<ReviewListDto> reviewList = reviewListService.getReviewList(1L, Pageable.unpaged());
+            List<ReviewListDto> reviewList = reviewService.getReviewList(1L, Pageable.unpaged());
 
             //then
             assertThat(reviewList).hasSize(2);
@@ -78,15 +82,15 @@ public class ReviewServiceImplTest extends DummyObject {
             //given
             User user = createMockUser(1L, "testUser");
             Place place = Place.builder().id(1L).build();
-            List<Review> reviews = List.of(createMockReview(1L, user), createMockReview(2L, user));
+            List<Review> reviews = List.of(createMockReview(1L, user, place), createMockReview(2L, user, place));
 
             when(reviewRepository.findByPlaceId(1L, Pageable.unpaged())).thenReturn(reviews);
             when(placeRepository.existsById(1L)).thenReturn(false);
 
             //when & then
-            assertThatThrownBy(() -> reviewListService.getReviewList(1L, Pageable.unpaged()))
+            assertThatThrownBy(() -> reviewService.getReviewList(1L, Pageable.unpaged()))
                     .isInstanceOf(PlaceNotFoundException.class)
-                    .hasMessageContaining("장소가 존재하지 않습니다!" + place.getId());
+                    .hasMessageContaining(PLACE_NOT_FOUND.getMessage() + place.getId());
         }
     }
     
@@ -105,7 +109,7 @@ public class ReviewServiceImplTest extends DummyObject {
             when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
             //when
-            reviewListService.createReview(reviewRequestDto);
+            reviewService.createReview(reviewRequestDto);
 
             //then
             verify(reviewRepository).save(any(Review.class));
@@ -122,9 +126,9 @@ public class ReviewServiceImplTest extends DummyObject {
             when(placeRepository.findById(1L)).thenReturn(Optional.empty());
 
             //when & then
-            assertThatThrownBy(() -> reviewListService.createReview(reviewRequestDto))
+            assertThatThrownBy(() -> reviewService.createReview(reviewRequestDto))
                     .isInstanceOf(PlaceNotFoundException.class)
-                    .hasMessageContaining("장소가 존재하지 않습니다!" + place.getId());
+                    .hasMessageContaining(PLACE_NOT_FOUND.getMessage() + place.getId());
         }
 
         @Test
@@ -139,9 +143,55 @@ public class ReviewServiceImplTest extends DummyObject {
             when(userRepository.findById(1L)).thenReturn(Optional.empty());
 
             //when & then
-            assertThatThrownBy(() -> reviewListService.createReview(reviewRequestDto))
+            assertThatThrownBy(() -> reviewService.createReview(reviewRequestDto))
                     .isInstanceOf(UserNotFoundException.class)
-                    .hasMessageContaining("사용자가 존재하지 않습니다!");
+                    .hasMessageContaining(USER_NOT_FOUND.getMessage());
+        }
+    }
+
+    @Nested
+    @DisplayName("내 리뷰 목록 조회")
+    class GetMyReviewList {
+
+        @Test
+        @DisplayName("성공")
+        public void getMyReviewList() {
+
+            //given
+            User user = createMockUser(1L, "testUser");
+            Place place1 = Place.builder().name("place1").build();
+            Place place2 = Place.builder().name("place2").build();
+            List<Review> reviews = List.of(createMockReview(1L, user, place1), createMockReview(2L, user, place2));
+
+            when(userRepository.existsById(user.getId())).thenReturn(true);
+            when(reviewRepository.findByUserId(user.getId(), Pageable.unpaged())).thenReturn(reviews);
+
+            //when
+            List<MyReviewListDto> myReviewList = reviewService.getMyReviewList(user.getId(), Pageable.unpaged());
+
+            //then
+            assertThat(myReviewList).hasSize(2);
+            assertThat(myReviewList.get(0).getId()).isEqualTo(1L);
+            assertThat(myReviewList.get(0).getContent()).isEqualTo("testContent");
+            assertThat(myReviewList.get(0).getTip()).isEqualTo("testTip");
+            assertThat(myReviewList.get(0).getPlaceName()).isEqualTo("place1");
+            assertThat(myReviewList.get(0).getScore()).isEqualTo(5);
+            assertThat(myReviewList.get(1).getId()).isEqualTo(2L);
+            assertThat(myReviewList.get(1).getPlaceName()).isEqualTo("place2");
+        }
+
+        @Test
+        @DisplayName("실패 - 유저 정보가 없을시 예외발생")
+        public void getMyReviewList_UserNotFoundException() {
+
+            //given
+            User user = createMockUser(1L, "testUser");
+            when(userRepository.existsById(user.getId())).thenReturn(false);
+
+            //when & then
+            assertThatThrownBy(() -> reviewService.getMyReviewList(user.getId(), null))
+                    .isInstanceOf(UserNotFoundException.class)
+                    .hasMessageContaining(USER_NOT_FOUND.getMessage());
         }
     }
 }

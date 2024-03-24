@@ -78,10 +78,11 @@ public class DummyObject {
                 .build();
     }
 
-    protected Review createMockReview(Long id, User user) {
+    protected Review createMockReview(Long id, User user, Place place) {
         return Review.builder()
                 .id(id)
                 .user(user)
+                .place(place)
                 .tip("testTip")
                 .content("testContent")
                 .score(5)
