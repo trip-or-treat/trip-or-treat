@@ -1,6 +1,7 @@
 package com.triportreat.backend.dummy;
 
 import com.triportreat.backend.place.domain.ReviewRequestDto;
+import com.triportreat.backend.place.domain.ReviewUpdateRequestDto;
 import com.triportreat.backend.place.entity.Place;
 import com.triportreat.backend.place.entity.Review;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
@@ -78,10 +79,11 @@ public class DummyObject {
                 .build();
     }
 
-    protected Review createMockReview(Long id, User user) {
+    protected Review createMockReview(Long id, User user, Place place) {
         return Review.builder()
                 .id(id)
                 .user(user)
+                .place(place)
                 .tip("testTip")
                 .content("testContent")
                 .score(5)
@@ -95,6 +97,15 @@ public class DummyObject {
                 .content("testContent")
                 .tip("testTip")
                 .score(5)
+                .build();
+    }
+
+    protected ReviewUpdateRequestDto createReviewUpdateRequestDto(Long id) {
+        return ReviewUpdateRequestDto.builder()
+                .placeId(id)
+                .content("newContent")
+                .tip("newTip")
+                .score(1)
                 .build();
     }
 }

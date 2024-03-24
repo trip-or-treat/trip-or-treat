@@ -45,4 +45,10 @@ public class Review extends BaseTimeEntity {
                 .score(reviewRequestDto.getScore())
                 .build();
     }
+
+    public void reviewUpdate(String content, String tip, Integer score) {
+        this.content = content;
+        this.tip = tip;
+        this.score = score;
+    }
 }
