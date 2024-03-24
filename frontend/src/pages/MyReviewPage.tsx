@@ -54,18 +54,20 @@ const MyReviewPage = () => {
     <Wrapper>
       <MyPageTitle>내 리뷰 목록</MyPageTitle>
       <ReviewListCategory />
-      {MY_REVIEW_DATA.map((data, idx) => {
-        return (
-          <MyReviewList
-            key={data.placeId}
-            idx={idx + 1}
-            review={data.review}
-            place={data.place}
-            score={data.score}
-            createdAt={data.createdAt}
-          />
-        );
-      })}
+      <ListContainer>
+        {MY_REVIEW_DATA.map((data, idx) => {
+          return (
+            <MyReviewList
+              key={data.placeId}
+              idx={idx + 1}
+              review={data.review}
+              place={data.place}
+              score={data.score}
+              createdAt={data.createdAt}
+            />
+          );
+        })}
+      </ListContainer>
     </Wrapper>
   );
 };
@@ -74,4 +76,9 @@ export default MyReviewPage;
 
 const Wrapper = styled.div`
   width: 800px;
+`;
+
+const ListContainer = styled.div`
+  max-height: 60vh;
+  overflow-y: auto;
 `;

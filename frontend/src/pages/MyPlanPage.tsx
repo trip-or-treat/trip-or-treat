@@ -92,7 +92,7 @@ const MY_PLANS_DATA = [
 
 const MyPlanPage = () => {
   return (
-    <Wrapper>
+    <div>
       <MyPageTitle>내 여행계획</MyPageTitle>
       <SearchBox>
         <SearchToggle />
@@ -104,26 +104,31 @@ const MyPlanPage = () => {
         <Button $isClicked={false}>2024</Button>
       </FilterBox>
       <PlanListCategory />
-      {MY_PLANS_DATA.map((data, idx) => {
-        return (
-          <MyPlanList
-            key={data.planId}
-            idx={idx + 1}
-            title={data.title}
-            regions={data.regions}
-            startDate={data.startDate}
-            endDate={data.endDate}
-            createdDate={data.createdDate}
-          />
-        );
-      })}
-    </Wrapper>
+      <ListContainer>
+        {MY_PLANS_DATA.map((data, idx) => {
+          return (
+            <MyPlanList
+              key={data.planId}
+              idx={idx + 1}
+              title={data.title}
+              regions={data.regions}
+              startDate={data.startDate}
+              endDate={data.endDate}
+              createdDate={data.createdDate}
+            />
+          );
+        })}
+      </ListContainer>
+    </div>
   );
 };
 
 export default MyPlanPage;
 
-const Wrapper = styled.div``;
+const ListContainer = styled.div`
+  max-height: 50vh;
+  overflow-y: auto;
+`;
 
 const SearchBox = styled.div`
   display: flex;

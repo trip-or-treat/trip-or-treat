@@ -15,10 +15,12 @@ export default MyPageNavBar;
 
 const NavBox = styled.div`
   position: fixed;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  top: 120px;
 
   margin-left: 15%;
   width: 170px;
@@ -33,7 +35,7 @@ const NavItem = styled(NavLink)`
   justify-content: center;
   align-items: center;
 
-  width: 170px;
+  width: 171px;
   height: 50px;
 
   border-radius: 10px;
