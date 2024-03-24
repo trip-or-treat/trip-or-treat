@@ -54,6 +54,10 @@ const ReviewContainer = styled.div`
   svg {
     width: 25px;
     cursor: pointer;
+
+    &:hover {
+      fill: ${(props) => props.theme.colors.mainColor};
+    }
   }
 `;
 

@@ -40,8 +40,7 @@ const PlanContainer = styled.div`
     width: 28px;
 
     &:hover {
-      filter: invert(16%) sepia(89%) saturate(6051%) hue-rotate(358deg) brightness(85%)
-        contrast(113%);
+      fill: ${(props) => props.theme.colors.mainColor};
     }
   }
 `;
