@@ -78,15 +78,7 @@ public class PlanServiceImpl implements PlanService {
                 .orElseThrow(PlanNotFoundException::new);
         plan.updateTitle(planUpdateRequestDto.getTitle());
 
-//        List<ScheduleUpdateRequestDto> scheduleDtos = planUpdateRequestDto.getSchedules();
         updateSchedules(planUpdateRequestDto.getSchedules());
-
-//        scheduleDtos.forEach(scheduleDto -> {
-//            Schedule schedule = scheduleRepository.findByIdWithSchedulePlacesFetchJoin(scheduleDto.getScheduleId())
-//                    .orElseThrow(ScheduleNotFoundException::new);
-//
-//            updateSchedule(schedule, scheduleDtos);
-//        });
     }
 
     private void updateSchedules(List<ScheduleUpdateRequestDto> scheduleDtos) {
@@ -98,10 +90,6 @@ public class PlanServiceImpl implements PlanService {
 
             updateSchedulePlaces(schedule, scheduleDto.getSchedulePlaces());
         });
-
-
-//        List<SchedulePlaceUpdateRequestDto> schedulePlaces = scheduleDto.getSchedulePlaces();
-//        updateSchedulePlaces(schedule, schedulePlaces);
     }
 
     private void updateSchedulePlaces(Schedule schedule, List<SchedulePlaceUpdateRequestDto> schedulePlaceDtos) {
