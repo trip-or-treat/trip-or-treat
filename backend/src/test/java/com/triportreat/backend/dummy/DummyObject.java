@@ -136,8 +136,6 @@ public class DummyObject {
                         .build());
 
         return PlanUpdateRequestDto.builder()
-                .userId(1L)
-                .planId(1L)
                 .title("수정한 계획 제목")
                 .schedules(mockSchedules)
                 .build();

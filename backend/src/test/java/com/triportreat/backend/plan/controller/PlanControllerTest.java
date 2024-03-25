@@ -233,17 +233,19 @@ class PlanControllerTest {
             Long id = 1L;
             Long userId = 1L;
             PlanUpdateRequestDto planUpdateRequestDto = createPlanUpdateRequestDto();
+            planUpdateRequestDto.setPlanId(id);
+            planUpdateRequestDto.setUserId(userId);
 
-            doNothing().when(planService).updatePlan(userId, id, planUpdateRequestDto);
+            doNothing().when(planService).updatePlan(planUpdateRequestDto);
 
             // when
-            planService.updatePlan(userId, id, planUpdateRequestDto);
+            planService.updatePlan(planUpdateRequestDto);
 
             // then
             mockMvc.perform(patch("/plans/{id}", id)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(planUpdateRequestDto)))
-                    .andExpect(result -> verify(planService).updatePlan(userId, id, planUpdateRequestDto))
+                    .andExpect(result -> verify(planService).updatePlan(planUpdateRequestDto))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.result", equalTo(true)))
                     .andExpect(jsonPath("$.status", equalTo(OK.value())))
@@ -258,12 +260,14 @@ class PlanControllerTest {
             Long id = 1L;
             Long userId = 2L;
             PlanUpdateRequestDto planUpdateRequestDto = createPlanUpdateRequestDto();
+            planUpdateRequestDto.setPlanId(id);
+            planUpdateRequestDto.setUserId(userId);
 
-            doThrow(new AuthenticateFailException()).when(planService).updatePlan(id, userId, planUpdateRequestDto);
+            doThrow(new AuthenticateFailException()).when(planService).updatePlan(planUpdateRequestDto);
 
             // when
             try {
-                planService.updatePlan(userId, id, planUpdateRequestDto);
+                planService.updatePlan(planUpdateRequestDto);
             } catch (AuthenticateFailException e) {
 
                 //then
@@ -281,12 +285,14 @@ class PlanControllerTest {
             Long id = 2L;
             Long userId = 1L;
             PlanUpdateRequestDto planUpdateRequestDto = createPlanUpdateRequestDto();
+            planUpdateRequestDto.setPlanId(id);
+            planUpdateRequestDto.setUserId(userId);
 
-            doThrow(PlanNotFoundException.class).when(planService).updatePlan(userId, id, planUpdateRequestDto);
+            doThrow(PlanNotFoundException.class).when(planService).updatePlan(planUpdateRequestDto);
 
             // when
             try {
-                planService.updatePlan(userId, id, planUpdateRequestDto);
+                planService.updatePlan(planUpdateRequestDto);
             } catch (PlanNotFoundException e) {
                 // then
                 ResponseResult.fail(e.getMessage(), e.getStatus(), null);

@@ -38,6 +38,7 @@ import com.triportreat.backend.plan.service.impl.PlanServiceImpl;
 import com.triportreat.backend.user.entity.User;
 import com.triportreat.backend.user.repository.UserRepository;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -203,51 +204,59 @@ class PlanServiceTest extends DummyObject {
 
         @Test
         @DisplayName("성공")
-        void updatePlan_CreateNewSchedulePlace() {
+        void updatePlan() {
             // given
             Long id = 1L;
             Long userId = 1L;
             PlanUpdateRequestDto mockUpdateRequestDto = createPlanUpdateRequestDto();
+            mockUpdateRequestDto.setPlanId(id);
+            mockUpdateRequestDto.setUserId(userId);
 
-            List<SchedulePlace> mockSchedulePlaces = List.of(createMockSchedulePlace(1L, 1L, 1));
-            List<Schedule> mockSchedules = List.of(createMockSchedule(1L, LocalDate.now(), mockSchedulePlaces));
+            SchedulePlace mockSchedulePlace = createMockSchedulePlace(1L, 1L, 1);
+            List<SchedulePlace> mockSchedulePlaces = new ArrayList<>();
+            mockSchedulePlaces.add(mockSchedulePlace);
+
+            Schedule mockSchedule = createMockSchedule(1L, LocalDate.now(), mockSchedulePlaces);
+            List<Schedule> mockSchedules = new ArrayList<>();
+            mockSchedules.add(mockSchedule);
+
             Plan mockPlan = createMockPlan(1L, mockSchedules);
 
-
             when(planRepository.existsByIdAndUserId(anyLong(), anyLong())).thenReturn(true);
-            when(planRepository.findById(anyLong())).thenReturn(Optional.ofNullable(mockPlan));
-            when(scheduleRepository.findById(anyLong())).thenReturn(Optional.of(createMockSchedule(1L, LocalDate.now(), mockSchedulePlaces)));
-            when(schedulePlaceRepository.findById(anyLong())).thenReturn(Optional.of(createMockSchedulePlace(1L, 1L, 1)));
+            when(planRepository.findByIdWithSchedulesFetchJoin(anyLong())).thenReturn(Optional.ofNullable(mockPlan));
+            when(scheduleRepository.findByIdWithSchedulePlacesFetchJoin(anyLong())).thenReturn(Optional.of(mockSchedule));
+            when(schedulePlaceRepository.findById(anyLong())).thenReturn(Optional.of(mockSchedulePlace));
             when(placeRepository.findById(anyLong())).thenReturn(Optional.of(Place.builder().id(1L).build()));
             when(schedulePlaceRepository.save(any(SchedulePlace.class))).thenReturn(createMockSchedulePlace(2L, 2L, 2));
 
             // when
-            planService.updatePlan(userId, id, mockUpdateRequestDto);
+            planService.updatePlan(mockUpdateRequestDto);
 
             // then
             verify(planRepository, times(1)).existsByIdAndUserId(anyLong(), anyLong());
-            verify(planRepository, times(1)).findById(anyLong());
-            verify(scheduleRepository, times(1)).findById(anyLong());
+            verify(planRepository, times(1)).findByIdWithSchedulesFetchJoin(anyLong());
+            verify(scheduleRepository, times(1)).findByIdWithSchedulePlacesFetchJoin(anyLong());
             verify(schedulePlaceRepository, times(1)).findById(anyLong());
             verify(placeRepository, times(1)).findById(anyLong());
             verify(schedulePlaceRepository, times(1)).save(any(SchedulePlace.class));
 
-            assertThat(planRepository.findById(id).get().getTitle()).isEqualTo(mockUpdateRequestDto.getTitle());
+            assertThat(planRepository.findByIdWithSchedulesFetchJoin(id).get().getTitle()).isEqualTo(mockUpdateRequestDto.getTitle());
         }
 
         @Test
         @DisplayName("실패 - 사용자ID와 계획ID로 일치하는 계획 정보 없음")
         void updatePlan_AuthenticationFailed() {
             // given
-            Long id = 1L;
+            Long id = 2L;
             Long userId = 1L;
             PlanUpdateRequestDto mockRequestDto = createPlanUpdateRequestDto();
+            mockRequestDto.setUserId(userId);
 
             when(planRepository.existsByIdAndUserId(anyLong(), anyLong())).thenReturn(false);
 
             // when
             // then
-            assertThatThrownBy(() -> planService.updatePlan(userId, id, mockRequestDto))
+            assertThatThrownBy(() -> planService.validatePlanOwner(id, userId))
                     .isInstanceOf(AuthenticateFailException.class)
                     .hasMessage(AUTHENTICATION_FAILED.getMessage());
         }
@@ -256,16 +265,18 @@ class PlanServiceTest extends DummyObject {
         @DisplayName("실패 - 계획 정보 없음")
         void updatePlan_PlanNotFound() {
             // given
-            Long id = 1L;
+            Long id = 100L;
             Long userId = 1L;
             PlanUpdateRequestDto mockRequestDto = createPlanUpdateRequestDto();
+            mockRequestDto.setPlanId(id);
+            mockRequestDto.setUserId(userId);
 
             when(planRepository.existsByIdAndUserId(anyLong(), anyLong())).thenReturn(true);
-            when(planRepository.findById(anyLong())).thenReturn(Optional.empty());
+            when(planRepository.findByIdWithSchedulesFetchJoin(anyLong())).thenReturn(Optional.empty());
 
             // when
             // then
-            assertThatThrownBy(() -> planService.updatePlan(userId, id, mockRequestDto))
+            assertThatThrownBy(() -> planService.updatePlan(mockRequestDto))
                     .isInstanceOf(PlanNotFoundException.class)
                     .hasMessage(PLAN_NOT_FOUND.getMessage());
         }
@@ -277,14 +288,16 @@ class PlanServiceTest extends DummyObject {
             Long id = 1L;
             Long userId = 1L;
             PlanUpdateRequestDto mockRequestDto = createPlanUpdateRequestDto();
+            mockRequestDto.setPlanId(id);
+            mockRequestDto.setUserId(userId);
 
             when(planRepository.existsByIdAndUserId(anyLong(), anyLong())).thenReturn(true);
-            when(planRepository.findById(anyLong())).thenReturn(Optional.of(createMockPlan(1L, null)));
-            when(scheduleRepository.findById(anyLong())).thenReturn(Optional.empty());
+            when(planRepository.findByIdWithSchedulesFetchJoin(anyLong())).thenReturn(Optional.of(createMockPlan(1L, null)));
+            when(scheduleRepository.findByIdWithSchedulePlacesFetchJoin(anyLong())).thenReturn(Optional.empty());
 
             // when
             // then
-            assertThatThrownBy(() -> planService.updatePlan(userId, id, mockRequestDto))
+            assertThatThrownBy(() -> planService.updatePlan(mockRequestDto))
                     .isInstanceOf(ScheduleNotFoundException.class)
                     .hasMessage(SCHEDULE_NOT_FOUND.getMessage());
         }
@@ -295,16 +308,28 @@ class PlanServiceTest extends DummyObject {
             // given
             Long id = 1L;
             Long userId = 1L;
-            PlanUpdateRequestDto mockRequestDto = createPlanUpdateRequestDto();
+            PlanUpdateRequestDto mockUpdateRequestDto = createPlanUpdateRequestDto();
+            mockUpdateRequestDto.setPlanId(id);
+            mockUpdateRequestDto.setUserId(userId);
+
+            SchedulePlace mockSchedulePlace = createMockSchedulePlace(1L, 1L, 1);
+            List<SchedulePlace> mockSchedulePlaces = new ArrayList<>();
+            mockSchedulePlaces.add(mockSchedulePlace);
+
+            Schedule mockSchedule = createMockSchedule(1L, LocalDate.now(), mockSchedulePlaces);
+            List<Schedule> mockSchedules = new ArrayList<>();
+            mockSchedules.add(mockSchedule);
+
+            Plan mockPlan = createMockPlan(1L, mockSchedules);
 
             when(planRepository.existsByIdAndUserId(anyLong(), anyLong())).thenReturn(true);
-            when(planRepository.findById(anyLong())).thenReturn(Optional.of(createMockPlan(1L, null)));
-            when(scheduleRepository.findById(anyLong())).thenReturn(Optional.of(createMockSchedule(1L, LocalDate.now(), null)));
+            when(planRepository.findByIdWithSchedulesFetchJoin(anyLong())).thenReturn(Optional.ofNullable(mockPlan));
+            when(scheduleRepository.findByIdWithSchedulePlacesFetchJoin(anyLong())).thenReturn(Optional.of(mockSchedule));
             when(schedulePlaceRepository.findById(anyLong())).thenReturn(Optional.empty());
 
             // when
             // then
-            assertThatThrownBy(() -> planService.updatePlan(userId, id, mockRequestDto))
+            assertThatThrownBy(() -> planService.updatePlan(mockUpdateRequestDto))
                     .isInstanceOf(SchedulePlaceNotFoundException.class)
                     .hasMessage(SCHEDULE_PLACE_NOT_FOUND.getMessage());
         }
