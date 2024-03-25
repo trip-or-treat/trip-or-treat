@@ -63,7 +63,7 @@ import org.springframework.test.web.servlet.MockMvc;
                         JwtAuthenticationFilter.class,
                         AuthUserArgumentResolver.class,
                         WebConfig.class}))
-class PlanControllerTest {
+class PlanControllerTest extends DummyObject {
 
     @Autowired
     private MockMvc mockMvc;
@@ -187,7 +187,6 @@ class PlanControllerTest {
                     .andExpect(jsonPath("$.data.schedules[0].schedulePlaces[1].schedulePlaceId").value(2))
                     .andExpect(jsonPath("$.data.schedules[1].schedulePlaces[0].schedulePlaceId").value(3))
                     .andExpect(jsonPath("$.data.schedules[1].schedulePlaces[1].schedulePlaceId").value(4));
-
         }
 
         @Test

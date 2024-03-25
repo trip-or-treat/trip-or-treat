@@ -180,7 +180,8 @@ class PlanServiceTest extends DummyObject {
             List<Schedule> schedules = List.of(
                     createMockSchedule(1L, null, schedulePlaces1, LocalDate.now()),
                     createMockSchedule(2L, null, schedulePlaces2, LocalDate.now().plusDays(1)));
-            Plan plan = createMockPlan(1L, regions, schedules, null, null);
+            User user = createMockUser(1L, "user1");
+            Plan plan = createMockPlan(1L, user, regions, schedules, null, null);
 
             when(planRepository.findByIdAndUserId(anyLong(), any())).thenReturn(Optional.of(plan));
 
@@ -235,7 +236,7 @@ class PlanServiceTest extends DummyObject {
             List<Schedule> mockSchedules = new ArrayList<>();
             mockSchedules.add(mockSchedule);
 
-            Plan mockPlan = createMockPlan(1L, null, mockSchedules, null, null);
+            Plan mockPlan = createMockPlan(1L, null, null, mockSchedules, null, null);
 
             when(planRepository.existsByIdAndUserId(anyLong(), anyLong())).thenReturn(true);
             when(planRepository.findById(anyLong())).thenReturn(Optional.ofNullable(mockPlan));
@@ -333,7 +334,7 @@ class PlanServiceTest extends DummyObject {
             List<Schedule> mockSchedules = new ArrayList<>();
             mockSchedules.add(mockSchedule);
 
-            Plan mockPlan = createMockPlan(1L, null, mockSchedules, null, null);
+            Plan mockPlan = createMockPlan(1L, null, null, mockSchedules, null, null);
 
             when(planRepository.existsByIdAndUserId(anyLong(), anyLong())).thenReturn(true);
             when(planRepository.findById(anyLong())).thenReturn(Optional.ofNullable(mockPlan));
