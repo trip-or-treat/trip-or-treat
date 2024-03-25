@@ -1,6 +1,6 @@
 package com.triportreat.backend.plan.service;
 
-import com.triportreat.backend.plan.domain.PlanDetailResponseDto;
+import com.triportreat.backend.plan.domain.PlanResponseDto.PlanDetailResponseDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanUpdateRequestDto;
 
