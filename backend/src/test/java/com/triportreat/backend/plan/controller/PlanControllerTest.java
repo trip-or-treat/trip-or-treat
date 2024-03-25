@@ -6,8 +6,8 @@ import static com.triportreat.backend.common.response.FailMessage.VALIDATION_FAI
 import static com.triportreat.backend.common.response.SuccessMessage.GET_SUCCESS;
 import static com.triportreat.backend.common.response.SuccessMessage.PATCH_SUCCESS;
 import static com.triportreat.backend.common.response.SuccessMessage.POST_SUCCESS;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -29,7 +29,6 @@ import com.triportreat.backend.auth.filter.JwtExceptionFilter;
 import com.triportreat.backend.auth.utils.AuthUserArgumentResolver;
 import com.triportreat.backend.common.config.WebConfig;
 import com.triportreat.backend.common.error.exception.AuthenticateFailException;
-import com.triportreat.backend.common.response.ResponseResult;
 import com.triportreat.backend.dummy.DummyObject;
 import com.triportreat.backend.plan.domain.PlanDetailResponseDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
@@ -263,19 +262,18 @@ class PlanControllerTest {
             planUpdateRequestDto.setPlanId(id);
             planUpdateRequestDto.setUserId(userId);
 
-            doThrow(new AuthenticateFailException()).when(planService).updatePlan(planUpdateRequestDto);
-
             // when
-            try {
-                planService.updatePlan(planUpdateRequestDto);
-            } catch (AuthenticateFailException e) {
+            doThrow(new AuthenticateFailException()).when(planService).updatePlan(any());
 
-                //then
-                ResponseResult.fail(e.getMessage(), e.getStatus(), null);
-
-                assertThat(e.getMessage()).isEqualTo(AUTHENTICATION_FAILED.getMessage());
-                assertThat(e.getStatus()).isEqualTo(UNAUTHORIZED);
-            }
+            // then
+            mockMvc.perform(patch("/plans/{id}", id)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(planUpdateRequestDto)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status", equalTo(UNAUTHORIZED.value())))
+                    .andExpect(jsonPath("$.message", equalTo(AUTHENTICATION_FAILED.getMessage())))
+                    .andExpect(jsonPath("$.result", equalTo(false)))
+                    .andExpect(jsonPath("$.data").doesNotExist());
         }
 
         @Test
@@ -288,18 +286,18 @@ class PlanControllerTest {
             planUpdateRequestDto.setPlanId(id);
             planUpdateRequestDto.setUserId(userId);
 
-            doThrow(PlanNotFoundException.class).when(planService).updatePlan(planUpdateRequestDto);
-
             // when
-            try {
-                planService.updatePlan(planUpdateRequestDto);
-            } catch (PlanNotFoundException e) {
-                // then
-                ResponseResult.fail(e.getMessage(), e.getStatus(), null);
+            doThrow(PlanNotFoundException.class).when(planService).updatePlan(any());
 
-                assertThat(e.getMessage()).isEqualTo(PLAN_NOT_FOUND.getMessage());
-                assertThat(e.getStatus()).isEqualTo(INTERNAL_SERVER_ERROR);
-            }
+            // then
+            mockMvc.perform(patch("/plans/{id}", id)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(planUpdateRequestDto)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status", equalTo(INTERNAL_SERVER_ERROR.value())))
+                    .andExpect(jsonPath("$.message", equalTo(PLAN_NOT_FOUND.getMessage())))
+                    .andExpect(jsonPath("$.result", equalTo(false)))
+                    .andExpect(jsonPath("$.data").doesNotExist());
         }
 
     }
