@@ -12,5 +12,5 @@ public interface ReviewService {
     List<ReviewListDto> getReviewList(Long id, Pageable pageable);
     void createReview(ReviewRequestDto reviewRequestDto);
     List<MyReviewListDto> getMyReviewList(Long id, Pageable pageable);
-    void updateReview(Long id,ReviewUpdateRequestDto reviewUpdateRequestDto);
+    void updateReview(Long userId,ReviewUpdateRequestDto reviewUpdateRequestDto);
 }

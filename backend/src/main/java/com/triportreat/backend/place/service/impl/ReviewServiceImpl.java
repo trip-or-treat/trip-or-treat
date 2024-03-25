@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
@@ -33,7 +34,6 @@ public class ReviewServiceImpl implements ReviewService {
     private final UserRepository userRepository;
 
     @Override
-    @Transactional(readOnly = true)
     public List<ReviewListDto> getReviewList(Long id, Pageable pageable) {
         List<Review> reviews = reviewRepository.findByPlaceId(id, pageable);
 
@@ -58,19 +58,15 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<MyReviewListDto> getMyReviewList(Long id, Pageable pageable) {
+    public List<MyReviewListDto> getMyReviewList(Long userId, Pageable pageable) {
 
-        if (!userRepository.existsById(id)) {
+        if (!userRepository.existsById(userId)) {
             throw new UserNotFoundException();
         }
 
-        List<Review> reviews = reviewRepository.findByUserId(id, pageable);
+        List<Review> reviews = reviewRepository.findByUserId(userId, pageable);
 
-        return reviews.stream().map(review -> {
-            Place place = review.getPlace();
-            return MyReviewListDto.toDto(review, place);
-        }).collect(Collectors.toList());
+        return reviews.stream().map(review -> MyReviewListDto.toDto(review, review.getPlace())).collect(Collectors.toList());
     }
 
     @Override
