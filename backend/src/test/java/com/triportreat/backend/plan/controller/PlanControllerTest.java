@@ -35,11 +35,13 @@ import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanUpdateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceCreateRequestDto;
+import com.triportreat.backend.plan.domain.PlanResponseDto.RegionResponseDto;
 import com.triportreat.backend.plan.domain.PlanResponseDto.ScheduleDetailResponseDto;
 import com.triportreat.backend.plan.domain.PlanResponseDto.SchedulePlaceDetailResponseDto;
 import com.triportreat.backend.plan.error.exception.PlanNotFoundException;
 import com.triportreat.backend.plan.service.PlanService;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -177,6 +179,8 @@ class PlanControllerTest {
                     .andExpect(jsonPath("$.message").value(GET_SUCCESS.getMessage()))
                     .andExpect(jsonPath("$.result").value(true))
                     .andExpect(jsonPath("$.data.planId").value(1))
+                    .andExpect(jsonPath("$.data.regions.regionIds.size()").value(3))
+                    .andExpect(jsonPath("$.data.regions.regionNames.size()").value(3))
                     .andExpect(jsonPath("$.data.schedules[0].scheduleId").value(1))
                     .andExpect(jsonPath("$.data.schedules[1].scheduleId").value(2))
                     .andExpect(jsonPath("$.data.schedules[0].schedulePlaces[0].schedulePlaceId").value(1))
@@ -214,9 +218,15 @@ class PlanControllerTest {
                     ScheduleDetailResponseDto.builder().scheduleId(1L).schedulePlaces(schedulePlaceDetails1).build(),
                     ScheduleDetailResponseDto.builder().scheduleId(2L).schedulePlaces(schedulePlaceDetails2).build());
 
+            RegionResponseDto regions = RegionResponseDto.builder()
+                    .regionIds(Arrays.asList(1L, 2L, 3L))
+                    .regionNames(Arrays.asList("서울", "인천", "대전"))
+                    .build();
+
             return PlanDetailResponseDto.builder()
                     .planId(1L)
                     .schedules(scheduleDetail)
+                    .regions(regions)
                     .build();
         }
     }
