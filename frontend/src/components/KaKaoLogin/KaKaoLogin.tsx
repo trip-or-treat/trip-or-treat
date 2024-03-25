@@ -5,6 +5,7 @@ import Loading from '../common/Loading';
 const KaKaoLogin = () => {
   const code = new URL(window.location.href).searchParams.get('code');
   const { data: serverToken, isLoading, isError } = useKakaoLogin(code);
+  const prevPage = localStorage.getItem('prevPage');
 
   if (serverToken) localStorage.setItem('accessToken', serverToken.split('Bearer ')[1]);
 
@@ -13,7 +14,11 @@ const KaKaoLogin = () => {
     window.location.href = '/';
   }
 
-  return isLoading ? <Loading type="LARGE" /> : <Navigate to="/" />;
+  return isLoading ? (
+    <Loading type="LARGE" />
+  ) : (
+    (prevPage && <Navigate to={prevPage} />) || <Navigate to="/" />
+  );
 };
 
 export default KaKaoLogin;

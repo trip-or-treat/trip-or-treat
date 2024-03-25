@@ -7,6 +7,7 @@ import myRegionListAtom from 'src/atoms/myRegionListAtom';
 import totalPlanAtom from 'src/atoms/totalPlanAtom';
 import loginStateAtom from 'src/atoms/loginStateAtom';
 
+import KAKAO_AUTH_URL from 'src/components/KaKaoLogin/KakaoPath';
 import AlertModal from 'src/components/AlertModal';
 import ConfirmSaveModal from 'src/components/ConfirmSaveModal';
 import CommonButton from 'src/components/common/CommonButton';
@@ -62,7 +63,12 @@ const PlansPage = () => {
       </Wrapper>
       {isLoggedIn && open && <ConfirmSaveModal onClose={onClose} />}
       {!isLoggedIn && open && (
-        <AlertModal onButtonText="로그인" offButtonText="닫기" path="/login" onClose={onClose}>
+        <AlertModal
+          onButtonText="로그인"
+          offButtonText="닫기"
+          path={KAKAO_AUTH_URL}
+          onClose={onClose}
+        >
           저장하려면 로그인이 필요해요!
         </AlertModal>
       )}
