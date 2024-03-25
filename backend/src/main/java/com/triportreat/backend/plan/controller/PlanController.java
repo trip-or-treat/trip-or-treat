@@ -11,6 +11,7 @@ import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
 import com.triportreat.backend.plan.service.PlanService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -28,8 +29,8 @@ public class PlanController {
     private final PlanService planService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getPlanDetail(@PathVariable("id") Long id) {
-        return ResponseEntity.ok().body(ResponseResult.success(GET_SUCCESS.getMessage(), planService.getPlanDetail(id)));
+    public ResponseEntity<?> getPlanDetail(@Auth Long userId, @PathVariable("id") Long planId) {
+        return ResponseEntity.ok().body(ResponseResult.success(GET_SUCCESS.getMessage(), planService.getPlanDetail(planId, userId)));
     }
 
     @PostMapping

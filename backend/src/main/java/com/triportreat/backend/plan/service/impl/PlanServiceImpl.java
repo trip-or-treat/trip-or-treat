@@ -35,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class PlanServiceImpl implements PlanService {
 
     private final PlanRepository planRepository;
@@ -62,10 +63,9 @@ public class PlanServiceImpl implements PlanService {
         createSchedules(planCreateRequestDto.getSchedules(), plan);
     }
 
-    @Transactional(readOnly = true)
     @Override
-    public PlanDetailResponseDto getPlanDetail(Long id) {
-        Plan plan = planRepository.findById(id).orElseThrow(PlanNotFoundException::new);
+    public PlanDetailResponseDto getPlanDetail(Long planId, Long userId) {
+        Plan plan = planRepository.findByIdAndUserId(planId, userId).orElseThrow(PlanNotFoundException::new);
         return PlanDetailResponseDto.toDto(plan, extractScheduleDetailsFromPlan(plan));
     }
 

@@ -25,7 +25,6 @@ import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanUpdateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceCreateRequestDto;
-import com.triportreat.backend.plan.domain.PlanResponseDto.PlanDetailResponseDto;
 import com.triportreat.backend.plan.entity.Plan;
 import com.triportreat.backend.plan.entity.PlanRegion;
 import com.triportreat.backend.plan.entity.Schedule;
@@ -183,10 +182,10 @@ class PlanServiceTest extends DummyObject {
                     createMockSchedule(2L, null, schedulePlaces2, LocalDate.now().plusDays(1)));
             Plan plan = createMockPlan(1L, regions, schedules, null, null);
 
-            when(planRepository.findById(anyLong())).thenReturn(Optional.of(plan));
+            when(planRepository.findByIdAndUserId(anyLong(), any())).thenReturn(Optional.of(plan));
 
             // when
-            PlanDetailResponseDto planDetail = planService.getPlanDetail(1L);
+            PlanDetailResponseDto planDetail = planService.getPlanDetail(1L, 1L);
 
             // then
             assertThat(planDetail.getPlanId()).isEqualTo(1L);
@@ -202,12 +201,13 @@ class PlanServiceTest extends DummyObject {
         void getPlanDetail_PlanNotFound() {
             // given
             Long planId = 1L;
+            Long userId = 1L;
 
-            when(planRepository.findById(anyLong())).thenReturn(Optional.empty());
+            when(planRepository.findByIdAndUserId(anyLong(), any())).thenReturn(Optional.empty());
 
             // when
             // then
-            assertThatThrownBy(() -> planService.getPlanDetail(planId))
+            assertThatThrownBy(() -> planService.getPlanDetail(planId, userId))
                     .isInstanceOf(PlanNotFoundException.class)
                     .hasMessage(PLAN_NOT_FOUND.getMessage());
         }

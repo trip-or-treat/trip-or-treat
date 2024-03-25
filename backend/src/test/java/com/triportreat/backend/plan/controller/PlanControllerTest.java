@@ -169,7 +169,7 @@ class PlanControllerTest {
             // given
             PlanDetailResponseDto planDetail = createPlanDetailResponseDto();
 
-            when(planService.getPlanDetail(anyLong())).thenReturn(planDetail);
+            when(planService.getPlanDetail(anyLong(), any())).thenReturn(planDetail);
 
             // when
             // then
@@ -194,7 +194,7 @@ class PlanControllerTest {
         @DisplayName("실패 - 계획 정보 없음")
         void getPlanDetail_PlanNotFound() throws Exception {
             // given
-            when(planService.getPlanDetail(anyLong())).thenThrow(PlanNotFoundException.class);
+            when(planService.getPlanDetail(anyLong(), any())).thenThrow(PlanNotFoundException.class);
 
             // when
             // then
