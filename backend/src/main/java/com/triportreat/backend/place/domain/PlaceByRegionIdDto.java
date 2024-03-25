@@ -8,7 +8,7 @@ import lombok.Data;
 @Builder
 public class PlaceByRegionIdDto {
 
-    private Long id;
+    private Long placeId;
     private String name;
     private String imageThumbnail;
     private String subCategoryName;
@@ -18,9 +18,9 @@ public class PlaceByRegionIdDto {
     private Long views;
 
     @QueryProjection
-    public PlaceByRegionIdDto(Long id, String name, String imageThumbnail, String subCategoryName, Double latitude,
+    public PlaceByRegionIdDto(Long placeId, String name, String imageThumbnail, String subCategoryName, Double latitude,
                               Double longitude, Long contentTypeId, Long views) {
-        this.id = id;
+        this.placeId = placeId;
         this.name = name;
         this.imageThumbnail = imageThumbnail;
         this.subCategoryName = subCategoryName;

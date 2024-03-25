@@ -50,9 +50,9 @@ class PlaceControllerTest {
         placeSearchCondition.setRegionId(null);
 
         List<PlaceByRegionIdDto> places = List.of(
-                PlaceByRegionIdDto.builder().id(1L).name("테스트1").contentTypeId(1L).build(),
-                PlaceByRegionIdDto.builder().id(2L).name("테스트2").contentTypeId(2L).build(),
-                PlaceByRegionIdDto.builder().id(3L).name("테스트3").contentTypeId(3L).build()
+                PlaceByRegionIdDto.builder().placeId(1L).name("테스트1").contentTypeId(1L).build(),
+                PlaceByRegionIdDto.builder().placeId(2L).name("테스트2").contentTypeId(2L).build(),
+                PlaceByRegionIdDto.builder().placeId(3L).name("테스트3").contentTypeId(3L).build()
         );
 
         // when
@@ -73,9 +73,9 @@ class PlaceControllerTest {
     void searchPlaceListByCondition_success() throws Exception {
         // given
         List<PlaceByRegionIdDto> places = List.of(
-                PlaceByRegionIdDto.builder().id(1L).name("테스트1").contentTypeId(1L).build(),
-                PlaceByRegionIdDto.builder().id(2L).name("테스트2").contentTypeId(2L).build(),
-                PlaceByRegionIdDto.builder().id(3L).name("테스트3").contentTypeId(3L).build()
+                PlaceByRegionIdDto.builder().placeId(1L).name("테스트1").contentTypeId(1L).build(),
+                PlaceByRegionIdDto.builder().placeId(2L).name("테스트2").contentTypeId(2L).build(),
+                PlaceByRegionIdDto.builder().placeId(3L).name("테스트3").contentTypeId(3L).build()
         );
 
         PlaceSearchCondition placeSearchCondition = new PlaceSearchCondition();
@@ -91,7 +91,7 @@ class PlaceControllerTest {
                 .andExpect(jsonPath("$.result").value(true))
                 .andExpect(jsonPath("$.message").value(GET_SUCCESS.getMessage()))
                 .andExpect(jsonPath("$.status").value(200))
-                .andExpect(jsonPath("$.data[0].id").value(1))
+                .andExpect(jsonPath("$.data[0].placeId").value(1))
                 .andExpect(jsonPath("$.data[0].name").value("테스트1"))
                 .andExpect(jsonPath("$.data[0].contentTypeId").value(1));
     }
@@ -106,9 +106,9 @@ class PlaceControllerTest {
         placeSearchCondition.setContentTypeId(123L);
 
         List<PlaceByRegionIdDto> places = List.of(
-                PlaceByRegionIdDto.builder().id(1L).name("테스트1").contentTypeId(1L).build(),
-                PlaceByRegionIdDto.builder().id(2L).name("테스트2").contentTypeId(2L).build(),
-                PlaceByRegionIdDto.builder().id(3L).name("테스트3").contentTypeId(3L).build()
+                PlaceByRegionIdDto.builder().placeId(1L).name("테스트1").contentTypeId(1L).build(),
+                PlaceByRegionIdDto.builder().placeId(2L).name("테스트2").contentTypeId(2L).build(),
+                PlaceByRegionIdDto.builder().placeId(3L).name("테스트3").contentTypeId(3L).build()
         );
 
         // when
