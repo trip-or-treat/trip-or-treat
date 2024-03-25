@@ -7,4 +7,6 @@ public interface PlanService {
     void createPlan(PlanCreateRequestDto planCreateRequestDto);
 
     PlanDetailResponseDto getPlanDetail(Long id);
+
+    PlanDetailResponseDto getSharedPlanDetail(String code);
 }
