@@ -13,7 +13,7 @@ import MenuButton from './MenuButton';
 const Nav = () => {
   const setIsModal = useSetRecoilState(homeModalAtom);
   const [isLogin, setLogin] = useRecoilState(loginStateAtom);
-  const location = useLocation().pathname;
+  const { pathname } = useLocation();
 
   useEffect(() => {
     if (localStorage.getItem('accessToken')) {
@@ -23,8 +23,8 @@ const Nav = () => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('prevPage', location);
-  }, [location]);
+    localStorage.setItem('prevPage', pathname);
+  }, [pathname]);
 
   const onLogout = () => {
     alert('로그아웃 되었습니다.');

@@ -28,10 +28,6 @@ const PlansPage = () => {
     setOpen(false);
   };
 
-  const setAccessPath = () => {
-    localStorage.setItem('prevPage', '/mypage/plans');
-  };
-
   if (!totalPlan[0]) return <FailDataPage />;
 
   return (
@@ -58,7 +54,6 @@ const PlansPage = () => {
           offButtonText="닫기"
           path={KAKAO_AUTH_URL}
           onClose={onClose}
-          accessPath={setAccessPath}
         >
           저장하려면 로그인이 필요해요!
         </AlertModal>

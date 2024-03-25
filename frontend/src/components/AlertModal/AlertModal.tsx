@@ -12,23 +12,15 @@ interface Props {
   offButtonText: string;
   path: string;
   onClose: () => void;
-  accessPath?: () => void;
 }
 
-const AlertModal = ({
-  children,
-  onButtonText,
-  offButtonText,
-  path,
-  onClose,
-  accessPath,
-}: Props) => {
+const AlertModal = ({ children, onButtonText, offButtonText, path, onClose }: Props) => {
   return (
     <ModalOverlay>
       <StyledModalLayout>
         <StyledModalText>{children}</StyledModalText>
         <StyledButtonInner>
-          <LinkButton path={path} color={theme.colors.mainColor} onClick={accessPath}>
+          <LinkButton path={path} color={theme.colors.mainColor}>
             {onButtonText}
           </LinkButton>
           <CloseButton onClick={onClose} color={theme.colors.darkGrey}>
