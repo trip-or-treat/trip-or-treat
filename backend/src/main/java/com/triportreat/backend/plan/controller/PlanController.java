@@ -40,10 +40,12 @@ public class PlanController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updatePlan(@PathVariable Long id,
-                                        @Auth Long userId,
+    public ResponseEntity<?> updatePlan(@Auth Long userId,
+                                        @PathVariable Long id,
                                         @RequestBody @Valid PlanUpdateRequestDto planUpdateRequestDto) {
-        planService.updatePlan(id, userId, planUpdateRequestDto);
+        planUpdateRequestDto.setUserId(userId);
+        planUpdateRequestDto.setPlanId(id);
+        planService.updatePlan(planUpdateRequestDto);
         return ResponseEntity.ok().body(ResponseResult.success(PATCH_SUCCESS.getMessage(), null));
     }
 
