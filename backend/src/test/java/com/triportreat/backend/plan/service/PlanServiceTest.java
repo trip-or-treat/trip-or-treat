@@ -3,9 +3,11 @@ package com.triportreat.backend.plan.service;
 import static com.triportreat.backend.common.response.FailMessage.PLACE_NOT_FOUND;
 import static com.triportreat.backend.common.response.FailMessage.PLAN_NOT_FOUND;
 import static com.triportreat.backend.common.response.FailMessage.USER_NOT_FOUND;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
@@ -13,8 +15,8 @@ import static org.mockito.internal.verification.VerificationModeFactory.times;
 import com.triportreat.backend.dummy.DummyObject;
 import com.triportreat.backend.place.entity.Place;
 import com.triportreat.backend.place.repository.PlaceRepository;
-import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanDetailResponseDto;
+import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceCreateRequestDto;
 import com.triportreat.backend.plan.entity.Plan;
@@ -184,6 +186,54 @@ class PlanServiceTest extends DummyObject {
             // when
             // then
             assertThatThrownBy(() -> planService.getPlanDetail(plan.getId()))
+                    .isInstanceOf(PlanNotFoundException.class)
+                    .hasMessage(PLAN_NOT_FOUND.getMessage());
+        }
+    }
+
+    @Nested
+    @DisplayName("공유 계획 상세 조회")
+    class GetSharedPlanDetail {
+
+        @Test
+        @DisplayName("성공")
+        void getSharedPlanDetail_Success() {
+            // given
+            List<SchedulePlace> schedulePlaces1 = List.of(
+                    createMockSchedulePlace(1L, 1L, 1),
+                    createMockSchedulePlace(2L, 2L, 2));
+            List<SchedulePlace> schedulePlaces2 = List.of(
+                    createMockSchedulePlace(3L, 3L, 3),
+                    createMockSchedulePlace(4L, 4L, 4));
+            List<Schedule> schedules = List.of(
+                    createMockSchedule(1L, LocalDate.now(), schedulePlaces1),
+                    createMockSchedule(2L, LocalDate.now().plusDays(1), schedulePlaces2));
+            Plan plan = createMockPlan(1L, schedules);
+
+            when(planRepository.findByCode(anyString())).thenReturn(Optional.of(plan));
+
+            // when
+            PlanDetailResponseDto planDetail = planService.getSharedPlanDetail("code");
+
+            // then
+            assertThat(planDetail.getSchedules().size()).isEqualTo(2);
+            assertThat(planDetail.getPlanId()).isEqualTo(1L);
+            assertThat(planDetail.getSchedules().size()).isEqualTo(2);
+            assertThat(planDetail.getSchedules().get(0).getSchedulePlaces().size()).isEqualTo(2);
+            assertThat(planDetail.getSchedules().get(1).getSchedulePlaces().size()).isEqualTo(2);
+        }
+
+        @Test
+        @DisplayName("실패 - 계획 데이터 없음")
+        void getSharedPlanDetail_PlanNotFound() {
+            // given
+            Plan plan = createMockPlan(1L, null);
+
+            when(planRepository.findByCode(anyString())).thenReturn(Optional.empty());
+
+            // when
+            // then
+            assertThatThrownBy(() -> planService.getSharedPlanDetail(plan.getCode()))
                     .isInstanceOf(PlanNotFoundException.class)
                     .hasMessage(PLAN_NOT_FOUND.getMessage());
         }

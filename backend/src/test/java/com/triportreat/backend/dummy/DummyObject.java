@@ -11,7 +11,6 @@ import com.triportreat.backend.plan.entity.Plan;
 import com.triportreat.backend.plan.entity.Schedule;
 import com.triportreat.backend.plan.entity.SchedulePlace;
 import com.triportreat.backend.user.entity.User;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -30,6 +29,7 @@ public class DummyObject {
     protected Plan createMockPlan(Long id, List<Schedule> schedules) {
         return Plan.builder()
                 .id(id)
+                .code("code")
                 .title("Plan")
                 .schedules(schedules)
                 .build();
