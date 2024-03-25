@@ -321,10 +321,10 @@ public class ReviewControllerTest {
         public void getMyReviewList() throws Exception {
 
             //given
-            when(reviewService.getMyReviewList(anyLong(), any(Pageable.class))).thenReturn(myReviewListDto);
+            when(reviewService.getMyReviewList(any(), any(Pageable.class))).thenReturn(myReviewListDto);
 
             //when & then
-            mockMvc.perform(get("/reviews/{id}", 1L)
+            mockMvc.perform(get("/reviews")
                     .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.result").value(true))
@@ -337,14 +337,14 @@ public class ReviewControllerTest {
         }
 
         @Test
-        @DisplayName("성공 - 빈 값 반환")
+        @DisplayName("성공 - 리뷰가 없을 시 빈 값 반환")
         public void getMyReviewList_Empty() throws Exception {
 
             //given
-            when(reviewService.getMyReviewList(anyLong(), any(Pageable.class))).thenReturn(Collections.emptyList());
+            when(reviewService.getMyReviewList(any(), any(Pageable.class))).thenReturn(Collections.emptyList());
 
             //when & then
-            mockMvc.perform(get("/reviews/{id}", 1L)
+            mockMvc.perform(get("/reviews")
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.result").value(true))
@@ -358,10 +358,10 @@ public class ReviewControllerTest {
         public void getMyReviewList_UserNotFoundException() throws Exception {
 
             //given
-            when(reviewService.getMyReviewList(anyLong(), any(Pageable.class))).thenThrow(UserNotFoundException.class);
+            when(reviewService.getMyReviewList(any(), any(Pageable.class))).thenThrow(UserNotFoundException.class);
 
             //when & then
-            mockMvc.perform(get("/reviews/{id}", 1L)
+            mockMvc.perform(get("/reviews")
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.result").value(false))
