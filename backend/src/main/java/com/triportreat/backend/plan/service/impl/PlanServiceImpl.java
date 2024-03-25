@@ -71,34 +71,44 @@ public class PlanServiceImpl implements PlanService {
 
     @Transactional
     @Override
-    public void updatePlan(Long id, Long userId, PlanUpdateRequestDto planUpdateRequestDto) {
-        validatePlanOwner(id, userId);
+    public void updatePlan(PlanUpdateRequestDto planUpdateRequestDto) {
+        validatePlanOwner(planUpdateRequestDto.getPlanId(), planUpdateRequestDto.getUserId());
 
-        Plan plan = planRepository.findById(planUpdateRequestDto.getPlanId())
+        Plan plan = planRepository.findByIdWithSchedulesFetchJoin(planUpdateRequestDto.getPlanId())
                 .orElseThrow(PlanNotFoundException::new);
         plan.updateTitle(planUpdateRequestDto.getTitle());
 
-        List<ScheduleUpdateRequestDto> schedules = planUpdateRequestDto.getSchedules();
-        schedules.forEach(s -> {
-            Schedule schedule = scheduleRepository.findById(s.getScheduleId())
+        List<ScheduleUpdateRequestDto> scheduleDtos = planUpdateRequestDto.getSchedules();
+        scheduleDtos.forEach(scheduleDto -> {
+            Schedule schedule = scheduleRepository.findByIdWithSchedulePlacesFetchJoin(scheduleDto.getScheduleId())
                     .orElseThrow(ScheduleNotFoundException::new);
-            List<SchedulePlaceUpdateRequestDto> schedulePlaces = s.getSchedulePlaces();
-            updateSchedulePlaces(schedule, schedulePlaces);
+
+            updateSchedule(schedule, scheduleDto);
         });
     }
 
-    private void updateSchedulePlaces(Schedule schedule, List<SchedulePlaceUpdateRequestDto> schedulePlaces) {
-        schedulePlaces.forEach(sp -> {
-            sp.getSchedulePlaceId().ifPresentOrElse(
+    private void updateSchedule(Schedule schedule, ScheduleUpdateRequestDto scheduleDto) {
+        schedule.getSchedulePlaces().clear();
+
+        List<SchedulePlaceUpdateRequestDto> schedulePlaces = scheduleDto.getSchedulePlaces();
+        updateSchedulePlaces(schedule, schedulePlaces);
+    }
+
+    private void updateSchedulePlaces(Schedule schedule, List<SchedulePlaceUpdateRequestDto> schedulePlaceDtos) {
+        schedulePlaceDtos.forEach(schedulePlaceDto -> {
+            schedulePlaceDto.getSchedulePlaceId().ifPresentOrElse(
                     schedulePlaceId -> {
                         SchedulePlace schedulePlace = schedulePlaceRepository.findById(schedulePlaceId)
                                 .orElseThrow(SchedulePlaceNotFoundException::new);
-                        schedulePlace.update(sp);
+                        schedulePlace.update(schedulePlaceDto);
+
+                        schedule.getSchedulePlaces().add(schedulePlace);
                     },
                     () -> {
-                        Place place = placeRepository.findById(sp.getPlaceId())
+                        Place place = placeRepository.findById(schedulePlaceDto.getPlaceId())
                                 .orElseThrow(PlaceNotFoundException::new);
-                        schedulePlaceRepository.save(SchedulePlace.toEntity(sp, schedule, place));
+
+                        schedulePlaceRepository.save(SchedulePlace.toEntity(schedulePlaceDto, schedule, place));
                     }
             );
         });
