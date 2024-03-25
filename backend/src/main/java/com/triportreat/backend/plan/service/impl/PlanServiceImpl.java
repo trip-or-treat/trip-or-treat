@@ -74,24 +74,34 @@ public class PlanServiceImpl implements PlanService {
     public void updatePlan(PlanUpdateRequestDto planUpdateRequestDto) {
         validatePlanOwner(planUpdateRequestDto.getPlanId(), planUpdateRequestDto.getUserId());
 
-        Plan plan = planRepository.findByIdWithSchedulesFetchJoin(planUpdateRequestDto.getPlanId())
+        Plan plan = planRepository.findById(planUpdateRequestDto.getPlanId())
                 .orElseThrow(PlanNotFoundException::new);
         plan.updateTitle(planUpdateRequestDto.getTitle());
 
-        List<ScheduleUpdateRequestDto> scheduleDtos = planUpdateRequestDto.getSchedules();
+//        List<ScheduleUpdateRequestDto> scheduleDtos = planUpdateRequestDto.getSchedules();
+        updateSchedules(planUpdateRequestDto.getSchedules());
+
+//        scheduleDtos.forEach(scheduleDto -> {
+//            Schedule schedule = scheduleRepository.findByIdWithSchedulePlacesFetchJoin(scheduleDto.getScheduleId())
+//                    .orElseThrow(ScheduleNotFoundException::new);
+//
+//            updateSchedule(schedule, scheduleDtos);
+//        });
+    }
+
+    private void updateSchedules(List<ScheduleUpdateRequestDto> scheduleDtos) {
         scheduleDtos.forEach(scheduleDto -> {
             Schedule schedule = scheduleRepository.findByIdWithSchedulePlacesFetchJoin(scheduleDto.getScheduleId())
                     .orElseThrow(ScheduleNotFoundException::new);
 
-            updateSchedule(schedule, scheduleDto);
+            schedule.getSchedulePlaces().clear();
+
+            updateSchedulePlaces(schedule, scheduleDto.getSchedulePlaces());
         });
-    }
 
-    private void updateSchedule(Schedule schedule, ScheduleUpdateRequestDto scheduleDto) {
-        schedule.getSchedulePlaces().clear();
 
-        List<SchedulePlaceUpdateRequestDto> schedulePlaces = scheduleDto.getSchedulePlaces();
-        updateSchedulePlaces(schedule, schedulePlaces);
+//        List<SchedulePlaceUpdateRequestDto> schedulePlaces = scheduleDto.getSchedulePlaces();
+//        updateSchedulePlaces(schedule, schedulePlaces);
     }
 
     private void updateSchedulePlaces(Schedule schedule, List<SchedulePlaceUpdateRequestDto> schedulePlaceDtos) {

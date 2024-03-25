@@ -223,7 +223,7 @@ class PlanServiceTest extends DummyObject {
             Plan mockPlan = createMockPlan(1L, mockSchedules);
 
             when(planRepository.existsByIdAndUserId(anyLong(), anyLong())).thenReturn(true);
-            when(planRepository.findByIdWithSchedulesFetchJoin(anyLong())).thenReturn(Optional.ofNullable(mockPlan));
+            when(planRepository.findById(anyLong())).thenReturn(Optional.ofNullable(mockPlan));
             when(scheduleRepository.findByIdWithSchedulePlacesFetchJoin(anyLong())).thenReturn(Optional.of(mockSchedule));
             when(schedulePlaceRepository.findById(anyLong())).thenReturn(Optional.of(mockSchedulePlace));
             when(placeRepository.findById(anyLong())).thenReturn(Optional.of(Place.builder().id(1L).build()));
@@ -234,13 +234,13 @@ class PlanServiceTest extends DummyObject {
 
             // then
             verify(planRepository, times(1)).existsByIdAndUserId(anyLong(), anyLong());
-            verify(planRepository, times(1)).findByIdWithSchedulesFetchJoin(anyLong());
+            verify(planRepository, times(1)).findById(anyLong());
             verify(scheduleRepository, times(1)).findByIdWithSchedulePlacesFetchJoin(anyLong());
             verify(schedulePlaceRepository, times(1)).findById(anyLong());
             verify(placeRepository, times(1)).findById(anyLong());
             verify(schedulePlaceRepository, times(1)).save(any(SchedulePlace.class));
 
-            assertThat(planRepository.findByIdWithSchedulesFetchJoin(id).get().getTitle()).isEqualTo(mockUpdateRequestDto.getTitle());
+            assertThat(planRepository.findById(id).get().getTitle()).isEqualTo(mockUpdateRequestDto.getTitle());
         }
 
         @Test
@@ -272,7 +272,7 @@ class PlanServiceTest extends DummyObject {
             mockRequestDto.setUserId(userId);
 
             when(planRepository.existsByIdAndUserId(anyLong(), anyLong())).thenReturn(true);
-            when(planRepository.findByIdWithSchedulesFetchJoin(anyLong())).thenReturn(Optional.empty());
+            when(planRepository.findById(anyLong())).thenReturn(Optional.empty());
 
             // when
             // then
@@ -292,7 +292,7 @@ class PlanServiceTest extends DummyObject {
             mockRequestDto.setUserId(userId);
 
             when(planRepository.existsByIdAndUserId(anyLong(), anyLong())).thenReturn(true);
-            when(planRepository.findByIdWithSchedulesFetchJoin(anyLong())).thenReturn(Optional.of(createMockPlan(1L, null)));
+            when(planRepository.findById(anyLong())).thenReturn(Optional.of(createMockPlan(1L, null)));
             when(scheduleRepository.findByIdWithSchedulePlacesFetchJoin(anyLong())).thenReturn(Optional.empty());
 
             // when
@@ -323,7 +323,7 @@ class PlanServiceTest extends DummyObject {
             Plan mockPlan = createMockPlan(1L, mockSchedules);
 
             when(planRepository.existsByIdAndUserId(anyLong(), anyLong())).thenReturn(true);
-            when(planRepository.findByIdWithSchedulesFetchJoin(anyLong())).thenReturn(Optional.ofNullable(mockPlan));
+            when(planRepository.findById(anyLong())).thenReturn(Optional.ofNullable(mockPlan));
             when(scheduleRepository.findByIdWithSchedulePlacesFetchJoin(anyLong())).thenReturn(Optional.of(mockSchedule));
             when(schedulePlaceRepository.findById(anyLong())).thenReturn(Optional.empty());
 
