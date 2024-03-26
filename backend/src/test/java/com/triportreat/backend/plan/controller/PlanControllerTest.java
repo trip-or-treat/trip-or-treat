@@ -351,7 +351,7 @@ class PlanControllerTest extends DummyObject {
             PageImpl<PlanListResponseDto> response = new PageImpl<>(content, pageable, total);
             PageResponseDto<PlanListResponseDto> pageResponse = new PageResponseDto<>(response);
 
-            when(planService.searchPlans(any(), any(), anyLong())).thenReturn(pageResponse);
+            when(planService.searchPlans(any(), any(), any())).thenReturn(pageResponse);
 
             // when
             // then
@@ -370,7 +370,7 @@ class PlanControllerTest extends DummyObject {
         @DisplayName("실패 - 사용자가 존재하지 않음")
         void searchPlans_UserNotFound() throws Exception {
             // given
-            when(planService.searchPlans(any(), any(), anyLong())).thenThrow(UserNotFoundException.class);
+            when(planService.searchPlans(any(), any(), any())).thenThrow(UserNotFoundException.class);
 
             // when
             // then

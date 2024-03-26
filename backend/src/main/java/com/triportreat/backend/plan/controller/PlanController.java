@@ -36,8 +36,7 @@ public class PlanController {
     }
 
     @GetMapping("/plans")
-    public ResponseEntity<?> searchPlans(PlanSearchRequestDto condition, @PageableDefault(size = 10) Pageable pageable) {
-        Long userId = 1L;   // TODO 사용자정보를 불러올 수 있을경우 수정 필요
+    public ResponseEntity<?> searchPlans(@Auth Long userId, PlanSearchRequestDto condition, @PageableDefault(size = 10) Pageable pageable) {
         return ResponseEntity.ok().body(ResponseResult.success(GET_SUCCESS.getMessage(), planService.searchPlans(condition, pageable, userId)));
     }
 
