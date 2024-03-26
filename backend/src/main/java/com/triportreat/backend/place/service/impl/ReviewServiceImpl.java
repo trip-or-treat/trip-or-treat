@@ -66,9 +66,8 @@ public class ReviewServiceImpl implements ReviewService {
         }
 
         Page<Review> reviewPage = reviewRepository.findByUserId(userId, pageable);
-        Page<MyReviewListDto> reviewDtoPage = reviewPage.map(review -> MyReviewListDto.toDto(review, review.getPlace()));
 
-        return new PageResponseDto<>(reviewDtoPage);
+        return new PageResponseDto<>(reviewPage.map(review -> MyReviewListDto.toDto(review, review.getPlace())));
     }
 
     @Override
