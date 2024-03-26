@@ -242,7 +242,7 @@ public class ReviewServiceImplTest extends DummyObject {
 
         @Test
         @DisplayName("성공")
-        public void getMyReviewList() {
+        void getMyReviewList() {
 
             //given
             User user = createMockUser(1L, "testUser");
@@ -274,7 +274,7 @@ public class ReviewServiceImplTest extends DummyObject {
 
         @Test
         @DisplayName("실패 - 유저 정보가 없을시 예외발생")
-        public void getMyReviewList_UserNotFoundException() {
+        void getMyReviewList_UserNotFoundException() {
 
             //given
             User user = createMockUser(1L, "testUser");
