@@ -5,6 +5,7 @@ import com.triportreat.backend.auth.filter.JwtAuthenticationFilter;
 import com.triportreat.backend.auth.filter.JwtExceptionFilter;
 import com.triportreat.backend.auth.utils.AuthUserArgumentResolver;
 import com.triportreat.backend.common.config.WebConfig;
+import com.triportreat.backend.common.response.PageResponseDto;
 import com.triportreat.backend.place.domain.MyReviewListDto;
 import com.triportreat.backend.place.domain.ReviewListDto;
 import com.triportreat.backend.place.domain.ReviewRequestDto;
@@ -23,6 +24,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
@@ -67,7 +70,6 @@ public class ReviewControllerTest {
     private ReviewListDto reviewListDto;
     private ReviewRequestDto reviewRequestDto;
     private ReviewUpdateRequestDto reviewUpdateRequestDto;
-    private List<MyReviewListDto> myReviewListDto;
 
     @BeforeEach
     public void setUp() {
@@ -95,10 +97,6 @@ public class ReviewControllerTest {
                 .tip("testTip")
                 .score(3)
                 .build();
-
-        myReviewListDto = List.of(
-                MyReviewListDto.builder().id(1L).placeName("place1").build(),
-                MyReviewListDto.builder().id(2L).placeName("place2").build());
     }
 
     @Nested
@@ -318,10 +316,21 @@ public class ReviewControllerTest {
 
         @Test
         @DisplayName("성공")
-        public void getMyReviewList() throws Exception {
+        void getMyReviewList() throws Exception {
 
             //given
-            when(reviewService.getMyReviewList(any(), any(Pageable.class))).thenReturn(myReviewListDto);
+            List<MyReviewListDto> content = List.of(
+                    MyReviewListDto.builder().id(1L).placeName("place1").build(),
+                    MyReviewListDto.builder().id(2L).placeName("place2").build()
+            );
+
+            Pageable pageable = PageRequest.of(0, 10);
+            long total = 2L;
+
+            Page<MyReviewListDto> myReviewListDtoPage = new PageImpl<>(content, pageable, total);
+            PageResponseDto<MyReviewListDto> pageResponse = new PageResponseDto<>(myReviewListDtoPage);
+
+            when(reviewService.getMyReviewList(any(), any())).thenReturn(pageResponse);
 
             //when & then
             mockMvc.perform(get("/reviews")
@@ -330,18 +339,26 @@ public class ReviewControllerTest {
                     .andExpect(jsonPath("$.result").value(true))
                     .andExpect(jsonPath("$.message").value(GET_SUCCESS.getMessage()))
                     .andExpect(jsonPath("$.status").value(200))
-                    .andExpect(jsonPath("$.data[0].id").value(1L))
-                    .andExpect(jsonPath("$.data[0].placeName").value("place1"))
-                    .andExpect(jsonPath("$.data[1].id").value(2L))
-                    .andExpect(jsonPath("$.data[1].placeName").value("place2"));
+                    .andExpect(jsonPath("$.data.contents.size()").value(2))
+                    .andExpect(jsonPath("$.data.contents[0].id").value(1L))
+                    .andExpect(jsonPath("$.data.contents[0].placeName").value("place1"))
+                    .andExpect(jsonPath("$.data.contents[1].id").value(2L))
+                    .andExpect(jsonPath("$.data.contents[1].placeName").value("place2"));
         }
 
         @Test
         @DisplayName("성공 - 리뷰가 없을 시 빈 값 반환")
-        public void getMyReviewList_Empty() throws Exception {
+        void getMyReviewList_Empty() throws Exception {
 
             //given
-            when(reviewService.getMyReviewList(any(), any(Pageable.class))).thenReturn(Collections.emptyList());
+            List<MyReviewListDto> emptyDto = Collections.emptyList();
+            Pageable pageable = PageRequest.of(0, 10);
+            long total = 0L;
+
+            Page<MyReviewListDto> emptyDtoPage = new PageImpl<>(emptyDto, pageable, total);
+            PageResponseDto<MyReviewListDto> emptyPageResponse = new PageResponseDto<>(emptyDtoPage);
+
+            when(reviewService.getMyReviewList(any(), any())).thenReturn(emptyPageResponse);
 
             //when & then
             mockMvc.perform(get("/reviews")
@@ -350,15 +367,15 @@ public class ReviewControllerTest {
                     .andExpect(jsonPath("$.result").value(true))
                     .andExpect(jsonPath("$.message").value(GET_SUCCESS.getMessage()))
                     .andExpect(jsonPath("$.status").value(200))
-                    .andExpect(jsonPath("$.data").isEmpty());
+                    .andExpect(jsonPath("$.data.contents").isEmpty());
         }
 
         @Test
         @DisplayName("실패 - 유저 정보가 없는 경우 예외 발생")
-        public void getMyReviewList_UserNotFoundException() throws Exception {
+        void getMyReviewList_UserNotFoundException() throws Exception {
 
             //given
-            when(reviewService.getMyReviewList(any(), any(Pageable.class))).thenThrow(UserNotFoundException.class);
+            when(reviewService.getMyReviewList(any(), any())).thenThrow(UserNotFoundException.class);
 
             //when & then
             mockMvc.perform(get("/reviews")

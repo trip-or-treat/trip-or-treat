@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
@@ -104,11 +105,13 @@ public class ReviewRepositoryTest {
 
         //when
         Pageable pageable = PageRequest.of(0, 10);
-        List<Review> reviews = reviewRepository.findByUserId(user.getId(), pageable);
+        Page<Review> reviews = reviewRepository.findByUserId(user.getId(), pageable);
 
         //then
-        assertThat(reviews).hasSize(2);
-        assertThat(reviews.get(0).getContent()).isEqualTo("review1");
-        assertThat(reviews.get(1).getContent()).isEqualTo("review2");
+        List<Review> reviewList = reviews.getContent();
+
+        assertThat(reviewList).hasSize(2);
+        assertThat(reviewList.get(0).getContent()).isEqualTo("review1");
+        assertThat(reviewList.get(1).getContent()).isEqualTo("review2");
     }
 }
