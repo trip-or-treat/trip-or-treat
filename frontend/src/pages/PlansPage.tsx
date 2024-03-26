@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import myRegionListAtom from 'src/atoms/myRegionListAtom';
 import totalPlanAtom from 'src/atoms/totalPlanAtom';
-import loginStateAtom from 'src/atoms/loginStateAtom';
+import loginStateAtom from 'src/atoms/Login/loginStateAtom';
 
 import KAKAO_AUTH_URL from 'src/components/KaKaoLogin/KakaoPath';
 import AlertModal from 'src/components/AlertModal';
