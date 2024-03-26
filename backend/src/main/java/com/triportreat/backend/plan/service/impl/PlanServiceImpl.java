@@ -56,6 +56,13 @@ public class PlanServiceImpl implements PlanService {
         return PlanDetailResponseDto.toDto(plan, extractScheduleDetailsFromPlan(plan));
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public PlanDetailResponseDto getSharedPlanDetail(String code) {
+        Plan plan = planRepository.findByCode(code).orElseThrow(PlanNotFoundException::new);
+        return PlanDetailResponseDto.toDto(plan, extractScheduleDetailsFromPlan(plan));
+    }
+
     private void createSchedules(List<ScheduleCreateRequestDto> schedulesRequests, Plan plan) {
         schedulesRequests.forEach(s -> {
             Schedule schedule = Schedule.toEntity(s, plan);
