@@ -2,7 +2,12 @@ package com.triportreat.backend.common.response;
 
 import java.util.ArrayList;
 import java.util.List;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.domain.Page;
 
 @Getter
@@ -17,36 +22,23 @@ public class PageResponseDto<T> {
 
     private Integer page;
     private Integer totalPages;
-    private Long totalElements;
     private Boolean prev;
     private Boolean next;
-    private Boolean first;
-    private Boolean last;
     private Integer startPage;
     private Integer endPage;
 
     public PageResponseDto(Page<T> page) {
         this.contents = page.getContent();
         this.page = page.getNumber() + 1;
-        this.totalElements = page.getTotalElements();
         this.totalPages = page.getTotalPages();
         this.prev = page.hasPrevious();
         this.next = page.hasNext();
-        this.first = page.isFirst();
-        this.last = page.isLast();
-        this.startPage = calculateStartPage();
-        this.endPage = calculateEndPage(page);
+        calculateStartPageAndEndPageNumber();
     }
 
-    private int calculateStartPage() {
-        int blockSize = 5;
-        int blockNumber = (int) Math.ceil((double) this.page / blockSize);
-        return (blockNumber - 1) * blockSize + 1;
-    }
-
-    private int calculateEndPage(Page<T> page) {
-        int lastItemIndex = this.page * page.getPageable().getPageSize() - 1;
-        int lastPageNumber = (int) Math.ceil((double) page.getTotalElements() / page.getPageable().getPageSize());
-        return Math.min(lastItemIndex, lastPageNumber);
+    private void calculateStartPageAndEndPageNumber() {
+        int tempEnd = (int) (Math.ceil(page/5.0)) * 5;
+        this.startPage = tempEnd - 4;
+        this.endPage = totalPages > tempEnd ? tempEnd : totalPages;
     }
 }
