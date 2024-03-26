@@ -16,7 +16,7 @@ const PlaceCardDetailBtn = ({ placeCardItem }: Props) => {
   const setPlace = useSetRecoilState(placeIdAtom);
 
   const handleClickModal = () => {
-    setPlace({ id: placeCardItem.id, name: placeCardItem.subCategoryName });
+    setPlace({ id: placeCardItem.placeId, name: placeCardItem.subCategoryName });
     setModal(true);
   };
 

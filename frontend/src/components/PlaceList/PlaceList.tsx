@@ -62,7 +62,11 @@ const PlaceList = ({ keyword, setKeyword }: Props) => {
           <>
             {data?.pages?.map((items) =>
               items.data.map((placeCardItem: PlaceListTypes) => (
-                <PlaceCard key={placeCardItem.id} placeCardItem={placeCardItem} type="ADD_BUTTON" />
+                <PlaceCard
+                  key={placeCardItem.placeId}
+                  placeCardItem={placeCardItem}
+                  type="ADD_BUTTON"
+                />
               )),
             )}
             {data?.pages[data.pages.length - 1].data.length >= 10 && (

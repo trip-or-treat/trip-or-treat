@@ -50,7 +50,7 @@ const SelectedPlaceCardList = () => {
               {filteredCurDay.map((itemArr) => (
                 <React.Fragment key={itemArr.date}>
                   {itemArr?.items?.map((item, index) => (
-                    <Draggable key={item.id} draggableId={String(item.id)} index={index}>
+                    <Draggable key={item.placeId} draggableId={String(item.placeId)} index={index}>
                       {(magic) => (
                         <li ref={magic.innerRef} {...magic.draggableProps}>
                           <PlaceCard placeCardItem={item} type="DRAG_AND_DROP" magic={magic} />
