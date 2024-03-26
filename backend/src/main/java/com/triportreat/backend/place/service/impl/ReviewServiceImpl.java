@@ -1,6 +1,7 @@
 package com.triportreat.backend.place.service.impl;
 
 
+import com.triportreat.backend.common.response.PageResponseDto;
 import com.triportreat.backend.place.domain.MyReviewListDto;
 import com.triportreat.backend.place.domain.ReviewListDto;
 import com.triportreat.backend.place.domain.ReviewRequestDto;
@@ -17,6 +18,7 @@ import com.triportreat.backend.place.service.ReviewService;
 import com.triportreat.backend.user.entity.User;
 import com.triportreat.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,15 +60,15 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<MyReviewListDto> getMyReviewList(Long userId, Pageable pageable) {
-
+    public PageResponseDto<MyReviewListDto> getMyReviewList(Long userId, Pageable pageable) {
         if (!userRepository.existsById(userId)) {
             throw new UserNotFoundException();
         }
 
-        List<Review> reviews = reviewRepository.findByUserId(userId, pageable);
+        Page<Review> reviewPage = reviewRepository.findByUserId(userId, pageable);
+        Page<MyReviewListDto> reviewDtoPage = reviewPage.map(review -> MyReviewListDto.toDto(review, review.getPlace()));
 
-        return reviews.stream().map(review -> MyReviewListDto.toDto(review, review.getPlace())).collect(Collectors.toList());
+        return new PageResponseDto<>(reviewDtoPage);
     }
 
     @Override
