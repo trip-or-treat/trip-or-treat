@@ -13,6 +13,8 @@ import com.triportreat.backend.plan.domain.PlanResponseDto.PlanListResponseDto;
 import com.triportreat.backend.plan.entity.Plan;
 import com.triportreat.backend.user.entity.User;
 import com.triportreat.backend.user.repository.UserRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -28,9 +30,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.jdbc.Sql;
 
-@Sql("classpath:db/teardown.sql")
 @DataJpaTest
 @Import(JpaConfig.class)
 class PlanRepositoryTest extends DummyObject {
@@ -47,39 +47,13 @@ class PlanRepositoryTest extends DummyObject {
     @Autowired
     PlanRegionRepository planRegionRepository;
 
+    @PersistenceContext
+    private EntityManager em;
+
     @BeforeEach
     void setUp() {
-        Region region1 = createMockRegion(1L, "서울");
-        Region region2 = createMockRegion(2L, "인천");
-        Region region3 = createMockRegion(3L, "대전");
-        regionRepository.save(region1);
-        regionRepository.save(region2);
-        regionRepository.save(region3);
-
-        User user = createMockUser(1L, "user");
-        userRepository.save(user);
-
-        for (long i = 1; i <= 50; i++) {
-            Plan plan = createMockPlan(i, "계획" + i, user, null, null, LocalDate.now().minusDays(3), LocalDate.now().minusDays(1));
-            planRepository.save(plan);
-
-            PlanRegion planRegion1 = PlanRegion.builder().plan(plan).region(region1).build();
-            PlanRegion planRegion2 = PlanRegion.builder().plan(plan).region(region3).build();
-            planRegionRepository.save(planRegion1);
-            planRegionRepository.save(planRegion2);
-        }
-
-        for (long i = 51; i <= 100; i++) {
-            Plan plan = createMockPlan(i, "계획" + i, user, null, null, LocalDate.now().plusDays(1), LocalDate.now().plusDays(3));
-            planRepository.save(plan);
-
-            PlanRegion planRegion1 = PlanRegion.builder().plan(plan).region(region1).build();
-            PlanRegion planRegion2 = PlanRegion.builder().plan(plan).region(region2).build();
-            PlanRegion planRegion3 = PlanRegion.builder().plan(plan).region(region3).build();
-            planRegionRepository.save(planRegion1);
-            planRegionRepository.save(planRegion2);
-            planRegionRepository.save(planRegion3);
-        }
+        autoIncrementReset();
+        dataSetting();
     }
 
     @Test
@@ -245,6 +219,57 @@ class PlanRepositoryTest extends DummyObject {
             assertThat(response.getContent().size()).isEqualTo(10);
             assertThat(response.getNumber()).isEqualTo(2);
             assertThat(response.getTotalPages()).isEqualTo(5);
+        }
+    }
+
+    private void autoIncrementReset() {
+        em.createNativeQuery("ALTER TABLE PLAN ALTER COLUMN id RESTART WITH 1").executeUpdate();
+        em.createNativeQuery("ALTER TABLE PLAN_REGION ALTER COLUMN id RESTART WITH 1").executeUpdate();
+        em.createNativeQuery("ALTER TABLE \"USER\" ALTER COLUMN id RESTART WITH 1").executeUpdate();
+    }
+
+    private void dataSetting() {
+        Region region1 = Region.builder().id(1L).name("서울").latitude(1.1).longitude(1.1).build();
+        Region region2 = Region.builder().id(2L).name("인천").latitude(1.1).longitude(1.1).build();
+        Region region3 = Region.builder().id(3L).name("대전").latitude(1.1).longitude(1.1).build();
+        regionRepository.save(region1);
+        regionRepository.save(region2);
+        regionRepository.save(region3);
+
+        User user = User.builder()
+                .name("user")
+                .email("user@gmail.com")
+                .nickname("user")
+                .imageThumbnail("")
+                .imageOrigin("")
+                .build();
+        userRepository.save(user);
+
+        for (long i = 1; i <= 50; i++) {
+            Plan plan = Plan.builder()
+                    .title("계획" + i)
+                    .user(user)
+                    .startDate(LocalDate.now().minusDays(3))
+                    .endDate(LocalDate.now().minusDays(1))
+                    .schedules(null).build();
+            planRepository.save(plan);
+
+            planRegionRepository.save(PlanRegion.builder().plan(plan).region(region1).build());
+            planRegionRepository.save(PlanRegion.builder().plan(plan).region(region3).build());
+        }
+
+        for (long i = 51; i <= 100; i++) {
+            Plan plan = Plan.builder()
+                    .title("계획" + i)
+                    .user(user)
+                    .startDate(LocalDate.now().plusDays(1))
+                    .endDate(LocalDate.now().plusDays(3))
+                    .schedules(null).build();
+            planRepository.save(plan);
+
+            planRegionRepository.save(PlanRegion.builder().plan(plan).region(region1).build());
+            planRegionRepository.save(PlanRegion.builder().plan(plan).region(region2).build());
+            planRegionRepository.save(PlanRegion.builder().plan(plan).region(region3).build());
         }
     }
 }
