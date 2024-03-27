@@ -35,7 +35,7 @@ public class PlanController {
         return ResponseEntity.ok().body(ResponseResult.success(GET_SUCCESS.getMessage(), planService.getPlanDetail(planId, userId)));
     }
 
-    @GetMapping("/plans")
+    @GetMapping
     public ResponseEntity<?> searchPlans(@Auth Long userId, PlanSearchRequestDto condition, @PageableDefault(size = 10) Pageable pageable) {
         return ResponseEntity.ok().body(ResponseResult.success(GET_SUCCESS.getMessage(), planService.searchPlans(condition, pageable, userId)));
     }
