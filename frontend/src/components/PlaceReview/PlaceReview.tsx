@@ -17,8 +17,6 @@ const PlaceReview = ({ currentId }: { currentId: number }) => {
     return isOnly;
   };
 
-  console.log(onlyReviews());
-
   onlyReviews();
   const onReviewInput = () => {
     setReviewInput(true);
