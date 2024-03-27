@@ -6,6 +6,8 @@ import { ReactComponent as StarEmpty } from 'src/assets/svgs/starEmpty.svg';
 import { ReactComponent as HoneyPot } from 'src/assets/svgs/honeyPot.svg';
 import { ReactComponent as SpeechBubble } from 'src/assets/svgs/speechBubble.svg';
 
+import { reviewWriteFetcher } from 'src/api/reviewWrite';
+
 const ReviewInput = ({ placeId }: { placeId: number }) => {
   const [content, setContent] = useState('');
   const [tip, setTip] = useState('');
@@ -18,6 +20,7 @@ const ReviewInput = ({ placeId }: { placeId: number }) => {
     if (score === 0 || score === -1) {
       setScore(-1);
     } else {
+      reviewWriteFetcher({ placeId, content, tip, score });
       setSubmit(true);
       setContent('');
       setTip('');
