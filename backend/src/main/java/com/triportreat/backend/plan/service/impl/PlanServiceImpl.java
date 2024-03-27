@@ -1,10 +1,10 @@
 package com.triportreat.backend.plan.service.impl;
 
 import com.triportreat.backend.common.error.exception.AuthenticateFailException;
+import com.triportreat.backend.common.response.PageResponseDto;
 import com.triportreat.backend.place.entity.Place;
 import com.triportreat.backend.place.repository.PlaceRepository;
 import com.triportreat.backend.plan.domain.PlanResponseDto.PlanDetailResponseDto;
-import com.triportreat.backend.common.response.PageResponseDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanUpdateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleCreateRequestDto;
@@ -33,12 +33,10 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -126,8 +124,6 @@ public class PlanServiceImpl implements PlanService {
         }
 
         PageResponseDto<PlanListResponseDto> pageResponse = new PageResponseDto<>(planRepository.searchPlans(condition, pageable, userId));
-
-        log.info("검색결과 {}", pageResponse);
 
         return pageResponse;
     }

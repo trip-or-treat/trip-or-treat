@@ -6,8 +6,8 @@ import static com.triportreat.backend.plan.domain.PlanSearchValue.SEARCH_TYPE_RE
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.triportreat.backend.common.config.JpaConfig;
-import com.triportreat.backend.dummy.DummyObject;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanSearchRequestDto;
 import com.triportreat.backend.plan.domain.PlanResponseDto.PlanListResponseDto;
 import com.triportreat.backend.plan.entity.Plan;
@@ -33,7 +33,7 @@ import org.springframework.data.domain.Pageable;
 
 @DataJpaTest
 @Import(JpaConfig.class)
-class PlanRepositoryTest extends DummyObject {
+class PlanRepositoryTest {
 
     @Autowired
     UserRepository userRepository;
@@ -54,6 +54,7 @@ class PlanRepositoryTest extends DummyObject {
     void setUp() {
         autoIncrementReset();
         dataSetting();
+        em.clear();
     }
 
     @Test
