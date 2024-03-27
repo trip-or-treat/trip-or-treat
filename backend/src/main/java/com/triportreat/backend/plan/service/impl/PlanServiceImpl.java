@@ -72,10 +72,11 @@ public class PlanServiceImpl implements PlanService {
     @Transactional
     @Override
     public void updatePlan(PlanUpdateRequestDto planUpdateRequestDto) {
-        validatePlanOwner(planUpdateRequestDto.getPlanId(), planUpdateRequestDto.getUserId());
-
         Plan plan = planRepository.findById(planUpdateRequestDto.getPlanId())
                 .orElseThrow(PlanNotFoundException::new);
+
+        validatePlanOwner(planUpdateRequestDto.getPlanId(), planUpdateRequestDto.getUserId());
+
         plan.updateTitle(planUpdateRequestDto.getTitle());
 
         updateSchedules(planUpdateRequestDto.getSchedules());

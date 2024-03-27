@@ -271,9 +271,7 @@ class PlanServiceTest extends DummyObject {
             mockRequestDto.setPlanId(id);
             mockRequestDto.setUserId(userId);
 
-            when(planRepository.existsByIdAndUserId(anyLong(), anyLong())).thenReturn(true);
             when(planRepository.findById(anyLong())).thenReturn(Optional.empty());
-
             // when
             // then
             assertThatThrownBy(() -> planService.updatePlan(mockRequestDto))
