@@ -2,87 +2,57 @@ import { styled } from 'styled-components';
 
 import { ReactComponent as StarFilled } from 'src/assets/svgs/starFilled.svg';
 import { ReactComponent as HoneyPot } from 'src/assets/svgs/honeyPot.svg';
+import { useReview } from 'src/hooks/api/useReviews';
+import { Review } from 'src/@types/api/review';
+import Loading from '../common/Loading';
 
-const data = [
-  {
-    id: 1,
-    nickname: 'user1',
-    imageThumbnail:
-      'https://plus.unsplash.com/premium_photo-1661948404806-391a240d6d40?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fCVFRCU5NSU5QyVFQSVCNSVBRCUyMCVFQyU5NyVBQyVFRCU5NiU4OXxlbnwwfHwwfHx8MA%3D%3D',
-    content:
-      '오랜만에 가족이랑 나들이를 왔습니다 아주 산좋고 공기좋고 물좋은 곳..! 추천합니다!오랜만에 가족이랑 오랜만에 가족이랑 나들이를 왔습니다 아주 산좋고 공기좋고 물좋은 곳..! 추천합니다!나들이를 왔습니다 아주 산좋고 공기좋고 물좋은 곳..! 추천합니다!',
-    tip: '개꿀마!',
-    score: 4,
-    createdDate: '2023-03-01',
-  },
-  {
-    id: 2,
-    nickname: 'user2user1',
-    imageThumbnail:
-      'https://plus.unsplash.com/premium_photo-1661948404806-391a240d6d40?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fCVFRCU5NSU5QyVFQSVCNSVBRCUyMCVFQyU5NyVBQyVFRCU5NiU4OXxlbnwwfHwwfHx8MA%3D%3D',
-    content: '소금빵 맛집dd ',
-    tip: '',
-    score: 3,
-    createdDate: '2023-03-02',
-  },
-  {
-    id: 3,
-    nickname: 'user2',
-    imageThumbnail:
-      'https://plus.unsplash.com/premium_photo-1661948404806-391a240d6d40?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fCVFRCU5NSU5QyVFQSVCNSVBRCUyMCVFQyU5NyVBQyVFRCU5NiU4OXxlbnwwfHwwfHx8MA%3D%3D',
-    content: '소금빵 맛집 ',
-    tip: '소금빵 꼭 시켜야함',
-    score: 3,
-    createdDate: '2023-03-02',
-  },
-  {
-    id: 4,
-    nickname: 'user24',
-    imageThumbnail:
-      'https://plus.unsplash.com/premium_photo-1661948404806-391a240d6d40?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fCVFRCU5NSU5QyVFQSVCNSVBRCUyMCVFQyU5NyVBQyVFRCU5NiU4OXxlbnwwfHwwfHx8MA%3D%3D',
-    content: '소금빵 맛집zz ',
-    tip: '소금빵 꼭 시켜야함',
-    score: 5,
-    createdDate: '2023-03-02',
-  },
-  {
-    id: 5,
-    nickname: 'user26',
-    imageThumbnail:
-      'https://plus.unsplash.com/premium_photo-1661948404806-391a240d6d40?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fCVFRCU5NSU5QyVFQSVCNSVBRCUyMCVFQyU5NyVBQyVFRCU5NiU4OXxlbnwwfHwwfHx8MA%3D%3D',
-    content: '소금빵 맛집!! ',
-    tip: '소금빵 꼭 시켜야함',
-    score: 1,
-    createdDate: '2023-03-02',
-  },
-];
+interface ReviewData {
+  data: {
+    data: Review[];
+  };
+  isLoading: boolean;
+  isError: boolean;
+}
 
-const Reviews = () => {
+const Reviews = ({ placeId }: { placeId: number }) => {
   const scoreArr = (score: number) =>
     Array.from({ length: score }).map((_, index) => `star${index}`);
 
+  const { data: reviewsApi, isLoading, isError }: ReviewData = useReview(placeId);
+
+  if (isLoading) {
+    return <Loading type="SMALL" />;
+  }
+  if (isError) {
+    return null;
+  }
+
   return (
     <Inner>
-      {data.map((el) => (
-        <ReviewInner key={el.id}>
-          <Review>
-            <Info>
-              <ProfileImg src={el.imageThumbnail} alt={el.nickname} />
-              <Nickname>{el.nickname}</Nickname>
-              {scoreArr(el.score).map((key) => (
-                <StarFilled key={`${el.id}${key}`} style={{ width: '17px' }} />
-              ))}
-            </Info>
-            {el.createdDate}
-          </Review>
-          <Content>{el.content}</Content>
-          {el.tip !== '' && (
-            <Tip>
-              <HoneyPot /> {el.tip}
-            </Tip>
-          )}
-        </ReviewInner>
-      ))}
+      {reviewsApi.data.length === 0 ? (
+        <EmptyContent>여행자님의 리뷰를 기다리고 있습니다 🙇🏻</EmptyContent>
+      ) : (
+        reviewsApi.data.map((data) => (
+          <ReviewInner key={data.id}>
+            <Title>
+              <Info>
+                <ProfileImg src={data.imageThumbnail} alt={data.nickname} />
+                <Nickname>{data.nickname}</Nickname>
+                {scoreArr(data.score).map((key) => (
+                  <StarFilled key={`${data.id}${key}`} style={{ width: '17px' }} />
+                ))}
+              </Info>
+              {data.createdDate.split('T')[0]}
+            </Title>
+            <Content>{data.content}</Content>
+            {data.tip !== '' && (
+              <Tip>
+                <HoneyPot /> {data.tip}
+              </Tip>
+            )}
+          </ReviewInner>
+        ))
+      )}
     </Inner>
   );
 };
@@ -111,7 +81,7 @@ const ReviewInner = styled.div`
   box-shadow: 0px 2px 3px 0px darkgray;
 `;
 
-const Review = styled.div`
+const Title = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -155,4 +125,13 @@ const Tip = styled.div`
 
   border-top: 0.1px solid;
   border-color: ${(props) => props.theme.colors.lightGrey};
+`;
+
+const EmptyContent = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
 `;
