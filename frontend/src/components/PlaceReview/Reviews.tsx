@@ -2,8 +2,10 @@ import { styled } from 'styled-components';
 
 import { ReactComponent as StarFilled } from 'src/assets/svgs/starFilled.svg';
 import { ReactComponent as HoneyPot } from 'src/assets/svgs/honeyPot.svg';
+
 import { useReview } from 'src/hooks/api/useReviews';
 import { Review } from 'src/@types/api/review';
+
 import Loading from '../common/Loading';
 
 interface ReviewData {
