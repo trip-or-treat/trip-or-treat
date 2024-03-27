@@ -123,9 +123,7 @@ public class PlanServiceImpl implements PlanService {
             throw new UserNotFoundException();
         }
 
-        PageResponseDto<PlanListResponseDto> pageResponse = new PageResponseDto<>(planRepository.searchPlans(condition, pageable, userId));
-
-        return pageResponse;
+        return new PageResponseDto<>(planRepository.searchPlans(condition, pageable, userId));
     }
 
     private void createSchedules(List<ScheduleCreateRequestDto> schedulesRequests, Plan plan) {
