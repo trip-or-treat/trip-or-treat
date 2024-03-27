@@ -1,11 +1,15 @@
 package com.triportreat.backend.plan.service.impl;
 
+import com.triportreat.backend.common.error.exception.AuthenticateFailException;
 import com.triportreat.backend.place.entity.Place;
 import com.triportreat.backend.place.repository.PlaceRepository;
 import com.triportreat.backend.plan.domain.PlanDetailResponseDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
+import com.triportreat.backend.plan.domain.PlanRequestDto.PlanUpdateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceCreateRequestDto;
+import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceUpdateRequestDto;
+import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleUpdateRequestDto;
 import com.triportreat.backend.plan.domain.ScheduleDetailResponseDto;
 import com.triportreat.backend.plan.domain.SchedulePlaceDetailResponseDto;
 import com.triportreat.backend.plan.entity.Plan;
@@ -13,6 +17,8 @@ import com.triportreat.backend.plan.entity.Schedule;
 import com.triportreat.backend.plan.entity.SchedulePlace;
 import com.triportreat.backend.plan.error.exception.PlaceNotFoundException;
 import com.triportreat.backend.plan.error.exception.PlanNotFoundException;
+import com.triportreat.backend.plan.error.exception.ScheduleNotFoundException;
+import com.triportreat.backend.plan.error.exception.SchedulePlaceNotFoundException;
 import com.triportreat.backend.plan.error.exception.UserNotFoundException;
 import com.triportreat.backend.plan.repository.PlanRepository;
 import com.triportreat.backend.plan.repository.SchedulePlaceRepository;
@@ -37,6 +43,13 @@ public class PlanServiceImpl implements PlanService {
     private final PlaceRepository placeRepository;
     private final SchedulePlaceRepository schedulePlaceRepository;
 
+    @Override
+    public void validatePlanOwner(Long id, Long userId) {
+        if (!planRepository.existsByIdAndUserId(id, userId)) {
+            throw new AuthenticateFailException();
+        }
+    }
+
     @Transactional
     @Override
     public void createPlan(PlanCreateRequestDto planCreateRequestDto) {
@@ -54,6 +67,50 @@ public class PlanServiceImpl implements PlanService {
     public PlanDetailResponseDto getPlanDetail(Long id) {
         Plan plan = planRepository.findById(id).orElseThrow(PlanNotFoundException::new);
         return PlanDetailResponseDto.toDto(plan, extractScheduleDetailsFromPlan(plan));
+    }
+
+    @Transactional
+    @Override
+    public void updatePlan(PlanUpdateRequestDto planUpdateRequestDto) {
+        Plan plan = planRepository.findById(planUpdateRequestDto.getPlanId())
+                .orElseThrow(PlanNotFoundException::new);
+
+        validatePlanOwner(planUpdateRequestDto.getPlanId(), planUpdateRequestDto.getUserId());
+
+        plan.updateTitle(planUpdateRequestDto.getTitle());
+
+        updateSchedules(planUpdateRequestDto.getSchedules());
+    }
+
+    private void updateSchedules(List<ScheduleUpdateRequestDto> scheduleDtos) {
+        scheduleDtos.forEach(scheduleDto -> {
+            Schedule schedule = scheduleRepository.findByIdWithSchedulePlacesFetchJoin(scheduleDto.getScheduleId())
+                    .orElseThrow(ScheduleNotFoundException::new);
+
+            schedule.getSchedulePlaces().clear();
+
+            updateSchedulePlaces(schedule, scheduleDto.getSchedulePlaces());
+        });
+    }
+
+    private void updateSchedulePlaces(Schedule schedule, List<SchedulePlaceUpdateRequestDto> schedulePlaceDtos) {
+        schedulePlaceDtos.forEach(schedulePlaceDto -> {
+            schedulePlaceDto.getSchedulePlaceId().ifPresentOrElse(
+                    schedulePlaceId -> {
+                        SchedulePlace schedulePlace = schedulePlaceRepository.findById(schedulePlaceId)
+                                .orElseThrow(SchedulePlaceNotFoundException::new);
+                        schedulePlace.update(schedulePlaceDto);
+
+                        schedule.getSchedulePlaces().add(schedulePlace);
+                    },
+                    () -> {
+                        Place place = placeRepository.findById(schedulePlaceDto.getPlaceId())
+                                .orElseThrow(PlaceNotFoundException::new);
+
+                        schedulePlaceRepository.save(SchedulePlace.toEntity(schedulePlaceDto, schedule, place));
+                    }
+            );
+        });
     }
 
     private void createSchedules(List<ScheduleCreateRequestDto> schedulesRequests, Plan plan) {

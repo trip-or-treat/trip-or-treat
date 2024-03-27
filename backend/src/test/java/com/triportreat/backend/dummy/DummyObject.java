@@ -5,15 +5,18 @@ import com.triportreat.backend.place.domain.ReviewUpdateRequestDto;
 import com.triportreat.backend.place.entity.Place;
 import com.triportreat.backend.place.entity.Review;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
+import com.triportreat.backend.plan.domain.PlanRequestDto.PlanUpdateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceCreateRequestDto;
+import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceUpdateRequestDto;
+import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleUpdateRequestDto;
 import com.triportreat.backend.plan.entity.Plan;
 import com.triportreat.backend.plan.entity.Schedule;
 import com.triportreat.backend.plan.entity.SchedulePlace;
 import com.triportreat.backend.user.entity.User;
-
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public class DummyObject {
 
@@ -106,6 +109,35 @@ public class DummyObject {
                 .content("newContent")
                 .tip("newTip")
                 .score(1)
+                .build();
+    }
+
+    protected PlanUpdateRequestDto createPlanUpdateRequestDto() {
+        List<SchedulePlaceUpdateRequestDto> mockSchedulePlaces = List.of(
+                SchedulePlaceUpdateRequestDto.builder()
+                        .schedulePlaceId(Optional.of(1L))
+                        .placeId(1L)
+                        .visitOrder(1)
+                        .memo("수정된 메모")
+                        .expense(1000L)
+                        .build(),
+                SchedulePlaceUpdateRequestDto.builder()
+                        .schedulePlaceId(Optional.empty())
+                        .placeId(2L)
+                        .visitOrder(2)
+                        .memo("새로 추가된 스케줄-장소의 메모")
+                        .expense(2000L)
+                        .build());
+
+        List<ScheduleUpdateRequestDto> mockSchedules = List.of(
+                ScheduleUpdateRequestDto.builder()
+                        .scheduleId(1L)
+                        .schedulePlaces(mockSchedulePlaces)
+                        .build());
+
+        return PlanUpdateRequestDto.builder()
+                .title("수정한 계획 제목")
+                .schedules(mockSchedules)
                 .build();
     }
 }
