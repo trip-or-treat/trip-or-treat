@@ -6,26 +6,31 @@ import { ReactComponent as StarEmpty } from 'src/assets/svgs/starEmpty.svg';
 import { ReactComponent as HoneyPot } from 'src/assets/svgs/honeyPot.svg';
 import { ReactComponent as SpeechBubble } from 'src/assets/svgs/speechBubble.svg';
 
-const ReviewInput = () => {
-  const [review, setReview] = useState('');
+import { reviewWriteFetcher } from 'src/api/reviewWrite';
+
+const ReviewInput = ({ placeId }: { placeId: number }) => {
+  const [content, setContent] = useState('');
   const [tip, setTip] = useState('');
-  const [rating, setRating] = useState(0);
+  const [score, setScore] = useState(0);
   const [hoverIndex, setHoverIndex] = useState(-1);
+  const [isSubmit, setSubmit] = useState(false);
   const scoreArr = Array.from({ length: 5 }).map((_, index) => `star${index}`);
 
-  const onInput = () => {
-    if (rating === 0 || rating === -1) {
-      setRating(-1);
+  const onSubmit = () => {
+    if (score === 0 || score === -1) {
+      setScore(-1);
     } else {
-      setReview('');
+      reviewWriteFetcher({ placeId, content, tip, score });
+      setSubmit(true);
+      setContent('');
       setTip('');
-      setRating(0);
+      setScore(0);
     }
   };
 
-  const handleReview = (event: ChangeEvent<HTMLTextAreaElement>) => {
+  const handleContent = (event: ChangeEvent<HTMLTextAreaElement>) => {
     if (event.target.value.length <= 200) {
-      setReview(event.target.value);
+      setContent(event.target.value);
     }
   };
 
@@ -36,7 +41,7 @@ const ReviewInput = () => {
   };
 
   const handleStarClick = (index: number) => {
-    setRating(index + 1);
+    setScore(index + 1);
   };
 
   const handleOnStar = (index: number) => {
@@ -66,19 +71,23 @@ const ReviewInput = () => {
               onMouseLeave={handleCloseStar}
               $hoverIndex={hoverIndex}
             >
-              {index < rating ? <StarFilled /> : <StarEmpty />}
+              {index < score ? <StarFilled /> : <StarEmpty />}
             </Svg>
           ))}
         </Score>
-        {rating === -1 && <RatingEmpty>별점을 입력해주세요.</RatingEmpty>}
+        {score === -1 && <RatingEmpty>별점을 입력해주세요.</RatingEmpty>}
       </SemiTitle>
-      <Review value={review} placeholder="이 장소는 어떠셨나요?" onChange={handleReview} />
+      <Content value={content} placeholder="이 장소는 어떠셨나요?" onChange={handleContent} />
       <SemiTitle>
         <HoneyPot />
         꿀팁
       </SemiTitle>
       <Tip value={tip} placeholder="꿀팁이 있다면 알려주세요! (20자)" onChange={handleTip} />
-      <InputSubmit onClick={onInput}>리뷰 등록</InputSubmit>
+      {!isSubmit ? (
+        <InputSubmit onClick={onSubmit}>리뷰 등록</InputSubmit>
+      ) : (
+        <SubmitCompleted>등록 완료</SubmitCompleted>
+      )}
     </InputInner>
   );
 };
@@ -104,7 +113,7 @@ const SemiTitle = styled.h3`
   font-size: 20px;
 `;
 
-const Review = styled.textarea`
+const Content = styled.textarea`
   width: 100%;
   height: 45%;
   margin-bottom: 30px;
@@ -153,6 +162,13 @@ const InputSubmit = styled.button`
   color: ${(props) => props.theme.colors.whiteFont};
 
   cursor: pointer;
+`;
+
+const SubmitCompleted = styled(InputSubmit)`
+  background-color: ${(props) => props.theme.colors.darkGrey};
+  color: ${(props) => props.theme.colors.whiteFont};
+
+  pointer-events: none;
 `;
 
 const Score = styled.div`

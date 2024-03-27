@@ -56,7 +56,7 @@ const PlaceModal = ({ onClose }: Props) => {
           </StyledImageBoxInner>
           <Address address={placeInfoApi.data.address} />
           <Overview overview={placeInfoApi.data.overview} />
-          <PlaceReview />
+          <PlaceReview currentId={currentId} />
         </StyledModalLayout>
       )}
     </ModalOverlay>

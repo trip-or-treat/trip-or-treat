@@ -7,7 +7,7 @@ import { ReactComponent as Pencil } from 'src/assets/svgs/pencil.svg';
 import ReviewInput from './ReviewInput';
 import Reviews from './Reviews';
 
-const PlaceReview = () => {
+const PlaceReview = ({ currentId }: { currentId: number }) => {
   const [isReviewInput, setReviewInput] = useState(false);
   const [isReviews, setReviews] = useState(true);
 
@@ -34,7 +34,7 @@ const PlaceReview = () => {
           리뷰 <StarFilled />
         </Title>
       </Nav>
-      {isReviewInput && <ReviewInput />}
+      {isReviewInput && <ReviewInput placeId={currentId} />}
       {isReviews && <Reviews />}
     </Wrapper>
   );
