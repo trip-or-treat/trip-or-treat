@@ -10,6 +10,7 @@ interface Colors {
   lightGreyFont: string;
   whiteFont: string;
   hoverColor: string;
+  yellow: string;
 }
 
 interface Width {
