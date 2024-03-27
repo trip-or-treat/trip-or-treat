@@ -10,7 +10,16 @@ import Reviews from './Reviews';
 const PlaceReview = ({ currentId }: { currentId: number }) => {
   const [isReviewInput, setReviewInput] = useState(false);
   const [isReviews, setReviews] = useState(true);
+  const prevPage = localStorage.getItem('prevPage');
 
+  const onlyReviews = () => {
+    const isOnly = prevPage?.split('/')[1] === 'place';
+    return isOnly;
+  };
+
+  console.log(onlyReviews());
+
+  onlyReviews();
   const onReviewInput = () => {
     setReviewInput(true);
     setReviews(false);
@@ -23,17 +32,21 @@ const PlaceReview = ({ currentId }: { currentId: number }) => {
 
   return (
     <Wrapper>
-      <Nav>
-        <Title
-          onClick={onReviewInput}
-          style={isReviewInput ? { borderBottom: `1px solid #d9d9d9` } : {}}
-        >
-          리뷰 작성 <Pencil />
-        </Title>
-        <Title onClick={onReviews} style={isReviews ? { borderBottom: '1px solid #d9d9d9' } : {}}>
-          리뷰 <StarFilled />
-        </Title>
-      </Nav>
+      {onlyReviews() ? (
+        <Nav />
+      ) : (
+        <Nav>
+          <Title
+            onClick={onReviewInput}
+            style={isReviewInput ? { borderBottom: `1px solid #d9d9d9` } : {}}
+          >
+            리뷰 작성 <Pencil />
+          </Title>
+          <Title onClick={onReviews} style={isReviews ? { borderBottom: '1px solid #d9d9d9' } : {}}>
+            리뷰 <StarFilled />
+          </Title>
+        </Nav>
+      )}
       {isReviewInput && <ReviewInput placeId={currentId} />}
       {isReviews && <Reviews placeId={currentId} />}
     </Wrapper>
