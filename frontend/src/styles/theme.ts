@@ -8,6 +8,7 @@ const theme = {
     lightGreyFont: '#F6F6F6',
     whiteFont: '#FFFFFF',
     hoverColor: '#f84a3b',
+    yellow: '#ffd233',
   },
 
   width: {

@@ -1,5 +1,5 @@
 export interface PlaceListTypes {
-  id: number;
+  placeId: number;
   name: string;
   imageThumbnail: string;
   subCategoryName: string;

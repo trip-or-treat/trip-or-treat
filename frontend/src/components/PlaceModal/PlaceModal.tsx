@@ -12,6 +12,7 @@ import ModalOverlay from '../common/modal/ModalOverlay';
 import ImageBox from '../common/modal/ImageBox';
 import Overview from '../common/modal/Overview';
 import Address from './Address';
+import PlaceReview from '../PlaceReview';
 
 interface Props {
   onClose: () => void;
@@ -55,7 +56,7 @@ const PlaceModal = ({ onClose }: Props) => {
           </StyledImageBoxInner>
           <Address address={placeInfoApi.data.address} />
           <Overview overview={placeInfoApi.data.overview} />
-          <StyledReviewIneer>리뷰 업데이트 예정이에요! 🙇🏻</StyledReviewIneer>
+          <PlaceReview currentId={currentId} />
         </StyledModalLayout>
       )}
     </ModalOverlay>
@@ -113,17 +114,6 @@ const StyledContentType = styled.div`
 
 const StyledImageBoxInner = styled.div`
   margin-bottom: 30px;
-`;
-
-const StyledReviewIneer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  width: 489px;
-  height: 580px;
-
-  background-color: ${(props) => props.theme.colors.whiteFont};
 `;
 
 const StyledIcon = styled.div`

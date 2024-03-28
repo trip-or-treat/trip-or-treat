@@ -35,7 +35,7 @@ const KaKaoMap = ({ list, curDay }: Props) => {
   return (
     <Map center={markerPositions[0]} style={{ width: '100%', height: '100%' }} level={10}>
       {list.map((info, idx) => (
-        <CustomOverlayMap key={info.id} position={{ lat: info.latitude, lng: info.longitude }}>
+        <CustomOverlayMap key={info.name} position={{ lat: info.latitude, lng: info.longitude }}>
           <Marker className="overlay" $bgColor={ORDER_COLORS[(curDay || 1) - 1]}>
             {idx + 1}
           </Marker>

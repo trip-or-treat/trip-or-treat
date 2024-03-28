@@ -36,7 +36,7 @@ const DragPlaceCard = ({ placeCardItem, magic }: Props) => {
     const targetId = Number((e.currentTarget.parentNode as HTMLElement)?.dataset.id);
     if (!targetId) return;
     const copyData = [...totalPlan];
-    const updatedItem = totalPlan[curDay - 1].items.filter((item) => item.id !== targetId);
+    const updatedItem = totalPlan[curDay - 1].items.filter((item) => item.placeId !== targetId);
     copyData[curDay - 1] = { ...copyData[curDay - 1], items: updatedItem };
 
     setTotalPlan(copyData);
@@ -56,7 +56,7 @@ const DragPlaceCard = ({ placeCardItem, magic }: Props) => {
     const copyData = [...totalPlan];
     const targetIndex = curDay - 1;
     const targetItemIdx = copyData[targetIndex].items.findIndex(
-      (data) => data.id === placeCardItem.id,
+      (data) => data.placeId === placeCardItem.placeId,
     );
 
     if (targetItemIdx !== -1) {
@@ -82,7 +82,9 @@ const DragPlaceCard = ({ placeCardItem, magic }: Props) => {
 
     if (e.currentTarget.parentNode !== null) {
       const targetId = currentTarget.dataset.id;
-      const targetItem = totalPlan[curDay - 1].items.find((data) => data.id === Number(targetId));
+      const targetItem = totalPlan[curDay - 1].items.find(
+        (data) => data.placeId === Number(targetId),
+      );
       setMemo(targetItem?.memo ?? '');
       setExpense(targetItem?.expense ?? 0);
     }
@@ -101,7 +103,7 @@ const DragPlaceCard = ({ placeCardItem, magic }: Props) => {
 
   return (
     <Accordion isOpenMemo={isOpenMemo} curScreenY={curScreenY}>
-      <Wrapper data-id={placeCardItem.id}>
+      <Wrapper data-id={placeCardItem.placeId}>
         <PlaceCardDetailBtn placeCardItem={placeCardItem} />
 
         <IconButton onClick={handleClickMemo}>

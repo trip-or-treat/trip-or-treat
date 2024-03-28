@@ -30,7 +30,7 @@ const PlansPage = () => {
       name: item.name,
       imageThumbnail: item.imageThumbnail,
       subCategoryName: item.subCategoryName,
-      placeId: item.id,
+      placeId: item.placeId,
       visitOrder: idx + 1,
       memo: item.memo ?? '',
       expense: item.expense ?? 0,
