@@ -65,7 +65,7 @@ public class PlanServiceImpl implements PlanService {
 
     @Override
     public PlanDetailResponseDto getPlanDetail(Long planId, Long userId) {
-        Plan plan = planRepository.findByIdAndUserId(planId, userId).orElseThrow(PlanNotFoundException::new);
+        Plan plan = planRepository.findByIdAndUserId(planId, userId).orElseThrow(AuthenticateFailException::new);
         return PlanDetailResponseDto.toDto(plan, extractScheduleDetailsFromPlan(plan));
     }
 

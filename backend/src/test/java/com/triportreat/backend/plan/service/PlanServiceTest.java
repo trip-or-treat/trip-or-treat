@@ -209,8 +209,8 @@ class PlanServiceTest extends DummyObject {
             // when
             // then
             assertThatThrownBy(() -> planService.getPlanDetail(planId, userId))
-                    .isInstanceOf(PlanNotFoundException.class)
-                    .hasMessage(PLAN_NOT_FOUND.getMessage());
+                    .isInstanceOf(AuthenticateFailException.class)
+                    .hasMessage(AUTHENTICATION_FAILED.getMessage());
         }
     }
 
