@@ -120,7 +120,7 @@ const MyReviewPage = () => {
           return (
             <MyReviewList
               key={data.id}
-              idx={idx + 1}
+              idx={10 * (currentPage - 1) + idx + 1}
               review={data.content}
               place={data.placeName}
               score={data.score}

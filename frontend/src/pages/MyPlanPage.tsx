@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 import MyPlanList from 'src/components/mypage/MyPlanList';
 import MyPageTitle from 'src/components/mypage/MyPageTitle';
-import SearchToggle from 'src/components/mypage/SearchToggle';
+import DropDown from 'src/components/mypage/DropDown';
 import PlanListCategory from 'src/components/mypage/PlanListCategory';
 import Paging from 'src/components/mypage/Pagination/Pagination';
 
@@ -95,7 +95,7 @@ export const MY_PLANS_DATA = [
   },
   {
     planId: 7,
-    title: '여행자1 님의 여행계획 14',
+    title: '여행자1 님의 여행계획 11',
     startDate: '2024-02-15',
     endDate: '2024-02-14',
     createdDate: '2024-03-18', // 시,분,초 제외
@@ -154,9 +154,9 @@ const MyPlanPage = () => {
     <div>
       <MyPageTitle>내 여행계획</MyPageTitle>
       <SearchBox>
-        <SearchToggle />
+        <DropDown />
         <Search>검색창입니다.</Search>
-        <SearchToggle />
+        <DropDown />
       </SearchBox>
       <FilterBox>
         <Button $isClicked={false}>최근 6개월</Button>
@@ -168,7 +168,7 @@ const MyPlanPage = () => {
           return (
             <MyPlanList
               key={data.planId}
-              idx={idx + 1}
+              idx={10 * (currentPage - 1) + idx + 1}
               title={data.title}
               regions={data.regions}
               startDate={data.startDate}
