@@ -4,6 +4,7 @@ import com.triportreat.backend.plan.entity.Plan;
 import com.triportreat.backend.plan.entity.PlanRegion;
 import com.triportreat.backend.plan.entity.Schedule;
 import com.triportreat.backend.plan.entity.SchedulePlace;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -143,7 +144,9 @@ public class PlanResponseDto {
         private String title;
         private LocalDate startDate;
         private LocalDate endDate;
-        private LocalDateTime createdDate;
+        @JsonIgnore
+        private LocalDateTime createdDateTime;
+        private String createdDate;
 
         @Builder.Default
         private List<String> regions = new ArrayList<>();

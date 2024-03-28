@@ -121,7 +121,7 @@ public class PlanRepositoryImpl implements PlanRepositoryCustom {
                                 plan.title,
                                 plan.startDate,
                                 plan.endDate,
-                                plan.createdDate,
+                                plan.createdDate.as("createdDateTime"),
                                 list(region.name).as("regions")))).get(0))
                 .collect(Collectors.toList());
     }
