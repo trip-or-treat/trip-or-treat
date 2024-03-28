@@ -1,6 +1,7 @@
 package com.triportreat.backend.place.service.impl;
 
 
+import com.triportreat.backend.common.error.exception.AuthenticateFailException;
 import com.triportreat.backend.place.domain.ReviewListDto;
 import com.triportreat.backend.place.domain.ReviewRequestDto;
 import com.triportreat.backend.place.domain.ReviewUpdateRequestDto;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
@@ -44,7 +46,6 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    @Transactional
     public void createReview(ReviewRequestDto reviewRequestDto) {
         Place place = placeRepository.findById(reviewRequestDto.getPlaceId())
                 .orElseThrow(() -> new PlaceNotFoundException(reviewRequestDto.getPlaceId()));
@@ -57,7 +58,6 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    @Transactional
     public void updateReview(Long id, ReviewUpdateRequestDto reviewUpdateRequestDto) {
         Place place = placeRepository.findById(reviewUpdateRequestDto.getPlaceId())
                 .orElseThrow(() -> new PlaceNotFoundException(reviewUpdateRequestDto.getPlaceId()));
@@ -70,6 +70,18 @@ public class ReviewServiceImpl implements ReviewService {
         }
 
         review.reviewUpdate(reviewUpdateRequestDto.getContent(), reviewUpdateRequestDto.getTip(), reviewUpdateRequestDto.getScore());
+    }
+
+    @Override
+    public void deleteReview(Long userId, Long id) {
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(ReviewNotFoundException::new);
+
+        if (!review.getUser().getId().equals(userId)) {
+            throw new AuthenticateFailException();
+        }
+
+        reviewRepository.deleteById(id);
     }
 }
 
