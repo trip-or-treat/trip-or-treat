@@ -17,7 +17,6 @@ public class MyReviewListDto {
 
     private  Long id;
     private  String content;
-    private  String tip;
     private  String placeName;
     private  Integer score;
     private  LocalDateTime createdDate;
@@ -26,7 +25,6 @@ public class MyReviewListDto {
         return MyReviewListDto.builder()
                 .id(review.getId())
                 .content(review.getContent())
-                .tip(review.getTip())
                 .placeName(place.getName())
                 .score(review.getScore())
                 .createdDate(review.getCreatedDate())
