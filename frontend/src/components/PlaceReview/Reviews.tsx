@@ -26,7 +26,11 @@ const Reviews = ({ placeId }: { placeId: number }) => {
     return <Loading type="SMALL" />;
   }
   if (isError) {
-    return null;
+    return (
+      <Inner>
+        <EmptyContent>데이터를 불러올 수 없습니다.</EmptyContent>
+      </Inner>
+    );
   }
 
   return (
@@ -44,7 +48,7 @@ const Reviews = ({ placeId }: { placeId: number }) => {
                   <StarFilled key={`${data.id}${key}`} style={{ width: '17px' }} />
                 ))}
               </Info>
-              {data.createdDate.split('T')[0]}
+              <Date>{data.createdDate.split('T')[0]}</Date>
             </Title>
             <Content>{data.content}</Content>
             {data.tip !== '' && (
@@ -80,7 +84,7 @@ const ReviewInner = styled.div`
 
   border-radius: 10px;
 
-  box-shadow: 0px 2px 3px 0px darkgray;
+  box-shadow: 1px 2px 6px 0px ${(props) => props.theme.colors.darkGrey};
 `;
 
 const Title = styled.div`
@@ -107,6 +111,11 @@ const ProfileImg = styled.img`
 
   border: none;
   border-radius: 50%;
+`;
+
+const Date = styled.div`
+  font-size: 13px;
+  color: ${(props) => props.theme.colors.darkGrey};
 `;
 
 const Content = styled.div`
