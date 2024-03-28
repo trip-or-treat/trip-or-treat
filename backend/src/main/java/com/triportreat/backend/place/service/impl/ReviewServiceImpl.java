@@ -1,6 +1,8 @@
 package com.triportreat.backend.place.service.impl;
 
 
+import com.triportreat.backend.common.response.PageResponseDto;
+import com.triportreat.backend.place.domain.MyReviewListDto;
 import com.triportreat.backend.common.error.exception.AuthenticateFailException;
 import com.triportreat.backend.place.domain.ReviewListDto;
 import com.triportreat.backend.place.domain.ReviewRequestDto;
@@ -17,6 +19,7 @@ import com.triportreat.backend.place.service.ReviewService;
 import com.triportreat.backend.user.entity.User;
 import com.triportreat.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,6 +85,18 @@ public class ReviewServiceImpl implements ReviewService {
         }
 
         reviewRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PageResponseDto<MyReviewListDto> getMyReviewList(Long userId, Pageable pageable) {
+        if (!userRepository.existsById(userId)) {
+            throw new UserNotFoundException();
+        }
+
+        Page<Review> reviewPage = reviewRepository.findByUserId(userId, pageable);
+
+        return new PageResponseDto<>(reviewPage.map(review -> MyReviewListDto.toDto(review, review.getPlace())));
     }
 }
 

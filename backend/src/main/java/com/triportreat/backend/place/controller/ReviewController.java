@@ -32,6 +32,11 @@ public class ReviewController {
         return ResponseEntity.ok().body(ResponseResult.success(POST_SUCCESS.getMessage(), null));
     }
 
+    @GetMapping("/reviews")
+    public ResponseEntity<?> getMyReviewList(@Auth Long userId, @PageableDefault(size = 10) Pageable pageable) {
+        return ResponseEntity.ok().body(ResponseResult.success(GET_SUCCESS.getMessage(), reviewService.getMyReviewList(userId, pageable)));
+    }
+
     @PutMapping("/reviews/{id}")
     public ResponseEntity<?> updateReview(@PathVariable Long id, @Valid @RequestBody ReviewUpdateRequestDto reviewUpdateRequestDto) {
         reviewService.updateReview(id, reviewUpdateRequestDto);

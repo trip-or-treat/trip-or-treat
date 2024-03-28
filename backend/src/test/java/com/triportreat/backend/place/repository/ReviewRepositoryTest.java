@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
@@ -71,5 +72,46 @@ public class ReviewRepositoryTest {
         //then
         assertThat(reviews.get(0).getContent()).isEqualTo("review1");
         assertThat(reviews).hasSize(2);
+    }
+
+    @Test
+    @DisplayName("유저 id에 따른 리뷰 조회")
+    public void findByUserIdTest() {
+
+        //given
+        User user = User.builder()
+                .id(1L)
+                .nickname("test name")
+                .build();
+        userRepository.save(user);
+
+        Review review1 = Review.builder()
+                .id(1L)
+                .content("review1")
+                .tip("tip1")
+                .score(5)
+                .user(user)
+                .build();
+        reviewRepository.save(review1);
+
+        Review review2 = Review.builder()
+                .id(2L)
+                .content("review2")
+                .tip("tip2")
+                .score(3)
+                .user(user)
+                .build();
+        reviewRepository.save(review2);
+
+        //when
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Review> reviews = reviewRepository.findByUserId(user.getId(), pageable);
+
+        //then
+        List<Review> reviewList = reviews.getContent();
+
+        assertThat(reviewList).hasSize(2);
+        assertThat(reviewList.get(0).getContent()).isEqualTo("review1");
+        assertThat(reviewList.get(1).getContent()).isEqualTo("review2");
     }
 }
