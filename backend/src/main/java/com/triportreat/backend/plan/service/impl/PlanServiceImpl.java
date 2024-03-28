@@ -3,15 +3,15 @@ package com.triportreat.backend.plan.service.impl;
 import com.triportreat.backend.common.error.exception.AuthenticateFailException;
 import com.triportreat.backend.place.entity.Place;
 import com.triportreat.backend.place.repository.PlaceRepository;
-import com.triportreat.backend.plan.domain.PlanDetailResponseDto;
+import com.triportreat.backend.plan.domain.PlanResponseDto.PlanDetailResponseDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanUpdateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceUpdateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleUpdateRequestDto;
-import com.triportreat.backend.plan.domain.ScheduleDetailResponseDto;
-import com.triportreat.backend.plan.domain.SchedulePlaceDetailResponseDto;
+import com.triportreat.backend.plan.domain.PlanResponseDto.ScheduleDetailResponseDto;
+import com.triportreat.backend.plan.domain.PlanResponseDto.SchedulePlaceDetailResponseDto;
 import com.triportreat.backend.plan.entity.Plan;
 import com.triportreat.backend.plan.entity.Schedule;
 import com.triportreat.backend.plan.entity.SchedulePlace;
@@ -35,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class PlanServiceImpl implements PlanService {
 
     private final PlanRepository planRepository;
@@ -62,10 +63,9 @@ public class PlanServiceImpl implements PlanService {
         createSchedules(planCreateRequestDto.getSchedules(), plan);
     }
 
-    @Transactional(readOnly = true)
     @Override
-    public PlanDetailResponseDto getPlanDetail(Long id) {
-        Plan plan = planRepository.findById(id).orElseThrow(PlanNotFoundException::new);
+    public PlanDetailResponseDto getPlanDetail(Long planId, Long userId) {
+        Plan plan = planRepository.findByIdAndUserId(planId, userId).orElseThrow(AuthenticateFailException::new);
         return PlanDetailResponseDto.toDto(plan, extractScheduleDetailsFromPlan(plan));
     }
 

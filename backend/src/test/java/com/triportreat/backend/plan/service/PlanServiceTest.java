@@ -16,14 +16,17 @@ import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 import com.triportreat.backend.common.error.exception.AuthenticateFailException;
 import com.triportreat.backend.dummy.DummyObject;
+import com.triportreat.backend.place.entity.ContentType;
 import com.triportreat.backend.place.entity.Place;
+import com.triportreat.backend.place.entity.SubCategory;
 import com.triportreat.backend.place.repository.PlaceRepository;
-import com.triportreat.backend.plan.domain.PlanDetailResponseDto;
+import com.triportreat.backend.plan.domain.PlanResponseDto.PlanDetailResponseDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanUpdateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceCreateRequestDto;
 import com.triportreat.backend.plan.entity.Plan;
+import com.triportreat.backend.plan.entity.PlanRegion;
 import com.triportreat.backend.plan.entity.Schedule;
 import com.triportreat.backend.plan.entity.SchedulePlace;
 import com.triportreat.backend.plan.error.exception.PlaceNotFoundException;
@@ -35,12 +38,14 @@ import com.triportreat.backend.plan.repository.PlanRepository;
 import com.triportreat.backend.plan.repository.SchedulePlaceRepository;
 import com.triportreat.backend.plan.repository.ScheduleRepository;
 import com.triportreat.backend.plan.service.impl.PlanServiceImpl;
+import com.triportreat.backend.region.entity.Region;
 import com.triportreat.backend.user.entity.User;
 import com.triportreat.backend.user.repository.UserRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -92,7 +97,7 @@ class PlanServiceTest extends DummyObject {
             PlanCreateRequestDto planCreateRequestDto = createPlanRequestDto(LocalDate.now(), LocalDate.now().plusDays(1), 1L, scheduleRequests);
 
             when(userRepository.findById(anyLong())).thenReturn(Optional.of(createMockUser(1L, "user1")));
-            when(planRepository.save(any(Plan.class))).thenReturn(createMockPlan(1L, null));
+            when(planRepository.save(any(Plan.class))).thenReturn(createMockPlan(1L));
             when(placeRepository.findById(anyLong())).thenReturn(Optional.of(Place.builder().id(1L).build()));
 
             // when
@@ -136,7 +141,7 @@ class PlanServiceTest extends DummyObject {
 
             PlanCreateRequestDto planCreateRequestDto = createPlanRequestDto(LocalDate.now(), LocalDate.now().plusDays(1), 1L, scheduleRequests);
             User user = createMockUser(planCreateRequestDto.getUserId(), "user1");
-            Plan plan = createMockPlan(1L, null);
+            Plan plan = createMockPlan(1L);
 
             when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
             when(planRepository.save(any(Plan.class))).thenReturn(plan);
@@ -158,43 +163,54 @@ class PlanServiceTest extends DummyObject {
         @DisplayName("성공")
         void getPlanDetail_Success() {
             // given
-            List<SchedulePlace> schedulePlaces1 = List.of(
-                    createMockSchedulePlace(1L, 1L, 1),
-                    createMockSchedulePlace(2L, 2L, 2));
-            List<SchedulePlace> schedulePlaces2 = List.of(
-                    createMockSchedulePlace(3L, 3L, 3),
-                    createMockSchedulePlace(4L, 4L, 4));
-            List<Schedule> schedules = List.of(
-                    createMockSchedule(1L, LocalDate.now(), schedulePlaces1),
-                    createMockSchedule(2L, LocalDate.now().plusDays(1), schedulePlaces2));
-            Plan plan = createMockPlan(1L, schedules);
+            Region region1 = createMockRegion(1L, "서울");
+            Region region2 = createMockRegion(2L, "인천");
+            ContentType contentType = ContentType.builder().id(1L).name("관광지").build();
+            SubCategory subCategory = SubCategory.builder().id("A1").name("산").build();
+            Place place1 = createMockPlace(1L, region1, contentType, subCategory, "place1");
+            Place place2 = createMockPlace(1L, region2, contentType, subCategory, "place2");
+            Set<PlanRegion> regions = Set.of(createPlanRegion(1L, null, region1), createPlanRegion(2L, null, region2));
 
-            when(planRepository.findById(anyLong())).thenReturn(Optional.of(plan));
+            List<SchedulePlace> schedulePlaces1 = List.of(
+                    createMockSchedulePlace(1L, place1, null, 1),
+                    createMockSchedulePlace(2L, place2, null, 2));
+            List<SchedulePlace> schedulePlaces2 = List.of(
+                    createMockSchedulePlace(3L, place1, null, 3),
+                    createMockSchedulePlace(4L, place2, null, 4));
+            List<Schedule> schedules = List.of(
+                    createMockSchedule(1L, null, schedulePlaces1, LocalDate.now()),
+                    createMockSchedule(2L, null, schedulePlaces2, LocalDate.now().plusDays(1)));
+            User user = createMockUser(1L, "user1");
+            Plan plan = createMockPlan(1L, user, regions, schedules, null, null);
+
+            when(planRepository.findByIdAndUserId(anyLong(), any())).thenReturn(Optional.of(plan));
 
             // when
-            PlanDetailResponseDto planDetail = planService.getPlanDetail(1L);
+            PlanDetailResponseDto planDetail = planService.getPlanDetail(1L, 1L);
 
             // then
-            assertThat(planDetail.getSchedules().size()).isEqualTo(2);
             assertThat(planDetail.getPlanId()).isEqualTo(1L);
             assertThat(planDetail.getSchedules().size()).isEqualTo(2);
             assertThat(planDetail.getSchedules().get(0).getSchedulePlaces().size()).isEqualTo(2);
             assertThat(planDetail.getSchedules().get(1).getSchedulePlaces().size()).isEqualTo(2);
+            assertThat(planDetail.getRegions().getRegionIds().size()).isEqualTo(2);
+            assertThat(planDetail.getRegions().getRegionNames().size()).isEqualTo(2);
         }
 
         @Test
         @DisplayName("실패 - 계획 데이터 없음")
         void getPlanDetail_PlanNotFound() {
             // given
-            Plan plan = createMockPlan(1L, null);
+            Long planId = 1L;
+            Long userId = 1L;
 
-            when(planRepository.findById(anyLong())).thenReturn(Optional.empty());
+            when(planRepository.findByIdAndUserId(anyLong(), any())).thenReturn(Optional.empty());
 
             // when
             // then
-            assertThatThrownBy(() -> planService.getPlanDetail(plan.getId()))
-                    .isInstanceOf(PlanNotFoundException.class)
-                    .hasMessage(PLAN_NOT_FOUND.getMessage());
+            assertThatThrownBy(() -> planService.getPlanDetail(planId, userId))
+                    .isInstanceOf(AuthenticateFailException.class)
+                    .hasMessage(AUTHENTICATION_FAILED.getMessage());
         }
     }
 
@@ -212,22 +228,22 @@ class PlanServiceTest extends DummyObject {
             mockUpdateRequestDto.setPlanId(id);
             mockUpdateRequestDto.setUserId(userId);
 
-            SchedulePlace mockSchedulePlace = createMockSchedulePlace(1L, 1L, 1);
+            SchedulePlace mockSchedulePlace = createMockSchedulePlace(1L, Place.builder().id(1L).build(), null, 1);
             List<SchedulePlace> mockSchedulePlaces = new ArrayList<>();
             mockSchedulePlaces.add(mockSchedulePlace);
 
-            Schedule mockSchedule = createMockSchedule(1L, LocalDate.now(), mockSchedulePlaces);
+            Schedule mockSchedule = createMockSchedule(1L,null, mockSchedulePlaces, LocalDate.now());
             List<Schedule> mockSchedules = new ArrayList<>();
             mockSchedules.add(mockSchedule);
 
-            Plan mockPlan = createMockPlan(1L, mockSchedules);
+            Plan mockPlan = createMockPlan(1L, null, null, mockSchedules, null, null);
 
             when(planRepository.existsByIdAndUserId(anyLong(), anyLong())).thenReturn(true);
             when(planRepository.findById(anyLong())).thenReturn(Optional.ofNullable(mockPlan));
             when(scheduleRepository.findByIdWithSchedulePlacesFetchJoin(anyLong())).thenReturn(Optional.of(mockSchedule));
             when(schedulePlaceRepository.findById(anyLong())).thenReturn(Optional.of(mockSchedulePlace));
             when(placeRepository.findById(anyLong())).thenReturn(Optional.of(Place.builder().id(1L).build()));
-            when(schedulePlaceRepository.save(any(SchedulePlace.class))).thenReturn(createMockSchedulePlace(2L, 2L, 2));
+            when(schedulePlaceRepository.save(any(SchedulePlace.class))).thenReturn(createMockSchedulePlace(2L, Place.builder().id(2L).build(), null, 2));
 
             // when
             planService.updatePlan(mockUpdateRequestDto);
@@ -290,7 +306,7 @@ class PlanServiceTest extends DummyObject {
             mockRequestDto.setUserId(userId);
 
             when(planRepository.existsByIdAndUserId(anyLong(), anyLong())).thenReturn(true);
-            when(planRepository.findById(anyLong())).thenReturn(Optional.of(createMockPlan(1L, null)));
+            when(planRepository.findById(anyLong())).thenReturn(Optional.of(createMockPlan(1L)));
             when(scheduleRepository.findByIdWithSchedulePlacesFetchJoin(anyLong())).thenReturn(Optional.empty());
 
             // when
@@ -310,15 +326,15 @@ class PlanServiceTest extends DummyObject {
             mockUpdateRequestDto.setPlanId(id);
             mockUpdateRequestDto.setUserId(userId);
 
-            SchedulePlace mockSchedulePlace = createMockSchedulePlace(1L, 1L, 1);
+            SchedulePlace mockSchedulePlace = createMockSchedulePlace(1L, Place.builder().id(1L).build(), null, 1);
             List<SchedulePlace> mockSchedulePlaces = new ArrayList<>();
             mockSchedulePlaces.add(mockSchedulePlace);
 
-            Schedule mockSchedule = createMockSchedule(1L, LocalDate.now(), mockSchedulePlaces);
+            Schedule mockSchedule = createMockSchedule(1L, null, mockSchedulePlaces, LocalDate.now());
             List<Schedule> mockSchedules = new ArrayList<>();
             mockSchedules.add(mockSchedule);
 
-            Plan mockPlan = createMockPlan(1L, mockSchedules);
+            Plan mockPlan = createMockPlan(1L, null, null, mockSchedules, null, null);
 
             when(planRepository.existsByIdAndUserId(anyLong(), anyLong())).thenReturn(true);
             when(planRepository.findById(anyLong())).thenReturn(Optional.ofNullable(mockPlan));
