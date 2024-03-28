@@ -9,7 +9,7 @@ import lombok.Data;
 public class PlaceByRegionIdDto {
 
     private Long placeId;
-    private String name;
+    private String placeName;
     private String imageThumbnail;
     private String subCategoryName;
     private Double latitude;
@@ -18,10 +18,10 @@ public class PlaceByRegionIdDto {
     private Long views;
 
     @QueryProjection
-    public PlaceByRegionIdDto(Long placeId, String name, String imageThumbnail, String subCategoryName, Double latitude,
+    public PlaceByRegionIdDto(Long placeId, String placeName, String imageThumbnail, String subCategoryName, Double latitude,
                               Double longitude, Long contentTypeId, Long views) {
         this.placeId = placeId;
-        this.name = name;
+        this.placeName = placeName;
         this.imageThumbnail = imageThumbnail;
         this.subCategoryName = subCategoryName;
         this.latitude = latitude;
