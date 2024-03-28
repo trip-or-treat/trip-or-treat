@@ -163,6 +163,59 @@ table {
 	background-color:${(props) => props.theme.colors.mainColor};
 	color: ${(props) => props.theme.colors.whiteFont}
 }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+
+    margin-top: 30px;
+}
+  
+  ul.pagination li {
+    /* display: inline-block; */
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 15px;
+  }
+
+  /* ul.pagination li:first-child{
+    border-radius: 5px 0 0 5px;
+  }
+
+  ul.pagination li:last-child{
+    border-radius: 0 5px 5px 0;
+  } */
+  
+  ul.pagination li a {
+    text-decoration: none;
+    color: ${(props) => props.theme.colors.blackFont};
+  }
+
+  ul.pagination li a:hover {
+    font-weight: bold;
+  }
+  
+  ul.pagination li.active a {
+    color: ${(props) => props.theme.colors.whiteFont};
+  }
+
+  ul.pagination li.active {
+    background-color: ${(props) => props.theme.colors.mainColor};
+  }
+
+  
+  
+  /* .page-selection {
+    width: 48px;
+    height: 30px;
+    color: black;
+  } */
+
 `;
 
 export default GlobalStyle;
