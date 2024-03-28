@@ -84,7 +84,7 @@ const ReviewInner = styled.div`
 
   border-radius: 10px;
 
-  box-shadow: 1px 2px 6px 0px ${(props) => props.theme.colors.darkGrey};
+  box-shadow: 2px 2px 5px 0px ${(props) => props.theme.colors.darkGrey};
 `;
 
 const Title = styled.div`
