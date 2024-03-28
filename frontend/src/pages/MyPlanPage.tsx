@@ -1,13 +1,18 @@
 import styled from 'styled-components';
+import { useEffect, useState } from 'react';
 
 import MyPlanList from 'src/components/mypage/MyPlanList';
 import MyPageTitle from 'src/components/mypage/MyPageTitle';
 import SearchToggle from 'src/components/mypage/SearchToggle';
 import PlanListCategory from 'src/components/mypage/PlanListCategory';
+import Paging from 'src/components/mypage/Pagination/Pagination';
+
 import { CommonContainer } from 'src/styles/CommonContainer';
 import { FilterButtonStyle } from 'src/styles/FilterButtonStyle';
 
-const MY_PLANS_DATA = [
+import { Plan } from 'src/@types/api/plan';
+
+export const MY_PLANS_DATA = [
   {
     planId: 17,
     title: '여행자1 님의 여행계획 14',
@@ -88,9 +93,63 @@ const MY_PLANS_DATA = [
     createdDate: '2024-03-18',
     regions: ['서울', '인천', '대전'],
   },
+  {
+    planId: 7,
+    title: '여행자1 님의 여행계획 14',
+    startDate: '2024-02-15',
+    endDate: '2024-02-14',
+    createdDate: '2024-03-18', // 시,분,초 제외
+    regions: ['서울', '대전'],
+  },
+  {
+    planId: 6,
+    title: '계획13',
+    startDate: '2024-02-15',
+    endDate: '2024-02-14',
+    createdDate: '2024-03-18',
+    regions: ['서울', '인천', '대전'],
+  },
+  {
+    planId: 5,
+    title: '계획12',
+    startDate: '2024-02-15',
+    endDate: '2024-02-14',
+    createdDate: '2024-03-18',
+    regions: ['인천', '대전'],
+  },
 ];
 
 const MyPlanPage = () => {
+  // const [planList, setPlanList] = useState<Plan[]>([]); //api로 받아온 데이터
+  const [currentPost, setCurrentPost] = useState<Plan[]>([]); // 게시판 목록에 보여줄 게시글
+  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호
+
+  const postPerPage = 10;
+  const indexOfLastPost = currentPage * postPerPage; // 10,20,30...
+  const indexOfFirstPost = indexOfLastPost - postPerPage;
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  console.log(currentPage);
+  console.log(currentPost);
+
+  // useEffect(() => {
+  //   //api 요청해서 계획목록 불러오기. axios.get('baseurl/plans')
+  //   .then((response) => {
+  //     setPlanList([...response.data].reverse())
+  //   })
+
+  //   .catch(function(error) {
+  //     console.log(error)
+  //   })
+  // },[])
+
+  useEffect(() => {
+    setCurrentPost(MY_PLANS_DATA.slice(indexOfFirstPost, indexOfLastPost));
+  }, [MY_PLANS_DATA, currentPage]);
+
   return (
     <div>
       <MyPageTitle>내 여행계획</MyPageTitle>
@@ -105,7 +164,7 @@ const MyPlanPage = () => {
       </FilterBox>
       <PlanListCategory />
       <ListContainer>
-        {MY_PLANS_DATA.map((data, idx) => {
+        {currentPost.map((data, idx) => {
           return (
             <MyPlanList
               key={data.planId}
@@ -119,6 +178,7 @@ const MyPlanPage = () => {
           );
         })}
       </ListContainer>
+      <Paging currentPage={currentPage} totalElements={13} setCurrentPage={handlePageChange} />
     </div>
   );
 };
@@ -126,7 +186,8 @@ const MyPlanPage = () => {
 export default MyPlanPage;
 
 const ListContainer = styled.div`
-  max-height: 50vh;
+  max-height: 48vh;
+  min-height: 48vh;
   overflow-y: auto;
 `;
 
@@ -154,6 +215,6 @@ const FilterBox = styled.div`
 const Button = styled.button<{ $isClicked: boolean }>`
   ${FilterButtonStyle};
 
-  height: 30px;
+  height: 25px;
   margin: 0 10px 10px 0;
 `;
