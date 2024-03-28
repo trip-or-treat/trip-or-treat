@@ -2,7 +2,8 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import stepPlanSavedBtn from 'src/atoms/stepPlanSavedBtn';
+
+import stepPlanSavedBtnAtom from 'src/atoms/stepPlanSavedBtnAtom';
 
 interface Props {
   path: string;
@@ -11,7 +12,7 @@ interface Props {
 }
 
 const StepNavLinkButton = ({ path, type, children }: Props) => {
-  const isClicked = useRecoilValue(stepPlanSavedBtn);
+  const isClicked = useRecoilValue(stepPlanSavedBtnAtom);
 
   return (
     <Wrapper $isClicked={isClicked}>
@@ -29,6 +30,7 @@ export default StepNavLinkButton;
 
 const Wrapper = styled.div<{ $isClicked: boolean }>`
   cursor: ${(props) => (props.$isClicked ? 'pointer' : 'not-allowed')};
+  width: 100px;
 `;
 
 const LinkBox = styled(Link)`
@@ -46,9 +48,9 @@ const LinkBox = styled(Link)`
 
   background-color: ${(props) => props.theme.colors.mainColor};
   color: ${(props) => props.theme.colors.whiteFont};
-
-  font-size: 14px;
+  font-size: 16px;
   text-decoration: none;
+  font-family: 'Pretendard-SemiBold';
   cursor: pointer;
 `;
 

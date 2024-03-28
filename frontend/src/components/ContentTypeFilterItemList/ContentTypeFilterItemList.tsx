@@ -1,28 +1,25 @@
-import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
-import contentTypeId from 'src/atoms/contentTypeId';
-
 import { useContentType } from 'src/hooks/api/useContentType';
+import { ContentType } from 'src/@types/api/contentType';
 import ContentTypeFilterItem from './ContentTypeFilterItem';
+import Loading from '../common/Loading';
+
+interface ContentTypeFilterItemListData {
+  data: { data: ContentType[] };
+  isLoading: boolean;
+}
 
 const ContentTypeFilterItemList = () => {
-  const [prevContentTypeId, setPrevContentTypeId] = useRecoilState(contentTypeId);
-  const { data: contentTypeData, isLoading } = useContentType();
+  const { data: contentTypeData, isLoading }: ContentTypeFilterItemListData = useContentType();
 
   return (
     <Wrapper>
-      {isLoading && <div>로딩중...</div>}
+      {isLoading && <Loading type="SMALL" />}
 
       {!isLoading &&
-        contentTypeData?.map((data) => (
-          <ContentTypeFilterItem
-            key={data.id}
-            id={data.id}
-            title={data.name}
-            prevContentTypeId={prevContentTypeId}
-            setPrevContentTypeId={setPrevContentTypeId}
-          />
+        contentTypeData?.data.map((data) => (
+          <ContentTypeFilterItem key={data.id} id={data.id} title={data.name} />
         ))}
     </Wrapper>
   );
@@ -35,5 +32,5 @@ const Wrapper = styled.div`
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
 
-  margin: 15px 0px;
+  margin: 5px 0px;
 `;

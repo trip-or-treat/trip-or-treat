@@ -1,16 +1,20 @@
 import React from 'react';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
+import contentTypeIdAtom from 'src/atoms/contentTypeIdAtom';
+import { FilterButtonStyle } from '../../styles/FilterButtonStyle';
+
 interface Props {
-  id: string;
+  id: number;
   title: string;
-  prevContentTypeId: string | null;
-  setPrevContentTypeId: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-const ContentTypeFilterItem = ({ id, title, prevContentTypeId, setPrevContentTypeId }: Props) => {
+const ContentTypeFilterItem = ({ id, title }: Props) => {
+  const [prevContentTypeId, setPrevContentTypeId] = useRecoilState(contentTypeIdAtom);
+
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const currentId = e.currentTarget.dataset.id ?? null;
+    const currentId = Number(e.currentTarget.dataset.id) ?? null;
 
     if (prevContentTypeId === currentId) {
       setPrevContentTypeId(null);
@@ -29,22 +33,5 @@ const ContentTypeFilterItem = ({ id, title, prevContentTypeId, setPrevContentTyp
 export default ContentTypeFilterItem;
 
 const Button = styled.button<{ $isClicked: boolean }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  padding: 10px;
-
-  border-radius: 25px;
-  border: none;
-
-  outline: none;
-  box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.2);
-  background-color: ${(props) =>
-    props.$isClicked ? props.theme.colors.mainColor : props.theme.colors.whiteFont};
-  color: ${(props) =>
-    props.$isClicked ? props.theme.colors.whiteFont : props.theme.colors.blackFont};
-
-  font-size: 12px;
-  cursor: pointer;
+  ${FilterButtonStyle};
 `;

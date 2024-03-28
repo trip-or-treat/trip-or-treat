@@ -1,19 +1,21 @@
 package com.triportreat.backend.place.error.handler;
 
-import static com.triportreat.backend.common.response.FailMessage.GET_FAIL;
-import static com.triportreat.backend.common.response.FailMessage.UNKNOWN_ERROR;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-
+import com.triportreat.backend.common.AbstractException;
 import com.triportreat.backend.common.response.ResponseResult;
 import com.triportreat.backend.place.controller.PlaceController;
-import java.util.Map;
-import java.util.stream.Collectors;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static com.triportreat.backend.common.response.FailMessage.UNKNOWN_ERROR;
+import static com.triportreat.backend.common.response.FailMessage.VALIDATION_FAILED;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @RestControllerAdvice(basePackageClasses = PlaceController.class)
 public class PlaceExceptionHandler {
@@ -28,7 +30,11 @@ public class PlaceExceptionHandler {
         Map<String, String> errors = e.getBindingResult().getFieldErrors()
                 .stream()
                 .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
-        return ResponseEntity.ok().body(ResponseResult.fail(GET_FAIL.getMessage(), BAD_REQUEST, errors));
+        return ResponseEntity.ok().body(ResponseResult.fail(VALIDATION_FAILED.getMessage(), BAD_REQUEST, errors));
     }
 
+    @ExceptionHandler(AbstractException.class)
+    protected ResponseEntity<?> abstractExceptionHandler(AbstractException e) {
+        return ResponseEntity.ok().body(ResponseResult.fail(e.getMessage(), e.getStatus(), null));
+    }
 }

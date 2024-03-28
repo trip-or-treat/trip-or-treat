@@ -1,46 +1,72 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 
-import contentTypeId from 'src/atoms/contentTypeId';
+import contentTypeIdAtom from 'src/atoms/contentTypeIdAtom';
+
 import { ReactComponent as FindIcon } from '../../assets/svgs/findIcon.svg';
+import { ReactComponent as RotateIcon } from '../../assets/svgs/rotate.svg';
 
 interface Props {
   placeHolder: string;
+  setKeyword?: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const EnterSearch = ({ placeHolder }: Props) => {
+const EnterSearch = ({ placeHolder, setKeyword }: Props) => {
+  const [value, setValue] = useState('');
   const { regionId } = useParams();
-  const [keyword, setKeyword] = useState('');
-  const prevContentTypeId = useRecoilValue(contentTypeId);
+  const setContentTypeId = useSetRecoilState(contentTypeIdAtom);
+
+  useEffect(() => {
+    setValue('');
+  }, [regionId]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (keyword.trim() === '') {
-      alert('검색어를 입력해주세요');
-      setKeyword('');
-      return;
-    }
-
-    // TODO : API 요청 기능 구현
-    // keyword : 검색어
-    // rgionId : url에 존재하는 지역 id
-    // prevContentTypeId : content_type_id인데 필터링이 없으면 null,  필터링 되면 string형식의 문자열 (eg. '12')
-    console.log('keyword', keyword, 'regionId', regionId, 'prevContentTypeId', prevContentTypeId);
-    setKeyword('');
+    if (setKeyword) setKeyword(value);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setKeyword(e.target.value);
+    setValue(e.target.value);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      if (value.trim() === '') {
+        e.preventDefault();
+        alert('검색어를 입력해주세요');
+        setValue('');
+        if (setKeyword) setKeyword('');
+      }
+    }
+  };
+
+  const handleRotate = () => {
+    if (setKeyword) setKeyword('');
+    setContentTypeId(null);
+    setValue('');
+  };
+
+  const handleSearch = () => {
+    if (value.trim() === '') {
+      alert('검색어를 입력해주세요');
+    }
   };
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Input placeholder={placeHolder} value={keyword} onChange={handleChange} />
-      <Button>
+      <Button onClick={handleSearch}>
         <FindIcon />
+      </Button>
+      <Input
+        placeholder={placeHolder}
+        value={value}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+      />
+      <Button onClick={handleRotate}>
+        <RotateIcon />
       </Button>
     </Form>
   );
@@ -60,25 +86,24 @@ const Input = styled.input`
   width: 90%;
 
   padding: 15px;
-  padding-left: 20px;
+  padding-left: 15%;
 
   border: none;
   border-radius: 35px;
   outline: none;
 
   box-shadow: ${(props) => `0px 4px 4px 0px ${props.theme.colors.lightGrey}`};
-  font-size: 13px;
+  font-size: 14px;
 
   &::placeholder {
     color: ${(props) => props.theme.colors.darkGrey};
+    font-family: 'Pretendard-Regular';
   }
 `;
 
 const Button = styled.button`
   position: absolute;
-  top: 10px;
-  right: 10px;
-
+  top: 9px;
   padding: 5px;
 
   border: none;
@@ -90,5 +115,14 @@ const Button = styled.button`
   svg {
     width: 20px;
     height: 15px;
+    fill: ${(props) => props.theme.colors.darkGrey};
+  }
+
+  &:first-child {
+    left: 10px;
+  }
+
+  &:last-child {
+    right: 10px;
   }
 `;

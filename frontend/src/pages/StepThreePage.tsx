@@ -1,58 +1,66 @@
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import RegionCategory from 'src/components/RegionCategory';
-import EnterSearch from 'src/components/EnterSearch';
-import ContentTypeFilterItemList from 'src/components/ContentTypeFilterItemList';
-import { useState } from 'react';
-import DayCategory from 'src/components/DayCategory copy';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
-const REGION_DATA = [
-  {
-    id: 1,
-    name: '서울',
-    imageOrigin:
-      'https://plus.unsplash.com/premium_photo-1661948404806-391a240d6d40?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fCVFRCU5NSU5QyVFQSVCNSVBRCUyMCVFQyU5NyVBQyVFRCU5NiU4OXxlbnwwfHwwfHx8MA%3D%3D',
-    imageThumbnail:
-      'https://plus.unsplash.com/premium_photo-1661948404806-391a240d6d40?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fCVFRCU5NSU5QyVFQSVCNSVBRCUyMCVFQyU5NyVBQyVFRCU5NiU4OXxlbnwwfHwwfHx8MA%3D%3D',
-    latitude: 123.1231231231,
-    longitude: 35.1231231231,
-  },
-  {
-    id: 2,
-    name: '부산',
-    imageOrigin:
-      'https://plus.unsplash.com/premium_photo-1661948404806-391a240d6d40?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fCVFRCU5NSU5QyVFQSVCNSVBRCUyMCVFQyU5NyVBQyVFRCU5NiU4OXxlbnwwfHwwfHx8MA%3D%3D',
-    imageThumbnail:
-      'https://plus.unsplash.com/premium_photo-1661948404806-391a240d6d40?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fCVFRCU5NSU5QyVFQSVCNSVBRCUyMCVFQyU5NyVBQyVFRCU5NiU4OXxlbnwwfHwwfHx8MA%3D%3D',
-    latitude: 123.1231231232,
-    longitude: 35.1231231231,
-  },
-  {
-    id: 3,
-    name: '포항',
-    imageOrigin:
-      'https://plus.unsplash.com/premium_photo-1661948404806-391a240d6d40?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fCVFRCU5NSU5QyVFQSVCNSVBRCUyMCVFQyU5NyVBQyVFRCU5NiU4OXxlbnwwfHwwfHx8MA%3D%3D',
-    imageThumbnail:
-      'https://plus.unsplash.com/premium_photo-1661948404806-391a240d6d40?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fCVFRCU5NSU5QyVFQSVCNSVBRCUyMCVFQyU5NyVBQyVFRCU5NiU4OXxlbnwwfHwwfHx8MA%3D%3D',
-    latitude: 123.1231231232,
-    longitude: 35.1231231231,
-  },
-];
+import KaKaoMap from 'src/components/KaKaoMap';
+import RegionCategory from 'src/components/RegionCategoryList/RegionCategoryList';
+import EnterSearch from 'src/components/EnterSearch';
+import PlaceList from 'src/components/PlaceList';
+import DayCategory from 'src/components/DayCategory';
+import ContentTypeFilterItemList from 'src/components/ContentTypeFilterItemList';
+import SelectedPlaceCardList from 'src/components/SelectedPlaceCardList';
+
+import myRegionListAtom from 'src/atoms/myRegionListAtom';
+import totalPlanAtom from 'src/atoms/totalPlanAtom';
+import stepPlanSavedBtnAtom from 'src/atoms/stepPlanSavedBtnAtom';
+import curDayAtom from 'src/atoms/curDayAtom';
+import { PlaceListTypes } from 'src/@types/api/placeList';
+import FailDataPage from './FailDataPage';
 
 const StepThreePage = () => {
-  const [curDay, setCurDay] = useState(1);
+  const [keyword, setKeyword] = useState('');
+  const [selectedPlaceList, setSelectedPlaceList] = useState<PlaceListTypes[]>([]);
+
+  const myRegionList = useRecoilValue(myRegionListAtom);
+  const totalPlan = useRecoilValue(totalPlanAtom);
+  const setStepPlanSaveBtn = useSetRecoilState(stepPlanSavedBtnAtom);
+  const curDay = useRecoilValue(curDayAtom);
+
+  useEffect(() => {
+    setStepPlanSaveBtn(totalPlan.map((data) => data?.items).every((data) => data.length !== 0));
+  }, [totalPlan]);
+
+  useEffect(() => {
+    setSelectedPlaceList(totalPlan[curDay - 1]?.items);
+  }, [curDay, totalPlan]);
+
+  if (!totalPlan[0] || !myRegionList)
+    return (
+      <Wrapper>
+        <FailDataPage />
+      </Wrapper>
+    );
 
   return (
     <Wrapper>
       <SearchLayer>
-        <RegionCategory data={REGION_DATA} />
-        <EnterSearch placeHolder="장소를 검색해보세요!" />
-        <ContentTypeFilterItemList />
+        <section>
+          <RegionCategory data={myRegionList} />
+          <EnterSearch placeHolder="장소를 검색해보세요!" setKeyword={setKeyword} />
+          <ContentTypeFilterItemList />
+        </section>
+
+        <PlaceList keyword={keyword} setKeyword={setKeyword} />
       </SearchLayer>
 
       <DayLayer>
-        <DayCategory curDay={curDay} setCurDay={setCurDay} />
+        <DayCategory />
+        <SelectedPlaceCardList />
       </DayLayer>
-      <MapLayer>mapLayer</MapLayer>
+
+      <MapLayer>
+        <KaKaoMap list={selectedPlaceList} curDay={curDay} />
+      </MapLayer>
     </Wrapper>
   );
 };
@@ -69,15 +77,18 @@ const Wrapper = styled.div`
 const SearchLayer = styled.div`
   width: 25%;
   height: inherit;
-  padding: 20px;
   border-left: ${(props) => `1px solid ${props.theme.colors.lightGrey}`};
   border-right: ${(props) => `1px solid ${props.theme.colors.lightGrey}`};
 
   box-sizing: border-box;
+
+  & > section {
+    padding: 20px;
+  }
 `;
 
 const DayLayer = styled.div`
-  width: 30%;
+  width: 27%;
   height: inherit;
   padding: 20px;
 
@@ -85,8 +96,6 @@ const DayLayer = styled.div`
 `;
 
 const MapLayer = styled.div`
-  width: 45%;
+  width: 48%;
   height: inherit;
-
-  background-color: darkgoldenrod;
 `;

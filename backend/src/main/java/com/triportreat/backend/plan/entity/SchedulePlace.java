@@ -2,6 +2,8 @@ package com.triportreat.backend.plan.entity;
 
 import com.triportreat.backend.common.BaseTimeEntity;
 import com.triportreat.backend.place.entity.Place;
+import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceCreateRequestDto;
+import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceUpdateRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,12 +16,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
+@ToString
 public class SchedulePlace extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,4 +47,33 @@ public class SchedulePlace extends BaseTimeEntity {
     @Column(length = 65535)
     private String memo;
 
+    public static SchedulePlace toEntity(SchedulePlaceCreateRequestDto schedulePlaceCreateRequestDto,
+                                         Schedule schedule,
+                                         Place place) {
+        return SchedulePlace.builder()
+                .schedule(schedule)
+                .place(place)
+                .visitOrder(schedulePlaceCreateRequestDto.getVisitOrder())
+                .expense(schedulePlaceCreateRequestDto.getExpense())
+                .memo(schedulePlaceCreateRequestDto.getMemo())
+                .build();
+    }
+
+    public static SchedulePlace toEntity(SchedulePlaceUpdateRequestDto schedulePlaceUpdateRequestDto,
+                                         Schedule schedule,
+                                         Place place) {
+        return SchedulePlace.builder()
+                .schedule(schedule)
+                .place(place)
+                .visitOrder(schedulePlaceUpdateRequestDto.getVisitOrder())
+                .expense(schedulePlaceUpdateRequestDto.getExpense())
+                .memo(schedulePlaceUpdateRequestDto.getMemo())
+                .build();
+    }
+
+    public void update(SchedulePlaceUpdateRequestDto schedulePlaceUpdateRequestDto) {
+        this.visitOrder = schedulePlaceUpdateRequestDto.getVisitOrder();
+        this.expense = schedulePlaceUpdateRequestDto.getExpense();
+        this.memo = schedulePlaceUpdateRequestDto.getMemo();
+    }
 }

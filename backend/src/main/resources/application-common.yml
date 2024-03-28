@@ -7,12 +7,33 @@ spring:
     hibernate:
       naming:
         physical-strategy: com.triportreat.backend.common.CustomCamelCaseToUnderscoresNamingStrategy
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
 
 openapi:
-  url: ENC(LLU9kjm25zSyg5yOyVPUXOv+5S90hpA4nf361o39gyCQseJX2RDJrDMSLPujhrq/TCmjv2PKnveaorj78K1640eKP91zTpiwzfJWOl1bB8nQWOJBxaiYZemCEBlBrF0xG5j/N898ydeUWrWl12uuJw==)
+  place-data-url: ENC(LLU9kjm25zSyg5yOyVPUXOv+5S90hpA4nf361o39gyCQseJX2RDJrDMSLPujhrq/TCmjv2PKnveaorj78K1640eKP91zTpiwzfJWOl1bB8nQWOJBxaiYZemCEBlBrF0xG5j/N898ydeUWrWl12uuJw==)
+  overviewUrl: ENC(fJ2nwclOmMDzWfbtJc+n260rUvkQPCztus0m7PXF8ah2xi8dkwoKWJJWD4J5kQpwhibbqdI2Sk4AYCg3ka/2GVx+zgVOa4H1bhrQhUzOuYr8LCYCKqD2VbYv18Ka3t2d2VMvCUTQMsl9UfOSi2oeYA==)
   key: ENC(D5hw5G8H2Ngep4NJFvgNB0ZWylYDw1+805rEsGA0L6zbbgGshGoKb4OiFtwuUjMW6EH6JYNgwu4G0lW7EZiNZ6bV/C+7KfI157qWMO2dBjvisAVV6VEg7ca0c2zZWXTE9g4Fl5wuwuznQhcZDvTrfw==)
 
 schedule:
-  cron: 0 0 2 * * *
+  place-data:
+    cron: 0 30 2 * * *
+  place-views:
+    cron: 0 0 * * * *
   use: true
 
+jwt:
+  secret-key: ENC(/FWeATqMxlqMoSYRHNMKlRx7H2ylpdvHsfg1iQ4nQnUtAD31Ha/kYFF0LVtnKfh7T4aFHi52TvoJMdNqr+KmBDpWvPA+48OaznrhQUnEya/+HB/Dhp8Y0fDKPjkMNbgSsQ5wjF0NfJc=)
+  access-token:
+    expiration-time: 1800000
+  refresh-token:
+    expiration-time: 86400000
+
+kakao:
+  client-id : ENC(GBKh+s++Qe/ttBfiJHgMxR9Tj+cZMT2KmUWfbA5m62m8381g5pheb3HAb4yHTCOt)
+#  프론트쪽 배포가 완료되면 https://triportreat.site/login으로 변경
+  redirect-uri : https://localhost:3000/login
+  token-uri : https://kauth.kakao.com/oauth/token
+  user-info-uri : https://kapi.kakao.com/v2/user/me

@@ -36,30 +36,25 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
                         subCategory.name,
                         place.latitude,
                         place.longitude,
-                        contentType.id))
+                        contentType.id,
+                        place.views))
                 .from(place)
                 .leftJoin(place.subCategory, subCategory)
                 .where(
                         region.id.eq(placeSearchCondition.getRegionId()),
                         contentTypeIdEquals(placeSearchCondition.getContentTypeId()),
-                        placeNameContains(placeSearchCondition.getKeyword()),
-                        subCategoryNameContains(placeSearchCondition.getKeyword())
+                        keywordContains(placeSearchCondition.getKeyword())
                 )
+                .orderBy(place.views.desc(), place.id.asc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
     }
 
-    public BooleanExpression placeNameContains(String keyword) {
+    public BooleanExpression keywordContains(String keyword) {
         if (hasText(keyword)) {
-            return place.name.contains(keyword);
-        }
-        return null;
-    }
-
-    public BooleanExpression subCategoryNameContains(String keyword) {
-        if (hasText(keyword)) {
-            return subCategory.name.contains(keyword);
+            return place.name.contains(keyword)
+                    .or(subCategory.name.contains(keyword));
         }
         return null;
     }
