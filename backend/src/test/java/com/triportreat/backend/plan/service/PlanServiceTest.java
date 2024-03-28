@@ -375,7 +375,7 @@ class PlanServiceTest extends DummyObject {
                             .regions(List.of("서울", "인천", "대전"))
                             .startDate(LocalDate.now().minusDays(3))
                             .endDate(LocalDate.now().minusDays(1))
-                            .createdDate(LocalDateTime.now().minusDays(7))
+                            .createdDateTime(LocalDateTime.now().minusDays(7))
                             .build(),
                     PlanListResponseDto.builder()
                             .planId(2L)
@@ -383,7 +383,7 @@ class PlanServiceTest extends DummyObject {
                             .regions(List.of("서울", "인천", "대전"))
                             .startDate(LocalDate.now().minusDays(3))
                             .endDate(LocalDate.now().minusDays(1))
-                            .createdDate(LocalDateTime.now().minusDays(7))
+                            .createdDateTime(LocalDateTime.now().minusDays(7))
                             .build());
 
             Pageable pageable = PageRequest.of(0, 10);
@@ -408,11 +408,8 @@ class PlanServiceTest extends DummyObject {
             assertThat(pageResponse.getContents().size()).isEqualTo(2);
             assertThat(pageResponse.getPage()).isEqualTo(1);
             assertThat(pageResponse.getTotalPages()).isEqualTo(1);
-//            assertThat(pageResponse.getTotalElements()).isEqualTo(2);
             assertThat(pageResponse.getPrev()).isEqualTo(false);
             assertThat(pageResponse.getNext()).isEqualTo(false);
-//            assertThat(pageResponse.getFirst()).isEqualTo(true);
-//            assertThat(pageResponse.getLast()).isEqualTo(true);
             assertThat(pageResponse.getStartPage()).isEqualTo(1);
             assertThat(pageResponse.getEndPage()).isEqualTo(1);
         }

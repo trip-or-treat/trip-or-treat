@@ -6,7 +6,6 @@ import static com.triportreat.backend.plan.domain.PlanSearchValue.SEARCH_TYPE_RE
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.triportreat.backend.common.config.JpaConfig;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanSearchRequestDto;
 import com.triportreat.backend.plan.domain.PlanResponseDto.PlanListResponseDto;
