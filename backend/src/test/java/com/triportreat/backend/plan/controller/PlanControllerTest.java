@@ -2,6 +2,7 @@ package com.triportreat.backend.plan.controller;
 
 import static com.triportreat.backend.common.response.FailMessage.AUTHENTICATION_FAILED;
 import static com.triportreat.backend.common.response.FailMessage.PLAN_NOT_FOUND;
+import static com.triportreat.backend.common.response.FailMessage.REGION_NOT_FOUND;
 import static com.triportreat.backend.common.response.FailMessage.USER_NOT_FOUND;
 import static com.triportreat.backend.common.response.FailMessage.VALIDATION_FAILED;
 import static com.triportreat.backend.common.response.SuccessMessage.GET_SUCCESS;
@@ -46,6 +47,7 @@ import com.triportreat.backend.plan.domain.PlanResponseDto.PlanListResponseDto;
 import com.triportreat.backend.plan.error.exception.PlanNotFoundException;
 import com.triportreat.backend.plan.error.exception.UserNotFoundException;
 import com.triportreat.backend.plan.service.PlanService;
+import com.triportreat.backend.region.error.exception.RegionNotFoundException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.time.LocalDateTime;
@@ -94,7 +96,7 @@ class PlanControllerTest extends DummyObject {
             // given
             PlanCreateRequestDto planCreateRequestDto = createPlanRequestDtoBeforeTest();
 
-            doNothing().when(planService).createPlan(planCreateRequestDto);
+            doNothing().when(planService).createPlan(planCreateRequestDto, 1L);
 
             // when
             // then
@@ -115,7 +117,7 @@ class PlanControllerTest extends DummyObject {
             PlanCreateRequestDto planCreateRequestDto = createPlanRequestDtoBeforeTest();
             planCreateRequestDto.setTitle("");
 
-            doNothing().when(planService).createPlan(planCreateRequestDto);
+            doNothing().when(planService).createPlan(planCreateRequestDto, 1L);
 
             // when
             // then
@@ -160,7 +162,6 @@ class PlanControllerTest extends DummyObject {
                     ScheduleCreateRequestDto.builder().date(LocalDate.now().plusDays(1)).schedulePlaces(schedulePlaceRequests2).build());
 
             return PlanCreateRequestDto.builder()
-                    .userId(1L)
                     .title("title")
                     .startDate(LocalDate.now())
                     .endDate(LocalDate.now().plusDays(1))
@@ -200,6 +201,22 @@ class PlanControllerTest extends DummyObject {
         }
 
         @Test
+        @DisplayName("실패 - 사용자 정보 없음")
+        void getPlanDetail_UserNotFound() throws Exception {
+            // given
+            when(planService.getPlanDetail(anyLong(), any())).thenThrow(UserNotFoundException.class);
+
+            // when
+            // then
+            mockMvc.perform(get("/plans/{id}", 1L))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value(500))
+                    .andExpect(jsonPath("$.message").value(USER_NOT_FOUND.getMessage()))
+                    .andExpect(jsonPath("$.result").value(false))
+                    .andExpect(jsonPath("$.data").doesNotExist());
+        }
+
+        @Test
         @DisplayName("실패 - 계획 정보 없음")
         void getPlanDetail_PlanNotFound() throws Exception {
             // given
@@ -211,6 +228,22 @@ class PlanControllerTest extends DummyObject {
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.status").value(500))
                     .andExpect(jsonPath("$.message").value(PLAN_NOT_FOUND.getMessage()))
+                    .andExpect(jsonPath("$.result").value(false))
+                    .andExpect(jsonPath("$.data").doesNotExist());
+        }
+
+        @Test
+        @DisplayName("실패 - 지역 정보 없음")
+        void getPlanDetail_RegionNotFound() throws Exception {
+            // given
+            when(planService.getPlanDetail(anyLong(), any())).thenThrow(RegionNotFoundException.class);
+
+            // when
+            // then
+            mockMvc.perform(get("/plans/{id}", 1L))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value(400))
+                    .andExpect(jsonPath("$.message").value(REGION_NOT_FOUND.getMessage()))
                     .andExpect(jsonPath("$.result").value(false))
                     .andExpect(jsonPath("$.data").doesNotExist());
         }

@@ -12,7 +12,7 @@ public interface PlanService {
 
     void validatePlanOwner(Long id, Long userId);
 
-    void createPlan(PlanCreateRequestDto planCreateRequestDto);
+    void createPlan(PlanCreateRequestDto planCreateRequestDto, Long userId);
 
     PlanDetailResponseDto getPlanDetail(Long id, Long userId);
 

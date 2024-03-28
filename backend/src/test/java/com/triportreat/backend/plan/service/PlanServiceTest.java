@@ -3,6 +3,7 @@ package com.triportreat.backend.plan.service;
 import static com.triportreat.backend.common.response.FailMessage.AUTHENTICATION_FAILED;
 import static com.triportreat.backend.common.response.FailMessage.PLACE_NOT_FOUND;
 import static com.triportreat.backend.common.response.FailMessage.PLAN_NOT_FOUND;
+import static com.triportreat.backend.common.response.FailMessage.REGION_NOT_FOUND;
 import static com.triportreat.backend.common.response.FailMessage.SCHEDULE_NOT_FOUND;
 import static com.triportreat.backend.common.response.FailMessage.SCHEDULE_PLACE_NOT_FOUND;
 import static com.triportreat.backend.common.response.FailMessage.USER_NOT_FOUND;
@@ -39,11 +40,14 @@ import com.triportreat.backend.plan.error.exception.PlanNotFoundException;
 import com.triportreat.backend.plan.error.exception.ScheduleNotFoundException;
 import com.triportreat.backend.plan.error.exception.SchedulePlaceNotFoundException;
 import com.triportreat.backend.plan.error.exception.UserNotFoundException;
+import com.triportreat.backend.plan.repository.PlanRegionRepository;
 import com.triportreat.backend.plan.repository.PlanRepository;
 import com.triportreat.backend.plan.repository.SchedulePlaceRepository;
 import com.triportreat.backend.plan.repository.ScheduleRepository;
 import com.triportreat.backend.plan.service.impl.PlanServiceImpl;
 import com.triportreat.backend.region.entity.Region;
+import com.triportreat.backend.region.error.exception.RegionNotFoundException;
+import com.triportreat.backend.region.repository.RegionRepository;
 import com.triportreat.backend.user.entity.User;
 import com.triportreat.backend.user.repository.UserRepository;
 import java.time.LocalDate;
@@ -84,6 +88,12 @@ class PlanServiceTest extends DummyObject {
     @Mock
     SchedulePlaceRepository schedulePlaceRepository;
 
+    @Mock
+    PlanRegionRepository planRegionRepository;
+
+    @Mock
+    RegionRepository regionRepository;
+
     @Nested
     @DisplayName("계획 저장")
     class CreatePlan {
@@ -92,6 +102,7 @@ class PlanServiceTest extends DummyObject {
         @DisplayName("성공")
         void createPlan() {
             // given
+            Long userId = 1L;
             List<SchedulePlaceCreateRequestDto> schedulePlaceRequests1 = List.of(
                     createSchedulePlaceRequestDto(1L, 1),
                     createSchedulePlaceRequestDto(2L, 2));
@@ -103,14 +114,16 @@ class PlanServiceTest extends DummyObject {
                     createScheduleRequestDto(LocalDate.now(), schedulePlaceRequests1),
                     createScheduleRequestDto(LocalDate.now().plusDays(1), schedulePlaceRequests2));
 
-            PlanCreateRequestDto planCreateRequestDto = createPlanRequestDto(LocalDate.now(), LocalDate.now().plusDays(1), 1L, scheduleRequests);
+            PlanCreateRequestDto planCreateRequestDto = createPlanRequestDto(List.of(1L, 2L, 3L), LocalDate.now(), LocalDate.now().plusDays(1), scheduleRequests);
 
-            when(userRepository.findById(anyLong())).thenReturn(Optional.of(createMockUser(1L, "user1")));
+            when(userRepository.findById(anyLong())).thenReturn(Optional.of(createMockUser(userId, "user1")));
             when(planRepository.save(any(Plan.class))).thenReturn(createMockPlan(1L));
+            when(regionRepository.findById(anyLong())).thenReturn(Optional.of(createMockRegion(1L, "서울")));
+            when(planRegionRepository.save(any(PlanRegion.class))).thenReturn(createMockPlanRegion(1L, Plan.builder().id(1L).build(), Region.builder().id(1L).build()));
             when(placeRepository.findById(anyLong())).thenReturn(Optional.of(Place.builder().id(1L).build()));
 
             // when
-            planService.createPlan(planCreateRequestDto);
+            planService.createPlan(planCreateRequestDto, userId);
 
             // then
             verify(schedulePlaceRepository, times(4)).save(any(SchedulePlace.class));
@@ -122,21 +135,23 @@ class PlanServiceTest extends DummyObject {
         @DisplayName("실패 - 사용자가 존재하지 않을시 예외발생")
         void createPlan_UserNotFoundException() {
             // given
-            PlanCreateRequestDto planCreateRequestDto = createPlanRequestDto(LocalDate.now(), LocalDate.now().plusDays(1), 1L, null);
+            Long userId = 1L;
+            PlanCreateRequestDto planCreateRequestDto = createPlanRequestDto(null, LocalDate.now(), LocalDate.now().plusDays(1), null);
 
             when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
             // when
             // then
-            assertThatThrownBy(() -> planService.createPlan(planCreateRequestDto))
+            assertThatThrownBy(() -> planService.createPlan(planCreateRequestDto, userId))
                     .isInstanceOf(UserNotFoundException.class)
                     .hasMessage(USER_NOT_FOUND.getMessage());
         }
 
         @Test
-        @DisplayName("실패 - 선택한 장소가 존재하지 않을시 예외발생")
-        void createPlan_PlaceNotFoundException() {
+        @DisplayName("실패 - 선택한 지역이 존재하지 않을시 예외발생")
+        void createPlan_RegionNotFoundException() {
             // given
+            Long userId = 1L;
             List<SchedulePlaceCreateRequestDto> schedulePlaceRequests1 = List.of(
                     createSchedulePlaceRequestDto(1L, 1),
                     createSchedulePlaceRequestDto(2L, 2));
@@ -148,17 +163,46 @@ class PlanServiceTest extends DummyObject {
                     createScheduleRequestDto(LocalDate.now(), schedulePlaceRequests1),
                     createScheduleRequestDto(LocalDate.now().plusDays(1), schedulePlaceRequests2));
 
-            PlanCreateRequestDto planCreateRequestDto = createPlanRequestDto(LocalDate.now(), LocalDate.now().plusDays(1), 1L, scheduleRequests);
-            User user = createMockUser(planCreateRequestDto.getUserId(), "user1");
-            Plan plan = createMockPlan(1L);
+            PlanCreateRequestDto planCreateRequestDto = createPlanRequestDto(List.of(1L, 2L, 3L), LocalDate.now(), LocalDate.now().plusDays(1), scheduleRequests);
 
-            when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
-            when(planRepository.save(any(Plan.class))).thenReturn(plan);
+            when(userRepository.findById(anyLong())).thenReturn(Optional.of(createMockUser(userId, "user1")));
+            when(planRepository.save(any(Plan.class))).thenReturn(createMockPlan(1L));
+            when(regionRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+            // when
+            // then
+            assertThatThrownBy(() -> planService.createPlan(planCreateRequestDto, userId))
+                    .isInstanceOf(RegionNotFoundException.class)
+                    .hasMessage(REGION_NOT_FOUND.getMessage());
+        }
+
+        @Test
+        @DisplayName("실패 - 선택한 장소가 존재하지 않을시 예외발생")
+        void createPlan_PlaceNotFoundException() {
+            // given
+            Long userId = 1L;
+            List<SchedulePlaceCreateRequestDto> schedulePlaceRequests1 = List.of(
+                    createSchedulePlaceRequestDto(1L, 1),
+                    createSchedulePlaceRequestDto(2L, 2));
+            List<SchedulePlaceCreateRequestDto> schedulePlaceRequests2 = List.of(
+                    createSchedulePlaceRequestDto(3L, 1),
+                    createSchedulePlaceRequestDto(4L, 2));
+
+            List<ScheduleCreateRequestDto> scheduleRequests = List.of(
+                    createScheduleRequestDto(LocalDate.now(), schedulePlaceRequests1),
+                    createScheduleRequestDto(LocalDate.now().plusDays(1), schedulePlaceRequests2));
+
+            PlanCreateRequestDto planCreateRequestDto = createPlanRequestDto(List.of(1L, 2L, 3L), LocalDate.now(), LocalDate.now().plusDays(1), scheduleRequests);
+
+            when(userRepository.findById(anyLong())).thenReturn(Optional.of(createMockUser(userId, "user1")));
+            when(planRepository.save(any(Plan.class))).thenReturn(createMockPlan(1L));
+            when(regionRepository.findById(anyLong())).thenReturn(Optional.of(createMockRegion(1L, "서울")));
+            when(planRegionRepository.save(any(PlanRegion.class))).thenReturn(createMockPlanRegion(1L, Plan.builder().id(1L).build(), Region.builder().id(1L).build()));
             when(placeRepository.findById(anyLong())).thenReturn(Optional.empty());
 
             // when
             // then
-            assertThatThrownBy(() -> planService.createPlan(planCreateRequestDto))
+            assertThatThrownBy(() -> planService.createPlan(planCreateRequestDto, userId))
                     .isInstanceOf(PlaceNotFoundException.class)
                     .hasMessage(PLACE_NOT_FOUND.getMessage());
         }
@@ -178,7 +222,7 @@ class PlanServiceTest extends DummyObject {
             SubCategory subCategory = SubCategory.builder().id("A1").name("산").build();
             Place place1 = createMockPlace(1L, region1, contentType, subCategory, "place1");
             Place place2 = createMockPlace(1L, region2, contentType, subCategory, "place2");
-            Set<PlanRegion> regions = Set.of(createPlanRegion(1L, null, region1), createPlanRegion(2L, null, region2));
+            Set<PlanRegion> regions = Set.of(createMockPlanRegion(1L, null, region1), createMockPlanRegion(2L, null, region2));
 
             List<SchedulePlace> schedulePlaces1 = List.of(
                     createMockSchedulePlace(1L, place1, null, 1),
