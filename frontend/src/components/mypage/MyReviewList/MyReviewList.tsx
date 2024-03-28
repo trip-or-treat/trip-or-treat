@@ -10,7 +10,7 @@ interface Props {
   review: string;
   place: string;
   score: number;
-  createdAt: string;
+  createdDate: string;
 }
 
 const renderStars = (score: number) => {
@@ -25,7 +25,7 @@ const renderStars = (score: number) => {
   return stars;
 };
 
-const MyReviewList = ({ idx, review, place, score, createdAt }: Props) => {
+const MyReviewList = ({ idx, review, place, score, createdDate }: Props) => {
   return (
     <ReviewContainer>
       <Index>{idx}</Index>
@@ -36,7 +36,8 @@ const MyReviewList = ({ idx, review, place, score, createdAt }: Props) => {
         <Place>{place}</Place>
       </PlaceBox>
       <Score>{renderStars(score)}</Score>
-      <CreatedAt>{createdAt}</CreatedAt>
+      <CreatedAt>{createdDate}</CreatedAt>
+      {/* 수정 아이콘 클릭하면 리뷰 수정 모달 띄우기 */}
       <EditIcon />
     </ReviewContainer>
   );
