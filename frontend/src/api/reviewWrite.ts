@@ -1,6 +1,8 @@
 import { ReviewWrite } from 'src/@types/api/reviewWrite';
 import { useLogin } from 'src/hooks/useLogin';
 
+import { END_POINTS } from 'src/constants/api';
+
 import { api } from '.';
 
 export const reviewWriteFetcher = async ({ placeId, content, tip, score }: ReviewWrite) => {
@@ -13,7 +15,7 @@ export const reviewWriteFetcher = async ({ placeId, content, tip, score }: Revie
     score,
   };
 
-  const data = await api.post('/reviews', review, { headers });
+  const data = await api.post(END_POINTS.REVIEWS, review, { headers });
 
   if (data.headers.authorization) {
     tokenRenewal(data.headers.authorization);
