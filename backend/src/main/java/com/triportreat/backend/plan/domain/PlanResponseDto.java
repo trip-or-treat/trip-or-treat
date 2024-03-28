@@ -4,11 +4,13 @@ import com.triportreat.backend.plan.entity.Plan;
 import com.triportreat.backend.plan.entity.PlanRegion;
 import com.triportreat.backend.plan.entity.Schedule;
 import com.triportreat.backend.plan.entity.SchedulePlace;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -129,5 +131,24 @@ public class PlanResponseDto {
                     .longitude(schedulePlace.getPlace().getLongitude())
                     .build();
         }
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @ToString
+    public static class PlanListResponseDto {
+        private Long planId;
+        private String title;
+        private LocalDate startDate;
+        private LocalDate endDate;
+        @JsonIgnore
+        private LocalDateTime createdDateTime;
+        private String createdDate;
+
+        @Builder.Default
+        private List<String> regions = new ArrayList<>();
     }
 }

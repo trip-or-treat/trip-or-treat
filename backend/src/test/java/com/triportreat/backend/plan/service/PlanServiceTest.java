@@ -8,6 +8,8 @@ import static com.triportreat.backend.common.response.FailMessage.SCHEDULE_PLACE
 import static com.triportreat.backend.common.response.FailMessage.USER_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static com.triportreat.backend.plan.domain.PlanSearchValue.COMING_YN_FALSE;
+import static com.triportreat.backend.plan.domain.PlanSearchValue.SEARCH_TYPE_REGION;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
@@ -21,10 +23,13 @@ import com.triportreat.backend.place.entity.Place;
 import com.triportreat.backend.place.entity.SubCategory;
 import com.triportreat.backend.place.repository.PlaceRepository;
 import com.triportreat.backend.plan.domain.PlanResponseDto.PlanDetailResponseDto;
+import com.triportreat.backend.common.response.PageResponseDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanUpdateRequestDto;
+import com.triportreat.backend.plan.domain.PlanRequestDto.PlanSearchRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceCreateRequestDto;
+import com.triportreat.backend.plan.domain.PlanResponseDto.PlanListResponseDto;
 import com.triportreat.backend.plan.entity.Plan;
 import com.triportreat.backend.plan.entity.PlanRegion;
 import com.triportreat.backend.plan.entity.Schedule;
@@ -43,6 +48,7 @@ import com.triportreat.backend.user.entity.User;
 import com.triportreat.backend.user.repository.UserRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -53,6 +59,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 @ExtendWith(MockitoExtension.class)
 class PlanServiceTest extends DummyObject {
@@ -181,7 +190,7 @@ class PlanServiceTest extends DummyObject {
                     createMockSchedule(1L, null, schedulePlaces1, LocalDate.now()),
                     createMockSchedule(2L, null, schedulePlaces2, LocalDate.now().plusDays(1)));
             User user = createMockUser(1L, "user1");
-            Plan plan = createMockPlan(1L, user, regions, schedules, null, null);
+            Plan plan = createMockPlan(1L, "계획", user, regions, schedules, null, null);
 
             when(planRepository.findByIdAndUserId(anyLong(), any())).thenReturn(Optional.of(plan));
 
@@ -236,11 +245,12 @@ class PlanServiceTest extends DummyObject {
             List<Schedule> mockSchedules = new ArrayList<>();
             mockSchedules.add(mockSchedule);
 
-            Plan mockPlan = createMockPlan(1L, null, null, mockSchedules, null, null);
+            Plan mockPlan = createMockPlan(1L, "계획", null, null, mockSchedules, null, null);
 
             when(planRepository.existsByIdAndUserId(anyLong(), anyLong())).thenReturn(true);
             when(planRepository.findById(anyLong())).thenReturn(Optional.ofNullable(mockPlan));
-            when(scheduleRepository.findByIdWithSchedulePlacesFetchJoin(anyLong())).thenReturn(Optional.of(mockSchedule));
+            when(scheduleRepository.findByIdWithSchedulePlacesFetchJoin(anyLong())).thenReturn(
+                    Optional.of(mockSchedule));
             when(schedulePlaceRepository.findById(anyLong())).thenReturn(Optional.of(mockSchedulePlace));
             when(placeRepository.findById(anyLong())).thenReturn(Optional.of(Place.builder().id(1L).build()));
             when(schedulePlaceRepository.save(any(SchedulePlace.class))).thenReturn(createMockSchedulePlace(2L, Place.builder().id(2L).build(), null, 2));
@@ -334,11 +344,12 @@ class PlanServiceTest extends DummyObject {
             List<Schedule> mockSchedules = new ArrayList<>();
             mockSchedules.add(mockSchedule);
 
-            Plan mockPlan = createMockPlan(1L, null, null, mockSchedules, null, null);
+            Plan mockPlan = createMockPlan(1L, "계획", null, null, mockSchedules, null, null);
 
             when(planRepository.existsByIdAndUserId(anyLong(), anyLong())).thenReturn(true);
             when(planRepository.findById(anyLong())).thenReturn(Optional.ofNullable(mockPlan));
-            when(scheduleRepository.findByIdWithSchedulePlacesFetchJoin(anyLong())).thenReturn(Optional.of(mockSchedule));
+            when(scheduleRepository.findByIdWithSchedulePlacesFetchJoin(anyLong())).thenReturn(
+                    Optional.of(mockSchedule));
             when(schedulePlaceRepository.findById(anyLong())).thenReturn(Optional.empty());
 
             // when
@@ -346,6 +357,82 @@ class PlanServiceTest extends DummyObject {
             assertThatThrownBy(() -> planService.updatePlan(mockUpdateRequestDto))
                     .isInstanceOf(SchedulePlaceNotFoundException.class)
                     .hasMessage(SCHEDULE_PLACE_NOT_FOUND.getMessage());
+        }
+    }
+
+    @Nested
+    @DisplayName("내 계획 목록 검색 및 조회")
+    class SearchPlans {
+
+        @Test
+        @DisplayName("성공")
+        void searchPlans_Success() {
+            // given
+            List<PlanListResponseDto> content = List.of(
+                    PlanListResponseDto.builder()
+                            .planId(1L)
+                            .title("계획1")
+                            .regions(List.of("서울", "인천", "대전"))
+                            .startDate(LocalDate.now().minusDays(3))
+                            .endDate(LocalDate.now().minusDays(1))
+                            .createdDateTime(LocalDateTime.now().minusDays(7))
+                            .build(),
+                    PlanListResponseDto.builder()
+                            .planId(2L)
+                            .title("계획2")
+                            .regions(List.of("서울", "인천", "대전"))
+                            .startDate(LocalDate.now().minusDays(3))
+                            .endDate(LocalDate.now().minusDays(1))
+                            .createdDateTime(LocalDateTime.now().minusDays(7))
+                            .build());
+
+            Pageable pageable = PageRequest.of(0, 10);
+            long total = 2L;
+            PageImpl<PlanListResponseDto> response = new PageImpl<>(content, pageable, total);
+
+            PlanSearchRequestDto condition = PlanSearchRequestDto.builder()
+                    .type(SEARCH_TYPE_REGION)
+                    .keyword("서울")
+                    .comingYn(COMING_YN_FALSE)
+                    .build();
+
+            Long userId = 1L;
+
+            when(userRepository.existsById(anyLong())).thenReturn(true);
+            when(planRepository.searchPlans(any(), any(), any())).thenReturn(response);
+
+            // when
+            PageResponseDto<PlanListResponseDto> pageResponse = planService.searchPlans(condition, pageable, userId);
+
+            // then
+            assertThat(pageResponse.getContents().size()).isEqualTo(2);
+            assertThat(pageResponse.getPage()).isEqualTo(1);
+            assertThat(pageResponse.getTotalPages()).isEqualTo(1);
+            assertThat(pageResponse.getPrev()).isEqualTo(false);
+            assertThat(pageResponse.getNext()).isEqualTo(false);
+            assertThat(pageResponse.getStartPage()).isEqualTo(1);
+            assertThat(pageResponse.getEndPage()).isEqualTo(1);
+        }
+
+        @Test
+        @DisplayName("실패 - 사용자가 존재하지 않음")
+        void searchPlans_UserNotExist() {
+            // given
+            Pageable pageable = PageRequest.of(0, 10);
+
+            PlanSearchRequestDto condition = PlanSearchRequestDto.builder()
+                    .type(SEARCH_TYPE_REGION)
+                    .keyword("서울")
+                    .comingYn(COMING_YN_FALSE)
+                    .build();
+
+            when(userRepository.existsById(anyLong())).thenReturn(false);
+
+            // when
+            // then
+            assertThatThrownBy(() -> planService.searchPlans(condition, pageable, 1L))
+                    .isInstanceOf(UserNotFoundException.class)
+                    .hasMessage(USER_NOT_FOUND.getMessage());
         }
     }
 }

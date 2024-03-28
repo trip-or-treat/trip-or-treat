@@ -1,6 +1,8 @@
 package com.triportreat.backend.plan.service.impl;
 
 import com.triportreat.backend.common.error.exception.AuthenticateFailException;
+import com.triportreat.backend.common.response.PageResponseDto;
+import com.triportreat.backend.common.utils.CustomDateUtil;
 import com.triportreat.backend.place.entity.Place;
 import com.triportreat.backend.place.repository.PlaceRepository;
 import com.triportreat.backend.plan.domain.PlanResponseDto.PlanDetailResponseDto;
@@ -12,6 +14,8 @@ import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceUpdateReq
 import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleUpdateRequestDto;
 import com.triportreat.backend.plan.domain.PlanResponseDto.ScheduleDetailResponseDto;
 import com.triportreat.backend.plan.domain.PlanResponseDto.SchedulePlaceDetailResponseDto;
+import com.triportreat.backend.plan.domain.PlanRequestDto.PlanSearchRequestDto;
+import com.triportreat.backend.plan.domain.PlanResponseDto.PlanListResponseDto;
 import com.triportreat.backend.plan.entity.Plan;
 import com.triportreat.backend.plan.entity.Schedule;
 import com.triportreat.backend.plan.entity.SchedulePlace;
@@ -26,10 +30,13 @@ import com.triportreat.backend.plan.repository.ScheduleRepository;
 import com.triportreat.backend.plan.service.PlanService;
 import com.triportreat.backend.user.entity.User;
 import com.triportreat.backend.user.repository.UserRepository;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -80,6 +87,19 @@ public class PlanServiceImpl implements PlanService {
         plan.updateTitle(planUpdateRequestDto.getTitle());
 
         updateSchedules(planUpdateRequestDto.getSchedules());
+    }
+
+    @Override
+    public PageResponseDto<PlanListResponseDto> searchPlans(PlanSearchRequestDto condition, Pageable pageable, Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new UserNotFoundException();
+        }
+
+        Page<PlanListResponseDto> response = planRepository.searchPlans(condition, pageable, userId);
+        response.forEach(planListResponseDto ->
+                planListResponseDto.setCreatedDate(CustomDateUtil.toStringFormat(planListResponseDto.getCreatedDateTime())));
+
+        return new PageResponseDto<>(response);
     }
 
     private void updateSchedules(List<ScheduleUpdateRequestDto> scheduleDtos) {
