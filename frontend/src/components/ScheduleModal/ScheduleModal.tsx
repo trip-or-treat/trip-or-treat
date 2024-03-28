@@ -25,7 +25,7 @@ const ScheduleModal = () => {
   return (
     <ModalOverlay>
       <StyledModalLayout>
-        <StyledTitel>여행 일정을 선택하실 수 있어요.</StyledTitel>
+        <StyledTitle>여행 일정을 선택하실 수 있어요.</StyledTitle>
         <StyledText>
           * 여행일자는 <StyledTextSemiBold>최대 7일까지</StyledTextSemiBold> 설정 가능합니다.
           <br />
@@ -67,7 +67,7 @@ const StyledModalLayout = styled.div`
   background-color: ${(props) => props.theme.colors.whiteFont};
 `;
 
-const StyledTitel = styled.h1`
+const StyledTitle = styled.h1`
   text-align: center;
   position: relative;
   font-size: 25px;
