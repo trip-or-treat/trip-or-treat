@@ -42,4 +42,10 @@ public class ReviewController {
         reviewService.updateReview(id, reviewUpdateRequestDto);
         return ResponseEntity.ok().body(ResponseResult.success(PUT_SUCCESS.getMessage(), null));
     }
+
+    @DeleteMapping("/reviews/{id}")
+    public ResponseEntity<?> deleteReview(@Auth Long userId, @PathVariable Long id) {
+        reviewService.deleteReview(userId, id);
+        return ResponseEntity.ok().body(ResponseResult.success(DELETE_SUCCESS.getMessage(), null));
+    }
 }

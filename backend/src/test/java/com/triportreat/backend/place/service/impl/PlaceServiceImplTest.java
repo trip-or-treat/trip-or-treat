@@ -62,12 +62,12 @@ class PlaceServiceImplTest {
         placeSearchCondition.setContentTypeId(14L);
         Pageable pageable = PageRequest.of(0, 10);
 
-        java.util.List<PlaceByRegionIdDto> findPlaces = List.of(
-                PlaceByRegionIdDto.builder().placeId(1L).name("경복궁").contentTypeId(14L).build(),
-                PlaceByRegionIdDto.builder().placeId(2L).name("창덕궁").contentTypeId(14L).build(),
-                PlaceByRegionIdDto.builder().placeId(3L).name("덕수궁").contentTypeId(14L).build(),
-                PlaceByRegionIdDto.builder().placeId(4L).name("창경궁").contentTypeId(14L).build(),
-                PlaceByRegionIdDto.builder().placeId(5L).name("경희궁").contentTypeId(14L).build());
+        List<PlaceByRegionIdDto> findPlaces = List.of(
+                PlaceByRegionIdDto.builder().placeId(1L).placeName("경복궁").contentTypeId(14L).build(),
+                PlaceByRegionIdDto.builder().placeId(2L).placeName("창덕궁").contentTypeId(14L).build(),
+                PlaceByRegionIdDto.builder().placeId(3L).placeName("덕수궁").contentTypeId(14L).build(),
+                PlaceByRegionIdDto.builder().placeId(4L).placeName("창경궁").contentTypeId(14L).build(),
+                PlaceByRegionIdDto.builder().placeId(5L).placeName("경희궁").contentTypeId(14L).build());
 
         // when
         when(placeRepositoryCustom.searchPlaceListByCondition(placeSearchCondition, pageable))
@@ -76,7 +76,7 @@ class PlaceServiceImplTest {
         // then
         assertThat(findPlaces.size()).isEqualTo(5);
         assertAll(findPlaces.stream().map(place -> () -> {
-            assertThat(place.getName()).contains("궁");
+            assertThat(place.getPlaceName()).contains("궁");
             assertThat(place.getContentTypeId()).isEqualTo(14L);
         }));
     }

@@ -7,6 +7,7 @@ import com.triportreat.backend.auth.utils.AuthUserArgumentResolver;
 import com.triportreat.backend.common.config.WebConfig;
 import com.triportreat.backend.common.response.PageResponseDto;
 import com.triportreat.backend.place.domain.MyReviewListDto;
+import com.triportreat.backend.common.error.exception.AuthenticateFailException;
 import com.triportreat.backend.place.domain.ReviewListDto;
 import com.triportreat.backend.place.domain.ReviewRequestDto;
 import com.triportreat.backend.place.domain.ReviewUpdateRequestDto;
@@ -42,8 +43,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -384,6 +385,63 @@ public class ReviewControllerTest {
                     .andExpect(jsonPath("$.result").value(false))
                     .andExpect(jsonPath("$.message").value(USER_NOT_FOUND.getMessage()))
                     .andExpect(jsonPath("$.status").value(500))
+          }
+    }
+  
+    @Nested
+    @DisplayName("리뷰 삭제")
+    class DeleteReview {
+
+        @Test
+        @DisplayName("성공")
+        void deleteReview() throws Exception {
+
+            //given
+            doNothing().when(reviewService).deleteReview(any(), anyLong());
+
+            //when & then
+            mockMvc.perform(delete("/reviews/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.result").value(true))
+                    .andExpect(jsonPath("$.message").value(DELETE_SUCCESS.getMessage()))
+                    .andExpect(jsonPath("$.status").value(200))
+                    .andExpect(jsonPath("$.data").isEmpty());
+
+            verify(reviewService).deleteReview(any(), anyLong());
+        }
+
+        @Test
+        @DisplayName("실패 - 리뷰가 존재하지 않을 때 예외 발생")
+        void deleteReview_UserNotFoundException() throws Exception {
+
+            //given
+            doThrow(new ReviewNotFoundException()).when(reviewService).deleteReview(any(), anyLong());
+
+            //when & then
+            mockMvc.perform(delete("/reviews/{id}", 1L)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.result").value(false))
+                    .andExpect(jsonPath("$.message").value(REVIEW_NOT_FOUND.getMessage()))
+                    .andExpect(jsonPath("$.status").value(400))
+                    .andExpect(jsonPath("$.data").isEmpty());
+        }
+
+        @Test
+        @DisplayName("실패 - 사용자 ID가 일치하지 않을 때 예외 발생")
+        void deleteReview_AuthenticateFailException() throws Exception {
+
+            //given
+            doThrow(new AuthenticateFailException()).when(reviewService).deleteReview(any(), anyLong());
+
+            //when & then
+            mockMvc.perform(delete("/reviews/{id}", 1L)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.result").value(false))
+                    .andExpect(jsonPath("$.message").value(AUTHENTICATION_FAILED.getMessage()))
+                    .andExpect(jsonPath("$.status").value(UNAUTHORIZED.value()))
                     .andExpect(jsonPath("$.data").isEmpty());
         }
     }
