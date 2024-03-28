@@ -74,7 +74,7 @@ const Inner = styled.div`
 `;
 
 const ReviewInner = styled.div`
-  height: 30%;
+  height: auto;
   padding: 10px;
   margin-bottom: 15px;
 
