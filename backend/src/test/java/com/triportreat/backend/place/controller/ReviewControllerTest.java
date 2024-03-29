@@ -343,8 +343,8 @@ public class ReviewControllerTest {
 
             //given
             List<MyReviewListDto> content = List.of(
-                    MyReviewListDto.builder().id(1L).placeName("place1").build(),
-                    MyReviewListDto.builder().id(2L).placeName("place2").build()
+                    MyReviewListDto.builder().id(1L).placeId(1L).placeName("place1").build(),
+                    MyReviewListDto.builder().id(2L).placeId(2L).placeName("place2").build()
             );
 
             Pageable pageable = PageRequest.of(0, 10);
@@ -364,8 +364,10 @@ public class ReviewControllerTest {
                     .andExpect(jsonPath("$.status").value(200))
                     .andExpect(jsonPath("$.data.contents.size()").value(2))
                     .andExpect(jsonPath("$.data.contents[0].id").value(1L))
+                    .andExpect(jsonPath("$.data.contents[0].placeId").value(1L))
                     .andExpect(jsonPath("$.data.contents[0].placeName").value("place1"))
                     .andExpect(jsonPath("$.data.contents[1].id").value(2L))
+                    .andExpect(jsonPath("$.data.contents[1].placeId").value(2L))
                     .andExpect(jsonPath("$.data.contents[1].placeName").value("place2"));
         }
 
