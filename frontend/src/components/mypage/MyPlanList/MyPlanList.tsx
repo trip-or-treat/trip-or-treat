@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import AlertModal from 'src/components/AlertModal';
@@ -22,12 +22,26 @@ const MyPlanList = ({ idx, title, regions, startDate, endDate, createdDate }: Pr
     setOpen(false);
   };
 
+  const parseName = (name: string) => {
+    return name.length > 5 ? name.slice(0, 2) : name;
+  };
+
+  const regionsNotSplit = regions.join(' ');
+  const regionsSplit: string[] = regionsNotSplit.split(' ');
+
   return (
     <PlanContainer>
       <Index>{idx}</Index>
       {/* 제목 클릭하면 mypage/plans/:planId 페이지로 보내주기 */}
       <PlanTitle to="/mypage/plans/:planId">{title}</PlanTitle>
-      <Region>{regions.join(' ')}</Region>
+      <Region>
+        {regionsSplit.map((item, index) => (
+          <React.Fragment key={item}>
+            <p>{parseName(item)}</p>
+            {index < regionsSplit.length - 1 && <span>&nbsp;</span>}
+          </React.Fragment>
+        ))}
+      </Region>
       <Period>
         {startDate} ~ {endDate}
       </Period>
@@ -89,6 +103,8 @@ const PlanTitle = styled(Link)`
 `;
 
 const Region = styled.div`
+  display: flex;
+
   width: 130px;
   padding-left: 20px;
 
