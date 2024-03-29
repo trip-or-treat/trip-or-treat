@@ -4,17 +4,22 @@ interface Props {
   pageParam: number;
   keyword: string;
   prevContentTypeId: number | null;
-  regionId: string | undefined;
+  regionId: number;
 }
 
-// TODO : api요청 수정
 export const placeListFetcher = async ({
   pageParam,
   keyword,
   prevContentTypeId,
-  regionId,
+  regionId = 0,
 }: Props) => {
+  const token = localStorage.getItem('accessToken');
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
   const { data } = await api.get(`/places?regionId=${regionId}`, {
+    headers,
     params: {
       keyword: keyword === '' ? null : keyword,
       contentTypeId: prevContentTypeId,
