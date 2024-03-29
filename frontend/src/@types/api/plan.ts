@@ -6,3 +6,4 @@ export interface Plan {
   createdDate: string;
   regions: string[];
 }
+[];
