@@ -1,7 +1,7 @@
 package com.triportreat.backend.place.service.impl;
 
-import com.triportreat.backend.common.response.PageResponseDto;
 import com.triportreat.backend.common.error.exception.AuthenticateFailException;
+import com.triportreat.backend.common.response.PageResponseDto;
 import com.triportreat.backend.dummy.DummyObject;
 import com.triportreat.backend.place.domain.MyReviewListDto;
 import com.triportreat.backend.place.domain.ReviewListDto;
@@ -35,7 +35,6 @@ import java.util.Optional;
 import static com.triportreat.backend.common.response.FailMessage.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -102,56 +101,60 @@ public class ReviewServiceImplTest extends DummyObject {
     
     @Nested
     @DisplayName("리뷰 저장")
-    class CreateReview{
+    class PostReview{
+
         @Test
         @DisplayName("성공")
         public void createReview() {
+
             //given
             User user = createMockUser(1L, "testUser");
             Place place = Place.builder().id(1L).build();
-            ReviewRequestDto reviewRequestDto = createReviewRequestDto(user.getId(), place.getId());
+            ReviewRequestDto reviewRequestDto = createReviewRequestDto(place.getId());
 
-            when(placeRepository.findById(1L)).thenReturn(Optional.of(place));
-            when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+            when(placeRepository.findById(place.getId())).thenReturn(Optional.of(place));
+            when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
 
             //when
-            reviewService.createReview(reviewRequestDto);
+            reviewService.createReview(user.getId(), reviewRequestDto);
 
             //then
             verify(reviewRepository).save(any(Review.class));
         }
 
         @Test
-        @DisplayName("실패 - 장소 정보가 없을시 없을시 예외발생")
+        @DisplayName("실패 - 장소 정보가 없을 때 예외발생")
         public void createReview_PlaceNotFoundException() {
+
             //given
             User user = createMockUser(1L, "testUser");
             Place place = Place.builder().id(1L).build();
-            ReviewRequestDto reviewRequestDto = createReviewRequestDto(user.getId(), place.getId());
+            ReviewRequestDto reviewRequestDto = createReviewRequestDto(place.getId());
 
-            when(placeRepository.findById(1L)).thenReturn(Optional.empty());
+            when(placeRepository.findById(place.getId())).thenReturn(Optional.empty());
 
             //when & then
-            assertThatThrownBy(() -> reviewService.createReview(reviewRequestDto))
+            assertThatThrownBy(() -> reviewService.createReview(user.getId(), reviewRequestDto))
                     .isInstanceOf(PlaceNotFoundException.class)
-                    .hasMessageContaining(PLACE_NOT_FOUND.getMessage() + place.getId());
+                    .hasMessage(PLACE_NOT_FOUND.getMessage() + place.getId());
         }
 
         @Test
-        @DisplayName("실패 - 유저 정보가 없을시 예외발생")
-        public void createReview_UserNotFoundException() {
+        @DisplayName("실패 - 유저 정보가 없을 때 예외발생")
+        public void createReview_AuthenticateFailException() {
+
             //given
             User user = createMockUser(1L, "testUser");
             Place place = Place.builder().id(1L).build();
-            ReviewRequestDto reviewRequestDto = createReviewRequestDto(user.getId(), place.getId());
+            ReviewRequestDto reviewRequestDto = createReviewRequestDto(place.getId());
 
             when(placeRepository.findById(1L)).thenReturn(Optional.of(place));
             when(userRepository.findById(1L)).thenReturn(Optional.empty());
 
             //when & then
-            assertThatThrownBy(() -> reviewService.createReview(reviewRequestDto))
-                    .isInstanceOf(UserNotFoundException.class)
-                    .hasMessageContaining(USER_NOT_FOUND.getMessage());
+            assertThatThrownBy(() -> reviewService.createReview(user.getId(), reviewRequestDto))
+                    .isInstanceOf(AuthenticateFailException.class)
+                    .hasMessageContaining(AUTHENTICATION_FAILED.getMessage());
         }
     }
 
