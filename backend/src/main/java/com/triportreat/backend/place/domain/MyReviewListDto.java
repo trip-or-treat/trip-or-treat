@@ -1,5 +1,6 @@
 package com.triportreat.backend.place.domain;
 
+import com.triportreat.backend.common.utils.CustomDateUtil;
 import com.triportreat.backend.place.entity.Place;
 import com.triportreat.backend.place.entity.Review;
 import lombok.AllArgsConstructor;
@@ -7,27 +8,31 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class MyReviewListDto {
 
-    private  Long id;
-    private  String content;
-    private  String placeName;
-    private  Integer score;
-    private  LocalDateTime createdDate;
+    private Long id;
+    private String content;
+    private String tip;
+    private Long placeId;
+    private String placeName;
+    private Integer score;
+    private String createdDate;
 
     public static MyReviewListDto toDto(Review review, Place place) {
+        String formattedDate = review.getCreatedDate() != null ? CustomDateUtil.toStringFormat(review.getCreatedDate()) : "날짜 정보 없음";
+
         return MyReviewListDto.builder()
                 .id(review.getId())
                 .content(review.getContent())
+                .tip(review.getTip())
+                .placeId(place.getId())
                 .placeName(place.getName())
                 .score(review.getScore())
-                .createdDate(review.getCreatedDate())
+                .createdDate(formattedDate)
                 .build();
     }
 }

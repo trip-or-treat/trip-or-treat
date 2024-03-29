@@ -17,20 +17,25 @@ import com.triportreat.backend.plan.domain.PlanResponseDto.SchedulePlaceDetailRe
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanSearchRequestDto;
 import com.triportreat.backend.plan.domain.PlanResponseDto.PlanListResponseDto;
 import com.triportreat.backend.plan.entity.Plan;
+import com.triportreat.backend.plan.entity.PlanRegion;
 import com.triportreat.backend.plan.entity.Schedule;
 import com.triportreat.backend.plan.entity.SchedulePlace;
 import com.triportreat.backend.plan.error.exception.PlaceNotFoundException;
 import com.triportreat.backend.plan.error.exception.PlanNotFoundException;
+import com.triportreat.backend.plan.error.exception.PlanWithUserNotFoundException;
 import com.triportreat.backend.plan.error.exception.ScheduleNotFoundException;
 import com.triportreat.backend.plan.error.exception.SchedulePlaceNotFoundException;
 import com.triportreat.backend.plan.error.exception.UserNotFoundException;
+import com.triportreat.backend.plan.repository.PlanRegionRepository;
 import com.triportreat.backend.plan.repository.PlanRepository;
 import com.triportreat.backend.plan.repository.SchedulePlaceRepository;
 import com.triportreat.backend.plan.repository.ScheduleRepository;
 import com.triportreat.backend.plan.service.PlanService;
+import com.triportreat.backend.region.entity.Region;
+import com.triportreat.backend.region.error.exception.RegionNotFoundException;
+import com.triportreat.backend.region.repository.RegionRepository;
 import com.triportreat.backend.user.entity.User;
 import com.triportreat.backend.user.repository.UserRepository;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -50,6 +55,8 @@ public class PlanServiceImpl implements PlanService {
     private final ScheduleRepository scheduleRepository;
     private final PlaceRepository placeRepository;
     private final SchedulePlaceRepository schedulePlaceRepository;
+    private final RegionRepository regionRepository;
+    private final PlanRegionRepository planRegionRepository;
 
     @Override
     public void validatePlanOwner(Long id, Long userId) {
@@ -60,21 +67,27 @@ public class PlanServiceImpl implements PlanService {
 
     @Transactional
     @Override
-    public void createPlan(PlanCreateRequestDto planCreateRequestDto) {
-        User user = userRepository.findById(planCreateRequestDto.getUserId())
-                .orElseThrow(UserNotFoundException::new);
+    public void createPlan(PlanCreateRequestDto planCreateRequestDto, Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
         Plan plan = Plan.toEntity(planCreateRequestDto, user, createPlanCode());
         planRepository.save(plan);
 
+        createPlanRegions(planCreateRequestDto.getRegions(), plan);
         createSchedules(planCreateRequestDto.getSchedules(), plan);
     }
 
     @Override
     public PlanDetailResponseDto getPlanDetail(Long planId, Long userId) {
-        Plan plan = planRepository.findByIdAndUserId(planId, userId).orElseThrow(AuthenticateFailException::new);
+        Plan plan = planRepository.findByIdAndUserId(planId, userId).orElseThrow(PlanWithUserNotFoundException::new);
         return PlanDetailResponseDto.toDto(plan, extractScheduleDetailsFromPlan(plan));
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public PlanDetailResponseDto getSharedPlanDetail(String code) {
+        Plan plan = planRepository.findByCode(code).orElseThrow(PlanNotFoundException::new);
+        return PlanDetailResponseDto.toDto(plan, extractScheduleDetailsFromPlan(plan));
 
     @Transactional
     @Override
@@ -100,6 +113,13 @@ public class PlanServiceImpl implements PlanService {
                 planListResponseDto.setCreatedDate(CustomDateUtil.toStringFormat(planListResponseDto.getCreatedDateTime())));
 
         return new PageResponseDto<>(response);
+    }
+
+    @Transactional
+    @Override
+    public void deletePlan(Long planId, Long userId) {
+        Plan plan = planRepository.findByIdAndUserId(planId, userId).orElseThrow(PlanWithUserNotFoundException::new);
+        planRepository.delete(plan);
     }
 
     private void updateSchedules(List<ScheduleUpdateRequestDto> scheduleDtos) {
@@ -134,18 +154,28 @@ public class PlanServiceImpl implements PlanService {
     }
 
     private void createSchedules(List<ScheduleCreateRequestDto> schedulesRequests, Plan plan) {
-        schedulesRequests.forEach(s -> {
-            Schedule schedule = Schedule.toEntity(s, plan);
+        schedulesRequests.forEach(scheduleRequest -> {
+            Schedule schedule = Schedule.toEntity(scheduleRequest, plan);
             scheduleRepository.save(schedule);
-            createSchedulePlaces(s.getSchedulePlaces(), schedule);
+            createSchedulePlaces(scheduleRequest.getSchedulePlaces(), schedule);
         });
     }
 
     private void createSchedulePlaces(List<SchedulePlaceCreateRequestDto> schedulePlaceRequests, Schedule schedule) {
-        schedulePlaceRequests.forEach(sp -> {
-            Place place = placeRepository.findById(sp.getPlaceId()).orElseThrow(PlaceNotFoundException::new);
-            SchedulePlace schedulePlace = SchedulePlace.toEntity(sp, schedule, place);
+        schedulePlaceRequests.forEach(schedulePlaceRequest -> {
+            Place place = placeRepository.findById(schedulePlaceRequest.getPlaceId()).orElseThrow(PlaceNotFoundException::new);
+            SchedulePlace schedulePlace = SchedulePlace.toEntity(schedulePlaceRequest, schedule, place);
             schedulePlaceRepository.save(schedulePlace);
+        });
+    }
+
+    private void createPlanRegions(List<Long> regionIds, Plan plan) {
+        regionIds.forEach(regionId -> {
+            Region region = regionRepository.findById(regionId).orElseThrow(RegionNotFoundException::new);
+            planRegionRepository.save(PlanRegion.builder()
+                    .plan(plan)
+                    .region(region)
+                    .build());
         });
     }
 

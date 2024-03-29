@@ -1,9 +1,9 @@
 package com.triportreat.backend.place.service.impl;
 
 
+import com.triportreat.backend.common.error.exception.AuthenticateFailException;
 import com.triportreat.backend.common.response.PageResponseDto;
 import com.triportreat.backend.place.domain.MyReviewListDto;
-import com.triportreat.backend.common.error.exception.AuthenticateFailException;
 import com.triportreat.backend.place.domain.ReviewListDto;
 import com.triportreat.backend.place.domain.ReviewRequestDto;
 import com.triportreat.backend.place.domain.ReviewUpdateRequestDto;
@@ -49,11 +49,11 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public void createReview(ReviewRequestDto reviewRequestDto) {
+    public void createReview(Long userId, ReviewRequestDto reviewRequestDto) {
         Place place = placeRepository.findById(reviewRequestDto.getPlaceId())
                 .orElseThrow(() -> new PlaceNotFoundException(reviewRequestDto.getPlaceId()));
 
-        User user = userRepository.findById(reviewRequestDto.getUserId())
+        User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
         Review review = Review.toEntity(reviewRequestDto, user, place);
@@ -76,18 +76,6 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public void deleteReview(Long userId, Long id) {
-        Review review = reviewRepository.findById(id)
-                .orElseThrow(ReviewNotFoundException::new);
-
-        if (!review.getUser().getId().equals(userId)) {
-            throw new AuthenticateFailException();
-        }
-
-        reviewRepository.deleteById(id);
-    }
-
-    @Override
     @Transactional(readOnly = true)
     public PageResponseDto<MyReviewListDto> getMyReviewList(Long userId, Pageable pageable) {
         if (!userRepository.existsById(userId)) {
@@ -97,6 +85,18 @@ public class ReviewServiceImpl implements ReviewService {
         Page<Review> reviewPage = reviewRepository.findByUserId(userId, pageable);
 
         return new PageResponseDto<>(reviewPage.map(review -> MyReviewListDto.toDto(review, review.getPlace())));
+    }
+
+    @Override
+    public void deleteReview(Long userId, Long id) {
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(ReviewNotFoundException::new);
+
+        if (!review.getUser().getId().equals(userId)) {
+            throw new AuthenticateFailException();
+        }
+
+        reviewRepository.deleteById(id);
     }
 }
 

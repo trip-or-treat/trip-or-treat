@@ -10,13 +10,17 @@ import org.springframework.data.domain.Pageable;
 
 public interface PlanService {
 
+    PlanDetailResponseDto getSharedPlanDetail(String code);
+
     void validatePlanOwner(Long id, Long userId);
 
-    void createPlan(PlanCreateRequestDto planCreateRequestDto);
+    void createPlan(PlanCreateRequestDto planCreateRequestDto, Long userId);
 
     PlanDetailResponseDto getPlanDetail(Long id, Long userId);
 
     void updatePlan(PlanUpdateRequestDto planUpdateRequestDto);
 
     PageResponseDto<PlanListResponseDto> searchPlans(PlanSearchRequestDto condition, Pageable pageable, Long userId);
+
+    void deletePlan(Long planId, Long userId);
 }

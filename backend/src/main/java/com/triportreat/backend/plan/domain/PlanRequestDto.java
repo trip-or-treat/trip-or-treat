@@ -37,8 +37,6 @@ public class PlanRequestDto {
         @NotNull(message = "여행 종료날짜는 필수 입력값입니다!")
         private LocalDate endDate;
 
-        private Long userId;
-
         @Builder.Default
         private List<Long> regions = new ArrayList<>();
 
