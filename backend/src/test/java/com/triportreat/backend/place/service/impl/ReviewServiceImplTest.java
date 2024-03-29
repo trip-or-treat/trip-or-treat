@@ -140,21 +140,21 @@ public class ReviewServiceImplTest extends DummyObject {
         }
 
         @Test
-        @DisplayName("실패 - 유저 정보가 없을 때 예외발생")
-        public void createReview_AuthenticateFailException() {
+        @DisplayName("실패 - 사용자가 존재하지 않을 때 예외 발생")
+        public void createReview_UserNotFoundException() {
 
             //given
             User user = createMockUser(1L, "testUser");
             Place place = Place.builder().id(1L).build();
             ReviewRequestDto reviewRequestDto = createReviewRequestDto(place.getId());
 
-            when(placeRepository.findById(1L)).thenReturn(Optional.of(place));
-            when(userRepository.findById(1L)).thenReturn(Optional.empty());
+            when(placeRepository.findById(place.getId())).thenReturn(Optional.of(place));
+            when(userRepository.findById(user.getId())).thenReturn(Optional.empty());
 
             //when & then
             assertThatThrownBy(() -> reviewService.createReview(user.getId(), reviewRequestDto))
-                    .isInstanceOf(AuthenticateFailException.class)
-                    .hasMessageContaining(AUTHENTICATION_FAILED.getMessage());
+                    .isInstanceOf(UserNotFoundException.class)
+                    .hasMessageContaining(USER_NOT_FOUND.getMessage());
         }
     }
 

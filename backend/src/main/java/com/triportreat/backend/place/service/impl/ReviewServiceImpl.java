@@ -54,7 +54,7 @@ public class ReviewServiceImpl implements ReviewService {
                 .orElseThrow(() -> new PlaceNotFoundException(reviewRequestDto.getPlaceId()));
 
         User user = userRepository.findById(userId)
-                .orElseThrow(AuthenticateFailException::new);
+                .orElseThrow(UserNotFoundException::new);
 
         Review review = Review.toEntity(reviewRequestDto, user, place);
         reviewRepository.save(review);

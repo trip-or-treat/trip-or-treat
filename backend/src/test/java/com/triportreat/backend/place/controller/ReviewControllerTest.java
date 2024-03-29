@@ -188,11 +188,11 @@ public class ReviewControllerTest {
         }
 
         @Test
-        @DisplayName("실패 - 사용자  ID가 일치하지 않을 때 예외 발생")
-        void createReview_AuthenticateFailException() throws Exception {
+        @DisplayName("실패 - 사용자가 존재하지 않을 때 예외 발생")
+        void createReview_UserNotFoundException() throws Exception {
 
             //given
-            doThrow(new AuthenticateFailException())
+            doThrow(new UserNotFoundException())
                     .when(reviewService).createReview(any(), eq(reviewRequestDto));
 
             //when & then
@@ -201,8 +201,8 @@ public class ReviewControllerTest {
                             .content(objectMapper.writeValueAsString(reviewRequestDto)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.result").value(false))
-                    .andExpect(jsonPath("$.message").value(AUTHENTICATION_FAILED.getMessage()))
-                    .andExpect(jsonPath("$.status").value(UNAUTHORIZED.value()))
+                    .andExpect(jsonPath("$.message").value(USER_NOT_FOUND.getMessage()))
+                    .andExpect(jsonPath("$.status").value(500))
                     .andExpect(jsonPath("$.data").isEmpty());
         }
 
