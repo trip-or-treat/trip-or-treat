@@ -1,13 +1,12 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { DraggableProvided } from 'react-beautiful-dnd';
 
 import { PlaceListTypes } from 'src/@types/api/placeList';
-import totalPlanAtom from 'src/atoms/totalPlanAtom';
-import placeClickedIdListAtom from 'src/atoms/placeClickedIdListAtom';
 import curDayAtom from 'src/atoms/curDayAtom';
 import isOpeningMemoAtom from 'src/atoms/isOpeningMemoAtom';
+import usePageState from 'src/hooks/usePageState';
 
 import { ReactComponent as Minus } from '../../assets/svgs/minus.svg';
 import { ReactComponent as Bars } from '../../assets/svgs/bars.svg';
@@ -22,19 +21,20 @@ interface Props {
 }
 
 const DragPlaceCard = ({ placeCardItem, magic }: Props) => {
-  const [isOpenMemo, setIsOpenMemo] = useState(false);
-  const [expense, setExpense] = useState(0);
   const [memo, setMemo] = useState('');
+  const [expense, setExpense] = useState(0);
+  const [isOpenMemo, setIsOpenMemo] = useState(false);
   const [curScreenY, setCurScreenY] = useState(0);
 
-  const [totalPlan, setTotalPlan] = useRecoilState(totalPlanAtom);
-  const [isOpeningMemo, setIsOpeningMemo] = useRecoilState(isOpeningMemoAtom);
-  const setClickedIdList = useSetRecoilState(placeClickedIdListAtom);
+  const { setClickedIdList, totalPlan, setTotalPlan } = usePageState();
+
   const curDay = useRecoilValue(curDayAtom);
+  const [isOpeningMemo, setIsOpeningMemo] = useRecoilState(isOpeningMemoAtom);
 
   const handleDeleteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const targetId = Number((e.currentTarget.parentNode as HTMLElement)?.dataset.id);
     if (!targetId) return;
+
     const copyData = [...totalPlan];
     const updatedItem = totalPlan[curDay - 1].items.filter((item) => item.placeId !== targetId);
     copyData[curDay - 1] = { ...copyData[curDay - 1], items: updatedItem };
