@@ -61,7 +61,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public void updateReview(Long id, ReviewUpdateRequestDto reviewUpdateRequestDto) {
+    public void updateReview(Long userId, Long id, ReviewUpdateRequestDto reviewUpdateRequestDto) {
         Place place = placeRepository.findById(reviewUpdateRequestDto.getPlaceId())
                 .orElseThrow(() -> new PlaceNotFoundException(reviewUpdateRequestDto.getPlaceId()));
 
@@ -70,6 +70,10 @@ public class ReviewServiceImpl implements ReviewService {
 
         if(!review.getPlace().equals(place)) {
             throw new ReviewNotBelongPlaceException();
+        }
+
+        if (!review.getUser().getId().equals(userId)) {
+            throw new AuthenticateFailException();
         }
 
         review.reviewUpdate(reviewUpdateRequestDto.getContent(), reviewUpdateRequestDto.getTip(), reviewUpdateRequestDto.getScore());
