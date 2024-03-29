@@ -1,5 +1,4 @@
 import { END_POINTS } from 'src/constants/api';
-import { Plan } from 'src/@types/api/plan';
 import { api } from '.';
 
 interface Props {
@@ -7,8 +6,7 @@ interface Props {
   searchType: string;
   keyword?: string;
   comingYn: string;
-  createdYear: number;
-  token: string;
+  createdYear: number | null;
 }
 
 export const myPlanListFetcher = async ({
@@ -17,8 +15,9 @@ export const myPlanListFetcher = async ({
   keyword,
   comingYn,
   createdYear,
-  token,
-}: Props): Promise<Plan[]> => {
+}: Props) => {
+  const token = localStorage.getItem('accessToken');
+
   try {
     const { data } = await api.get(END_POINTS.PLANS, {
       params: {
