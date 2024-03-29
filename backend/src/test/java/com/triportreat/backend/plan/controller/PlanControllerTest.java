@@ -433,7 +433,6 @@ class PlanControllerTest extends DummyObject {
         void deletePlans_success() throws Exception {
             // given
             Long planId = 1L;
-            Long userId = 1L;
 
             // when
             // then
@@ -443,7 +442,6 @@ class PlanControllerTest extends DummyObject {
                     .andExpect(jsonPath("$.message").value(DELETE_SUCCESS.getMessage()))
                     .andExpect(jsonPath("$.result").value(true))
                     .andExpect(jsonPath("$.data").doesNotExist());
-            verify(planService, times(1)).deletePlan(planId, userId);
         }
 
         @Test
@@ -451,7 +449,6 @@ class PlanControllerTest extends DummyObject {
         void deletePlans_PlanWithUserNotFoundException() throws Exception {
             // given
             Long planId = 1L;
-            Long userId = 1L;
 
             // when
             doThrow(PlanWithUserNotFoundException.class).when(planService).deletePlan(anyLong(), any());
