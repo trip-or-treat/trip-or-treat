@@ -1,20 +1,19 @@
 import styled from 'styled-components';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { useParams } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 import { DraggableProvided } from 'react-beautiful-dnd';
 
-import { PlaceListTypes } from 'src/@types/api/placeList';
-import totalPlanAtom from 'src/atoms/totalPlanAtom';
-import placeClickedIdListAtom from 'src/atoms/placeClickedIdListAtom';
 import curDayAtom from 'src/atoms/curDayAtom';
-
-import { ReactComponent as Plus } from '../../assets/svgs/plus.svg';
+import usePageState from 'src/hooks/usePageState';
+import { PlaceListTypes } from 'src/@types/api/placeList';
+import { SchedulePlacesDetail } from 'src/@types/api/schedules';
 
 import PlaceCardDetailBtn from './PlaceCardDetailBtn';
 import DragPlaceCard from './DragPlaceCard';
 
+import { ReactComponent as Plus } from '../../assets/svgs/plus.svg';
+
 interface Props {
-  placeCardItem: PlaceListTypes;
+  placeCardItem: PlaceListTypes | SchedulePlacesDetail;
   type: 'ADD_BUTTON' | 'DELETE_BUTTON' | 'DRAG_AND_DROP';
   magic?: DraggableProvided | undefined;
 }
@@ -22,20 +21,20 @@ interface Props {
 const PlaceCard = ({ placeCardItem, type, magic }: Props) => {
   const curDay = useRecoilValue(curDayAtom);
 
-  const [clickedIdList, setClickedIdList] = useRecoilState(placeClickedIdListAtom);
-  const [totalPlan, setTotalPlan] = useRecoilState(totalPlanAtom);
-
-  const { regionId } = useParams();
+  const { regionId, clickedIdList, setClickedIdList, totalPlan, setTotalPlan } = usePageState();
 
   const isClicked =
     clickedIdList &&
     clickedIdList[curDay - 1]?.map((data) => data.placeId).includes(placeCardItem?.placeId);
 
-  const handleAddClick = (newItem: PlaceListTypes) => {
+  const handleAddClick = (newItem: PlaceListTypes | SchedulePlacesDetail) => {
     if (totalPlan[curDay - 1].items.length === 7) return;
 
     const copyData = [...totalPlan];
-    const updatedItem = [...totalPlan[curDay - 1].items, { ...newItem, regionId }];
+    const updatedItem = [
+      ...totalPlan[curDay - 1].items,
+      { ...newItem, regionId: Number(regionId) },
+    ];
     copyData[curDay - 1] = { ...copyData[curDay - 1], items: updatedItem };
 
     setTotalPlan(copyData);
