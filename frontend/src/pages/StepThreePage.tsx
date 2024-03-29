@@ -45,7 +45,7 @@ const StepThreePage = () => {
     <Wrapper>
       <SearchLayer>
         <section>
-          <RegionCategory data={myRegionList} />
+          <RegionCategory data={myRegionList} type="LINK" />
           <EnterSearch placeHolder="장소를 검색해보세요!" setKeyword={setKeyword} />
           <ContentTypeFilterItemList />
         </section>
