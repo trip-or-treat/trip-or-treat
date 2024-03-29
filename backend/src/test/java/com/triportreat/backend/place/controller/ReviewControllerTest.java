@@ -5,9 +5,9 @@ import com.triportreat.backend.auth.filter.JwtAuthenticationFilter;
 import com.triportreat.backend.auth.filter.JwtExceptionFilter;
 import com.triportreat.backend.auth.utils.AuthUserArgumentResolver;
 import com.triportreat.backend.common.config.WebConfig;
+import com.triportreat.backend.common.error.exception.AuthenticateFailException;
 import com.triportreat.backend.common.response.PageResponseDto;
 import com.triportreat.backend.place.domain.MyReviewListDto;
-import com.triportreat.backend.common.error.exception.AuthenticateFailException;
 import com.triportreat.backend.place.domain.ReviewListDto;
 import com.triportreat.backend.place.domain.ReviewRequestDto;
 import com.triportreat.backend.place.domain.ReviewUpdateRequestDto;
@@ -384,7 +384,7 @@ public class ReviewControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.result").value(false))
                     .andExpect(jsonPath("$.message").value(USER_NOT_FOUND.getMessage()))
-                    .andExpect(jsonPath("$.status").value(500))
+                    .andExpect(jsonPath("$.status").value(500));
           }
     }
   
