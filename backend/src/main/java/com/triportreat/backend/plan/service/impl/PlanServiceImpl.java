@@ -22,6 +22,7 @@ import com.triportreat.backend.plan.entity.Schedule;
 import com.triportreat.backend.plan.entity.SchedulePlace;
 import com.triportreat.backend.plan.error.exception.PlaceNotFoundException;
 import com.triportreat.backend.plan.error.exception.PlanNotFoundException;
+import com.triportreat.backend.plan.error.exception.PlanWithUserNotFoundException;
 import com.triportreat.backend.plan.error.exception.ScheduleNotFoundException;
 import com.triportreat.backend.plan.error.exception.SchedulePlaceNotFoundException;
 import com.triportreat.backend.plan.error.exception.UserNotFoundException;
@@ -78,7 +79,7 @@ public class PlanServiceImpl implements PlanService {
 
     @Override
     public PlanDetailResponseDto getPlanDetail(Long planId, Long userId) {
-        Plan plan = planRepository.findByIdAndUserId(planId, userId).orElseThrow(AuthenticateFailException::new);
+        Plan plan = planRepository.findByIdAndUserId(planId, userId).orElseThrow(PlanWithUserNotFoundException::new);
         return PlanDetailResponseDto.toDto(plan, extractScheduleDetailsFromPlan(plan));
     }
 
@@ -106,6 +107,13 @@ public class PlanServiceImpl implements PlanService {
                 planListResponseDto.setCreatedDate(CustomDateUtil.toStringFormat(planListResponseDto.getCreatedDateTime())));
 
         return new PageResponseDto<>(response);
+    }
+
+    @Transactional
+    @Override
+    public void deletePlan(Long planId, Long userId) {
+        Plan plan = planRepository.findByIdAndUserId(planId, userId).orElseThrow(PlanWithUserNotFoundException::new);
+        planRepository.delete(plan);
     }
 
     private void updateSchedules(List<ScheduleUpdateRequestDto> scheduleDtos) {

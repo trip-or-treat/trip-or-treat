@@ -19,4 +19,6 @@ public interface PlanService {
     void updatePlan(PlanUpdateRequestDto planUpdateRequestDto);
 
     PageResponseDto<PlanListResponseDto> searchPlans(PlanSearchRequestDto condition, Pageable pageable, Long userId);
+
+    void deletePlan(Long planId, Long userId);
 }
