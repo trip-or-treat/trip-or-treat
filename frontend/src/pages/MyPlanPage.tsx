@@ -1,72 +1,94 @@
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 
 import MyPlanList from 'src/components/mypage/MyPlanList';
 import MyPageTitle from 'src/components/mypage/MyPageTitle';
 import DropDown from 'src/components/mypage/DropDown';
 import PlanListCategory from 'src/components/mypage/PlanListCategory';
 import Paging from 'src/components/mypage/Pagination/Pagination';
+import MyPlanSearch from 'src/components/mypage/MyPlanSearch';
+import EmptyBox from 'src/components/common/EmptyBox';
 
 // import { CommonContainer } from 'src/styles/CommonContainer';
 import { FilterButtonStyle } from 'src/styles/FilterButtonStyle';
-
-import { Plan } from 'src/@types/api/plan';
-import { myPlanComingYnAtom, myPlanCreatedYearAtom, myPlanSearchTypeAtom } from 'src/atoms/myPlan';
 import useMyPlanList from 'src/hooks/api/useMyPlanList';
-import EnterSearch from 'src/components/EnterSearch';
+
+import {
+  myPlanComingYnAtom,
+  myPlanCreatedYearAtom,
+  myPlanCurrentPageAtom,
+  myPlanCurrentPostAtom,
+  myPlanSearchTypeAtom,
+} from 'src/atoms/myPlan';
+
+interface MyPlanData {
+  data: {
+    data: TotalMyPlanData;
+  };
+  isLoading: boolean;
+  isError: boolean;
+}
+
+interface TotalMyPlanData {
+  contents: {
+    planId: number;
+    title: string;
+    startDate: string;
+    endDate: string;
+    createdDate: string;
+    regions: string[];
+  }[];
+  page: number;
+  totalPages: number;
+  prev: boolean;
+  next: boolean;
+  startPage: number;
+  endPage: number;
+}
 
 const MyPlanPage = () => {
-  const [searchType] = useRecoilValue(myPlanSearchTypeAtom);
-  const [comingYn] = useRecoilValue(myPlanComingYnAtom);
-  const [createdYear, setCreatedYear] = useRecoilState(myPlanCreatedYearAtom);
+  const [searchType, setSearchType] = useRecoilState(myPlanSearchTypeAtom);
+  const [comingYn, setComingYn] = useRecoilState(myPlanComingYnAtom);
+  const [createdYear, setCreatedYear] = useRecoilState(myPlanCreatedYearAtom); // 작성연도
+  const [currentPage, setCurrentPage] = useRecoilState(myPlanCurrentPageAtom); // 현재 페이지 번호
+  const [currentPost, setCurrentPost] = useRecoilState(myPlanCurrentPostAtom); // 게시판 목록에 보여줄 게시글
 
   const [keyword, setKeyword] = useState('');
-  const [planList, setPlanList] = useState<Plan[]>([]); // api로 받아온 데이터
-  const [currentPost, setCurrentPost] = useState<Plan[]>([]); // 게시판 목록에 보여줄 게시글
-  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호
-  const [clickedYear, setClickedYear] = useState(6);
-
-  const token = localStorage.getItem('accessToken') ?? '';
-  // 토큰이 없을 때 에러처리
 
   // 데이터 불러오기
-  const { data: myPlanListData } = useMyPlanList({
+  const {
+    data: myPlanData,
+    isError,
+    isLoading,
+  }: MyPlanData = useMyPlanList({
     pageParam: currentPage,
     searchType,
     keyword: keyword || '',
     comingYn,
     createdYear,
-    token,
   });
 
-  useEffect(() => {
-    if (myPlanListData instanceof Array) {
-      setPlanList(myPlanListData);
-    }
-  }, [myPlanListData]);
+  if (isError) return null;
+  console.log(myPlanData?.data);
 
-  console.log(myPlanListData);
+  useEffect(() => {
+    if (!isLoading) {
+      setCurrentPost(myPlanData.data.contents);
+    }
+  }, [myPlanData]);
 
   // 페이지네이션
-  const postPerPage = 10;
-  const indexOfLastPost = currentPage * postPerPage; // 10,20,30...
-  const indexOfFirstPost = indexOfLastPost - postPerPage;
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+    console.log('currentPage:', page);
   };
-
-  useEffect(() => {
-    setCurrentPost(planList.slice(indexOfFirstPost, indexOfLastPost));
-  }, [planList, currentPage]);
-
-  console.log(currentPage);
   console.log(currentPost);
 
   // 작성연도 필터
   const currentYear = new Date().getFullYear();
-  const endYear = 2024;
+  const endYear = 2023;
   const createdYearList = [6];
 
   for (let year = currentYear; year >= endYear; year -= 1) {
@@ -74,27 +96,42 @@ const MyPlanPage = () => {
   }
 
   const handleClick = (year: number) => {
-    setClickedYear(year);
     setCreatedYear(year);
+    console.log(createdYear);
+  };
+
+  useEffect(() => {
+    setCreatedYear(null);
+  }, []);
+
+  const searchTypeObj = {
+    제목: 'T',
+    지역: 'R',
+  };
+
+  const comingYnObj = {
+    '다가오는 여행': 'Y',
+    '지난 여행': 'N',
   };
 
   return (
     <div>
       <MyPageTitle>내 여행계획</MyPageTitle>
       <SearchBox>
-        <DropDownFirst filter="제목,장소" />
-        <EnterSearch placeHolder="제목 또는 지역으로 검색해보세요." setKeyword={setKeyword} />
-        <DropDownSecond filter="다가오는 여행,지난 여행" />
+        <DropDownFirst filter={searchTypeObj} setParams={setSearchType} />
+        <MyPlanSearch placeHolder="제목 또는 지역으로 검색해보세요." setKeyword={setKeyword} />
+        <DropDownSecond filter={comingYnObj} setParams={setComingYn} />
       </SearchBox>
       <FilterBox>
         {createdYearList.map((year) => (
-          <Button key={year} onClick={() => handleClick(year)} $isClicked={clickedYear === year}>
+          <Button key={year} onClick={() => handleClick(year)} $isClicked={createdYear === year}>
             {year === 6 ? '최근 6개월' : year}
           </Button>
         ))}
       </FilterBox>
       <PlanListCategory />
       <ListContainer>
+        {currentPost.length === 0 && <EmptyBox>계획 목록이 없습니다.</EmptyBox>}
         {currentPost.map((data, idx) => {
           return (
             <MyPlanList
@@ -109,7 +146,7 @@ const MyPlanPage = () => {
           );
         })}
       </ListContainer>
-      <Paging currentPage={currentPage} totalElements={13} setCurrentPage={handlePageChange} />
+      <Paging currentPage={currentPage} totalElements={55} setCurrentPage={handlePageChange} />
     </div>
   );
 };
@@ -129,16 +166,6 @@ const SearchBox = styled.div`
   margin-bottom: 15px;
 `;
 
-// const Search = styled.div`
-//   ${CommonContainer};
-
-//   width: 50%;
-//   margin: 0 10px;
-
-//   border-radius: 35px;
-//   box-shadow: 0px 4px 4px 0px ${(props) => props.theme.colors.lightGrey};
-// `;
-
 const FilterBox = styled.div`
   display: flex;
 `;
@@ -151,9 +178,9 @@ const Button = styled.button<{ $isClicked: boolean }>`
 `;
 
 const DropDownFirst = styled(DropDown)`
-  width: 20%;
+  width: 40px;
 `;
 
 const DropDownSecond = styled(DropDown)`
-  width: 25%;
+  width: 60px;
 `;

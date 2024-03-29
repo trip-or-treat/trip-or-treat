@@ -1,24 +1,24 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { ReactComponent as DropDownIcon } from '../../../assets/svgs/dropDown.svg';
 import { CommonContainer } from '../../../styles/CommonContainer';
 
 interface Props {
-  filter: string;
+  filter: object;
+  setParams(arg: string): void;
 }
 
-const DropDown = ({ filter }: Props) => {
-  const filterArray = filter.split(',');
+const DropDown = ({ filter, setParams }: Props) => {
+  const filterKeyArray: string[] = Object.keys(filter);
+  const filterValueArray: string[] = Object.values(filter);
 
   const [open, setOpen] = useState(false);
-  const [clicked, setClicked] = useState(filterArray[0]);
+  const [clicked, setClicked] = useState(filterKeyArray[0]);
 
-  // console.log(filter);
-  // console.log(filterArray);
-
-  // console.log(open);
-  // console.log(clicked);
+  useEffect(() => {
+    setClicked(filterKeyArray[0]);
+  }, []);
 
   return (
     <div>
@@ -32,8 +32,15 @@ const DropDown = ({ filter }: Props) => {
       </ToggleBox>
       {open && (
         <DropMenu>
-          {filterArray.map((item) => (
-            <DropMenuItem key={item} onClick={() => setClicked(item)}>
+          {filterKeyArray.map((item, idx) => (
+            <DropMenuItem
+              key={item}
+              onClick={() => {
+                setClicked(item);
+                setOpen(!open);
+                setParams(filterValueArray[idx]);
+              }}
+            >
               {item}
             </DropMenuItem>
           ))}
@@ -51,9 +58,10 @@ const ToggleBox = styled.div`
   height: 35px;
 
   border-radius: 35px;
-  box-shadow: 0px 4px 4px 0px ${(props) => props.theme.colors.lightGrey};
+  box-shadow: 0px 3px 5px 0px ${(props) => props.theme.colors.lightGrey};
 
   cursor: pointer;
+  overflow: hidden;
 `;
 
 const DropMenu = styled.div`
@@ -71,11 +79,16 @@ const DropMenu = styled.div`
 `;
 
 const DropMenuItem = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
   height: 35px;
+  border-radius: 20px;
+  /* background-color: yellow; */
+  cursor: pointer;
 `;
 
 const Selected = styled.div`
   /* width: 35px; */
-
-  background-color: blue;
 `;
