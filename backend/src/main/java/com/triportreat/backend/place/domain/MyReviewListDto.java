@@ -14,10 +14,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MyReviewListDto {
 
-    private  Long id;
-    private  String content;
-    private  String placeName;
-    private  Integer score;
+    private Long id;
+    private String content;
+    private String tip;
+    private Long placeId;
+    private String placeName;
+    private Integer score;
     private String createdDate;
 
     public static MyReviewListDto toDto(Review review, Place place) {
@@ -26,6 +28,8 @@ public class MyReviewListDto {
         return MyReviewListDto.builder()
                 .id(review.getId())
                 .content(review.getContent())
+                .tip(review.getTip())
+                .placeId(place.getId())
                 .placeName(place.getName())
                 .score(review.getScore())
                 .createdDate(formattedDate)

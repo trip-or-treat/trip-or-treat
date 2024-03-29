@@ -249,8 +249,8 @@ public class ReviewServiceImplTest extends DummyObject {
 
             //given
             User user = createMockUser(1L, "testUser");
-            Place place1 = Place.builder().name("place1").build();
-            Place place2 = Place.builder().name("place2").build();
+            Place place1 = Place.builder().id(1L).name("place1").build();
+            Place place2 = Place.builder().id(2L).name("place2").build();
             List<Review> reviews = List.of(createMockReview(1L, user, place1), createMockReview(2L, user, place2));
 
             Pageable pageable = PageRequest.of(0, 10);
@@ -268,9 +268,12 @@ public class ReviewServiceImplTest extends DummyObject {
             assertThat(reviewList).hasSize(2);
             assertThat(reviewList.get(0).getId()).isEqualTo(1L);
             assertThat(reviewList.get(0).getContent()).isEqualTo("testContent");
+            assertThat(reviewList.get(0).getTip()).isEqualTo("testTip");
+            assertThat(reviewList.get(0).getPlaceId()).isEqualTo(1L);
             assertThat(reviewList.get(0).getPlaceName()).isEqualTo("place1");
             assertThat(reviewList.get(0).getScore()).isEqualTo(5);
             assertThat(reviewList.get(1).getId()).isEqualTo(2L);
+            assertThat(reviewList.get(1).getPlaceId()).isEqualTo(2L);
             assertThat(reviewList.get(1).getPlaceName()).isEqualTo("place2");
         }
 
