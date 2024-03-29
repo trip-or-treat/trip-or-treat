@@ -18,7 +18,6 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -38,27 +37,26 @@ import com.triportreat.backend.auth.filter.JwtExceptionFilter;
 import com.triportreat.backend.auth.utils.AuthUserArgumentResolver;
 import com.triportreat.backend.common.config.WebConfig;
 import com.triportreat.backend.common.error.exception.AuthenticateFailException;
-import com.triportreat.backend.dummy.DummyObject;
-import com.triportreat.backend.plan.domain.PlanResponseDto.PlanDetailResponseDto;
 import com.triportreat.backend.common.response.PageResponseDto;
+import com.triportreat.backend.dummy.DummyObject;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanUpdateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceCreateRequestDto;
+import com.triportreat.backend.plan.domain.PlanResponseDto.PlanDetailResponseDto;
+import com.triportreat.backend.plan.domain.PlanResponseDto.PlanListResponseDto;
 import com.triportreat.backend.plan.domain.PlanResponseDto.RegionResponseDto;
 import com.triportreat.backend.plan.domain.PlanResponseDto.ScheduleDetailResponseDto;
 import com.triportreat.backend.plan.domain.PlanResponseDto.SchedulePlaceDetailResponseDto;
-import com.triportreat.backend.plan.domain.PlanResponseDto.PlanListResponseDto;
 import com.triportreat.backend.plan.error.exception.PlanNotFoundException;
 import com.triportreat.backend.plan.error.exception.PlanWithUserNotFoundException;
 import com.triportreat.backend.plan.error.exception.UserNotFoundException;
 import com.triportreat.backend.plan.service.PlanService;
 import com.triportreat.backend.region.error.exception.RegionNotFoundException;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -495,7 +493,7 @@ class PlanControllerTest extends DummyObject {
                     .andExpect(jsonPath("$.data.schedules[1].schedulePlaces[0].schedulePlaceId").value(3))
                     .andExpect(jsonPath("$.data.schedules[1].schedulePlaces[1].schedulePlaceId").value(4));
         }
-      
+
         @Test
         @DisplayName("실패 - 계획 정보 없음")
         void getSharedPlanDetail_PlanNotFound() throws Exception {
@@ -513,7 +511,7 @@ class PlanControllerTest extends DummyObject {
                     .andExpect(jsonPath("$.result").value(false))
                     .andExpect(jsonPath("$.data").doesNotExist());
         }
-      
+
         @Test
         @DisplayName("실패 - 지역 정보 없음")
         void getSharedPlanDetail_RegionNotFound() throws Exception {
@@ -543,10 +541,17 @@ class PlanControllerTest extends DummyObject {
                     ScheduleDetailResponseDto.builder().scheduleId(1L).schedulePlaces(schedulePlaceDetails1).build(),
                     ScheduleDetailResponseDto.builder().scheduleId(2L).schedulePlaces(schedulePlaceDetails2).build());
 
+            RegionResponseDto regions = RegionResponseDto.builder()
+                    .regionIds(Arrays.asList(1L, 2L, 3L))
+                    .regionNames(Arrays.asList("서울", "인천", "대전"))
+                    .build();
+
             return PlanDetailResponseDto.builder()
                     .planId(1L)
-                    .code(UUID.randomUUID().toString().toUpperCase())
+                    .code("code")
                     .schedules(scheduleDetail)
+                    .regions(regions)
                     .build();
         }
+    }
 }
