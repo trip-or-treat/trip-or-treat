@@ -1,5 +1,8 @@
 package com.triportreat.backend.dummy;
 
+import com.triportreat.backend.auth.domain.KakaoTokenResponseDto;
+import com.triportreat.backend.auth.domain.KakaoUserInfoResponseDto;
+import com.triportreat.backend.auth.domain.KakaoUserInfoResponseDto.KakaoAccount;
 import com.triportreat.backend.place.domain.ReviewRequestDto;
 import com.triportreat.backend.place.domain.ReviewUpdateRequestDto;
 import com.triportreat.backend.place.entity.ContentType;
@@ -188,5 +191,22 @@ public class DummyObject {
                 .title("수정한 계획 제목")
                 .schedules(mockSchedules)
                 .build();
+    }
+
+    protected KakaoUserInfoResponseDto createMockKakaoUserInfo() {
+        KakaoAccount kakaoAccount = new KakaoAccount();
+        kakaoAccount.setEmail("test@gmail.com");
+
+        KakaoUserInfoResponseDto mockKakaoUserInfo = new KakaoUserInfoResponseDto();
+        mockKakaoUserInfo.setKakaoAccount(kakaoAccount);
+
+        return mockKakaoUserInfo;
+    }
+
+    protected KakaoTokenResponseDto createMockKakaoTokenResponse() {
+        KakaoTokenResponseDto mockKakaoTokenResponse = new KakaoTokenResponseDto();
+        mockKakaoTokenResponse.setAccessToken("testAccessToken");
+
+        return mockKakaoTokenResponse;
     }
 }
