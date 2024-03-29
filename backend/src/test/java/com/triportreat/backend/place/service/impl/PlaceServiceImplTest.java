@@ -1,5 +1,15 @@
 package com.triportreat.backend.place.service.impl;
 
+import static com.triportreat.backend.place.domain.TourApiPlaceResponseDto.Body;
+import static com.triportreat.backend.place.domain.TourApiPlaceResponseDto.Item;
+import static com.triportreat.backend.place.domain.TourApiPlaceResponseDto.Items;
+import static com.triportreat.backend.place.domain.TourApiPlaceResponseDto.ResponseData;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.BDDMockito.when;
+import static org.mockito.Mockito.mock;
+
 import com.triportreat.backend.common.response.FailMessage;
 import com.triportreat.backend.place.domain.PlaceByRegionIdDto;
 import com.triportreat.backend.place.domain.PlaceInfoDto;
@@ -16,6 +26,8 @@ import com.triportreat.backend.place.repository.PlaceRepositoryCustom;
 import com.triportreat.backend.place.service.ExternalApiService;
 import com.triportreat.backend.place.service.PlaceService;
 import com.triportreat.backend.region.entity.Region;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -24,16 +36,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
-import java.util.Optional;
-
-import static com.triportreat.backend.place.domain.TourApiPlaceResponseDto.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.BDDMockito.when;
-import static org.mockito.Mockito.mock;
 
 @SpringBootTest
 class PlaceServiceImplTest {
@@ -60,12 +62,12 @@ class PlaceServiceImplTest {
         placeSearchCondition.setContentTypeId(14L);
         Pageable pageable = PageRequest.of(0, 10);
 
-        java.util.List<PlaceByRegionIdDto> findPlaces = List.of(
-                PlaceByRegionIdDto.builder().id(1L).name("경복궁").contentTypeId(14L).build(),
-                PlaceByRegionIdDto.builder().id(2L).name("창덕궁").contentTypeId(14L).build(),
-                PlaceByRegionIdDto.builder().id(3L).name("덕수궁").contentTypeId(14L).build(),
-                PlaceByRegionIdDto.builder().id(4L).name("창경궁").contentTypeId(14L).build(),
-                PlaceByRegionIdDto.builder().id(5L).name("경희궁").contentTypeId(14L).build());
+        List<PlaceByRegionIdDto> findPlaces = List.of(
+                PlaceByRegionIdDto.builder().placeId(1L).placeName("경복궁").contentTypeId(14L).build(),
+                PlaceByRegionIdDto.builder().placeId(2L).placeName("창덕궁").contentTypeId(14L).build(),
+                PlaceByRegionIdDto.builder().placeId(3L).placeName("덕수궁").contentTypeId(14L).build(),
+                PlaceByRegionIdDto.builder().placeId(4L).placeName("창경궁").contentTypeId(14L).build(),
+                PlaceByRegionIdDto.builder().placeId(5L).placeName("경희궁").contentTypeId(14L).build());
 
         // when
         when(placeRepositoryCustom.searchPlaceListByCondition(placeSearchCondition, pageable))
@@ -74,7 +76,7 @@ class PlaceServiceImplTest {
         // then
         assertThat(findPlaces.size()).isEqualTo(5);
         assertAll(findPlaces.stream().map(place -> () -> {
-            assertThat(place.getName()).contains("궁");
+            assertThat(place.getPlaceName()).contains("궁");
             assertThat(place.getContentTypeId()).isEqualTo(14L);
         }));
     }

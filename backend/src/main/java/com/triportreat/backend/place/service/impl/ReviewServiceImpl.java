@@ -1,6 +1,9 @@
 package com.triportreat.backend.place.service.impl;
 
 
+import com.triportreat.backend.common.error.exception.AuthenticateFailException;
+import com.triportreat.backend.common.response.PageResponseDto;
+import com.triportreat.backend.place.domain.MyReviewListDto;
 import com.triportreat.backend.place.domain.ReviewListDto;
 import com.triportreat.backend.place.domain.ReviewRequestDto;
 import com.triportreat.backend.place.domain.ReviewUpdateRequestDto;
@@ -16,6 +19,7 @@ import com.triportreat.backend.place.service.ReviewService;
 import com.triportreat.backend.user.entity.User;
 import com.triportreat.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +29,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
@@ -44,12 +49,11 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    @Transactional
-    public void createReview(ReviewRequestDto reviewRequestDto) {
+    public void createReview(Long userId, ReviewRequestDto reviewRequestDto) {
         Place place = placeRepository.findById(reviewRequestDto.getPlaceId())
                 .orElseThrow(() -> new PlaceNotFoundException(reviewRequestDto.getPlaceId()));
 
-        User user = userRepository.findById(reviewRequestDto.getUserId())
+        User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
         Review review = Review.toEntity(reviewRequestDto, user, place);
@@ -57,7 +61,6 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    @Transactional
     public void updateReview(Long id, ReviewUpdateRequestDto reviewUpdateRequestDto) {
         Place place = placeRepository.findById(reviewUpdateRequestDto.getPlaceId())
                 .orElseThrow(() -> new PlaceNotFoundException(reviewUpdateRequestDto.getPlaceId()));
@@ -70,6 +73,30 @@ public class ReviewServiceImpl implements ReviewService {
         }
 
         review.reviewUpdate(reviewUpdateRequestDto.getContent(), reviewUpdateRequestDto.getTip(), reviewUpdateRequestDto.getScore());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PageResponseDto<MyReviewListDto> getMyReviewList(Long userId, Pageable pageable) {
+        if (!userRepository.existsById(userId)) {
+            throw new UserNotFoundException();
+        }
+
+        Page<Review> reviewPage = reviewRepository.findByUserId(userId, pageable);
+
+        return new PageResponseDto<>(reviewPage.map(review -> MyReviewListDto.toDto(review, review.getPlace())));
+    }
+
+    @Override
+    public void deleteReview(Long userId, Long id) {
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(ReviewNotFoundException::new);
+
+        if (!review.getUser().getId().equals(userId)) {
+            throw new AuthenticateFailException();
+        }
+
+        reviewRepository.deleteById(id);
     }
 }
 

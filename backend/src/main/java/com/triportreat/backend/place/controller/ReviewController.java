@@ -1,5 +1,6 @@
 package com.triportreat.backend.place.controller;
 
+import com.triportreat.backend.auth.utils.Auth;
 import com.triportreat.backend.common.response.ResponseResult;
 import com.triportreat.backend.place.domain.ReviewRequestDto;
 import com.triportreat.backend.place.domain.ReviewUpdateRequestDto;
@@ -25,9 +26,8 @@ public class ReviewController {
     }
 
     @PostMapping("/reviews")
-    public ResponseEntity<?> postReview(@Valid @RequestBody ReviewRequestDto reviewRequestDto) {
-        reviewRequestDto.setUserId(1L); // TODO 로그인 기능 구현 완료시 수정 필요
-        reviewService.createReview(reviewRequestDto);
+    public ResponseEntity<?> postReview(@Auth Long userId, @Valid @RequestBody ReviewRequestDto reviewRequestDto) {
+        reviewService.createReview(userId, reviewRequestDto);
         return ResponseEntity.ok().body(ResponseResult.success(POST_SUCCESS.getMessage(), null));
     }
 
@@ -35,5 +35,16 @@ public class ReviewController {
     public ResponseEntity<?> updateReview(@PathVariable Long id, @Valid @RequestBody ReviewUpdateRequestDto reviewUpdateRequestDto) {
         reviewService.updateReview(id, reviewUpdateRequestDto);
         return ResponseEntity.ok().body(ResponseResult.success(PUT_SUCCESS.getMessage(), null));
+    }
+
+    @GetMapping("/reviews")
+    public ResponseEntity<?> getMyReviewList(@Auth Long userId, @PageableDefault(size = 10) Pageable pageable) {
+        return ResponseEntity.ok().body(ResponseResult.success(GET_SUCCESS.getMessage(), reviewService.getMyReviewList(userId, pageable)));
+    }
+
+    @DeleteMapping("/reviews/{id}")
+    public ResponseEntity<?> deleteReview(@Auth Long userId, @PathVariable Long id) {
+        reviewService.deleteReview(userId, id);
+        return ResponseEntity.ok().body(ResponseResult.success(DELETE_SUCCESS.getMessage(), null));
     }
 }

@@ -1,5 +1,7 @@
 package com.triportreat.backend.place.service;
 
+import com.triportreat.backend.common.response.PageResponseDto;
+import com.triportreat.backend.place.domain.MyReviewListDto;
 import com.triportreat.backend.place.domain.ReviewListDto;
 import com.triportreat.backend.place.domain.ReviewRequestDto;
 import com.triportreat.backend.place.domain.ReviewUpdateRequestDto;
@@ -9,6 +11,8 @@ import java.util.List;
 
 public interface ReviewService {
     List<ReviewListDto> getReviewList(Long id, Pageable pageable);
-    void createReview(ReviewRequestDto reviewRequestDto);
+    void createReview(Long userId, ReviewRequestDto reviewRequestDto);
+    PageResponseDto<MyReviewListDto> getMyReviewList(Long id, Pageable pageable);
     void updateReview(Long id,ReviewUpdateRequestDto reviewUpdateRequestDto);
+    void deleteReview(Long userId, Long id);
 }

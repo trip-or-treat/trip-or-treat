@@ -9,7 +9,6 @@ import lombok.Data;
 @Builder
 public class ReviewRequestDto {
 
-    private Long userId;
     @NotNull(message = "placeId는 필수 입력값입니다.")
     private Long placeId;
     @NotEmpty(message = "내용은 필수 입력값입니다.")

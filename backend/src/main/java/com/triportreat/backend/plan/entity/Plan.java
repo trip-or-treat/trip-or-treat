@@ -44,7 +44,7 @@ public class Plan extends BaseTimeEntity {
     private List<Schedule> schedules = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "plan")
+    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<PlanRegion> regions = new HashSet<>();
 
     @Column(length = 20, nullable = false)
@@ -66,5 +66,9 @@ public class Plan extends BaseTimeEntity {
                 .endDate(planCreateRequestDto.getEndDate())
                 .code(code)
                 .build();
+    }
+
+    public void updateTitle(String title) {
+        this.title = title;
     }
 }
