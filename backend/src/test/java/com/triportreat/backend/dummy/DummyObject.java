@@ -83,7 +83,7 @@ public class DummyObject {
                 .build();
     }
 
-    protected PlanRegion createPlanRegion(Long id, Plan plan, Region region) {
+    protected PlanRegion createMockPlanRegion(Long id, Plan plan, Region region) {
         return PlanRegion.builder()
                 .id(id)
                 .plan(plan)
@@ -110,12 +110,12 @@ public class DummyObject {
                 .build();
     }
 
-    protected PlanCreateRequestDto createPlanRequestDto(LocalDate startDate, LocalDate endDate, Long userId, List<ScheduleCreateRequestDto> scheduleRequests) {
+    protected PlanCreateRequestDto createPlanRequestDto(List<Long> regionIds, LocalDate startDate, LocalDate endDate, List<ScheduleCreateRequestDto> scheduleRequests) {
         return PlanCreateRequestDto.builder()
                 .title("Plan")
+                .regions(regionIds)
                 .startDate(startDate)
                 .endDate(endDate)
-                .userId(userId)
                 .schedules(scheduleRequests)
                 .build();
     }
