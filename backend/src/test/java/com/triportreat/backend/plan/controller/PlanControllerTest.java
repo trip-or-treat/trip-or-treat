@@ -2,9 +2,11 @@ package com.triportreat.backend.plan.controller;
 
 import static com.triportreat.backend.common.response.FailMessage.AUTHENTICATION_FAILED;
 import static com.triportreat.backend.common.response.FailMessage.PLAN_NOT_FOUND;
+import static com.triportreat.backend.common.response.FailMessage.PLAN_WITH_USER_NOT_FOUND;
 import static com.triportreat.backend.common.response.FailMessage.REGION_NOT_FOUND;
 import static com.triportreat.backend.common.response.FailMessage.USER_NOT_FOUND;
 import static com.triportreat.backend.common.response.FailMessage.VALIDATION_FAILED;
+import static com.triportreat.backend.common.response.SuccessMessage.DELETE_SUCCESS;
 import static com.triportreat.backend.common.response.SuccessMessage.GET_SUCCESS;
 import static com.triportreat.backend.common.response.SuccessMessage.PATCH_SUCCESS;
 import static com.triportreat.backend.common.response.SuccessMessage.POST_SUCCESS;
@@ -13,6 +15,7 @@ import static com.triportreat.backend.plan.domain.PlanSearchValue.SEARCH_TYPE_RE
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -20,6 +23,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -33,24 +37,25 @@ import com.triportreat.backend.auth.filter.JwtExceptionFilter;
 import com.triportreat.backend.auth.utils.AuthUserArgumentResolver;
 import com.triportreat.backend.common.config.WebConfig;
 import com.triportreat.backend.common.error.exception.AuthenticateFailException;
-import com.triportreat.backend.dummy.DummyObject;
-import com.triportreat.backend.plan.domain.PlanResponseDto.PlanDetailResponseDto;
 import com.triportreat.backend.common.response.PageResponseDto;
+import com.triportreat.backend.dummy.DummyObject;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanUpdateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceCreateRequestDto;
+import com.triportreat.backend.plan.domain.PlanResponseDto.PlanDetailResponseDto;
+import com.triportreat.backend.plan.domain.PlanResponseDto.PlanListResponseDto;
 import com.triportreat.backend.plan.domain.PlanResponseDto.RegionResponseDto;
 import com.triportreat.backend.plan.domain.PlanResponseDto.ScheduleDetailResponseDto;
 import com.triportreat.backend.plan.domain.PlanResponseDto.SchedulePlaceDetailResponseDto;
-import com.triportreat.backend.plan.domain.PlanResponseDto.PlanListResponseDto;
 import com.triportreat.backend.plan.error.exception.PlanNotFoundException;
+import com.triportreat.backend.plan.error.exception.PlanWithUserNotFoundException;
 import com.triportreat.backend.plan.error.exception.UserNotFoundException;
 import com.triportreat.backend.plan.service.PlanService;
 import com.triportreat.backend.region.error.exception.RegionNotFoundException;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -416,6 +421,137 @@ class PlanControllerTest extends DummyObject {
                     .andExpect(jsonPath("$.message").value(USER_NOT_FOUND.getMessage()))
                     .andExpect(jsonPath("$.status").value(500))
                     .andExpect(jsonPath("$.data").isEmpty());
+        }
+    }
+
+    @Nested
+    @DisplayName("계획 삭제")
+    class DeletePlans {
+
+        @Test
+        @DisplayName("성공")
+        void deletePlans_success() throws Exception {
+            // given
+            Long planId = 1L;
+
+            // when
+            // then
+            mockMvc.perform(delete("/plans/{id}", planId))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value(200))
+                    .andExpect(jsonPath("$.message").value(DELETE_SUCCESS.getMessage()))
+                    .andExpect(jsonPath("$.result").value(true))
+                    .andExpect(jsonPath("$.data").doesNotExist());
+        }
+
+        @Test
+        @DisplayName("실패 - 해당 사용자의 계획 정보 없음")
+        void deletePlans_PlanWithUserNotFoundException() throws Exception {
+            // given
+            Long planId = 1L;
+
+            // when
+            doThrow(PlanWithUserNotFoundException.class).when(planService).deletePlan(anyLong(), any());
+
+            // then
+            mockMvc.perform(delete("/plans/{id}", planId))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value(500))
+                    .andExpect(jsonPath("$.message").value(PLAN_WITH_USER_NOT_FOUND.getMessage()))
+                    .andExpect(jsonPath("$.result").value(false))
+                    .andExpect(jsonPath("$.data").doesNotExist());
+        }
+    }
+  
+    @Nested
+    @DisplayName("공유 계획 상세 조회")
+    class GetSharedPlanDetail {
+
+        @Test
+        @DisplayName("성공")
+        void getSharedPlanDetail_Success() throws Exception {
+            // given
+            PlanDetailResponseDto planDetail = createPlanDetailResponseDto();
+            String code = planDetail.getCode();
+
+            // when
+            when(planService.getSharedPlanDetail(code)).thenReturn(planDetail);
+
+            // then
+            mockMvc.perform(get("/plans/share/{id}", code))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value(200))
+                    .andExpect(jsonPath("$.message").value(GET_SUCCESS.getMessage()))
+                    .andExpect(jsonPath("$.result").value(true))
+                    .andExpect(jsonPath("$.data.planId").value(1))
+                    .andExpect(jsonPath("$.data.regions.regionIds.size()").value(3))
+                    .andExpect(jsonPath("$.data.regions.regionNames.size()").value(3))
+                    .andExpect(jsonPath("$.data.schedules[0].scheduleId").value(1))
+                    .andExpect(jsonPath("$.data.schedules[1].scheduleId").value(2))
+                    .andExpect(jsonPath("$.data.schedules[0].schedulePlaces[0].schedulePlaceId").value(1))
+                    .andExpect(jsonPath("$.data.schedules[0].schedulePlaces[1].schedulePlaceId").value(2))
+                    .andExpect(jsonPath("$.data.schedules[1].schedulePlaces[0].schedulePlaceId").value(3))
+                    .andExpect(jsonPath("$.data.schedules[1].schedulePlaces[1].schedulePlaceId").value(4));
+        }
+
+        @Test
+        @DisplayName("실패 - 계획 정보 없음")
+        void getSharedPlanDetail_PlanNotFound() throws Exception {
+            // given
+            String invalidCode = "INVALID_CODE";
+
+            // when
+            when(planService.getSharedPlanDetail(anyString())).thenThrow(PlanNotFoundException.class);
+
+            // then
+            mockMvc.perform(get("/plans/share/{id}", invalidCode))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value(500))
+                    .andExpect(jsonPath("$.message").value(PLAN_NOT_FOUND.getMessage()))
+                    .andExpect(jsonPath("$.result").value(false))
+                    .andExpect(jsonPath("$.data").doesNotExist());
+        }
+
+        @Test
+        @DisplayName("실패 - 지역 정보 없음")
+        void getSharedPlanDetail_RegionNotFound() throws Exception {
+            // given
+            String code = "code";
+            when(planService.getSharedPlanDetail(anyString())).thenThrow(RegionNotFoundException.class);
+
+            // when
+            // then
+            mockMvc.perform(get("/plans/share/{id}", code))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value(400))
+                    .andExpect(jsonPath("$.message").value(REGION_NOT_FOUND.getMessage()))
+                    .andExpect(jsonPath("$.result").value(false))
+                    .andExpect(jsonPath("$.data").doesNotExist());
+        }
+
+        private PlanDetailResponseDto createPlanDetailResponseDto() {
+            List<SchedulePlaceDetailResponseDto> schedulePlaceDetails1 = List.of(
+                    SchedulePlaceDetailResponseDto.builder().schedulePlaceId(1L).build(),
+                    SchedulePlaceDetailResponseDto.builder().schedulePlaceId(2L).build());
+            List<SchedulePlaceDetailResponseDto> schedulePlaceDetails2 = List.of(
+                    SchedulePlaceDetailResponseDto.builder().schedulePlaceId(3L).build(),
+                    SchedulePlaceDetailResponseDto.builder().schedulePlaceId(4L).build());
+
+            List<ScheduleDetailResponseDto> scheduleDetail = List.of(
+                    ScheduleDetailResponseDto.builder().scheduleId(1L).schedulePlaces(schedulePlaceDetails1).build(),
+                    ScheduleDetailResponseDto.builder().scheduleId(2L).schedulePlaces(schedulePlaceDetails2).build());
+
+            RegionResponseDto regions = RegionResponseDto.builder()
+                    .regionIds(Arrays.asList(1L, 2L, 3L))
+                    .regionNames(Arrays.asList("서울", "인천", "대전"))
+                    .build();
+
+            return PlanDetailResponseDto.builder()
+                    .planId(1L)
+                    .code("code")
+                    .schedules(scheduleDetail)
+                    .regions(regions)
+                    .build();
         }
     }
 }

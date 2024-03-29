@@ -6,12 +6,7 @@ import com.triportreat.backend.place.entity.ContentType;
 import com.triportreat.backend.place.entity.Place;
 import com.triportreat.backend.place.entity.Review;
 import com.triportreat.backend.place.entity.SubCategory;
-import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
-import com.triportreat.backend.plan.domain.PlanRequestDto.PlanUpdateRequestDto;
-import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleCreateRequestDto;
-import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceCreateRequestDto;
-import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceUpdateRequestDto;
-import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleUpdateRequestDto;
+import com.triportreat.backend.plan.domain.PlanRequestDto.*;
 import com.triportreat.backend.plan.entity.Plan;
 import com.triportreat.backend.plan.entity.PlanRegion;
 import com.triportreat.backend.plan.entity.Schedule;
@@ -42,6 +37,7 @@ public class DummyObject {
     protected Plan createMockPlan(Long id, String title, User user, Set<PlanRegion> regions, List<Schedule> schedules, LocalDate startDate, LocalDate endDate) {
         return Plan.builder()
                 .id(id)
+                .code("code")
                 .title(title)
                 .user(user)
                 .regions(regions)
@@ -147,9 +143,8 @@ public class DummyObject {
                 .build();
     }
 
-    protected ReviewRequestDto createReviewRequestDto(Long userId, Long placeId) {
+    protected ReviewRequestDto createReviewRequestDto(Long placeId) {
         return ReviewRequestDto.builder()
-                .userId(userId)
                 .placeId(placeId)
                 .content("testContent")
                 .tip("testTip")

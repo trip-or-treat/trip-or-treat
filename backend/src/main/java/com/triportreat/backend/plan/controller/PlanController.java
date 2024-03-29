@@ -1,5 +1,6 @@
 package com.triportreat.backend.plan.controller;
 
+import static com.triportreat.backend.common.response.SuccessMessage.DELETE_SUCCESS;
 import static com.triportreat.backend.common.response.SuccessMessage.GET_SUCCESS;
 import static com.triportreat.backend.common.response.SuccessMessage.PATCH_SUCCESS;
 import static com.triportreat.backend.common.response.SuccessMessage.POST_SUCCESS;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,6 +47,11 @@ public class PlanController {
         planService.createPlan(planCreateRequestDto, userId);
         return ResponseEntity.ok().body(ResponseResult.success(POST_SUCCESS.getMessage(), null));
     }
+      
+    @GetMapping("/share/{code}")
+    public ResponseEntity<?> getSharedPlanDetail(@PathVariable("code") String code) {
+        return ResponseEntity.ok().body(ResponseResult.success(GET_SUCCESS.getMessage(), planService.getSharedPlanDetail(code)));
+    }
 
     @PatchMapping("/{id}")
     public ResponseEntity<?> updatePlan(@Auth Long userId,
@@ -56,4 +63,9 @@ public class PlanController {
         return ResponseEntity.ok().body(ResponseResult.success(PATCH_SUCCESS.getMessage(), null));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePlan(@Auth Long userId, @PathVariable("id") Long planId) {
+        planService.deletePlan(planId, userId);
+        return ResponseEntity.ok().body(ResponseResult.success(DELETE_SUCCESS.getMessage(), null));
+    }
 }

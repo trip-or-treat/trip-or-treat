@@ -5,23 +5,24 @@ import com.triportreat.backend.common.response.PageResponseDto;
 import com.triportreat.backend.common.utils.CustomDateUtil;
 import com.triportreat.backend.place.entity.Place;
 import com.triportreat.backend.place.repository.PlaceRepository;
-import com.triportreat.backend.plan.domain.PlanResponseDto.PlanDetailResponseDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
+import com.triportreat.backend.plan.domain.PlanRequestDto.PlanSearchRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanUpdateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceCreateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceUpdateRequestDto;
 import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleUpdateRequestDto;
+import com.triportreat.backend.plan.domain.PlanResponseDto.PlanDetailResponseDto;
+import com.triportreat.backend.plan.domain.PlanResponseDto.PlanListResponseDto;
 import com.triportreat.backend.plan.domain.PlanResponseDto.ScheduleDetailResponseDto;
 import com.triportreat.backend.plan.domain.PlanResponseDto.SchedulePlaceDetailResponseDto;
-import com.triportreat.backend.plan.domain.PlanRequestDto.PlanSearchRequestDto;
-import com.triportreat.backend.plan.domain.PlanResponseDto.PlanListResponseDto;
 import com.triportreat.backend.plan.entity.Plan;
 import com.triportreat.backend.plan.entity.PlanRegion;
 import com.triportreat.backend.plan.entity.Schedule;
 import com.triportreat.backend.plan.entity.SchedulePlace;
 import com.triportreat.backend.plan.error.exception.PlaceNotFoundException;
 import com.triportreat.backend.plan.error.exception.PlanNotFoundException;
+import com.triportreat.backend.plan.error.exception.PlanWithUserNotFoundException;
 import com.triportreat.backend.plan.error.exception.ScheduleNotFoundException;
 import com.triportreat.backend.plan.error.exception.SchedulePlaceNotFoundException;
 import com.triportreat.backend.plan.error.exception.UserNotFoundException;
@@ -78,7 +79,14 @@ public class PlanServiceImpl implements PlanService {
 
     @Override
     public PlanDetailResponseDto getPlanDetail(Long planId, Long userId) {
-        Plan plan = planRepository.findByIdAndUserId(planId, userId).orElseThrow(AuthenticateFailException::new);
+        Plan plan = planRepository.findByIdAndUserId(planId, userId).orElseThrow(PlanWithUserNotFoundException::new);
+        return PlanDetailResponseDto.toDto(plan, extractScheduleDetailsFromPlan(plan));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public PlanDetailResponseDto getSharedPlanDetail(String code) {
+        Plan plan = planRepository.findByCode(code).orElseThrow(PlanNotFoundException::new);
         return PlanDetailResponseDto.toDto(plan, extractScheduleDetailsFromPlan(plan));
     }
 
@@ -106,6 +114,13 @@ public class PlanServiceImpl implements PlanService {
                 planListResponseDto.setCreatedDate(CustomDateUtil.toStringFormat(planListResponseDto.getCreatedDateTime())));
 
         return new PageResponseDto<>(response);
+    }
+
+    @Transactional
+    @Override
+    public void deletePlan(Long planId, Long userId) {
+        Plan plan = planRepository.findByIdAndUserId(planId, userId).orElseThrow(PlanWithUserNotFoundException::new);
+        planRepository.delete(plan);
     }
 
     private void updateSchedules(List<ScheduleUpdateRequestDto> scheduleDtos) {
