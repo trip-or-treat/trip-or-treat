@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 
 public interface PlanService {
 
+    PlanDetailResponseDto getSharedPlanDetail(String code);
+
     void validatePlanOwner(Long id, Long userId);
 
     void createPlan(PlanCreateRequestDto planCreateRequestDto, Long userId);

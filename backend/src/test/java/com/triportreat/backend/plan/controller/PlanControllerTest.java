@@ -15,6 +15,7 @@ import static com.triportreat.backend.plan.domain.PlanSearchValue.SEARCH_TYPE_RE
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
@@ -57,6 +58,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -462,4 +464,89 @@ class PlanControllerTest extends DummyObject {
                     .andExpect(jsonPath("$.data").doesNotExist());
         }
     }
+  
+    @Nested
+    @DisplayName("공유 계획 상세 조회")
+    class GetSharedPlanDetail {
+
+        @Test
+        @DisplayName("성공")
+        void getSharedPlanDetail_Success() throws Exception {
+            // given
+            PlanDetailResponseDto planDetail = createPlanDetailResponseDto();
+            String code = planDetail.getCode();
+
+            // when
+            when(planService.getSharedPlanDetail(code)).thenReturn(planDetail);
+
+            // then
+            mockMvc.perform(get("/plans/share/{id}", code))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value(200))
+                    .andExpect(jsonPath("$.message").value(GET_SUCCESS.getMessage()))
+                    .andExpect(jsonPath("$.result").value(true))
+                    .andExpect(jsonPath("$.data.planId").value(1))
+                    .andExpect(jsonPath("$.data.regions.regionIds.size()").value(3))
+                    .andExpect(jsonPath("$.data.regions.regionNames.size()").value(3))
+                    .andExpect(jsonPath("$.data.schedules[0].scheduleId").value(1))
+                    .andExpect(jsonPath("$.data.schedules[1].scheduleId").value(2))
+                    .andExpect(jsonPath("$.data.schedules[0].schedulePlaces[0].schedulePlaceId").value(1))
+                    .andExpect(jsonPath("$.data.schedules[0].schedulePlaces[1].schedulePlaceId").value(2))
+                    .andExpect(jsonPath("$.data.schedules[1].schedulePlaces[0].schedulePlaceId").value(3))
+                    .andExpect(jsonPath("$.data.schedules[1].schedulePlaces[1].schedulePlaceId").value(4));
+        }
+      
+        @Test
+        @DisplayName("실패 - 계획 정보 없음")
+        void getSharedPlanDetail_PlanNotFound() throws Exception {
+            // given
+            String invalidCode = "INVALID_CODE";
+
+            // when
+            when(planService.getSharedPlanDetail(anyString())).thenThrow(PlanNotFoundException.class);
+
+            // then
+            mockMvc.perform(get("/plans/share/{id}", invalidCode))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value(500))
+                    .andExpect(jsonPath("$.message").value(PLAN_NOT_FOUND.getMessage()))
+                    .andExpect(jsonPath("$.result").value(false))
+                    .andExpect(jsonPath("$.data").doesNotExist());
+        }
+      
+        @Test
+        @DisplayName("실패 - 지역 정보 없음")
+        void getSharedPlanDetail_RegionNotFound() throws Exception {
+            // given
+            String code = "code";
+            when(planService.getSharedPlanDetail(anyString())).thenThrow(RegionNotFoundException.class);
+
+            // when
+            // then
+            mockMvc.perform(get("/plans/share/{id}", code))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value(400))
+                    .andExpect(jsonPath("$.message").value(REGION_NOT_FOUND.getMessage()))
+                    .andExpect(jsonPath("$.result").value(false))
+                    .andExpect(jsonPath("$.data").doesNotExist());
+        }
+
+        private PlanDetailResponseDto createPlanDetailResponseDto() {
+            List<SchedulePlaceDetailResponseDto> schedulePlaceDetails1 = List.of(
+                    SchedulePlaceDetailResponseDto.builder().schedulePlaceId(1L).build(),
+                    SchedulePlaceDetailResponseDto.builder().schedulePlaceId(2L).build());
+            List<SchedulePlaceDetailResponseDto> schedulePlaceDetails2 = List.of(
+                    SchedulePlaceDetailResponseDto.builder().schedulePlaceId(3L).build(),
+                    SchedulePlaceDetailResponseDto.builder().schedulePlaceId(4L).build());
+
+            List<ScheduleDetailResponseDto> scheduleDetail = List.of(
+                    ScheduleDetailResponseDto.builder().scheduleId(1L).schedulePlaces(schedulePlaceDetails1).build(),
+                    ScheduleDetailResponseDto.builder().scheduleId(2L).schedulePlaces(schedulePlaceDetails2).build());
+
+            return PlanDetailResponseDto.builder()
+                    .planId(1L)
+                    .code(UUID.randomUUID().toString().toUpperCase())
+                    .schedules(scheduleDetail)
+                    .build();
+        }
 }

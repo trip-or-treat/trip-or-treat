@@ -83,6 +83,12 @@ public class PlanServiceImpl implements PlanService {
         return PlanDetailResponseDto.toDto(plan, extractScheduleDetailsFromPlan(plan));
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public PlanDetailResponseDto getSharedPlanDetail(String code) {
+        Plan plan = planRepository.findByCode(code).orElseThrow(PlanNotFoundException::new);
+        return PlanDetailResponseDto.toDto(plan, extractScheduleDetailsFromPlan(plan));
+
     @Transactional
     @Override
     public void updatePlan(PlanUpdateRequestDto planUpdateRequestDto) {

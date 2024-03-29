@@ -47,6 +47,11 @@ public class PlanController {
         planService.createPlan(planCreateRequestDto, userId);
         return ResponseEntity.ok().body(ResponseResult.success(POST_SUCCESS.getMessage(), null));
     }
+      
+    @GetMapping("/share/{code}")
+    public ResponseEntity<?> getSharedPlanDetail(@PathVariable("code") String code) {
+        return ResponseEntity.ok().body(ResponseResult.success(GET_SUCCESS.getMessage(), planService.getSharedPlanDetail(code)));
+    }
 
     @PatchMapping("/{id}")
     public ResponseEntity<?> updatePlan(@Auth Long userId,

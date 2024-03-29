@@ -13,7 +13,6 @@ import com.triportreat.backend.plan.entity.Schedule;
 import com.triportreat.backend.plan.entity.SchedulePlace;
 import com.triportreat.backend.region.entity.Region;
 import com.triportreat.backend.user.entity.User;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +37,7 @@ public class DummyObject {
     protected Plan createMockPlan(Long id, String title, User user, Set<PlanRegion> regions, List<Schedule> schedules, LocalDate startDate, LocalDate endDate) {
         return Plan.builder()
                 .id(id)
+                .code("code")
                 .title(title)
                 .user(user)
                 .regions(regions)
