@@ -28,7 +28,7 @@ const ConfirmSaveModal = ({ onClose }: Props) => {
   const schedules = totalPlan.map(({ date, items }) => ({
     date,
     schedulePlaces: items.map((item, idx) => ({
-      placeId: item.id,
+      placeId: item.placeId,
       visitOrder: idx + 1,
       memo: item.memo ?? '',
       expense: item.expense ?? 0,
