@@ -85,7 +85,6 @@ public class ReviewControllerTest {
                 .build();
 
         reviewRequestDto = ReviewRequestDto.builder()
-                .userId(1L)
                 .placeId(1L)
                 .content("testContent")
                 .tip("testTip")
@@ -151,7 +150,7 @@ public class ReviewControllerTest {
 
     @Nested
     @DisplayName("리뷰 저장")
-    class CreateReview{
+    class PostReview{
 
         @Test
         @DisplayName("성공")
@@ -165,14 +164,17 @@ public class ReviewControllerTest {
                     .andExpect(jsonPath("$.message").value(POST_SUCCESS.getMessage()))
                     .andExpect(jsonPath("$.status").value(200))
                     .andExpect(jsonPath("$.data").isEmpty());
+
+            verify(reviewService).createReview(any(), eq(reviewRequestDto));
         }
 
         @Test
-        @DisplayName("실패 - 장소 정보가 없을시 예외 발생")
+        @DisplayName("실패 - 장소 정보가 없을 때 예외 발생")
         void createReview_PlaceNotFoundException() throws Exception{
 
             //given
-            doThrow(new PlaceNotFoundException(reviewRequestDto.getPlaceId())).when(reviewService).createReview(reviewRequestDto);
+            doThrow(new PlaceNotFoundException(reviewRequestDto.getPlaceId()))
+                    .when(reviewService).createReview(any(), eq(reviewRequestDto));
 
             //when & then
             mockMvc.perform(post("/reviews")
@@ -186,17 +188,36 @@ public class ReviewControllerTest {
         }
 
         @Test
+        @DisplayName("실패 - 사용자가 존재하지 않을 때 예외 발생")
+        void createReview_UserNotFoundException() throws Exception {
+
+            //given
+            doThrow(new UserNotFoundException())
+                    .when(reviewService).createReview(any(), eq(reviewRequestDto));
+
+            //when & then
+            mockMvc.perform(post("/reviews")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(reviewRequestDto)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.result").value(false))
+                    .andExpect(jsonPath("$.message").value(USER_NOT_FOUND.getMessage()))
+                    .andExpect(jsonPath("$.status").value(500))
+                    .andExpect(jsonPath("$.data").isEmpty());
+        }
+
+        @Test
         @DisplayName("실패 - 유효성 검증 실패")
         void createReview_ValidationFail() throws Exception {
 
             //given
             reviewRequestDto = ReviewRequestDto.builder()
-                    .userId(1L)
-                    .placeId(1L)
+                    .placeId(null)
                     .content("")
                     .tip("testTip")
                     .score(null)
                     .build();
+
             //when & then
             mockMvc.perform(post("/reviews")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -205,6 +226,7 @@ public class ReviewControllerTest {
                     .andExpect(jsonPath("$.result").value(false))
                     .andExpect(jsonPath("$.message").value(VALIDATION_FAILED.getMessage()))
                     .andExpect(jsonPath("$.status").value(400))
+                    .andExpect(jsonPath("$.data.placeId").value("placeId는 필수 입력값입니다."))
                     .andExpect(jsonPath("$.data.content").value("내용은 필수 입력값입니다."))
                     .andExpect(jsonPath("$.data.score").value("별점은 필수 입력값입니다."));
         }
@@ -396,10 +418,6 @@ public class ReviewControllerTest {
         @DisplayName("성공")
         void deleteReview() throws Exception {
 
-            //given
-            doNothing().when(reviewService).deleteReview(any(), anyLong());
-
-            //when & then
             mockMvc.perform(delete("/reviews/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())

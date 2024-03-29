@@ -6,18 +6,14 @@ import com.triportreat.backend.place.entity.ContentType;
 import com.triportreat.backend.place.entity.Place;
 import com.triportreat.backend.place.entity.Review;
 import com.triportreat.backend.place.entity.SubCategory;
-import com.triportreat.backend.plan.domain.PlanRequestDto.PlanCreateRequestDto;
-import com.triportreat.backend.plan.domain.PlanRequestDto.PlanUpdateRequestDto;
-import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleCreateRequestDto;
-import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceCreateRequestDto;
-import com.triportreat.backend.plan.domain.PlanRequestDto.SchedulePlaceUpdateRequestDto;
-import com.triportreat.backend.plan.domain.PlanRequestDto.ScheduleUpdateRequestDto;
+import com.triportreat.backend.plan.domain.PlanRequestDto.*;
 import com.triportreat.backend.plan.entity.Plan;
 import com.triportreat.backend.plan.entity.PlanRegion;
 import com.triportreat.backend.plan.entity.Schedule;
 import com.triportreat.backend.plan.entity.SchedulePlace;
 import com.triportreat.backend.region.entity.Region;
 import com.triportreat.backend.user.entity.User;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -147,9 +143,8 @@ public class DummyObject {
                 .build();
     }
 
-    protected ReviewRequestDto createReviewRequestDto(Long userId, Long placeId) {
+    protected ReviewRequestDto createReviewRequestDto(Long placeId) {
         return ReviewRequestDto.builder()
-                .userId(userId)
                 .placeId(placeId)
                 .content("testContent")
                 .tip("testTip")
