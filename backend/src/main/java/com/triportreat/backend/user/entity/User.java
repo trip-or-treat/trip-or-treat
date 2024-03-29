@@ -43,4 +43,8 @@ public class User extends BaseTimeEntity {
                 .imageThumbnail(kakaoAccount.getProfile().getImageThumbnail())
                 .build();
     }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
 }
