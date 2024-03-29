@@ -13,19 +13,18 @@ import { PlaceListTypes } from 'src/@types/api/placeList';
 import { SchedulesType } from 'src/@types/api/schedules';
 import { SchedulesTypeWithRegions } from 'src/@types/api/planDetail';
 
+import ModalOverlay from 'src/components/common/modal/ModalOverlay';
+import PlanTitle from 'src/components/plan/PlanNavBar/PlanTitle';
+import RegionCategoryList from 'src/components/RegionCategoryList';
+import EnterSearch from 'src/components/EnterSearch';
+import ContentTypeFilterItemList from 'src/components/ContentTypeFilterItemList';
+import PlaceList from 'src/components/PlaceList';
+import DayCategory from 'src/components/DayCategory';
+import SelectedPlaceCardList from 'src/components/SelectedPlaceCardList';
+import KaKaoMap from 'src/components/KaKaoMap';
+import CloseButton from 'src/components/common/modal/CloseButton';
+
 import { usePatchTotalPlan } from 'src/hooks/api/usePatchTotalPlan';
-
-import CloseButton from '../common/modal/CloseButton';
-import ModalOverlay from '../common/modal/ModalOverlay';
-
-import KaKaoMap from '../KaKaoMap';
-import PlaceList from '../PlaceList';
-import PlanTitle from '../plan/PlanNavBar/PlanTitle';
-import EnterSearch from '../EnterSearch';
-import DayCategory from '../DayCategory';
-import RegionCategoryList from '../RegionCategoryList';
-import SelectedPlaceCardList from '../SelectedPlaceCardList';
-import ContentTypeFilterItemList from '../ContentTypeFilterItemList';
 
 interface Props {
   detailData: SchedulesTypeWithRegions;

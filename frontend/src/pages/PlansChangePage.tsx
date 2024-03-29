@@ -13,10 +13,10 @@ import { usePlanDetail } from 'src/hooks/api/usePlanDetail';
 import { SchedulesTypeWithRegions } from 'src/@types/api/planDetail';
 
 import Loading from 'src/components/common/Loading';
+import PlanChangeModal from 'src/components/mypage/PlanChangeModal';
 import PlanNavBar from '../components/plan/PlanNavBar';
 import PlansList from '../components/plan/PlansList';
 import CommonButton from '../components/common/CommonButton';
-import PlanChangeModal from '../components/ConfirmSaveModal/PlanChangeModal';
 
 import FailDataPage from './FailDataPage';
 
