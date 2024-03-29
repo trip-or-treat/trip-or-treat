@@ -67,4 +67,8 @@ public class Plan extends BaseTimeEntity {
                 .code(code)
                 .build();
     }
+
+    public void updateTitle(String title) {
+        this.title = title;
+    }
 }

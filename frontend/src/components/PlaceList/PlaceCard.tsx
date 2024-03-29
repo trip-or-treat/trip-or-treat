@@ -28,7 +28,8 @@ const PlaceCard = ({ placeCardItem, type, magic }: Props) => {
   const { regionId } = useParams();
 
   const isClicked =
-    clickedIdList && clickedIdList[curDay - 1]?.map((data) => data.id).includes(placeCardItem?.id);
+    clickedIdList &&
+    clickedIdList[curDay - 1]?.map((data) => data.placeId).includes(placeCardItem?.placeId);
 
   const handleAddClick = (newItem: PlaceListTypes) => {
     if (totalPlan[curDay - 1].items.length === 7) return;
@@ -46,7 +47,7 @@ const PlaceCard = ({ placeCardItem, type, magic }: Props) => {
   }
 
   return (
-    <Wrapper data-id={placeCardItem.id}>
+    <Wrapper data-id={placeCardItem.placeId}>
       <PlaceCardDetailBtn placeCardItem={placeCardItem} />
 
       <IconButtonBox>

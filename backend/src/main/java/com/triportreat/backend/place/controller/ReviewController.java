@@ -1,5 +1,6 @@
 package com.triportreat.backend.place.controller;
 
+import com.triportreat.backend.auth.utils.Auth;
 import com.triportreat.backend.common.response.ResponseResult;
 import com.triportreat.backend.place.domain.ReviewRequestDto;
 import com.triportreat.backend.place.domain.ReviewUpdateRequestDto;
@@ -31,9 +32,20 @@ public class ReviewController {
         return ResponseEntity.ok().body(ResponseResult.success(POST_SUCCESS.getMessage(), null));
     }
 
+    @GetMapping("/reviews")
+    public ResponseEntity<?> getMyReviewList(@Auth Long userId, @PageableDefault(size = 10) Pageable pageable) {
+        return ResponseEntity.ok().body(ResponseResult.success(GET_SUCCESS.getMessage(), reviewService.getMyReviewList(userId, pageable)));
+    }
+
     @PutMapping("/reviews/{id}")
     public ResponseEntity<?> updateReview(@PathVariable Long id, @Valid @RequestBody ReviewUpdateRequestDto reviewUpdateRequestDto) {
         reviewService.updateReview(id, reviewUpdateRequestDto);
         return ResponseEntity.ok().body(ResponseResult.success(PUT_SUCCESS.getMessage(), null));
+    }
+
+    @DeleteMapping("/reviews/{id}")
+    public ResponseEntity<?> deleteReview(@Auth Long userId, @PathVariable Long id) {
+        reviewService.deleteReview(userId, id);
+        return ResponseEntity.ok().body(ResponseResult.success(DELETE_SUCCESS.getMessage(), null));
     }
 }
