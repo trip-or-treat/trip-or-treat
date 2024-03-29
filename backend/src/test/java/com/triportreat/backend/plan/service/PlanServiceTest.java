@@ -3,6 +3,7 @@ package com.triportreat.backend.plan.service;
 import static com.triportreat.backend.common.response.FailMessage.AUTHENTICATION_FAILED;
 import static com.triportreat.backend.common.response.FailMessage.PLACE_NOT_FOUND;
 import static com.triportreat.backend.common.response.FailMessage.PLAN_NOT_FOUND;
+import static com.triportreat.backend.common.response.FailMessage.PLAN_WITH_USER_NOT_FOUND;
 import static com.triportreat.backend.common.response.FailMessage.REGION_NOT_FOUND;
 import static com.triportreat.backend.common.response.FailMessage.SCHEDULE_NOT_FOUND;
 import static com.triportreat.backend.common.response.FailMessage.SCHEDULE_PLACE_NOT_FOUND;
@@ -37,6 +38,7 @@ import com.triportreat.backend.plan.entity.Schedule;
 import com.triportreat.backend.plan.entity.SchedulePlace;
 import com.triportreat.backend.plan.error.exception.PlaceNotFoundException;
 import com.triportreat.backend.plan.error.exception.PlanNotFoundException;
+import com.triportreat.backend.plan.error.exception.PlanWithUserNotFoundException;
 import com.triportreat.backend.plan.error.exception.ScheduleNotFoundException;
 import com.triportreat.backend.plan.error.exception.SchedulePlaceNotFoundException;
 import com.triportreat.backend.plan.error.exception.UserNotFoundException;
@@ -262,8 +264,8 @@ class PlanServiceTest extends DummyObject {
             // when
             // then
             assertThatThrownBy(() -> planService.getPlanDetail(planId, userId))
-                    .isInstanceOf(AuthenticateFailException.class)
-                    .hasMessage(AUTHENTICATION_FAILED.getMessage());
+                    .isInstanceOf(PlanWithUserNotFoundException.class)
+                    .hasMessage(PLAN_WITH_USER_NOT_FOUND.getMessage());
         }
     }
 
@@ -477,6 +479,42 @@ class PlanServiceTest extends DummyObject {
             assertThatThrownBy(() -> planService.searchPlans(condition, pageable, 1L))
                     .isInstanceOf(UserNotFoundException.class)
                     .hasMessage(USER_NOT_FOUND.getMessage());
+        }
+    }
+
+    @Nested
+    @DisplayName("계획 삭제")
+    class DeletePlans {
+
+        @Test
+        @DisplayName("성공")
+        void deletePlans_success() {
+            // given
+            Plan plan = createMockPlan(1L);
+
+            when(planRepository.findByIdAndUserId(anyLong(), any())).thenReturn(Optional.of(plan));
+
+            // when
+            planService.deletePlan(1L, 1L);
+
+            // then
+            verify(planRepository).delete(plan);
+        }
+
+        @Test
+        @DisplayName("실패 - 해당 사용자의 게시물 없음")
+        void deletePlans_PlanWithUserNotFoundException() {
+            // given
+            Plan plan = createMockPlan(1L);
+
+            when(planRepository.findByIdAndUserId(anyLong(), any())).thenReturn(Optional.empty());
+
+            // when
+            // then
+            assertThatThrownBy(() -> planService.deletePlan(1L, 1L))
+                    .isInstanceOf(PlanWithUserNotFoundException.class)
+                    .hasMessage(PLAN_WITH_USER_NOT_FOUND.getMessage());
+            verify(planRepository, times(0)).delete(plan);
         }
     }
 }

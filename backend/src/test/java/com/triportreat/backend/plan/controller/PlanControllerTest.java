@@ -2,9 +2,11 @@ package com.triportreat.backend.plan.controller;
 
 import static com.triportreat.backend.common.response.FailMessage.AUTHENTICATION_FAILED;
 import static com.triportreat.backend.common.response.FailMessage.PLAN_NOT_FOUND;
+import static com.triportreat.backend.common.response.FailMessage.PLAN_WITH_USER_NOT_FOUND;
 import static com.triportreat.backend.common.response.FailMessage.REGION_NOT_FOUND;
 import static com.triportreat.backend.common.response.FailMessage.USER_NOT_FOUND;
 import static com.triportreat.backend.common.response.FailMessage.VALIDATION_FAILED;
+import static com.triportreat.backend.common.response.SuccessMessage.DELETE_SUCCESS;
 import static com.triportreat.backend.common.response.SuccessMessage.GET_SUCCESS;
 import static com.triportreat.backend.common.response.SuccessMessage.PATCH_SUCCESS;
 import static com.triportreat.backend.common.response.SuccessMessage.POST_SUCCESS;
@@ -15,11 +17,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -45,6 +49,7 @@ import com.triportreat.backend.plan.domain.PlanResponseDto.ScheduleDetailRespons
 import com.triportreat.backend.plan.domain.PlanResponseDto.SchedulePlaceDetailResponseDto;
 import com.triportreat.backend.plan.domain.PlanResponseDto.PlanListResponseDto;
 import com.triportreat.backend.plan.error.exception.PlanNotFoundException;
+import com.triportreat.backend.plan.error.exception.PlanWithUserNotFoundException;
 import com.triportreat.backend.plan.error.exception.UserNotFoundException;
 import com.triportreat.backend.plan.service.PlanService;
 import com.triportreat.backend.region.error.exception.RegionNotFoundException;
@@ -416,6 +421,48 @@ class PlanControllerTest extends DummyObject {
                     .andExpect(jsonPath("$.message").value(USER_NOT_FOUND.getMessage()))
                     .andExpect(jsonPath("$.status").value(500))
                     .andExpect(jsonPath("$.data").isEmpty());
+        }
+    }
+
+    @Nested
+    @DisplayName("계획 삭제")
+    class DeletePlans {
+
+        @Test
+        @DisplayName("성공")
+        void deletePlans_success() throws Exception {
+            // given
+            Long planId = 1L;
+            Long userId = 1L;
+
+            // when
+            // then
+            mockMvc.perform(delete("/plans/{id}", planId))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value(200))
+                    .andExpect(jsonPath("$.message").value(DELETE_SUCCESS.getMessage()))
+                    .andExpect(jsonPath("$.result").value(true))
+                    .andExpect(jsonPath("$.data").doesNotExist());
+            verify(planService, times(1)).deletePlan(planId, userId);
+        }
+
+        @Test
+        @DisplayName("실패 - 해당 사용자의 계획 정보 없음")
+        void deletePlans_PlanWithUserNotFoundException() throws Exception {
+            // given
+            Long planId = 1L;
+            Long userId = 1L;
+
+            // when
+            doThrow(PlanWithUserNotFoundException.class).when(planService).deletePlan(anyLong(), any());
+
+            // then
+            mockMvc.perform(delete("/plans/{id}", planId))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value(500))
+                    .andExpect(jsonPath("$.message").value(PLAN_WITH_USER_NOT_FOUND.getMessage()))
+                    .andExpect(jsonPath("$.result").value(false))
+                    .andExpect(jsonPath("$.data").doesNotExist());
         }
     }
 }
