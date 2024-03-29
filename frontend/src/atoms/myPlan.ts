@@ -1,12 +1,12 @@
 import { atom } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
+import { Plan } from 'src/@types/api/plan';
 
 const { persistAtom } = recoilPersist();
 
-const myPlanCreatedYearAtom = atom<number>({
+const myPlanCreatedYearAtom = atom<number | null>({
   key: 'myPlanCreatedYearAtom',
-  default: 6,
-  effects_UNSTABLE: [persistAtom],
+  default: null,
 });
 
 const myPlanSearchTypeAtom = atom<string>({
@@ -21,4 +21,22 @@ const myPlanComingYnAtom = atom<string>({
   effects_UNSTABLE: [persistAtom],
 });
 
-export { myPlanCreatedYearAtom, myPlanSearchTypeAtom, myPlanComingYnAtom };
+const myPlanCurrentPageAtom = atom<number>({
+  key: 'myPlanCurrentPageAtom',
+  default: 1,
+  effects_UNSTABLE: [persistAtom],
+});
+
+const myPlanCurrentPostAtom = atom<Plan[]>({
+  key: 'myPlanCurrentPostAtom',
+  default: [],
+  effects_UNSTABLE: [persistAtom],
+});
+
+export {
+  myPlanCreatedYearAtom,
+  myPlanSearchTypeAtom,
+  myPlanComingYnAtom,
+  myPlanCurrentPageAtom,
+  myPlanCurrentPostAtom,
+};
