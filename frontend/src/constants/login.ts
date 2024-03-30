@@ -1,4 +1,4 @@
 export const LOGIN = {
-  TOKEN: 'accessToken',
+  ACCESS_TOKEN: 'accessToken',
   BEARER: 'Bearer ',
 };
