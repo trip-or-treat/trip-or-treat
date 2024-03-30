@@ -2,10 +2,15 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import PlaceModal from 'src/components/PlaceModal';
+import AlertModal from 'src/components/AlertModal';
+
+import { deleteReviewFetcher } from 'src/api/review';
 
 import { ReactComponent as StarFilled } from '../../../assets/svgs/starFilled.svg';
 import { ReactComponent as StarEmpty } from '../../../assets/svgs/starEmpty.svg';
 import { ReactComponent as EditIcon } from '../../../assets/svgs/edit.svg';
+import { ReactComponent as DeleteIcon } from '../../../assets/svgs/delete.svg';
+
 import { CommonContainer } from '../../../styles/CommonContainer';
 
 interface MyReviews {
@@ -36,6 +41,7 @@ const renderStars = (score: number) => {
 const MyReviewList = ({ data: myReview, index }: MyReviews) => {
   const [isEditClick, setEditClick] = useState(false);
   const [isModal, setModal] = useState(false);
+  const [isDelte, setDelte] = useState(false);
 
   const handlerEditClick = () => {
     setEditClick(!isEditClick);
@@ -56,6 +62,16 @@ const MyReviewList = ({ data: myReview, index }: MyReviews) => {
     }
   }, [isEditClick]);
 
+  const handlerDelteClick = () => {
+    setDelte(!isDelte);
+  };
+
+  const onDelte = async () => {
+    await deleteReviewFetcher(myReview.id);
+    setDelte(!isDelte);
+    window.location.href = '/mypage/myReview';
+  };
+
   return (
     <ReviewContainer>
       <Index>{index}</Index>
@@ -67,10 +83,25 @@ const MyReviewList = ({ data: myReview, index }: MyReviews) => {
       </PlaceBox>
       <Score>{renderStars(myReview.score)}</Score>
       <CreatedAt>{myReview.createdDate}</CreatedAt>
-      <Edit onClick={handlerEditClick}>
-        <EditIcon />
-      </Edit>
+      <div>
+        <Edit onClick={handlerEditClick}>
+          <EditIcon />
+        </Edit>
+        <Edit onClick={handlerDelteClick}>
+          <DeleteIcon />
+        </Edit>
+      </div>
       {isModal && <PlaceModal onClose={handlerEditClick} />}
+      {isDelte && (
+        <AlertModal
+          onButtonText="삭제"
+          offButtonText="닫기"
+          onClick={onDelte}
+          onClose={handlerDelteClick}
+        >
+          정말 삭제하시겠습니까?
+        </AlertModal>
+      )}
     </ReviewContainer>
   );
 };
@@ -147,6 +178,8 @@ const CreatedAt = styled.div`
 `;
 
 const Edit = styled.button`
+  padding: 2px;
+
   border: none;
   background-color: transparent;
 `;
