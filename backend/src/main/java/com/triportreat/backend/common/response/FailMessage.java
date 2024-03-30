@@ -18,7 +18,8 @@ public enum FailMessage {
     AUTHENTICATION_FAILED("사용자 정보가 일치하지 않습니다!"),
     SCHEDULE_NOT_FOUND("스케줄이 존재하지 않습니다!"),
     SCHEDULE_PLACE_NOT_FOUND("스케줄-장소가 존재하지 않습니다!"),
-    PLAN_WITH_USER_NOT_FOUND("해당 사용자의 게시물이 존재하지 않습니다!");
+    PLAN_WITH_USER_NOT_FOUND("해당 사용자의 게시물이 존재하지 않습니다!"),
+    USER_NICKNAME_EXIST("이미 존재하는 닉네임 입니다!");
 
     private final String message;
 
