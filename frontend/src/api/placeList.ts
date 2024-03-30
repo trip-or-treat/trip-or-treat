@@ -1,4 +1,5 @@
-import { api } from '.';
+import { END_POINTS } from 'src/constants/api';
+import { loginApi } from '.';
 
 interface Props {
   pageParam: number;
@@ -13,13 +14,7 @@ export const placeListFetcher = async ({
   prevContentTypeId,
   regionId = 0,
 }: Props) => {
-  const token = localStorage.getItem('accessToken');
-  const headers = {
-    Authorization: `Bearer ${token}`,
-  };
-
-  const { data } = await api.get(`/places?regionId=${regionId}`, {
-    headers,
+  const { data } = await loginApi.get(`${END_POINTS.PLACES}?regionId=${regionId}`, {
     params: {
       keyword: keyword === '' ? null : keyword,
       contentTypeId: prevContentTypeId,

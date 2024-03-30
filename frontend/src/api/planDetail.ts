@@ -1,12 +1,7 @@
 import { END_POINTS } from 'src/constants/api';
-import { api } from '.';
+import { loginApi } from '.';
 
 export const planDetailFetcher = async (id: string | undefined) => {
-  const token = localStorage.getItem('accessToken');
-  const headers = {
-    Authorization: `Bearer ${token}`,
-  };
-
-  const { data } = await api.get(`${END_POINTS.PLAN}/${id}`, { headers });
+  const { data } = await loginApi.get(`${END_POINTS.PLAN}/${id}`);
   return data;
 };
