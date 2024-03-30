@@ -35,7 +35,6 @@ const MyReviewList = ({ data: myReview, index }: MyReviews) => {
   const [isModal, setModal] = useState(false);
 
   const modalHandler = () => {
-    console.log(1);
     setModal(!isModal);
   };
 
@@ -136,4 +135,7 @@ const CreatedAt = styled.div`
   text-align: center;
 `;
 
-const Edit = styled.button``;
+const Edit = styled.button`
+  border: none;
+  background-color: transparent;
+`;
