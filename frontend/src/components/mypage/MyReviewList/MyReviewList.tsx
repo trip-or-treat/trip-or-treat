@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
+import PlaceModal from 'src/components/PlaceModal';
+
 import { ReactComponent as StarFilled } from '../../../assets/svgs/starFilled.svg';
 import { ReactComponent as StarEmpty } from '../../../assets/svgs/starEmpty.svg';
 import { ReactComponent as EditIcon } from '../../../assets/svgs/edit.svg';
@@ -32,19 +34,27 @@ const renderStars = (score: number) => {
 };
 
 const MyReviewList = ({ data: myReview, index }: MyReviews) => {
+  const [isEditClick, setEditClick] = useState(false);
   const [isModal, setModal] = useState(false);
 
-  const modalHandler = () => {
-    setModal(!isModal);
+  const handlerEditClick = () => {
+    setEditClick(!isEditClick);
   };
 
+  // useEffect만 사용한다면 비동기이기 때문에 modal의 상태가 변경되었을 때 바로 modal이
+  // 데이터가 셋팅되지 않는 상태에서 열리기 때문에 에러발생
+  // isisEditClick가 변경될 때 마다 실행되기때문에 setModal(!isModal)을 한다면 켰다가 꺼지면서
+  // isModal의 값이 동일해지기 때문에 modal이 안열림
+
   useEffect(() => {
-    if (isModal) {
+    if (isEditClick) {
       localStorage.setItem('myReview', JSON.stringify(myReview));
+      setModal(true);
     } else {
       localStorage.removeItem('myReview');
+      setModal(false);
     }
-  }, [isModal]);
+  }, [isEditClick]);
 
   return (
     <ReviewContainer>
@@ -57,9 +67,10 @@ const MyReviewList = ({ data: myReview, index }: MyReviews) => {
       </PlaceBox>
       <Score>{renderStars(myReview.score)}</Score>
       <CreatedAt>{myReview.createdDate}</CreatedAt>
-      <Edit onClick={modalHandler}>
+      <Edit onClick={handlerEditClick}>
         <EditIcon />
       </Edit>
+      {isModal && <PlaceModal onClose={handlerEditClick} />}
     </ReviewContainer>
   );
 };

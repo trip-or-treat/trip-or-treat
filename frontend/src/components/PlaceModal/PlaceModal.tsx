@@ -27,9 +27,17 @@ interface Info {
 }
 
 const PlaceModal = ({ onClose }: Props) => {
-  const { id: currentId, name: content } = useRecoilValue(placeIdAtom);
-  const { data: placeInfoApi, isLoading, isError }: Info = usePlaceInfo(currentId);
   const setTitle = useSetRecoilState(overviewTitleAtom);
+  let { id: currentId, name: content } = useRecoilValue(placeIdAtom);
+  const myReview = localStorage.getItem('myReview');
+
+  if (myReview) {
+    const review = JSON.parse(myReview);
+    currentId = review.placeId;
+    content = review.placeName;
+  }
+
+  const { data: placeInfoApi, isLoading, isError }: Info = usePlaceInfo(currentId);
 
   if (isError) {
     onClose();
