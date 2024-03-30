@@ -58,7 +58,7 @@ public class ReviewServiceImplTest extends DummyObject {
 
         @Test
         @DisplayName("성공")
-        public void getReviewList() {
+        void getReviewList() {
             //given
             User user = createMockUser(1L, "testUser");
             Place place = Place.builder().id(1L).build();
@@ -83,7 +83,7 @@ public class ReviewServiceImplTest extends DummyObject {
 
         @Test
         @DisplayName("실패 - 장소 정보가 없을시 예외 발생")
-        public void  getReviewList_PlaceNotFoundException() {
+        void  getReviewList_PlaceNotFoundException() {
             //given
             User user = createMockUser(1L, "testUser");
             Place place = Place.builder().id(1L).build();
@@ -105,7 +105,7 @@ public class ReviewServiceImplTest extends DummyObject {
 
         @Test
         @DisplayName("성공")
-        public void createReview() {
+        void createReview() {
 
             //given
             User user = createMockUser(1L, "testUser");
@@ -124,7 +124,7 @@ public class ReviewServiceImplTest extends DummyObject {
 
         @Test
         @DisplayName("실패 - 장소 정보가 없을 때 예외발생")
-        public void createReview_PlaceNotFoundException() {
+        void createReview_PlaceNotFoundException() {
 
             //given
             User user = createMockUser(1L, "testUser");
@@ -141,7 +141,7 @@ public class ReviewServiceImplTest extends DummyObject {
 
         @Test
         @DisplayName("실패 - 사용자가 존재하지 않을 때 예외 발생")
-        public void createReview_UserNotFoundException() {
+        void createReview_UserNotFoundException() {
 
             //given
             User user = createMockUser(1L, "testUser");
@@ -164,7 +164,7 @@ public class ReviewServiceImplTest extends DummyObject {
 
         @Test
         @DisplayName("성공")
-        public void updateReview() {
+        void updateReview() {
 
             //given
             User user = createMockUser(1L, "testUser");
@@ -177,7 +177,7 @@ public class ReviewServiceImplTest extends DummyObject {
             when(reviewRepository.findById(review.getId())).thenReturn(Optional.of(review));
 
             //when
-            reviewService.updateReview(review.getId(), reviewUpdateRequestDto);
+            reviewService.updateReview(user.getId(), review.getId(), reviewUpdateRequestDto);
 
             //then
             assertThat(review.getPlace().getId()).isEqualTo(1L);
@@ -187,55 +187,86 @@ public class ReviewServiceImplTest extends DummyObject {
         }
 
         @Test
-        @DisplayName("실패 - 장소 정보가 없을시 없을시 예외발생")
-        public void updateReview_PlaceNotFoundException() {
+        @DisplayName("실패 - 장소 정보가 없을시 없을 때 예외 발생")
+        void updateReview_PlaceNotFoundException() {
 
             //given
             Place place = Place.builder().id(1L).build();
+            User user = createMockUser(1L, "testUser");
+            Review review = createMockReview(1L, user, place);
+
             ReviewUpdateRequestDto reviewUpdateRequestDto = createReviewUpdateRequestDto(place.getId());
 
+            when(placeRepository.findById(place.getId())).thenReturn(Optional.empty());
+
             //when & then
-            assertThatThrownBy(() -> reviewService.updateReview(place.getId(), reviewUpdateRequestDto))
+            assertThatThrownBy(() -> reviewService.updateReview(user.getId(), review.getId(), reviewUpdateRequestDto))
                     .isInstanceOf(PlaceNotFoundException.class)
-                    .hasMessageContaining(PLACE_NOT_FOUND.getMessage() + place.getId());
+                    .hasMessage(PLACE_NOT_FOUND.getMessage() + place.getId());
         }
 
         @Test
-        @DisplayName("실패 - 수정할 리뷰가 존재하지 않을시 예외발생")
-        public void updateReview_ReviewNotFoundException() {
+        @DisplayName("실패 - 수정할 리뷰가 존재하지 않을 때 예외 발생")
+        void updateReview_ReviewNotFoundException() {
 
             //given
             Place place = Place.builder().id(1L).build();
+            User user = createMockUser(1L, "testUser");
+            Review review = createMockReview(1L, user, place);
+
             ReviewUpdateRequestDto reviewUpdateRequestDto = createReviewUpdateRequestDto(place.getId());
 
-            when(placeRepository.findById(reviewUpdateRequestDto.getPlaceId())).thenReturn(Optional.of(place));
+            when(placeRepository.findById(place.getId())).thenReturn(Optional.of(place));
+            when(reviewRepository.findById(review.getId())).thenReturn(Optional.empty());
 
             //when & then
-            assertThatThrownBy(() -> reviewService.updateReview(place.getId(), reviewUpdateRequestDto))
+            assertThatThrownBy(() -> reviewService.updateReview(user.getId(), review.getId(), reviewUpdateRequestDto))
                     .isInstanceOf(ReviewNotFoundException.class)
-                    .hasMessageContaining(REVIEW_NOT_FOUND.getMessage());
+                    .hasMessage(REVIEW_NOT_FOUND.getMessage());
         }
 
         @Test
-        @DisplayName("실패 - 리뷰가 요청된 장소에 속하지 않을시 예외발생")
-        public void updateReview_ReviewNotBelongPlaceException() {
+        @DisplayName("실패 - 리뷰가 요청된 장소에 속하지 않을 때 예외 발생")
+        void updateReview_ReviewNotBelongPlaceException() {
 
             //given
             Place place1 = Place.builder().id(1L).build();
             User user = createMockUser(1L, "testUser");
             Review review = createMockReview(1L, user, place1);
-
-            //when
             Place place2 = Place.builder().id(2L).build();
+
             ReviewUpdateRequestDto reviewUpdateRequestDto = createReviewUpdateRequestDto(place2.getId());
 
+            when(reviewRepository.findById(review.getId())).thenReturn(Optional.of(review));
             when(placeRepository.findById(reviewUpdateRequestDto.getPlaceId())).thenReturn(Optional.of(place2));
+
+            //when & then
+            assertThatThrownBy(() -> reviewService.updateReview(user.getId(), review.getId(), reviewUpdateRequestDto))
+                    .isInstanceOf(ReviewNotBelongPlaceException.class)
+                    .hasMessage(REVIEW_NOT_BELONG_TO_PLACE.getMessage());
+        }
+
+        @Test
+        @DisplayName("실패 - 사용자 ID가 일치하지 않을 때 예외 발생")
+        void updateReview_AuthenticateFailException() {
+
+            //given
+            Long userId = 1L;
+            Long wrongUserId = 2L;
+
+            User user = createMockUser(userId, "testUser");
+            Place place = Place.builder().id(1L).build();
+            Review review = createMockReview(1L, user, place);
+
+            ReviewUpdateRequestDto reviewUpdateRequestDto = createReviewUpdateRequestDto(place.getId());
+
+            when(placeRepository.findById(place.getId())).thenReturn(Optional.of(place));
             when(reviewRepository.findById(review.getId())).thenReturn(Optional.of(review));
 
-            //then
-            assertThatThrownBy(() -> reviewService.updateReview(review.getId(), reviewUpdateRequestDto))
-                    .isInstanceOf(ReviewNotBelongPlaceException.class)
-                    .hasMessageContaining(REVIEW_NOT_BELONG_TO_PLACE.getMessage());
+            //when & then
+            assertThatThrownBy(() -> reviewService.updateReview(wrongUserId, review.getId(), reviewUpdateRequestDto))
+                    .isInstanceOf(AuthenticateFailException.class)
+                    .hasMessage(AUTHENTICATION_FAILED.getMessage());
         }
     }
 

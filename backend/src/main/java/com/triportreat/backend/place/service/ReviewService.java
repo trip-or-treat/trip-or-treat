@@ -13,6 +13,6 @@ public interface ReviewService {
     List<ReviewListDto> getReviewList(Long id, Pageable pageable);
     void createReview(Long userId, ReviewRequestDto reviewRequestDto);
     PageResponseDto<MyReviewListDto> getMyReviewList(Long id, Pageable pageable);
-    void updateReview(Long id,ReviewUpdateRequestDto reviewUpdateRequestDto);
+    void updateReview(Long userId, Long id,ReviewUpdateRequestDto reviewUpdateRequestDto);
     void deleteReview(Long userId, Long id);
 }

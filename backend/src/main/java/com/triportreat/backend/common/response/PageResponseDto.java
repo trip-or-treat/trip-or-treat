@@ -1,14 +1,10 @@
 package com.triportreat.backend.common.response;
 
+import lombok.*;
+import org.springframework.data.domain.Page;
+
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import org.springframework.data.domain.Page;
 
 @Getter
 @Setter
@@ -22,6 +18,7 @@ public class PageResponseDto<T> {
 
     private Integer page;
     private Integer totalPages;
+    private Long totalElements;
     private Boolean prev;
     private Boolean next;
     private Integer startPage;
@@ -31,6 +28,7 @@ public class PageResponseDto<T> {
         this.contents = page.getContent();
         this.page = page.getNumber() + 1;
         this.totalPages = page.getTotalPages();
+        this.totalElements = page.getTotalElements();
         this.prev = page.hasPrevious();
         this.next = page.hasNext();
         calculateStartPageAndEndPageNumber();

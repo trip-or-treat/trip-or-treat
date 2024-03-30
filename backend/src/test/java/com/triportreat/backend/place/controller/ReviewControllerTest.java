@@ -33,13 +33,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static com.triportreat.backend.common.response.FailMessage.*;
 import static com.triportreat.backend.common.response.SuccessMessage.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -105,10 +104,11 @@ public class ReviewControllerTest {
 
         @Test
         @DisplayName("성공")
-        public void getReviewListTest() throws Exception {
+        void getReviewListTest() throws Exception {
+
             //given
             given(reviewService.getReviewList(1L, PageRequest.of(0, 10)))
-                    .willReturn(Arrays.asList(reviewListDto));
+                    .willReturn(Collections.singletonList(reviewListDto));
 
             //when & then
             mockMvc.perform(get("/places/1/review")
@@ -130,7 +130,8 @@ public class ReviewControllerTest {
 
         @Test
         @DisplayName("성공 - 리뷰가 없으면 빈 리스트를 반환한다.")
-        public void getReviewList_empty() throws Exception {
+        void getReviewList_empty() throws Exception {
+
             //given
             given(reviewService.getReviewList(1L, PageRequest.of(0, 10)))
                     .willReturn(Collections.emptyList());
@@ -234,11 +235,11 @@ public class ReviewControllerTest {
 
     @Nested
     @DisplayName("리뷰 수정")
-    class UpdateReview {
+    class PutReview {
 
         @Test
         @DisplayName("성공")
-        public void updateReview() throws Exception {
+        void updateReview() throws Exception {
 
             mockMvc.perform(put("/reviews/{id}", 1L)
                     .contentType(MediaType.APPLICATION_JSON)
@@ -248,14 +249,16 @@ public class ReviewControllerTest {
                     .andExpect(jsonPath("$.message").value(PUT_SUCCESS.getMessage()))
                     .andExpect(jsonPath("$.status").value(200))
                     .andExpect(jsonPath("$.data").isEmpty());
+
+            verify(reviewService).updateReview(any(), anyLong(), any());
         }
 
         @Test
-        @DisplayName("실패 - 장소 정보가 없을시 예외 발생")
-        public void updateReview_PlaceNotFoundException() throws Exception {
+        @DisplayName("실패 - 장소 정보가 없을 때 예외 발생")
+        void updateReview_PlaceNotFoundException() throws Exception {
 
             //given
-            doThrow(new PlaceNotFoundException(reviewUpdateRequestDto.getPlaceId())).when(reviewService).updateReview(anyLong(), any(ReviewUpdateRequestDto.class));
+            doThrow(new PlaceNotFoundException(reviewUpdateRequestDto.getPlaceId())).when(reviewService).updateReview(any(), anyLong(), any());
 
             //when & then
             mockMvc.perform(put("/reviews/{id}", 1L)
@@ -264,17 +267,17 @@ public class ReviewControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.result").value(false))
                     .andExpect(jsonPath("$.message").value(PLACE_NOT_FOUND.getMessage()+reviewUpdateRequestDto.getPlaceId()))
-                    .andExpect(result -> assertTrue(result.getResolvedException() instanceof PlaceNotFoundException))
+                    .andExpect(result -> assertInstanceOf(PlaceNotFoundException.class, result.getResolvedException()))
                     .andExpect(jsonPath("$.status").value(400))
                     .andExpect(jsonPath("$.data").isEmpty());
         }
 
         @Test
-        @DisplayName("실패 - 리뷰 정보가 없을시 예외 발생")
-        public void updateReview_ReviewNotFoundException() throws Exception {
+        @DisplayName("실패 - 리뷰 정보가 없을 때 예외 발생")
+        void updateReview_ReviewNotFoundException() throws Exception {
 
             //given
-            doThrow(new ReviewNotFoundException()).when(reviewService).updateReview(anyLong(), any(ReviewUpdateRequestDto.class));
+            doThrow(new ReviewNotFoundException()).when(reviewService).updateReview(any(), anyLong(), any());
 
             //when & then
             mockMvc.perform(put("/reviews/{id}", 1L)
@@ -283,17 +286,17 @@ public class ReviewControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.result").value(false))
                     .andExpect(jsonPath("$.message").value(REVIEW_NOT_FOUND.getMessage()))
-                    .andExpect(result -> assertTrue(result.getResolvedException() instanceof ReviewNotFoundException))
+                    .andExpect(result -> assertInstanceOf(ReviewNotFoundException.class, result.getResolvedException()))
                     .andExpect(jsonPath("$.status").value(400))
                     .andExpect(jsonPath("$.data").isEmpty());
         }
 
         @Test
-        @DisplayName("실패 - 리뷰가 요청된 장소에 속하지 않을시 예외발생")
-        public void updateReview_ReviewNotBelongPlaceException() throws Exception {
+        @DisplayName("실패 - 리뷰가 요청된 장소에 속하지 않을 때 예외 발생")
+        void updateReview_ReviewNotBelongPlaceException() throws Exception {
 
             //given
-            doThrow(new ReviewNotBelongPlaceException()).when(reviewService).updateReview(anyLong(), any(ReviewUpdateRequestDto.class));
+            doThrow(new ReviewNotBelongPlaceException()).when(reviewService).updateReview(any(), anyLong(), any());
 
             //when & then
             mockMvc.perform(put("/reviews/{id}", 1L)
@@ -302,8 +305,27 @@ public class ReviewControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.result").value(false))
                     .andExpect(jsonPath("$.message").value(REVIEW_NOT_BELONG_TO_PLACE.getMessage()))
-                    .andExpect(result -> assertTrue(result.getResolvedException() instanceof ReviewNotBelongPlaceException))
+                    .andExpect(result -> assertInstanceOf(ReviewNotBelongPlaceException.class, result.getResolvedException()))
                     .andExpect(jsonPath("$.status").value(400))
+                    .andExpect(jsonPath("$.data").isEmpty());
+        }
+
+        @Test
+        @DisplayName("실패 - 사용자 ID가 일치하지 않을 때 예외 발생")
+        void updateReview_AuthenticateFailException() throws Exception {
+
+            //given
+            doThrow(AuthenticateFailException.class).when(reviewService).updateReview(any(), anyLong(), any());
+
+            //when & then
+            mockMvc.perform(put("/reviews/{id}", 1L)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(reviewUpdateRequestDto)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.result").value(false))
+                    .andExpect(jsonPath("$.message").value(AUTHENTICATION_FAILED.getMessage()))
+                    .andExpect(result -> assertInstanceOf(AuthenticateFailException.class, result.getResolvedException()))
+                    .andExpect(jsonPath("$.status").value(UNAUTHORIZED.value()))
                     .andExpect(jsonPath("$.data").isEmpty());
         }
 
