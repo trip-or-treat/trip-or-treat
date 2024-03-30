@@ -19,6 +19,9 @@
 ![요청 흐름도](https://github.com/trip-or-treat/trip-or-treat/assets/108510951/fc21fa89-6186-4511-b1a7-1fa1647a67d6)
 ### CI/CD
 
+### ERD
+![image](https://github.com/trip-or-treat/trip-or-treat/assets/108510951/b2ef03c6-a1c3-4d24-b06a-196c9909bfc0)
+
 ## 👥 팀원 소개
 
 |                   Backend                    |                      Backend                       |                Backend                 |              Frontend              |                Frontend                |             Frontend             |
