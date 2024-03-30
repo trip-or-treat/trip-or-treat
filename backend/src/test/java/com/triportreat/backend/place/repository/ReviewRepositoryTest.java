@@ -17,7 +17,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-public class ReviewRepositoryTest {
+class ReviewRepositoryTest {
 
     @Autowired
     private ReviewRepository reviewRepository;

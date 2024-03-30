@@ -38,7 +38,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ReviewServiceImplTest extends DummyObject {
+class ReviewServiceImplTest extends DummyObject {
 
     @InjectMocks
     private ReviewServiceImpl reviewService;
