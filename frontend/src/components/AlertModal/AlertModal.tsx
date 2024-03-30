@@ -10,17 +10,18 @@ interface Props {
   children: React.ReactNode;
   onButtonText: string;
   offButtonText: string;
-  path: string;
+  path?: string;
+  onClick?: () => void;
   onClose: () => void;
 }
 
-const AlertModal = ({ children, onButtonText, offButtonText, path, onClose }: Props) => {
+const AlertModal = ({ children, onButtonText, offButtonText, path, onClose, onClick }: Props) => {
   return (
     <ModalOverlay>
       <StyledModalLayout>
         <StyledModalText>{children}</StyledModalText>
         <StyledButtonInner>
-          <LinkButton path={path} color={theme.colors.mainColor}>
+          <LinkButton path={path} color={theme.colors.mainColor} onClick={onClick}>
             {onButtonText}
           </LinkButton>
           <CloseButton onClick={onClose} color={theme.colors.darkGrey}>

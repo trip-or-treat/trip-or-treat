@@ -3,16 +3,19 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 interface Props {
-  path: string;
+  path?: string;
   color: string;
   children: React.ReactNode;
+  onClick?: () => void;
 }
 
-const LinkButton = ({ path, color, children }: Props) => {
-  return (
+const LinkButton = ({ path, color, children, onClick }: Props) => {
+  return path ? (
     <StyledLinkButton to={path} color={color}>
       {children}
     </StyledLinkButton>
+  ) : (
+    <OptionalButton onClick={onClick}>{children}</OptionalButton>
   );
 };
 
@@ -40,5 +43,16 @@ const StyledLinkButton = styled(Link)<{ color: string }>`
   ${StyledButton}
 
   background-color: ${(props) => props.color};
+  color: ${(props) => props.theme.colors.whiteFont};
+`;
+
+const OptionalButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  ${StyledButton}
+
+  background-color: ${(props) => props.theme.colors.mainColor};
   color: ${(props) => props.theme.colors.whiteFont};
 `;
