@@ -8,11 +8,13 @@ import com.triportreat.backend.user.entity.User;
 import com.triportreat.backend.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -37,39 +39,45 @@ public class AuthService {
     @Value("${kakao.user-info-uri}")
     private String userInfoUri;
 
+    @Transactional
     public void loginByKakao(String code, HttpServletResponse response) {
-        //카카오 엑세스토큰 발급
         String kakaoAccessToken = getKakaoAccessToken(code);
 
-        //카카오 사용자정보 조회
         KakaoAccount userInfo = getUserInfo(kakaoAccessToken);
 
-        //사용자 정보를 토대로 신규 유저면 저장, 기존 유저면 조회
         User user = getUser(userInfo);
 
-        //해당 유저에 대해 JWT 토큰 발급
-        String accessToken = jwtProvider.issueAccessToken(user.getId());
-        String refreshToken = jwtProvider.issueRefreshToken(user.getId());
-
-        //응답 헤더와 쿠키에 토큰 저장
-        jwtProvider.setAccessAndRefreshToken(response, accessToken, refreshToken);
+        jwtProvider.issueAccessToken(user.getId(), response);
+        jwtProvider.issueRefreshToken(user.getId(), response);
     }
 
-    public User getUser(KakaoAccount userInfo) {
+    private User getUser(KakaoAccount userInfo) {
         if (!isAlreadyUser(userInfo)) {
+            if (userInfo.getProfile().getNickname() == null) {
+                setRandomNickname(userInfo);
+            }
             return userRepository.save(User.toEntity(userInfo));
         }
         return userRepository.findByEmail(userInfo.getEmail());
     }
 
-    public boolean isAlreadyUser(KakaoAccount userInfo) {
+    private void setRandomNickname(KakaoAccount userInfo) {
+        String randomNickname;
+        do {
+            randomNickname = "사용자 " + RandomStringUtils.randomAlphanumeric(4);
+        } while (userRepository.existsByNickname(randomNickname));
+
+        userInfo.getProfile().setNickname(randomNickname);
+    }
+
+    private boolean isAlreadyUser(KakaoAccount userInfo) {
         return userRepository.existsByEmail(userInfo.getEmail());
     }
 
-    public KakaoAccount getUserInfo(String kakaoAccessToken) {
+    private KakaoAccount getUserInfo(String accessToken) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.setBearerAuth(kakaoAccessToken);
+        headers.setBearerAuth(accessToken);
 
         KakaoUserInfoResponseDto response = restTemplate
                 .postForObject(userInfoUri, new HttpEntity<>(headers), KakaoUserInfoResponseDto.class);
@@ -77,7 +85,7 @@ public class AuthService {
         return response.getKakaoAccount();
     }
 
-    public String getKakaoAccessToken(String code) {
+    private String getKakaoAccessToken(String code) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 

@@ -19,17 +19,15 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-
-        log.info("supportsParameter");
         return parameter.hasParameterAnnotation(Auth.class);
     }
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        log.info("resolveArgument");
+                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         String accessToken = jwtProvider.extractAccessToken(request);
+        log.info("ArgumentResolver 액세스 토큰 : {}", accessToken);
         return jwtProvider.getUserInfo(accessToken);
     }
 }

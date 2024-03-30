@@ -5,6 +5,10 @@ import lombok.Getter;
 @Getter
 public enum FailMessage {
     UNKNOWN_ERROR("알 수 없는 오류가 발생하였습니다."),
+    TOKEN_EXPIRED("토큰이 만료되었습니다!"),
+    TOKEN_INVALID("토큰이 유효하지 않습니다!"),
+    TOKEN_MALFORMED("토큰이 변조되었습니다!"),
+    TOKEN_NOT_FOUND("토큰이 존재하지 않습니다!"),
     REGION_NOT_FOUND("지역 정보가 존재하지 않습니다!"),
     RECOMMENDED_PLACE_EMPTY("추천 장소 정보가 존재하지 않습니다!"),
     API_CALL_FAILED("외부 API 호출에 실패하였습니다."),
