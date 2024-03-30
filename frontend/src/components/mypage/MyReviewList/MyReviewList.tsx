@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { ReactComponent as StarFilled } from '../../../assets/svgs/starFilled.svg';
@@ -5,12 +6,17 @@ import { ReactComponent as StarEmpty } from '../../../assets/svgs/starEmpty.svg'
 import { ReactComponent as EditIcon } from '../../../assets/svgs/edit.svg';
 import { CommonContainer } from '../../../styles/CommonContainer';
 
-interface Props {
-  idx: number;
-  review: string;
-  place: string;
-  score: number;
-  createdAt: string;
+interface MyReviews {
+  data: {
+    id: number;
+    content: string;
+    tip: string;
+    placeId: number;
+    placeName: string;
+    score: number;
+    createdDate: string;
+  };
+  index: number;
 }
 
 const renderStars = (score: number) => {
@@ -25,19 +31,36 @@ const renderStars = (score: number) => {
   return stars;
 };
 
-const MyReviewList = ({ idx, review, place, score, createdAt }: Props) => {
+const MyReviewList = ({ data: myReview, index }: MyReviews) => {
+  const [isModal, setModal] = useState(false);
+
+  const modalHandler = () => {
+    console.log(1);
+    setModal(!isModal);
+  };
+
+  useEffect(() => {
+    if (isModal) {
+      localStorage.setItem('myReview', JSON.stringify(myReview));
+    } else {
+      localStorage.removeItem('myReview');
+    }
+  }, [isModal]);
+
   return (
     <ReviewContainer>
-      <Index>{idx}</Index>
+      <Index>{index}</Index>
       <ReviewBox>
-        <Review>{review}</Review>
+        <Review>{myReview.content}</Review>
       </ReviewBox>
       <PlaceBox>
-        <Place>{place}</Place>
+        <Place>{myReview.placeName}</Place>
       </PlaceBox>
-      <Score>{renderStars(score)}</Score>
-      <CreatedAt>{createdAt}</CreatedAt>
-      <EditIcon />
+      <Score>{renderStars(myReview.score)}</Score>
+      <CreatedAt>{myReview.createdDate}</CreatedAt>
+      <Edit onClick={modalHandler}>
+        <EditIcon />
+      </Edit>
     </ReviewContainer>
   );
 };
@@ -58,6 +81,10 @@ const ReviewContainer = styled.div`
     &:hover {
       fill: ${(props) => props.theme.colors.mainColor};
     }
+  }
+
+  > * {
+    color: ${(props) => props.theme.colors.blackFont};
   }
 `;
 
@@ -108,3 +135,5 @@ const CreatedAt = styled.div`
   font-size: 12px;
   text-align: center;
 `;
+
+const Edit = styled.button``;
