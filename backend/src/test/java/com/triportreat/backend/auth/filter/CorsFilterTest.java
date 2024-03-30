@@ -73,10 +73,10 @@ public class CorsFilterTest {
         verify(response).setCharacterEncoding("UTF-8");
 
         verify(response).setHeader(ACCESS_CONTROL_ALLOW_ORIGIN, origin);
-        verify(response).setHeader(ACCESS_CONTROL_ALLOW_HEADERS, "*");
+        verify(response).setHeader(ACCESS_CONTROL_ALLOW_HEADERS, "Content-Type, Authorization");
         verify(response).setHeader(ACCESS_CONTROL_EXPOSE_HEADERS, AUTHORIZATION);
         verify(response).setHeader(ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
-        verify(response).setHeader(ACCESS_CONTROL_ALLOW_METHODS, "POST, GET, PUT, OPTIONS, DELETE");
+        verify(response).setHeader(ACCESS_CONTROL_ALLOW_METHODS, "GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD");
         verify(response).setHeader(ACCESS_CONTROL_MAX_AGE, "3600");
 
         verify(chain, times(1)).doFilter(request, response);
