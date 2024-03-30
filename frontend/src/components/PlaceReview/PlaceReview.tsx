@@ -45,8 +45,8 @@ const PlaceReview = ({ currentId }: { currentId: number }) => {
           </Title>
         </Nav>
       )}
-      {isReviewInput && <ReviewInput placeId={currentId} />}
-      {isReviews && <Reviews placeId={currentId} />}
+      {isReviewInput && <ReviewInput currentId={currentId} />}
+      {isReviews && <Reviews currentId={currentId} />}
     </Wrapper>
   );
 };
