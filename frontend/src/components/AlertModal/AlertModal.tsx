@@ -18,7 +18,6 @@ interface Props {
 const AlertModal = ({ children, onButtonText, offButtonText, path, onClick, onClose }: Props) => {
   const handleClick = () => {
     if (onClick) onClick();
-    onClose();
   };
 
   return (
