@@ -1,6 +1,7 @@
 package com.triportreat.backend.auth.filter;
 
 import static org.springframework.util.PatternMatchUtils.simpleMatch;
+import static org.springframework.web.bind.annotation.RequestMethod.OPTIONS;
 
 import com.triportreat.backend.auth.utils.JwtProvider;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-@Order(2)
+@Order(3)
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter implements Filter {
 
@@ -35,46 +36,45 @@ public class JwtAuthenticationFilter implements Filter {
 
     @Override
     public void doFilter(
-            ServletRequest request,
-            ServletResponse response,
+            ServletRequest req,
+            ServletResponse res,
             FilterChain chain
     ) throws IOException, ServletException {
+        log.info("JWT 인증 필터 실행");
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) res;
 
-        log.info("검증 필터 동작");
-
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-        HttpServletResponse httpResponse = (HttpServletResponse) response;
-
-        if (httpRequest.getMethod().equals("OPTIONS")) {
-            log.info("프리플라이트 요청이면 필터 통과");
-            chain.doFilter(request, response);
+        log.info("요청 메서드: {}", request.getMethod());
+        if (request.getMethod().equals(OPTIONS.name())) {
+            log.info("Preflight 요청은 허용, 필터 체인 종료, Servlet으로 이동");
+            chain.doFilter(req, res);
             return;
         }
 
-        if (isInWhitelist(httpRequest.getRequestURI())) {
-            log.info("화이트리스트 검증");
-            chain.doFilter(request, response);
+        log.info("요청 URI: {}", request.getRequestURI());
+        if (isInWhitelist(request.getRequestURI())) {
+            log.info("허용된 URI, 필터 체인 종료, Servlet으로 이동");
+            chain.doFilter(req, res);
             return;
         }
 
+        log.info("토큰 검증 시작");
         try {
-            log.info("액세스 토큰 검증");
-            String accessToken = jwtProvider.extractAccessToken(httpRequest);
-            log.info("액세스 토큰 정보 : {}", accessToken);
+            String accessToken = jwtProvider.extractAccessToken(request);
+            log.info("액세스 토큰 추출: {}", accessToken);
             if (jwtProvider.isValid(accessToken)) {
-                log.info("액세스 토큰 검증완료");
-                chain.doFilter(request, response);
+                log.info("액세스 토큰 유효, 필터 체인 종료, Servlet으로 이동");
+                chain.doFilter(req, res);
             }
         } catch (ExpiredJwtException e) {
-            log.info("액세스 토큰 만료, 리프레시 토큰 검증");
-            String refreshToken = jwtProvider.extractRefreshToken(httpRequest);
-            log.info("리프레시 토큰 정보 : {}", refreshToken);
+            log.info("액세스 토큰 만료, 리프레시 토큰 검증 시작");
+            String refreshToken = jwtProvider.extractRefreshToken(request);
+            log.info("리프레시 토큰 추출: {}", refreshToken);
             if (jwtProvider.isValid(refreshToken)) {
-                log.info("리프레시 토큰 검증완료");
-                String newAccessToken = jwtProvider.reIssueAccessToken(refreshToken);
-                jwtProvider.setAccessToken(httpResponse, newAccessToken);
-                log.info("리프레시 토큰으로 액세스 토큰 재발급");
-                chain.doFilter(request, response);
+                log.info("리프레시 토큰 유효, 액세스 토큰 재발급");
+                HttpServletRequest newTokenReq = jwtProvider.reIssueAccessToken(refreshToken, response, request);
+                log.info("액세스 토큰 재발급 완료, 필터 체인 종료, Servlet으로 이동");
+                chain.doFilter(newTokenReq, res);
             }
         }
     }
