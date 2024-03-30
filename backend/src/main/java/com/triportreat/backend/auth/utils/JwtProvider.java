@@ -1,7 +1,16 @@
 package com.triportreat.backend.auth.utils;
 
+import static com.triportreat.backend.common.response.FailMessage.TOKEN_EXPIRED;
+import static com.triportreat.backend.common.response.FailMessage.TOKEN_INVALID;
+import static com.triportreat.backend.common.response.FailMessage.TOKEN_MALFORMED;
+import static com.triportreat.backend.common.response.FailMessage.TOKEN_NOT_FOUND;
+import static org.springframework.boot.web.server.Cookie.SameSite.NONE;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.HttpHeaders.SET_COOKIE;
+
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -14,12 +23,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Optional;
 import javax.crypto.SecretKey;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
-@Slf4j
 @Component
 public class JwtProvider {
 
@@ -29,64 +36,71 @@ public class JwtProvider {
     @Value("${jwt.refresh-token.expiration-time}")
     private Long refreshTokenExpirationTime;
 
-    private final String AUTH_FIELD = "Authorization";
     private final String AUTH_TYPE = "Bearer ";
     private final String REFRESH_TOKEN_NAME = "refreshToken";
     private final String USER_INFO = "userInfo";
 
     private final SecretKey secretKey;
+    private final JwtParser jwtParser;
 
     public JwtProvider(@Value("${jwt.secret-key}") String secretKey) {
         this.secretKey = Keys.hmacShaKeyFor(secretKey.getBytes());
+        this.jwtParser = Jwts.parserBuilder().setSigningKey(this.secretKey).build();
     }
 
-    public String issueAccessToken(Long userInfo) {
+    public void issueAccessToken(Long userInfo, HttpServletResponse response) {
         Date now = new Date();
         Date expiration = new Date(now.getTime() + accessTokenExpirationTime);
 
-        return Jwts.builder()
+        String accessToken = Jwts.builder()
                 .claim(USER_INFO, userInfo)
                 .setIssuedAt(now)
                 .setExpiration(expiration)
                 .signWith(secretKey, SignatureAlgorithm.HS512)
                 .compact();
+
+        setAccessToken(response, accessToken);
     }
 
-    public String issueRefreshToken(Long userInfo) {
+    public void issueRefreshToken(Long userInfo, HttpServletResponse response) {
         Date now = new Date();
         Date expiration = new Date(now.getTime() + refreshTokenExpirationTime);
 
-        return Jwts.builder()
+        String refreshToken = Jwts.builder()
                 .claim(USER_INFO, userInfo)
                 .setIssuedAt(now)
                 .setExpiration(expiration)
                 .signWith(secretKey, SignatureAlgorithm.HS512)
                 .compact();
+
+        setRefreshToken(response, refreshToken);
     }
 
-    public String reIssueAccessToken(String refreshToken) {
-        return issueAccessToken(getUserInfo(refreshToken));
+    public HttpServletRequest reIssueAccessToken(String refreshToken, HttpServletResponse response, HttpServletRequest request) {
+        issueAccessToken(getUserInfo(refreshToken), response);
+
+        String issuedAccessToken = response.getHeader(AUTHORIZATION);
+        return new CustomHttpServletRequestWrapper(request, issuedAccessToken);
     }
 
     public void setAccessToken(HttpServletResponse response, String accessToken) {
-        response.addHeader(AUTH_FIELD, AUTH_TYPE + accessToken);
+        response.addHeader(AUTHORIZATION, AUTH_TYPE + accessToken);
     }
 
-    public void setAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
+    public void setRefreshToken(HttpServletResponse response, String refreshToken) {
         ResponseCookie cookie = ResponseCookie.from(REFRESH_TOKEN_NAME, refreshToken)
                 .path("/")
                 .httpOnly(true)
                 .secure(true)
-                .sameSite("None")
+                .sameSite(NONE.name())
                 .maxAge(3600 * 24)
                 .build();
 
-        response.addHeader(AUTH_FIELD, AUTH_TYPE + accessToken);
-        response.addHeader("Set-Cookie", cookie.toString());
+        response.addHeader(SET_COOKIE, cookie.toString());
     }
 
     public String extractAccessToken(HttpServletRequest request) {
-        return Optional.ofNullable(request.getHeader(AUTH_FIELD))
+        return Optional.ofNullable(request.getHeader(AUTHORIZATION))
                 .filter(authHeader -> authHeader.startsWith(AUTH_TYPE))
                 .map(authHeader -> authHeader.replace(AUTH_TYPE, ""))
                 .orElse(null);
@@ -102,35 +116,24 @@ public class JwtProvider {
     }
 
     public boolean isValid(String token) {
+        if (token == null) {
+            throw new JwtException(TOKEN_NOT_FOUND.getMessage());
+        }
+
         try {
-            if (token == null) {
-                log.info("토큰이 존재하지 않습니다.");
-                throw new JwtException("토큰이 존재하지 않습니다.");
-            }
-
-            Jwts.parserBuilder()
-                    .setSigningKey(secretKey)
-                    .build()
-                    .parseClaimsJws(token);
-
+            jwtParser.parseClaimsJws(token);
             return true;
         } catch (SignatureException e) {
-            log.info("토큰이 유효하지 않습니다.");
-            throw new SignatureException("토큰이 유효하지 않습니다. 시그니쳐 검증에 실패하였습니다!");
+            throw new SignatureException(TOKEN_INVALID.getMessage());
         } catch (MalformedJwtException e) {
-            log.info("토큰이 올바르지 않습니다.");
-            throw new MalformedJwtException("토큰이 올바르지 않습니다. 토큰이 변조되었습니다!");
+            throw new MalformedJwtException(TOKEN_MALFORMED.getMessage());
         } catch (ExpiredJwtException e) {
-            log.info("토큰이 만료되었습니다.");
-            throw new ExpiredJwtException(e.getHeader(), e.getClaims(), "토큰이 만료되었습니다.");
+            throw new ExpiredJwtException(e.getHeader(), e.getClaims(), TOKEN_EXPIRED.getMessage());
         }
     }
 
     public Long getUserInfo(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(secretKey)
-                .build()
-                .parseClaimsJws(token)
+        return jwtParser.parseClaimsJws(token)
                 .getBody()
                 .get(USER_INFO, Long.class);
     }
