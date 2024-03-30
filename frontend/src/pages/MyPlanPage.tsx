@@ -142,6 +142,7 @@ const MyPlanPage = () => {
               startDate={data.startDate}
               endDate={data.endDate}
               createdDate={data.createdDate}
+              planId={data.planId}
             />
           );
         })}

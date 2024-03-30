@@ -13,9 +13,10 @@ interface Props {
   startDate: string;
   endDate: string;
   createdDate: string;
+  planId: number;
 }
 
-const MyPlanList = ({ idx, title, regions, startDate, endDate, createdDate }: Props) => {
+const MyPlanList = ({ idx, title, regions, startDate, endDate, createdDate, planId }: Props) => {
   const [open, setOpen] = useState(false);
 
   const onClose = () => {
@@ -33,7 +34,7 @@ const MyPlanList = ({ idx, title, regions, startDate, endDate, createdDate }: Pr
     <PlanContainer>
       <Index>{idx}</Index>
       {/* 제목 클릭하면 mypage/plans/:planId 페이지로 보내주기 */}
-      <PlanTitle to="/mypage/plans/:planId">{title}</PlanTitle>
+      <PlanTitle to={`/mypage/plans/${planId}`}>{title}</PlanTitle>
       <Region>
         {regionsSplit.map((item, index) => (
           <React.Fragment key={item}>
