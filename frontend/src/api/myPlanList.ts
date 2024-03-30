@@ -1,5 +1,5 @@
 import { END_POINTS } from 'src/constants/api';
-import { api } from '.';
+import { loginApi } from '.';
 
 interface Props {
   pageParam: number;
@@ -16,19 +16,14 @@ export const myPlanListFetcher = async ({
   comingYn,
   createdYear,
 }: Props) => {
-  const token = localStorage.getItem('accessToken');
-
   try {
-    const { data } = await api.get(END_POINTS.PLANS, {
+    const { data } = await loginApi.get(END_POINTS.PLANS, {
       params: {
         page: pageParam,
         type: searchType,
         keyword: keyword === '' ? null : keyword,
         comingYn,
         year: createdYear,
-      },
-      headers: {
-        Authorization: `Bearer ${token}`,
       },
     });
 
