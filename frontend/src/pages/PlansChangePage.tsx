@@ -57,7 +57,7 @@ const PlansChangePage = () => {
     setTitle(planDetailApi?.data.title);
   };
 
-  if (isError || !planDetailApi?.data) {
+  if (isError) {
     return (
       <Main>
         <FailDataPage />
@@ -67,7 +67,7 @@ const PlansChangePage = () => {
 
   return (
     <Main>
-      {(isLoading || !planDetailApi) && <Loading type="LARGE" />}
+      {(isLoading || !planDetailApi?.data) && <Loading type="LARGE" />}
       {!isLoading && (
         <Wrapper>
           <PlanNavBar
