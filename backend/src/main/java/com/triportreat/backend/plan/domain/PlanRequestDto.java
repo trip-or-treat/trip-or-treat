@@ -159,10 +159,8 @@ public class PlanRequestDto {
 
         private String keyword;
 
-        @Builder.Default
-        private String comingYn = COMING_YN_TRUE;
+        private String comingYn;
 
-        @Builder.Default
-        private int year = RECENT_6_MONTH;
+        private int year;
     }
 }
