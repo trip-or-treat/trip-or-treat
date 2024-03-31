@@ -10,6 +10,7 @@ import com.triportreat.backend.auth.filter.JwtAuthenticationFilter;
 import com.triportreat.backend.auth.service.AuthService;
 import com.triportreat.backend.auth.utils.AuthUserArgumentResolver;
 import com.triportreat.backend.common.config.WebConfig;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -19,6 +20,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -46,9 +48,10 @@ class AuthControllerTest {
         void loginByKakao() throws Exception {
             // given
             String code = "testKakaoAuthenticationCode";
+            HttpServletRequest request = new MockHttpServletRequest();
             HttpServletResponse response = new MockHttpServletResponse();
 
-            doNothing().when(authService).loginByKakao(code, response);
+            doNothing().when(authService).loginByKakao(code, request, response);
 
             // when
             // then

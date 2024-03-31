@@ -4,6 +4,7 @@ import static com.triportreat.backend.common.response.SuccessMessage.LOGIN_SUCCE
 
 import com.triportreat.backend.auth.service.AuthService;
 import com.triportreat.backend.common.response.ResponseResult;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +19,9 @@ public class AuthController {
 
     @GetMapping("/login")
     public ResponseEntity<?> loginByKakao(String code,
+                                          HttpServletRequest request,
                                           HttpServletResponse response) {
-        authService.loginByKakao(code, response);
+        authService.loginByKakao(code, request, response);
         return ResponseEntity.ok().body(ResponseResult.success(LOGIN_SUCCESS.getMessage(), null));
     }
 }
