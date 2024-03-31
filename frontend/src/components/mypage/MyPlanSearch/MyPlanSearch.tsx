@@ -90,7 +90,7 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
-  width: 500px;
+  width: 480px;
 
   padding: 15px;
   padding-left: 50px;
