@@ -115,9 +115,13 @@ const MyPlanPage = () => {
     <div>
       <MyPageTitle>내 여행계획</MyPageTitle>
       <SearchBox>
-        <DropSearchType filter={searchTypeObj} setParams={setSearchType} />
+        <SearchTypeDrop>
+          <DropDown filter={searchTypeObj} setParams={setSearchType} />
+        </SearchTypeDrop>
         <MyPlanSearch placeHolder="제목 또는 지역으로 검색해보세요." setKeyword={setKeyword} />
-        <DropComingYn filter={comingYnObj} setParams={setComingYn} />
+        <ComingYnDrop>
+          <DropDown filter={comingYnObj} setParams={setComingYn} />
+        </ComingYnDrop>
       </SearchBox>
       <FilterBox>
         {createdYearList.map((year) => (
@@ -180,10 +184,10 @@ const Button = styled.button<{ $isClicked: boolean }>`
   margin: 0 10px 10px 0;
 `;
 
-const DropSearchType = styled(DropDown)`
-  width: 40px;
+const SearchTypeDrop = styled.div`
+  width: 90px;
 `;
 
-const DropComingYn = styled(DropDown)`
-  width: 60px;
+const ComingYnDrop = styled.div`
+  width: 150px;
 `;
