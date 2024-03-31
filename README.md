@@ -16,7 +16,7 @@
 
 ## 🖥️ 프로젝트 구조
 ### 인프라
-![요청 흐름도](https://github.com/trip-or-treat/trip-or-treat/assets/108510951/fc21fa89-6186-4511-b1a7-1fa1647a67d6)
+![TOT 아키텍쳐](https://github.com/trip-or-treat/trip-or-treat/assets/108510951/8a3db4ff-1174-4988-b956-9c06f8293f0f))
 ### CI/CD
 ![TOT CI_CD](https://github.com/trip-or-treat/trip-or-treat/assets/108510951/f3959671-e409-4d69-9fdf-00f550fa24bc)
 ### ERD
