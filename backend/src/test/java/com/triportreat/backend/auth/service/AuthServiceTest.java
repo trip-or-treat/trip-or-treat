@@ -16,6 +16,7 @@ import com.triportreat.backend.auth.utils.JwtProvider;
 import com.triportreat.backend.dummy.DummyObject;
 import com.triportreat.backend.user.entity.User;
 import com.triportreat.backend.user.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -49,6 +50,9 @@ class AuthServiceTest extends DummyObject {
     private JwtProvider jwtProvider;
 
     @Mock
+    private HttpServletRequest request;
+
+    @Mock
     private HttpServletResponse response;
 
     @Nested
@@ -76,7 +80,7 @@ class AuthServiceTest extends DummyObject {
             doNothing().when(jwtProvider).issueRefreshToken(anyLong(), eq(response));
 
             // when
-            authService.loginByKakao(code, response);
+            authService.loginByKakao(code, request, response);
 
             // then
             verify(jwtProvider, times(1)).issueAccessToken(eq(1L), eq(response));
@@ -104,7 +108,7 @@ class AuthServiceTest extends DummyObject {
             doNothing().when(jwtProvider).issueRefreshToken(anyLong(), eq(response));
 
             // when
-            authService.loginByKakao(code, response);
+            authService.loginByKakao(code, request, response);
 
             // then
             assertThat(mockUserInfoDto.getKakaoAccount().getProfile().getNickname()).isNotNull();
