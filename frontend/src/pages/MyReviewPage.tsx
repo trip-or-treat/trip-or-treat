@@ -17,6 +17,7 @@ interface MyReviews {
         score: number;
         createdDate: string;
       }[];
+      totalElements: number;
     };
     index: number;
   };
