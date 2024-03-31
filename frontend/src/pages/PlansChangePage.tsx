@@ -71,6 +71,7 @@ const PlansChangePage = () => {
       {!isLoading && (
         <Wrapper>
           <PlanNavBar
+            code={planDetailApi?.data?.code}
             startDate={planDetailApi?.data?.startDate}
             endDate={planDetailApi?.data?.endDate}
             regions={planDetailApi?.data?.regions.regionIds}
