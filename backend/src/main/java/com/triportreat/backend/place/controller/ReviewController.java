@@ -32,8 +32,8 @@ public class ReviewController {
     }
 
     @PutMapping("/reviews/{id}")
-    public ResponseEntity<?> updateReview(@PathVariable Long id, @Valid @RequestBody ReviewUpdateRequestDto reviewUpdateRequestDto) {
-        reviewService.updateReview(id, reviewUpdateRequestDto);
+    public ResponseEntity<?> updateReview(@Auth Long userId, @PathVariable Long id, @Valid @RequestBody ReviewUpdateRequestDto reviewUpdateRequestDto) {
+        reviewService.updateReview(userId, id, reviewUpdateRequestDto);
         return ResponseEntity.ok().body(ResponseResult.success(PUT_SUCCESS.getMessage(), null));
     }
 

@@ -66,10 +66,10 @@ public class CorsFilter implements Filter {
             response.setStatus(OK.value());
 
             response.setHeader(ACCESS_CONTROL_ALLOW_ORIGIN, origin);
-            response.setHeader(ACCESS_CONTROL_ALLOW_HEADERS, "*");
+            response.setHeader(ACCESS_CONTROL_ALLOW_HEADERS, "Content-Type, Authorization");
             response.setHeader(ACCESS_CONTROL_EXPOSE_HEADERS, AUTHORIZATION);
             response.setHeader(ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
-            response.setHeader(ACCESS_CONTROL_ALLOW_METHODS, "POST, GET, PUT, OPTIONS, DELETE");
+            response.setHeader(ACCESS_CONTROL_ALLOW_METHODS, "GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD");
             response.setHeader(ACCESS_CONTROL_MAX_AGE, "3600");
         }
         log.info("CORS 필터 종료, 다음 필터로 이동");
