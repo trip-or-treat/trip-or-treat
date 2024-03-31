@@ -40,12 +40,7 @@ interface TotalMyPlanData {
     createdDate: string;
     regions: string[];
   }[];
-  page: number;
-  totalPages: number;
-  prev: boolean;
-  next: boolean;
-  startPage: number;
-  endPage: number;
+  totalElements: number;
 }
 
 const MyPlanPage = () => {
@@ -71,7 +66,7 @@ const MyPlanPage = () => {
   });
 
   if (isError) return null;
-  console.log(myPlanData?.data);
+  console.log(myPlanData?.data.contents);
 
   useEffect(() => {
     if (!isLoading) {
@@ -80,7 +75,7 @@ const MyPlanPage = () => {
   }, [myPlanData]);
 
   // 페이지네이션
-
+  const totalElements = myPlanData?.data.totalElements;
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
@@ -150,7 +145,11 @@ const MyPlanPage = () => {
           );
         })}
       </ListContainer>
-      <Paging currentPage={currentPage} totalElements={55} setCurrentPage={handlePageChange} />
+      <Paging
+        currentPage={currentPage}
+        totalElements={totalElements}
+        setCurrentPage={handlePageChange}
+      />
     </div>
   );
 };
