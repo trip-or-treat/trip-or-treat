@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import PlaceModal from 'src/components/PlaceModal';
@@ -41,9 +42,14 @@ const MyReviewList = ({ data: myReview, index }: MyReviews) => {
   const [isEditClick, setEditClick] = useState(false);
   const [isModal, setModal] = useState(false);
   const [isDelte, setDelte] = useState(false);
+  const navigate = useNavigate();
 
   const handlerEditClick = () => {
     setEditClick(!isEditClick);
+  };
+
+  const onRefresh = () => {
+    navigate(0);
   };
 
   useEffect(() => {
@@ -63,7 +69,7 @@ const MyReviewList = ({ data: myReview, index }: MyReviews) => {
   const onDelte = async () => {
     await deleteReviewFetcher(myReview.id);
     setDelte(!isDelte);
-    window.location.href = '/mypage/myReview';
+    onRefresh();
   };
 
   return (

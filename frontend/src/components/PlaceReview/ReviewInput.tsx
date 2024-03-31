@@ -1,5 +1,6 @@
 import { useState, ChangeEvent, useEffect } from 'react';
 import { styled } from 'styled-components';
+import { useSetRecoilState } from 'recoil';
 
 import { ReactComponent as StarFilled } from 'src/assets/svgs/starFilled.svg';
 import { ReactComponent as StarEmpty } from 'src/assets/svgs/starEmpty.svg';
@@ -8,6 +9,7 @@ import { ReactComponent as SpeechBubble } from 'src/assets/svgs/speechBubble.svg
 
 import { reviewWriteFetcher } from 'src/api/reviewWrite';
 import { editReviewFetcher } from 'src/api/review';
+import { editReviewAtom } from 'src/atoms/review';
 
 const ReviewInput = ({ currentId }: { currentId: number }) => {
   const [id, setID] = useState(0);
@@ -19,6 +21,7 @@ const ReviewInput = ({ currentId }: { currentId: number }) => {
   const [isSubmit, setSubmit] = useState(false);
   const scoreArr = Array.from({ length: 5 }).map((_, index) => `star${index}`);
   const myReview = localStorage.getItem('myReview');
+  const isEditReview = useSetRecoilState(editReviewAtom);
 
   useEffect(() => {
     if (myReview) {
@@ -38,6 +41,7 @@ const ReviewInput = ({ currentId }: { currentId: number }) => {
     } else {
       if (myReview) {
         editReviewFetcher({ id, placeId, content, tip, score });
+        isEditReview(true);
       } else {
         reviewWriteFetcher({ placeId, content, tip, score });
       }
