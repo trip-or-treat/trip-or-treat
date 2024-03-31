@@ -26,7 +26,7 @@ const PlaceCardDetailBtn = ({ placeCardItem }: Props) => {
         <ThumbnailImg src={placeCardItem.imageThumbnail || defaultimg} />
       </div>
       <RegionNameBox>
-        <p>{placeCardItem.name}</p>
+        <p>{placeCardItem.placeName}</p>
         <p>{placeCardItem.subCategoryName}</p>
       </RegionNameBox>
     </DetailButton>

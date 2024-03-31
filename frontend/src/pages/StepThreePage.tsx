@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 
 import KaKaoMap from 'src/components/KaKaoMap';
 import RegionCategory from 'src/components/RegionCategoryList/RegionCategoryList';
@@ -12,9 +12,10 @@ import SelectedPlaceCardList from 'src/components/SelectedPlaceCardList';
 
 import myRegionListAtom from 'src/atoms/myRegionListAtom';
 import totalPlanAtom from 'src/atoms/totalPlanAtom';
-import stepPlanSavedBtnAtom from 'src/atoms/stepPlanSavedBtnAtom';
+
 import curDayAtom from 'src/atoms/curDayAtom';
 import { PlaceListTypes } from 'src/@types/api/placeList';
+
 import FailDataPage from './FailDataPage';
 
 const StepThreePage = () => {
@@ -23,12 +24,7 @@ const StepThreePage = () => {
 
   const myRegionList = useRecoilValue(myRegionListAtom);
   const totalPlan = useRecoilValue(totalPlanAtom);
-  const setStepPlanSaveBtn = useSetRecoilState(stepPlanSavedBtnAtom);
   const curDay = useRecoilValue(curDayAtom);
-
-  useEffect(() => {
-    setStepPlanSaveBtn(totalPlan.map((data) => data?.items).every((data) => data.length !== 0));
-  }, [totalPlan]);
 
   useEffect(() => {
     setSelectedPlaceList(totalPlan[curDay - 1]?.items);
@@ -45,7 +41,7 @@ const StepThreePage = () => {
     <Wrapper>
       <SearchLayer>
         <section>
-          <RegionCategory data={myRegionList} />
+          <RegionCategory data={myRegionList} type="LINK" />
           <EnterSearch placeHolder="장소를 검색해보세요!" setKeyword={setKeyword} />
           <ContentTypeFilterItemList />
         </section>

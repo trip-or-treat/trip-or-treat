@@ -27,7 +27,7 @@ const PlansPage = () => {
   const schedules = totalPlan.map(({ date, items }) => ({
     date,
     schedulePlaces: items.map((item, idx) => ({
-      name: item.name,
+      placeName: item.placeName,
       imageThumbnail: item.imageThumbnail,
       subCategoryName: item.subCategoryName,
       placeId: item.placeId,

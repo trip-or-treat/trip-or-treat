@@ -1,9 +1,8 @@
 import React from 'react';
-import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-import stepPlanSavedBtnAtom from 'src/atoms/stepPlanSavedBtnAtom';
+import { useDisableButton } from 'src/hooks/useDisableButton';
 
 interface Props {
   path: string;
@@ -12,13 +11,13 @@ interface Props {
 }
 
 const StepNavLinkButton = ({ path, type, children }: Props) => {
-  const isClicked = useRecoilValue(stepPlanSavedBtnAtom);
+  const isClickPossible = useDisableButton();
 
   return (
-    <Wrapper $isClicked={isClicked}>
+    <Wrapper $isClicked={isClickPossible}>
       {type === 'ENABLE_ONLY' && <LinkBox to={path}>{children}</LinkBox>}
       {type === 'ENABLE_AND_DISABLE' && (
-        <ChangeLinkBox to={isClicked ? path : '#'} $isClicked={isClicked}>
+        <ChangeLinkBox to={isClickPossible ? path : '#'} $isClicked={isClickPossible}>
           {children}
         </ChangeLinkBox>
       )}

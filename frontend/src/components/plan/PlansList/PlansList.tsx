@@ -2,50 +2,34 @@ import styled from 'styled-components';
 
 import { useCarousel } from 'src/hooks/useCarousel';
 
+import { SchedulePlaces, SchedulePlacesDetail, SchedulesType } from 'src/@types/api/schedules';
 import { ReactComponent as ChevronLeft } from '../../../assets/svgs/chevronLeft.svg';
 import { ReactComponent as ChevronRight } from '../../../assets/svgs/chevronRight.svg';
 import PlansListCard from './PlansListCard';
 
 interface Props {
-  schedules: {
-    date: string;
-    schedulePlaces: {
-      name: string;
-      imageThumbnail: string;
-      subCategoryName: string;
-      placeId: number;
-      visitOrder: number;
-      memo: string;
-      expense: number;
-    }[];
-  }[];
+  schedules: SchedulesType['schedules'];
 }
 
-export interface SchedulePlacesType {
-  name: string;
-  imageThumbnail: string;
-  subCategoryName: string;
-  placeId: number;
-  visitOrder: number;
-  memo: string;
-  expense: number;
-}
-
-const calculateDailyExpense = (schedulePlaces: SchedulePlacesType[]) => {
-  const totalExpense = schedulePlaces.reduce((total, item) => total + (item.expense ?? 0), 0);
+const calculateDailyExpense = (schedulePlaces: (SchedulePlacesDetail | SchedulePlaces)[]) => {
+  const totalExpense = schedulePlaces.reduce(
+    (total, item) => total + (typeof item === 'object' ? item.expense ?? 0 : 0),
+    0,
+  );
   return totalExpense.toLocaleString();
 };
 
 const PlansList = ({ schedules }: Props) => {
-  const { handlePrev, handleNext, slideRef, currentSlide } = useCarousel(schedules.length % 2, 150);
+  const CAROUSEL_LENGTH = schedules && schedules.length % 2;
+  const { handlePrev, handleNext, slideRef, currentSlide } = useCarousel(CAROUSEL_LENGTH, 150);
 
   return (
     <>
-      <Wrapper ref={slideRef} $length={schedules.length}>
-        {schedules.map(({ date, schedulePlaces }, listIdx) => (
+      <Wrapper ref={slideRef} $length={CAROUSEL_LENGTH}>
+        {schedules?.map(({ date, schedulePlaces }, listIdx) => (
           <PlanListBox key={date}>
             <DayTitle>{`${listIdx + 1}일차 경비 : ${calculateDailyExpense(schedulePlaces)}원`}</DayTitle>
-            {schedulePlaces.map((data, idx) => (
+            {schedulePlaces?.map((data, idx) => (
               <PlansListCard key={data.placeId} listIdx={listIdx} idx={idx} data={data} />
             ))}
           </PlanListBox>
@@ -53,12 +37,12 @@ const PlansList = ({ schedules }: Props) => {
       </Wrapper>
 
       {currentSlide === 1 && (
-        <LeftButton onClick={handlePrev} $length={schedules.length}>
+        <LeftButton onClick={handlePrev} $length={CAROUSEL_LENGTH}>
           <ChevronLeft />
         </LeftButton>
       )}
       {currentSlide === 0 && (
-        <RightButton onClick={handleNext} $length={schedules.length}>
+        <RightButton onClick={handleNext} $length={CAROUSEL_LENGTH}>
           <ChevronRight />
         </RightButton>
       )}

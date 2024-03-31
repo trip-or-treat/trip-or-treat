@@ -1,16 +1,16 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
 import curDayAtom from 'src/atoms/curDayAtom';
-import totalPlanAtom from 'src/atoms/totalPlanAtom';
+import usePageState from 'src/hooks/usePageState';
 
 const getDate = (date: string) => {
   return date?.split(' ').join('.').slice(5);
 };
 
 const DayCategory = () => {
-  const totalPlan = useRecoilValue(totalPlanAtom);
   const [curDay, setCurDay] = useRecoilState(curDayAtom);
+  const { totalPlan } = usePageState();
 
   return (
     <>

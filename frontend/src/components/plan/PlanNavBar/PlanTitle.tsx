@@ -2,11 +2,14 @@ import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { ChangeEvent, useRef, useState } from 'react';
 
-import { StyledButton } from 'src/components/common/modal/LinkButton/LinkButton';
 import { planTitleAtom } from 'src/atoms/plan';
 import { ReactComponent as Pen } from '../../../assets/svgs/pen.svg';
 
-const PlanTitle = () => {
+interface Props {
+  type?: 'DEFAULT' | 'NOT_CHANGE';
+}
+
+const PlanTitle = ({ type = 'DEFAULT' }: Props) => {
   const titleRef = useRef<HTMLInputElement>(null);
   const [isChangingTitle, setIsChangingTitle] = useState(false);
   const [title, setTitle] = useRecoilState(planTitleAtom);
@@ -23,6 +26,13 @@ const PlanTitle = () => {
     if (e.target.value.length === 13) return;
     setTitle(e.target.value);
   };
+
+  if (type === 'NOT_CHANGE')
+    return (
+      <Wrapper>
+        <Title>{title}</Title>
+      </Wrapper>
+    );
 
   return (
     <Wrapper>
@@ -51,9 +61,21 @@ const PlanTitle = () => {
 export default PlanTitle;
 
 const Wrapper = styled.div`
-  position: fixed;
-  left: 40%;
-  height: 40px;
+  position: relative;
+  height: 20px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Title = styled.div`
+  width: 250px;
+  height: inherit;
+
+  color: ${(props) => props.theme.colors.blackFont};
+  font-size: 30px;
+  font-family: 'Pretendard-SemiBold';
 `;
 
 const Input = styled.input`
@@ -69,6 +91,7 @@ const Input = styled.input`
   font-family: 'Pretendard-SemiBold';
 
   &:focus {
+    padding: 5px 0px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.3);
   }
 
@@ -77,27 +100,36 @@ const Input = styled.input`
   }
 `;
 
-const ChangeButton = styled.button`
+const CommonButton = styled.button`
+  position: absolute;
+  right: -50px;
+
+  width: 50px;
+  height: 40px;
+
   border: none;
-  background-color: inherit;
   cursor: pointer;
+`;
+
+const ChangeButton = styled(CommonButton)`
+  background-color: inherit;
 
   svg {
-    width: 50px;
-    height: 20px;
+    width: 30px;
+    height: 25px;
     fill: ${(props) => props.theme.colors.blackFont};
+
+    &:hover {
+      fill: ${(props) => props.theme.colors.mainColor};
+    }
   }
 `;
 
-const ChangeEndButton = styled.button`
-  ${StyledButton}
+const ChangeEndButton = styled(CommonButton)`
+  width: 40px;
+  height: 30px;
 
-  position: absolute;
-  top: 4px;
-  width: 50px;
-
+  border-radius: 7px;
   background-color: ${(props) => props.theme.colors.mainColor};
   color: ${(props) => props.theme.colors.whiteFont};
-
-  cursor: pointer;
 `;

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
+import { useMatch, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
 import { PlaceListTypes } from 'src/@types/api/placeList';
@@ -17,6 +17,7 @@ import GhostImg from '../../assets/images/ghost.png';
 interface Props {
   keyword: string;
   setKeyword: React.Dispatch<React.SetStateAction<string>>;
+  curRegionId?: number;
 }
 
 export const NotFoundResult = () => {
@@ -28,11 +29,13 @@ export const NotFoundResult = () => {
   );
 };
 
-const PlaceList = ({ keyword, setKeyword }: Props) => {
+const PlaceList = ({ keyword, setKeyword, curRegionId }: Props) => {
   const observerRef = useRef(null);
   const { regionId } = useParams();
   const [prevContentTypeId, setContentTypeId] = useRecoilState(contentTypeIdAtom);
   const [isModal, setModal] = useRecoilState(modalStateAtom);
+
+  const planDetailMatch = useMatch('/mypage/plans/:planId');
 
   const onClose = () => {
     setModal(false);
@@ -41,7 +44,7 @@ const PlaceList = ({ keyword, setKeyword }: Props) => {
   const { data, isLoading } = useInfinityScroll({
     observerRef,
     queryKey: 'placeList',
-    regionId,
+    regionId: Number(regionId) || curRegionId!,
     fetcherFn: placeListFetcher,
     keyword,
     prevContentTypeId,
@@ -53,7 +56,7 @@ const PlaceList = ({ keyword, setKeyword }: Props) => {
   }, [regionId]);
 
   return (
-    <Wrapper>
+    <Wrapper $isDetailPage={!!planDetailMatch}>
       <Title>장소선택</Title>
       <PlaceListBox>
         {isLoading && <Loading type="SMALL" />}
@@ -61,7 +64,7 @@ const PlaceList = ({ keyword, setKeyword }: Props) => {
         {!isLoading && (
           <>
             {data?.pages?.map((items) =>
-              items.data.map((placeCardItem: PlaceListTypes) => (
+              items?.data?.map((placeCardItem: PlaceListTypes) => (
                 <PlaceCard
                   key={placeCardItem.placeId}
                   placeCardItem={placeCardItem}
@@ -69,7 +72,7 @@ const PlaceList = ({ keyword, setKeyword }: Props) => {
                 />
               )),
             )}
-            {data?.pages[data.pages.length - 1].data.length >= 10 && (
+            {data?.pages[data.pages.length - 1]?.data?.length >= 10 && (
               <div ref={observerRef}>
                 <Loading type="SMALL" />
               </div>
@@ -84,8 +87,8 @@ const PlaceList = ({ keyword, setKeyword }: Props) => {
 
 export default PlaceList;
 
-const Wrapper = styled.div`
-  height: calc(100vh - 320px);
+const Wrapper = styled.div<{ $isDetailPage: boolean }>`
+  height: ${(props) => (props.$isDetailPage ? 'calc(90vh - 350px)' : 'calc(100vh - 320px)')};
   overflow: auto;
 `;
 

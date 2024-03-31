@@ -5,4 +5,5 @@ export const END_POINTS = {
   REGIONS: '/regions',
   PLACES: '/places',
   REVIEWS: '/reviews',
+  PLAN: '/plans',
 };
