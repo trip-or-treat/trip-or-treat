@@ -81,7 +81,6 @@ const MY_REVIEW_DATA = [
 ];
 
 const MyReviewPage = () => {
-  // const [planList, setPlanList] = useState<Plan[]>([]); //api로 받아온 데이터
   const [currentPost, setCurrentPost] = useState<MyReview[]>([]); // 게시판 목록에 보여줄 게시글
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호
 
@@ -95,17 +94,6 @@ const MyReviewPage = () => {
 
   console.log(currentPage);
   console.log(currentPost);
-
-  // useEffect(() => {
-  //   //api 요청해서 계획목록 불러오기. axios.get('baseurl/plans')
-  //   .then((response) => {
-  //     setPlanList([...response.data].reverse())
-  //   })
-
-  //   .catch(function(error) {
-  //     console.log(error)
-  //   })
-  // },[])
 
   useEffect(() => {
     setCurrentPost(MY_REVIEW_DATA.slice(indexOfFirstPost, indexOfLastPost));
