@@ -4,7 +4,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 interface Props {
   observerRef: RefObject<HTMLElement>;
   queryKey: string;
-  regionId: string | undefined;
+  regionId: number;
   fetcherFn: any;
   keyword?: string;
   prevContentTypeId?: number | null;

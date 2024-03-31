@@ -1,20 +1,11 @@
 import styled from 'styled-components';
 
 import { ORDER_COLORS } from 'src/constants/color';
+import { SchedulePlaces, SchedulePlacesDetail } from 'src/@types/api/schedules';
 import defaultImg from '../../../assets/images/defaultImg.png';
 
-export interface SchedulePlacesType {
-  name: string;
-  subCategoryName: string;
-  imageThumbnail: string;
-  placeId: number;
-  visitOrder: number;
-  memo: string;
-  expense: number;
-}
-
 interface Props {
-  data: SchedulePlacesType;
+  data: SchedulePlacesDetail | SchedulePlaces;
   idx: number;
   listIdx: number;
 }
@@ -25,7 +16,7 @@ const PlansListCard = ({ listIdx, idx, data }: Props) => {
       <OrderBox color={ORDER_COLORS[listIdx]}>{idx + 1}</OrderBox>
       <DescriptionBox>
         <Description>
-          <p>{data.name}</p>
+          <p>{data.placeName}</p>
           <p>{data.subCategoryName}</p>
         </Description>
 

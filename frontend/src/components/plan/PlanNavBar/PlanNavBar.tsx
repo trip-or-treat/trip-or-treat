@@ -3,24 +3,14 @@ import { useRecoilValue } from 'recoil';
 
 import regionsAtom from 'src/atoms/regionsAtom';
 import { SchedulesType } from 'src/@types/api/schedules';
+import { useMatch } from 'react-router-dom';
 import PlanTitle from './PlanTitle';
 
 interface Props {
   startDate: string;
   endDate: string;
   regions: number[];
-  schedules: {
-    date: string;
-    schedulePlaces: {
-      name: string;
-      imageThumbnail: string;
-      subCategoryName: string;
-      placeId: number;
-      visitOrder: number;
-      memo: string;
-      expense: number;
-    }[];
-  }[];
+  schedules: SchedulesType['schedules'];
 }
 
 const parseName = (name: string) => {
@@ -28,16 +18,17 @@ const parseName = (name: string) => {
 };
 
 const calculateExpense = (schedules: SchedulesType['schedules']) => {
-  const dailyExpenses = schedules.map(({ schedulePlaces }) =>
-    schedulePlaces.map((info) => info.expense ?? 0).reduce((a, c) => a + c, 0),
+  const dailyExpenses = schedules?.map(({ schedulePlaces }) =>
+    schedulePlaces?.map((info) => info.expense ?? 0).reduce((a, c) => a + c, 0),
   );
-  const totalExpense = dailyExpenses.reduce((a, c) => a + c, 0);
-  return totalExpense.toLocaleString();
+  const totalExpense = dailyExpenses?.reduce((a, c) => a + c, 0);
+  return totalExpense?.toLocaleString();
 };
 
 const PlanNavBar = ({ startDate, endDate, regions, schedules }: Props) => {
   const data = useRecoilValue(regionsAtom);
-  const result = data.filter((item) => regions.includes(item.id));
+  const result = data.filter((item) => regions?.includes(item.id));
+  const planDetail = useMatch('/mypage/plans/:planId');
 
   return (
     <Wrapper>
@@ -51,7 +42,9 @@ const PlanNavBar = ({ startDate, endDate, regions, schedules }: Props) => {
           <P> {`${startDate} ~ ${endDate}`}</P>
         </RegionListAndDateBox>
       </section>
-      <PlanTitle />
+      <TitleBox>
+        <PlanTitle type={planDetail !== null ? 'NOT_CHANGE' : 'DEFAULT'} />
+      </TitleBox>
 
       <TotalExpenseBox>{`총 경비 : ${calculateExpense(schedules)}원`}</TotalExpenseBox>
     </Wrapper>
@@ -71,6 +64,7 @@ const Wrapper = styled.div`
   & > section {
     display: flex;
     flex-direction: column;
+    width: 33%;
   }
 `;
 
@@ -97,6 +91,13 @@ const P = styled.p`
   font-family: 'Pretendard-Medium';
 `;
 
-const TotalExpenseBox = styled.div`
+const TitleBox = styled.section`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 33%;
+  padding: 10px;
+`;
+const TotalExpenseBox = styled.section`
   text-align: end;
 `;

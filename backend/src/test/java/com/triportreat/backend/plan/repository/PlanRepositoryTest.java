@@ -103,10 +103,10 @@ class PlanRepositoryTest {
             Page<PlanListResponseDto> response = planRepository.searchPlans(condition, pageable, userId);
 
             // then
-            assertThat(response.getTotalElements()).isEqualTo(50);
+            assertThat(response.getTotalElements()).isEqualTo(100);
             assertThat(response.getContent().size()).isEqualTo(10);
             assertThat(response.getNumber()).isEqualTo(0);
-            assertThat(response.getTotalPages()).isEqualTo(5);
+            assertThat(response.getTotalPages()).isEqualTo(10);
         }
 
         @Test

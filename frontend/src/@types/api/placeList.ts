@@ -1,12 +1,13 @@
 export interface PlaceListTypes {
   placeId: number;
-  name: string;
+  placeName: string;
   imageThumbnail: string;
   subCategoryName: string;
   latitude: number;
   longitude: number;
   contentTypeId: number;
-  regionId?: string;
-  memo?: string;
-  expense?: number;
+  regionId: number;
+  memo: string;
+  expense: number;
+  schedulePlaceId?: number;
 }

@@ -1,18 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd';
 
-import totalPlanAtom from 'src/atoms/totalPlanAtom';
 import curDayAtom from 'src/atoms/curDayAtom';
+import usePageState from 'src/hooks/usePageState';
 
 import PlaceCard from '../PlaceList/PlaceCard';
 import EmptyBox from '../common/EmptyBox';
 
 const SelectedPlaceCardList = () => {
   const curDay = useRecoilValue(curDayAtom);
+  const { totalPlan, setTotalPlan } = usePageState();
 
-  const [totalPlan, setTotalPlan] = useRecoilState(totalPlanAtom);
   const filteredCurDay = totalPlan.filter((item) => item.day === curDay);
 
   const onDragEnd = ({ destination, source }: DropResult) => {

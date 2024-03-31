@@ -1,20 +1,20 @@
-import { api } from '.';
+import { END_POINTS } from 'src/constants/api';
+import { loginApi } from '.';
 
 interface Props {
   pageParam: number;
   keyword: string;
   prevContentTypeId: number | null;
-  regionId: string | undefined;
+  regionId: number;
 }
 
-// TODO : api요청 수정
 export const placeListFetcher = async ({
   pageParam,
   keyword,
   prevContentTypeId,
-  regionId,
+  regionId = 0,
 }: Props) => {
-  const { data } = await api.get(`/places?regionId=${regionId}`, {
+  const { data } = await loginApi.get(`${END_POINTS.PLACES}?regionId=${regionId}`, {
     params: {
       keyword: keyword === '' ? null : keyword,
       contentTypeId: prevContentTypeId,
