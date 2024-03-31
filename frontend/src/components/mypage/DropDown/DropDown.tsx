@@ -21,7 +21,7 @@ const DropDown = ({ filter, setParams }: Props) => {
   }, []);
 
   return (
-    <div>
+    <Wrapper>
       <ToggleBox
         onClick={() => {
           setOpen(!open);
@@ -46,15 +46,20 @@ const DropDown = ({ filter, setParams }: Props) => {
           ))}
         </DropMenu>
       )}
-    </div>
+    </Wrapper>
   );
 };
 
 export default DropDown;
 
+const Wrapper = styled.div`
+  display: flex;
+`;
+
 const ToggleBox = styled.div`
   ${CommonContainer}
 
+  width: 100%;
   height: 35px;
 
   border-radius: 35px;
@@ -65,10 +70,15 @@ const ToggleBox = styled.div`
 `;
 
 const DropMenu = styled.div`
+  position: fixed;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  margin-top: 50px;
+  width: max-content;
+  padding: 10px 1%;
 
   border: solid 0.7px ${(props) => props.theme.colors.darkGrey};
   border-radius: 20px;
@@ -76,19 +86,24 @@ const DropMenu = styled.div`
 
   font-family: 'Pretendard-Regular';
   font-size: 14px;
+
+  z-index: 5;
 `;
 
 const DropMenuItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
   width: 100%;
   height: 35px;
+
   border-radius: 20px;
-  /* background-color: yellow; */
+
   cursor: pointer;
 `;
 
 const Selected = styled.div`
-  /* width: 35px; */
+  width: 70%;
+  margin-right: 10px;
 `;
