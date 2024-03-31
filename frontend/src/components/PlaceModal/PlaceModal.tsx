@@ -38,7 +38,7 @@ const PlaceModal = ({ onClose }: Props) => {
   if (myReview) {
     const review = JSON.parse(myReview);
     currentId = review.placeId;
-    content = review.placeName;
+    content = '';
   }
 
   const { data: placeInfoApi, isLoading, isError }: Info = usePlaceInfo(currentId);
