@@ -2,7 +2,13 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useResetRecoilState } from 'recoil';
 
-import { myPlanComingYnAtom, myPlanCreatedYearAtom, myPlanSearchTypeAtom } from 'src/atoms/myPlan';
+import {
+  myPlanComingYnAtom,
+  myPlanCreatedYearAtom,
+  myPlanCurrentPageAtom,
+  myPlanSearchTypeAtom,
+} from 'src/atoms/myPlan';
+
 import { ReactComponent as FindIcon } from '../../../assets/svgs/findIcon.svg';
 import { ReactComponent as RotateIcon } from '../../../assets/svgs/rotate.svg';
 
@@ -13,9 +19,11 @@ interface Props {
 
 const EnterSearch = ({ placeHolder, setKeyword }: Props) => {
   const [value, setValue] = useState('');
+
   const resetSearchType = useResetRecoilState(myPlanSearchTypeAtom);
   const resetComingYn = useResetRecoilState(myPlanComingYnAtom);
   const resetCreatedYear = useResetRecoilState(myPlanCreatedYearAtom);
+  const resetCurrentPage = useResetRecoilState(myPlanCurrentPageAtom);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -42,6 +50,7 @@ const EnterSearch = ({ placeHolder, setKeyword }: Props) => {
     resetSearchType();
     resetComingYn();
     resetCreatedYear();
+    resetCurrentPage();
     setValue('');
   };
 
