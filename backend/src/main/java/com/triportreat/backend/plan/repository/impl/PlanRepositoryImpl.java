@@ -58,7 +58,7 @@ public class PlanRepositoryImpl implements PlanRepositoryCustom {
                         planDateGoeOrLt(condition.getComingYn()),
                         planCreatedInYear(condition.getYear())
                 )
-                .orderBy(plan.id.desc(), plan.createdDate.desc())
+                .orderBy(plan.createdDate.desc(), plan.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -90,7 +90,7 @@ public class PlanRepositoryImpl implements PlanRepositoryCustom {
                         planDateGoeOrLt(condition.getComingYn()),
                         planCreatedInYear(condition.getYear()),
                         planRegionUserIdEq(userId))
-                .orderBy(planRegion.plan.id.desc(), planRegion.plan.createdDate.desc())
+                .orderBy(planRegion.plan.createdDate.desc(), planRegion.plan.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

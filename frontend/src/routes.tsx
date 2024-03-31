@@ -17,6 +17,8 @@ import MyInfoPage from './pages/MyInfoPage';
 import MyPlanPage from './pages/MyPlanPage';
 import MyReviewPage from './pages/MyReviewPage';
 
+import SharedPage from './pages/SharedPage';
+
 import KaKaoLogin from './components/KaKaoLogin';
 
 const routes = [
@@ -55,6 +57,11 @@ const routes = [
   {
     path: '/login',
     element: <KaKaoLogin />,
+  },
+
+  {
+    path: '/plans/share/:code',
+    element: <SharedPage />,
   },
 ];
 

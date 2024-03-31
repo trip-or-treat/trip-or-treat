@@ -3,10 +3,10 @@ import { useRecoilValue } from 'recoil';
 
 import regionsAtom from 'src/atoms/regionsAtom';
 import { SchedulesType } from 'src/@types/api/schedules';
-import { useMatch } from 'react-router-dom';
 import PlanTitle from './PlanTitle';
 
 interface Props {
+  code?: string;
   startDate: string;
   endDate: string;
   regions: number[];
@@ -25,10 +25,9 @@ const calculateExpense = (schedules: SchedulesType['schedules']) => {
   return totalExpense?.toLocaleString();
 };
 
-const PlanNavBar = ({ startDate, endDate, regions, schedules }: Props) => {
+const PlanNavBar = ({ code, startDate, endDate, regions, schedules }: Props) => {
   const data = useRecoilValue(regionsAtom);
   const result = data.filter((item) => regions?.includes(item.id));
-  const planDetail = useMatch('/mypage/plans/:planId');
 
   return (
     <Wrapper>
@@ -43,7 +42,7 @@ const PlanNavBar = ({ startDate, endDate, regions, schedules }: Props) => {
         </RegionListAndDateBox>
       </section>
       <TitleBox>
-        <PlanTitle type={planDetail !== null ? 'NOT_CHANGE' : 'DEFAULT'} />
+        <PlanTitle code={code} />
       </TitleBox>
 
       <TotalExpenseBox>{`총 경비 : ${calculateExpense(schedules)}원`}</TotalExpenseBox>

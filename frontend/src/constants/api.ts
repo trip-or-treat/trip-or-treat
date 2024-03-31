@@ -7,4 +7,5 @@ export const END_POINTS = {
   PLANS: '/plans',
   REVIEWS: '/reviews',
   PLAN: '/plans',
+  SHARE: '/plans/share',
 };

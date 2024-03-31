@@ -3,16 +3,22 @@ import { useRecoilState } from 'recoil';
 import { ChangeEvent, useRef, useState } from 'react';
 
 import { planTitleAtom } from 'src/atoms/plan';
+import ShareButton from 'src/components/mypage/ShareButton';
+import { useMatch } from 'react-router-dom';
 import { ReactComponent as Pen } from '../../../assets/svgs/pen.svg';
 
 interface Props {
-  type?: 'DEFAULT' | 'NOT_CHANGE';
+  code?: string;
+  type?: 'MODAL';
 }
 
-const PlanTitle = ({ type = 'DEFAULT' }: Props) => {
+const PlanTitle = ({ type, code }: Props) => {
   const titleRef = useRef<HTMLInputElement>(null);
   const [isChangingTitle, setIsChangingTitle] = useState(false);
   const [title, setTitle] = useRecoilState(planTitleAtom);
+  const planMatch = useMatch('/plans');
+  const planDetailMatch = useMatch('/mypage/plans/:planId');
+  const sharedMatch = useMatch('/plans/share/:code');
 
   const handleTitleClick = () => {
     if (titleRef.current !== null) {
@@ -27,32 +33,32 @@ const PlanTitle = ({ type = 'DEFAULT' }: Props) => {
     setTitle(e.target.value);
   };
 
-  if (type === 'NOT_CHANGE')
-    return (
-      <Wrapper>
-        <Title>{title}</Title>
-      </Wrapper>
-    );
-
   return (
     <Wrapper>
-      <Input
-        ref={titleRef}
-        value={title}
-        onChange={handleTitleInput}
-        disabled={!isChangingTitle}
-        maxLength={12}
-        placeholder="여행자님의 여행계획"
-      />
+      {(planDetailMatch || sharedMatch) && type !== 'MODAL' && <Title>{title}</Title>}
+      {planDetailMatch && !type && <ShareButton code={code ?? ''} />}
 
-      {isChangingTitle ? (
-        <ChangeEndButton type="button" onClick={() => setIsChangingTitle(false)}>
-          수정
-        </ChangeEndButton>
-      ) : (
-        <ChangeButton onClick={handleTitleClick}>
-          <Pen />
-        </ChangeButton>
+      {(planMatch || type === 'MODAL') && (
+        <>
+          <Input
+            ref={titleRef}
+            value={title}
+            onChange={handleTitleInput}
+            disabled={!isChangingTitle}
+            maxLength={12}
+            placeholder="여행자님의 여행계획"
+          />
+
+          {isChangingTitle ? (
+            <ChangeEndButton type="button" onClick={() => setIsChangingTitle(false)}>
+              수정
+            </ChangeEndButton>
+          ) : (
+            <ChangeButton onClick={handleTitleClick}>
+              <Pen />
+            </ChangeButton>
+          )}
+        </>
       )}
     </Wrapper>
   );
@@ -62,7 +68,7 @@ export default PlanTitle;
 
 const Wrapper = styled.div`
   position: relative;
-  height: 20px;
+  height: inherit;
 
   display: flex;
   justify-content: center;

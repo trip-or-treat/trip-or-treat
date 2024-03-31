@@ -107,7 +107,7 @@ const PlanChangeModal = ({ onClose, detailData }: Props) => {
     <ModalOverlay>
       <Wrapper>
         <TitleBox>
-          <PlanTitle />
+          <PlanTitle type="MODAL" />
         </TitleBox>
 
         <Content>

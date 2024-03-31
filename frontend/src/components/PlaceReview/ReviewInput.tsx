@@ -1,5 +1,6 @@
-import { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent, useEffect } from 'react';
 import { styled } from 'styled-components';
+import { useSetRecoilState } from 'recoil';
 
 import { ReactComponent as StarFilled } from 'src/assets/svgs/starFilled.svg';
 import { ReactComponent as StarEmpty } from 'src/assets/svgs/starEmpty.svg';
@@ -7,20 +8,43 @@ import { ReactComponent as HoneyPot } from 'src/assets/svgs/honeyPot.svg';
 import { ReactComponent as SpeechBubble } from 'src/assets/svgs/speechBubble.svg';
 
 import { reviewWriteFetcher } from 'src/api/reviewWrite';
+import { editReviewFetcher } from 'src/api/review';
+import { editReviewAtom } from 'src/atoms/review';
 
-const ReviewInput = ({ placeId }: { placeId: number }) => {
+const ReviewInput = ({ currentId }: { currentId: number }) => {
+  const [id, setID] = useState(0);
+  const [placeId, setPlaceId] = useState(currentId);
   const [content, setContent] = useState('');
   const [tip, setTip] = useState('');
   const [score, setScore] = useState(0);
   const [hoverIndex, setHoverIndex] = useState(-1);
   const [isSubmit, setSubmit] = useState(false);
   const scoreArr = Array.from({ length: 5 }).map((_, index) => `star${index}`);
+  const myReview = localStorage.getItem('myReview');
+  const isEditReview = useSetRecoilState(editReviewAtom);
+
+  useEffect(() => {
+    if (myReview) {
+      const review = JSON.parse(myReview);
+
+      setID(review.id);
+      setPlaceId(review.placeId);
+      setContent(review.content);
+      setTip(review.tip);
+      setScore(review.score);
+    }
+  }, []);
 
   const onSubmit = () => {
     if (score === 0 || score === -1) {
       setScore(-1);
     } else {
-      reviewWriteFetcher({ placeId, content, tip, score });
+      if (myReview) {
+        editReviewFetcher({ id, placeId, content, tip, score });
+        isEditReview(true);
+      } else {
+        reviewWriteFetcher({ placeId, content, tip, score });
+      }
       setSubmit(true);
       setContent('');
       setTip('');
@@ -56,6 +80,11 @@ const ReviewInput = ({ placeId }: { placeId: number }) => {
     return hoverIndex >= 0 && index <= hoverIndex ? 'hoverRange' : '';
   };
 
+  const review = {
+    request: myReview ? '리뷰 수정' : '리뷰 등록',
+    complete: myReview ? '수정 완료' : '등록 완료',
+  };
+
   return (
     <InputInner>
       <SemiTitle>
@@ -84,9 +113,9 @@ const ReviewInput = ({ placeId }: { placeId: number }) => {
       </SemiTitle>
       <Tip value={tip} placeholder="꿀팁이 있다면 알려주세요! (20자)" onChange={handleTip} />
       {!isSubmit ? (
-        <InputSubmit onClick={onSubmit}>리뷰 등록</InputSubmit>
+        <InputSubmit onClick={onSubmit}>{review.request}</InputSubmit>
       ) : (
-        <SubmitCompleted>등록 완료</SubmitCompleted>
+        <SubmitCompleted>{review.complete}</SubmitCompleted>
       )}
     </InputInner>
   );

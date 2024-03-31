@@ -6,6 +6,7 @@ import com.triportreat.backend.auth.domain.KakaoUserInfoResponseDto.KakaoAccount
 import com.triportreat.backend.auth.utils.JwtProvider;
 import com.triportreat.backend.user.entity.User;
 import com.triportreat.backend.user.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -40,8 +41,8 @@ public class AuthService {
     private String userInfoUri;
 
     @Transactional
-    public void loginByKakao(String code, HttpServletResponse response) {
-        String kakaoAccessToken = getKakaoAccessToken(code);
+    public void loginByKakao(String code, HttpServletRequest request, HttpServletResponse response) {
+        String kakaoAccessToken = getKakaoAccessToken(code, request);
 
         KakaoAccount userInfo = getUserInfo(kakaoAccessToken);
 
@@ -85,14 +86,14 @@ public class AuthService {
         return response.getKakaoAccount();
     }
 
-    private String getKakaoAccessToken(String code) {
+    private String getKakaoAccessToken(String code, HttpServletRequest request) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", clientId);
-        params.add("redirect_uri", redirectUri);
+        params.add("redirect_uri", request.getHeader(HttpHeaders.ORIGIN) + redirectUri);
         params.add("code", code);
 
         KakaoTokenResponseDto response = restTemplate

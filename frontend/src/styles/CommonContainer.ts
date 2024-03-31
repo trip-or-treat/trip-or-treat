@@ -7,5 +7,4 @@ export const CommonContainer = `
 
   font-family: 'Pretendard-Regular';
   font-size: 14px;
-  color: ${`(props) => props.theme.colors.blackFont`};
 `;
