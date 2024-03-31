@@ -25,7 +25,7 @@ import KaKaoMap from 'src/components/KaKaoMap';
 import CloseButton from 'src/components/common/modal/CloseButton';
 
 import { usePatchTotalPlan } from 'src/hooks/api/usePatchTotalPlan';
-import { useDiableButton } from 'src/hooks/useDisableButton';
+import { useDisableButton } from 'src/hooks/useDisableButton';
 import { StyledButton } from 'src/components/common/modal/LinkButton/LinkButton';
 
 interface Props {
@@ -54,7 +54,7 @@ const PlanChangeModal = ({ onClose, detailData }: Props) => {
 
   const navigate = useNavigate();
   const regions = filterRegions(detailData?.regions);
-  const isPossibleSaveButton = useDiableButton();
+  const isClickPossible = useDisableButton();
 
   useEffect(() => {
     setSelectedPlaceList(totalPlanDetail[curDay - 1]?.items);
@@ -139,8 +139,8 @@ const PlanChangeModal = ({ onClose, detailData }: Props) => {
         </Content>
 
         <ButtonBox>
-          <SaveButtonBox $isClicked={isPossibleSaveButton}>
-            <SaveButton onClick={handlePlanChange} $isClicked={isPossibleSaveButton}>
+          <SaveButtonBox $isClicked={isClickPossible}>
+            <SaveButton onClick={handlePlanChange} $isClicked={isClickPossible}>
               저장
             </SaveButton>
           </SaveButtonBox>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import usePageState from './usePageState';
 
-export const useDiableButton = () => {
+export const useDisableButton = () => {
   const { totalPlan } = usePageState();
   const [clickPossible, setClickPossible] = useState(false);
 
