@@ -11,8 +11,8 @@ interface Props {
   onButtonText: string;
   offButtonText: string;
   path?: string;
-  onClick?: () => void;
   onClose: () => void;
+  onClick?: () => void;
 }
 
 const AlertModal = ({ children, onButtonText, offButtonText, path, onClose, onClick }: Props) => {

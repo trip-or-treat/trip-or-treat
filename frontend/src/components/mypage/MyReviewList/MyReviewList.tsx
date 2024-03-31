@@ -62,11 +62,11 @@ const MyReviewList = ({ data: myReview, index }: MyReviews) => {
     }
   }, [isEditClick]);
 
-  const handlerDelteClick = () => {
+  const handlerDeleteClick = () => {
     setDelte(!isDelte);
   };
 
-  const onDelte = async () => {
+  const onDelete = async () => {
     await deleteReviewFetcher(myReview.id);
     setDelte(!isDelte);
     onRefresh();
@@ -84,7 +84,7 @@ const MyReviewList = ({ data: myReview, index }: MyReviews) => {
       <Score>{renderStars(myReview.score)}</Score>
       <CreatedAt>{myReview.createdDate}</CreatedAt>
       <div>
-        <Delete onClick={handlerDelteClick}>
+        <Delete onClick={handlerDeleteClick}>
           <DeleteIcon />
         </Delete>
       </div>
@@ -93,8 +93,8 @@ const MyReviewList = ({ data: myReview, index }: MyReviews) => {
         <AlertModal
           onButtonText="삭제"
           offButtonText="닫기"
-          onClick={onDelte}
-          onClose={handlerDelteClick}
+          onClick={onDelete}
+          onClose={handlerDeleteClick}
         >
           정말 삭제하시겠습니까?
         </AlertModal>

@@ -7,16 +7,7 @@ import curDayAtom from 'src/atoms/curDayAtom';
 import usePageState from 'src/hooks/usePageState';
 
 import PlaceCard from '../PlaceList/PlaceCard';
-import GhostImg from '../../assets/images/ghost.png';
-
-const EmptyPlaceItem = () => {
-  return (
-    <EmptyPlaceItemWrapper>
-      <p>날짜별로 장소를 1개 이상 선택해주세요!</p>
-      <img src={GhostImg} alt="고스트 이미지" />
-    </EmptyPlaceItemWrapper>
-  );
-};
+import EmptyBox from '../common/EmptyBox';
 
 const SelectedPlaceCardList = () => {
   const curDay = useRecoilValue(curDayAtom);
@@ -42,7 +33,9 @@ const SelectedPlaceCardList = () => {
 
   return (
     <Wrapper>
-      {filteredCurDay[0]?.items.length === 0 && <EmptyPlaceItem />}
+      {filteredCurDay[0]?.items.length === 0 && (
+        <EmptyBox>날짜별로 장소를 1개 이상 선택해주세요!</EmptyBox>
+      )}
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="dragList">
           {(provided) => (
@@ -72,25 +65,4 @@ export default SelectedPlaceCardList;
 
 const Wrapper = styled.div`
   margin-top: 20px;
-`;
-
-const EmptyPlaceItemWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  margin-top: 90px;
-
-  justify-content: center;
-  align-items: center;
-
-  font-family: 'Pretendard-Medium';
-  font-size: 17px;
-  color: ${(props) => props.theme.colors.blackFont};
-  font-family: 'Pretendard-Medium';
-
-  img {
-    width: 80px;
-    height: 80px;
-    margin-top: 20px;
-  }
 `;

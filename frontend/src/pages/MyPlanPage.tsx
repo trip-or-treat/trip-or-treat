@@ -1,124 +1,167 @@
 import styled from 'styled-components';
+import { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
 
 import MyPlanList from 'src/components/mypage/MyPlanList';
 import MyPageTitle from 'src/components/mypage/MyPageTitle';
-import SearchToggle from 'src/components/mypage/SearchToggle';
+import DropDown from 'src/components/mypage/DropDown';
 import PlanListCategory from 'src/components/mypage/PlanListCategory';
-import { CommonContainer } from 'src/styles/CommonContainer';
-import { FilterButtonStyle } from 'src/styles/FilterButtonStyle';
+import Paging from 'src/components/mypage/Pagination/Pagination';
+import MyPlanSearch from 'src/components/mypage/MyPlanSearch';
+import EmptyBox from 'src/components/common/EmptyBox';
 
-const MY_PLANS_DATA = [
-  {
-    planId: 17,
-    title: '여행자1 님의 여행계획 14',
-    startDate: '2024-02-15',
-    endDate: '2024-02-14',
-    createdDate: '2024-03-18', // 시,분,초 제외
-    regions: ['서울', '대전'],
-  },
-  {
-    planId: 16,
-    title: '계획13',
-    startDate: '2024-02-15',
-    endDate: '2024-02-14',
-    createdDate: '2024-03-18',
-    regions: ['서울', '인천', '대전'],
-  },
-  {
-    planId: 15,
-    title: '계획12',
-    startDate: '2024-02-15',
-    endDate: '2024-02-14',
-    createdDate: '2024-03-18',
-    regions: ['인천', '대전'],
-  },
-  {
-    planId: 14,
-    title: '계획11',
-    startDate: '2024-02-15',
-    endDate: '2024-02-14',
-    createdDate: '2024-03-18',
-    regions: ['서울', '인천', '서울'],
-  },
-  {
-    planId: 13,
-    title: '계획10',
-    startDate: '2024-02-15',
-    endDate: '2024-02-14',
-    createdDate: '2024-03-18',
-    regions: ['서울', '인천', '대전'],
-  },
-  {
-    planId: 12,
-    title: '계획9',
-    startDate: '2024-02-15',
-    endDate: '2024-02-14',
-    createdDate: '2024-03-18',
-    regions: ['서울', '인천'],
-  },
-  {
-    planId: 11,
-    title: '계획8',
-    startDate: '2024-02-15',
-    endDate: '2024-02-14',
-    createdDate: '2024-03-18',
-    regions: ['서울', '인천'],
-  },
-  {
-    planId: 10,
-    title: '계획7',
-    startDate: '2024-02-13',
-    endDate: '2024-02-14',
-    createdDate: '2024-03-18',
-    regions: ['서울', '인천'],
-  },
-  {
-    planId: 9,
-    title: '계획6',
-    startDate: '2024-02-13',
-    endDate: '2024-02-14',
-    createdDate: '2024-03-18',
-    regions: ['서울', '인천', '대전'],
-  },
-  {
-    planId: 8,
-    title: '계획5',
-    startDate: '2024-02-13',
-    endDate: '2024-02-14',
-    createdDate: '2024-03-18',
-    regions: ['서울', '인천', '대전'],
-  },
-];
+import { Plan } from 'src/@types/api/plan';
+import { FilterButtonStyle } from 'src/styles/FilterButtonStyle';
+import useMyPlanList from 'src/hooks/api/useMyPlanList';
+
+import {
+  myPlanComingYnAtom,
+  myPlanCreatedYearAtom,
+  myPlanCurrentPageAtom,
+  myPlanSearchTypeAtom,
+} from 'src/atoms/myPlan';
+
+import FailDataPage from './FailDataPage';
+
+interface MyPlanData {
+  data: {
+    data: TotalMyPlanData;
+  };
+  isLoading: boolean;
+  isError: boolean;
+}
+
+interface TotalMyPlanData {
+  contents: {
+    planId: number;
+    title: string;
+    startDate: string;
+    endDate: string;
+    createdDate: string;
+    regions: string[];
+  }[];
+  totalElements: number;
+}
 
 const MyPlanPage = () => {
+  const [searchType, setSearchType] = useRecoilState(myPlanSearchTypeAtom);
+  const [comingYn, setComingYn] = useRecoilState(myPlanComingYnAtom);
+  const [createdYear, setCreatedYear] = useRecoilState(myPlanCreatedYearAtom); // 작성연도
+  const [currentPage, setCurrentPage] = useRecoilState(myPlanCurrentPageAtom); // 현재 페이지 번호
+
+  const [currentPost, setCurrentPost] = useState<Plan[]>([]); // 게시판 목록에 보여줄 게시글
+  const [keyword, setKeyword] = useState('');
+
+  // 데이터 불러오기
+  const {
+    data: myPlanData,
+    isError,
+    isLoading,
+  }: MyPlanData = useMyPlanList({
+    pageParam: currentPage,
+    searchType,
+    keyword: keyword || '',
+    comingYn,
+    createdYear,
+  });
+
+  if (isError) return null;
+  console.log(myPlanData?.data.contents);
+
+  useEffect(() => {
+    if (!isLoading) {
+      setCurrentPost(myPlanData.data.contents);
+    }
+  }, [myPlanData]);
+
+  // 페이지네이션
+  const totalElements = myPlanData?.data.totalElements;
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  // 작성연도 필터
+  const currentYear = new Date().getFullYear();
+  const endYear = 2023;
+  const createdYearList = [6];
+
+  for (let year = currentYear; year >= endYear; year -= 1) {
+    createdYearList.push(year);
+  }
+
+  const handleClick = (year: number) => {
+    if (year === createdYear) setCreatedYear(null);
+    else setCreatedYear(year);
+  };
+
+  useEffect(() => {
+    setCreatedYear(null);
+    setSearchType('T');
+    setComingYn(null);
+    setCurrentPage(1);
+  }, []);
+
+  const searchTypeObj = {
+    제목: 'T',
+    지역: 'R',
+  };
+
+  const comingYnObj = {
+    전체: null,
+    '다가오는 여행': 'Y',
+    '지난 여행': 'N',
+  };
+
+  console.log('currentPage:', currentPage);
+  console.log('currentPost:', currentPost);
+
   return (
     <div>
       <MyPageTitle>내 여행계획</MyPageTitle>
       <SearchBox>
-        <SearchToggle />
-        <Search>검색창입니다.</Search>
-        <SearchToggle />
+        <SearchTypeDrop>
+          <DropDown filter={searchTypeObj} setParams={setSearchType} />
+        </SearchTypeDrop>
+        <MyPlanSearch placeHolder="제목 또는 지역으로 검색해보세요." setKeyword={setKeyword} />
+        <ComingYnDrop>
+          <DropDown filter={comingYnObj} setParams={setComingYn} />
+        </ComingYnDrop>
       </SearchBox>
       <FilterBox>
-        <Button $isClicked={false}>최근 6개월</Button>
-        <Button $isClicked={false}>2024</Button>
+        {createdYearList.map((year) => (
+          <Button
+            key={year}
+            onClick={() => handleClick(year)}
+            $isClicked={createdYear === year ?? false}
+          >
+            {year === 6 ? '최근 6개월' : year}
+          </Button>
+        ))}
       </FilterBox>
       <PlanListCategory />
+      {isError && <FailDataPage />}
       <ListContainer>
-        {MY_PLANS_DATA.map((data, idx) => {
+        {currentPost.length === 0 && <EmptyBox>계획 목록이 없습니다.</EmptyBox>}
+        {currentPost.map((data, idx) => {
           return (
             <MyPlanList
               key={data.planId}
-              idx={idx + 1}
+              idx={10 * (currentPage - 1) + idx + 1}
               title={data.title}
               regions={data.regions}
               startDate={data.startDate}
               endDate={data.endDate}
               createdDate={data.createdDate}
+              planId={data.planId}
             />
           );
         })}
       </ListContainer>
+      <Paging
+        currentPage={currentPage}
+        totalElements={totalElements}
+        setCurrentPage={handlePageChange}
+      />
     </div>
   );
 };
@@ -126,7 +169,8 @@ const MyPlanPage = () => {
 export default MyPlanPage;
 
 const ListContainer = styled.div`
-  max-height: 50vh;
+  max-height: 48vh;
+  min-height: 48vh;
   overflow-y: auto;
 `;
 
@@ -137,16 +181,6 @@ const SearchBox = styled.div`
   margin-bottom: 15px;
 `;
 
-const Search = styled.div`
-  ${CommonContainer};
-
-  width: 50%;
-  margin: 0 10px;
-
-  border-radius: 35px;
-  box-shadow: 0px 4px 4px 0px ${(props) => props.theme.colors.lightGrey};
-`;
-
 const FilterBox = styled.div`
   display: flex;
 `;
@@ -154,6 +188,14 @@ const FilterBox = styled.div`
 const Button = styled.button<{ $isClicked: boolean }>`
   ${FilterButtonStyle};
 
-  height: 30px;
+  height: 25px;
   margin: 0 10px 10px 0;
+`;
+
+const SearchTypeDrop = styled.div`
+  width: 90px;
+`;
+
+const ComingYnDrop = styled.div`
+  width: 150px;
 `;

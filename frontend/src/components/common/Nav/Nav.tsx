@@ -40,7 +40,7 @@ const Nav = () => {
           <MenuButton path="/" onClick={onLogout}>
             로그아웃
           </MenuButton>
-          <MenuButton path="/">마이페이지</MenuButton>
+          <MenuButton path="/mypage/myInfo">마이페이지</MenuButton>
           <MenuButton path="/">이용방법</MenuButton>
         </>
       ) : (

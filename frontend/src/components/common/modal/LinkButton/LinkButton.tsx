@@ -11,7 +11,7 @@ interface Props {
 
 const LinkButton = ({ path, color, children, onClick }: Props) => {
   return path ? (
-    <StyledLinkButton to={path} color={color}>
+    <StyledLinkButton to={path} color={color} onClick={onClick}>
       {children}
     </StyledLinkButton>
   ) : (

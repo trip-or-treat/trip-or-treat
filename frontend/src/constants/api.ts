@@ -4,6 +4,7 @@ export const END_POINTS = {
   CONTENT_TYPE: '/places/content-type',
   REGIONS: '/regions',
   PLACES: '/places',
+  PLANS: '/plans',
   REVIEWS: '/reviews',
   PLAN: '/plans',
   SHARE: '/plans/share',
