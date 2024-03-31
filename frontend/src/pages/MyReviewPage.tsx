@@ -1,11 +1,13 @@
 import styled from 'styled-components';
+import { useEffect, useState } from 'react';
 
 import MyPageTitle from 'src/components/mypage/MyPageTitle';
 import ReviewListCategory from 'src/components/mypage/ReviewListCategory';
 import MyReviewList from 'src/components/mypage/MyReviewList';
-import { useReviews } from 'src/hooks/api/useMyReviews';
-import { useState } from 'react';
 import Paging from 'src/components/mypage/Pagination/Pagination';
+
+import { useReviews } from 'src/hooks/api/useMyReviews';
+import { MyReview } from 'src/@types/api/myReview';
 
 interface MyReviews {
   data: {
@@ -26,10 +28,16 @@ interface MyReviews {
 }
 
 const MyReviewPage = () => {
-  const { data: myReviews }: MyReviews = useReviews();
-
   const [currentPage, setCurrentPage] = useState(1);
+  const [currentPost, setCurrentPost] = useState<MyReview[]>([]); // 게시판 목록에 보여줄 게시글
+
+  const { data: myReviews }: MyReviews = useReviews({ pageParam: currentPage });
+
   const totalElements = myReviews?.data.totalElements;
+
+  useEffect(() => {
+    setCurrentPost(myReviews?.data.contents);
+  }, [myReviews]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -40,7 +48,7 @@ const MyReviewPage = () => {
       <MyPageTitle>내 리뷰 목록</MyPageTitle>
       <ReviewListCategory />
       <ListContainer>
-        {myReviews?.data.contents.map((data, index) => {
+        {currentPost?.map((data, index) => {
           return <MyReviewList key={data.id} data={data} index={index + 1} />;
         })}
       </ListContainer>
