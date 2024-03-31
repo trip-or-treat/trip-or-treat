@@ -42,12 +42,12 @@ const PlansChangePage = () => {
   const { data: planDetailApi, isLoading, isError }: PlanDetailData = usePlanDetail(planId);
 
   useEffect(() => {
-    const formattedData = planDetailApi?.data.schedules.map((data) => {
+    const formattedData = planDetailApi?.data?.schedules.map((data) => {
       return { date: data.date, day: data.scheduleId, items: data.schedulePlaces };
     });
 
     setCurDay(1);
-    setTitle(planDetailApi?.data.title);
+    setTitle(planDetailApi?.data?.title);
     setTotalPlan(formattedData);
     setClickedIdList(formattedData?.map((data) => data?.items));
   }, [planDetailApi]);
@@ -57,7 +57,7 @@ const PlansChangePage = () => {
     setTitle(planDetailApi?.data.title);
   };
 
-  if (isError) {
+  if (isError || !planDetailApi?.data) {
     return (
       <Main>
         <FailDataPage />
@@ -65,16 +65,17 @@ const PlansChangePage = () => {
     );
   }
 
+  console.log(planDetailApi);
   return (
     <Main>
-      {isLoading && <Loading type="LARGE" />}
+      {(isLoading || !planDetailApi) && <Loading type="LARGE" />}
       {!isLoading && (
         <Wrapper>
           <PlanNavBar
-            startDate={planDetailApi?.data.startDate}
-            endDate={planDetailApi?.data.endDate}
-            regions={planDetailApi?.data.regions.regionIds}
-            schedules={planDetailApi?.data.schedules}
+            startDate={planDetailApi?.data?.startDate}
+            endDate={planDetailApi?.data?.endDate}
+            regions={planDetailApi?.data?.regions.regionIds}
+            schedules={planDetailApi?.data?.schedules}
           />
 
           <PlansList schedules={planDetailApi?.data?.schedules} />
