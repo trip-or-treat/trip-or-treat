@@ -8,7 +8,6 @@ import { deleteReviewFetcher } from 'src/api/review';
 
 import { ReactComponent as StarFilled } from '../../../assets/svgs/starFilled.svg';
 import { ReactComponent as StarEmpty } from '../../../assets/svgs/starEmpty.svg';
-import { ReactComponent as EditIcon } from '../../../assets/svgs/edit.svg';
 import { ReactComponent as DeleteIcon } from '../../../assets/svgs/delete.svg';
 
 import { CommonContainer } from '../../../styles/CommonContainer';
@@ -47,11 +46,6 @@ const MyReviewList = ({ data: myReview, index }: MyReviews) => {
     setEditClick(!isEditClick);
   };
 
-  // useEffect만 사용한다면 비동기이기 때문에 modal의 상태가 변경되었을 때 바로 modal이
-  // 데이터가 셋팅되지 않는 상태에서 열리기 때문에 에러발생
-  // isisEditClick가 변경될 때 마다 실행되기때문에 setModal(!isModal)을 한다면 켰다가 꺼지면서
-  // isModal의 값이 동일해지기 때문에 modal이 안열림
-
   useEffect(() => {
     if (isEditClick) {
       localStorage.setItem('myReview', JSON.stringify(myReview));
@@ -75,7 +69,7 @@ const MyReviewList = ({ data: myReview, index }: MyReviews) => {
   return (
     <ReviewContainer>
       <Index>{index}</Index>
-      <ReviewBox>
+      <ReviewBox onClick={handlerEditClick}>
         <Review>{myReview.content}</Review>
       </ReviewBox>
       <PlaceBox>
@@ -84,12 +78,9 @@ const MyReviewList = ({ data: myReview, index }: MyReviews) => {
       <Score>{renderStars(myReview.score)}</Score>
       <CreatedAt>{myReview.createdDate}</CreatedAt>
       <div>
-        <Edit onClick={handlerEditClick}>
-          <EditIcon />
-        </Edit>
-        <Edit onClick={handlerDelteClick}>
+        <Delete onClick={handlerDelteClick}>
           <DeleteIcon />
-        </Edit>
+        </Delete>
       </div>
       {isModal && <PlaceModal onClose={handlerEditClick} />}
       {isDelte && (
@@ -130,7 +121,13 @@ const ReviewContainer = styled.div`
 `;
 
 const ReviewBox = styled.div`
+  display: flex;
+  align-items: center;
+
   width: 230px;
+  height: 40px;
+
+  cursor: pointer;
 `;
 
 const PlaceBox = styled.div`
@@ -177,9 +174,7 @@ const CreatedAt = styled.div`
   text-align: center;
 `;
 
-const Edit = styled.button`
-  padding: 2px;
-
+const Delete = styled.button`
   border: none;
   background-color: transparent;
 `;
