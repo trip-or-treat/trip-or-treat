@@ -10,7 +10,7 @@ import Paging from 'src/components/mypage/Pagination/Pagination';
 import MyPlanSearch from 'src/components/mypage/MyPlanSearch';
 import EmptyBox from 'src/components/common/EmptyBox';
 
-// import { CommonContainer } from 'src/styles/CommonContainer';
+import { Plan } from 'src/@types/api/plan';
 import { FilterButtonStyle } from 'src/styles/FilterButtonStyle';
 import useMyPlanList from 'src/hooks/api/useMyPlanList';
 
@@ -18,9 +18,10 @@ import {
   myPlanComingYnAtom,
   myPlanCreatedYearAtom,
   myPlanCurrentPageAtom,
-  myPlanCurrentPostAtom,
   myPlanSearchTypeAtom,
 } from 'src/atoms/myPlan';
+
+import FailDataPage from './FailDataPage';
 
 interface MyPlanData {
   data: {
@@ -52,8 +53,8 @@ const MyPlanPage = () => {
   const [comingYn, setComingYn] = useRecoilState(myPlanComingYnAtom);
   const [createdYear, setCreatedYear] = useRecoilState(myPlanCreatedYearAtom); // 작성연도
   const [currentPage, setCurrentPage] = useRecoilState(myPlanCurrentPageAtom); // 현재 페이지 번호
-  const [currentPost, setCurrentPost] = useRecoilState(myPlanCurrentPostAtom); // 게시판 목록에 보여줄 게시글
 
+  const [currentPost, setCurrentPost] = useState<Plan[]>([]); // 게시판 목록에 보여줄 게시글
   const [keyword, setKeyword] = useState('');
 
   // 데이터 불러오기
@@ -82,9 +83,7 @@ const MyPlanPage = () => {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    console.log('currentPage:', page);
   };
-  console.log(currentPost);
 
   // 작성연도 필터
   const currentYear = new Date().getFullYear();
@@ -97,11 +96,13 @@ const MyPlanPage = () => {
 
   const handleClick = (year: number) => {
     setCreatedYear(year);
-    console.log(createdYear);
   };
 
   useEffect(() => {
     setCreatedYear(null);
+    setSearchType('T');
+    setComingYn('Y');
+    setCurrentPage(1);
   }, []);
 
   const searchTypeObj = {
@@ -110,6 +111,7 @@ const MyPlanPage = () => {
   };
 
   const comingYnObj = {
+    전체: null,
     '다가오는 여행': 'Y',
     '지난 여행': 'N',
   };
@@ -118,9 +120,9 @@ const MyPlanPage = () => {
     <div>
       <MyPageTitle>내 여행계획</MyPageTitle>
       <SearchBox>
-        <DropDownFirst filter={searchTypeObj} setParams={setSearchType} />
+        <DropSearchType filter={searchTypeObj} setParams={setSearchType} />
         <MyPlanSearch placeHolder="제목 또는 지역으로 검색해보세요." setKeyword={setKeyword} />
-        <DropDownSecond filter={comingYnObj} setParams={setComingYn} />
+        <DropComingYn filter={comingYnObj} setParams={setComingYn} />
       </SearchBox>
       <FilterBox>
         {createdYearList.map((year) => (
@@ -130,6 +132,7 @@ const MyPlanPage = () => {
         ))}
       </FilterBox>
       <PlanListCategory />
+      {isError && <FailDataPage />}
       <ListContainer>
         {currentPost.length === 0 && <EmptyBox>계획 목록이 없습니다.</EmptyBox>}
         {currentPost.map((data, idx) => {
@@ -178,10 +181,10 @@ const Button = styled.button<{ $isClicked: boolean }>`
   margin: 0 10px 10px 0;
 `;
 
-const DropDownFirst = styled(DropDown)`
+const DropSearchType = styled(DropDown)`
   width: 40px;
 `;
 
-const DropDownSecond = styled(DropDown)`
+const DropComingYn = styled(DropDown)`
   width: 60px;
 `;
