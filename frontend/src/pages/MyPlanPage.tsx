@@ -90,7 +90,8 @@ const MyPlanPage = () => {
   }
 
   const handleClick = (year: number) => {
-    setCreatedYear(year);
+    if (year === createdYear) setCreatedYear(null);
+    else setCreatedYear(year);
   };
 
   useEffect(() => {
@@ -111,6 +112,9 @@ const MyPlanPage = () => {
     '지난 여행': 'N',
   };
 
+  console.log('currentPage:', currentPage);
+  console.log('currentPost:', currentPost);
+
   return (
     <div>
       <MyPageTitle>내 여행계획</MyPageTitle>
@@ -125,7 +129,11 @@ const MyPlanPage = () => {
       </SearchBox>
       <FilterBox>
         {createdYearList.map((year) => (
-          <Button key={year} onClick={() => handleClick(year)} $isClicked={createdYear === year}>
+          <Button
+            key={year}
+            onClick={() => handleClick(year)}
+            $isClicked={createdYear === year ?? false}
+          >
             {year === 6 ? '최근 6개월' : year}
           </Button>
         ))}
