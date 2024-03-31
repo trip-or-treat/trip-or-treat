@@ -14,10 +14,10 @@ const DropDown = ({ filter, setParams }: Props) => {
   const filterValueArray: string[] = Object.values(filter);
 
   const [open, setOpen] = useState(false);
-  const [clicked, setClicked] = useState(filterKeyArray[0]);
+  const [selected, setSelected] = useState(filterKeyArray[0]);
 
   useEffect(() => {
-    setClicked(filterKeyArray[0]);
+    setSelected(filterKeyArray[0]);
   }, []);
 
   return (
@@ -27,7 +27,7 @@ const DropDown = ({ filter, setParams }: Props) => {
           setOpen(!open);
         }}
       >
-        <Selected>{clicked}</Selected>
+        <Selected>{selected}</Selected>
         <DropDownIcon />
       </ToggleBox>
       {open && (
@@ -36,7 +36,7 @@ const DropDown = ({ filter, setParams }: Props) => {
             <DropMenuItem
               key={item}
               onClick={() => {
-                setClicked(item);
+                setSelected(item);
                 setOpen(!open);
                 setParams(filterValueArray[idx]);
               }}
