@@ -5,7 +5,7 @@ interface Props {
   pageParam: number;
   searchType: string;
   keyword?: string;
-  comingYn: string;
+  comingYn: string | null;
   createdYear: number | null;
 }
 
