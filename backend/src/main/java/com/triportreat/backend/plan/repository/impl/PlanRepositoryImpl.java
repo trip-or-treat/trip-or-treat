@@ -47,6 +47,7 @@ public class PlanRepositoryImpl implements PlanRepositoryCustom {
 
     private Page<PlanListResponseDto> searchPlansByTitle(PlanSearchRequestDto condition, Pageable pageable, Long userId) {
         log.info("제목검색");
+        log.info(condition.toString());
 
         List<Long> planIds = queryFactory
                 .select(plan.id)
@@ -135,21 +136,25 @@ public class PlanRepositoryImpl implements PlanRepositoryCustom {
     }
 
     private BooleanExpression planDateGoeOrLt(String comingYn) {
-        if (!hasText(comingYn) || comingYn.equals(COMING_YN_TRUE)) {
+        if (comingYn == null) {
+            return null;
+        } else if (comingYn.equals(COMING_YN_TRUE)) {
             return plan.startDate.goe(LocalDate.now());
         } else if (comingYn.equals(COMING_YN_FALSE)) {
             return plan.endDate.lt(LocalDate.now());
-        } else {
-            return null;
         }
+        return null;
     }
 
     private BooleanExpression planCreatedInYear(int year) {
-        if (year == RECENT_6_MONTH) {
+        if (year == 0) {
+            return null;
+        } else if (year == RECENT_6_MONTH) {
             return plan.createdDate.between(LocalDateTime.now().minusMonths(6), LocalDateTime.now());
-        } else {
+        } else if (year > 0){
             return plan.createdDate.between(LocalDateTime.of(year, 1, 1, 0, 0, 0), LocalDateTime.of(year, 12, 31, 0, 0, 0));
         }
+        return null;
     }
 
     private BooleanExpression containsKeyword(String type, String keyword) {
