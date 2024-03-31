@@ -101,7 +101,7 @@ const MyPlanPage = () => {
   useEffect(() => {
     setCreatedYear(null);
     setSearchType('T');
-    setComingYn('Y');
+    setComingYn(null);
     setCurrentPage(1);
   }, []);
 
