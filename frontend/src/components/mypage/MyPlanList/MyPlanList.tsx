@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-// import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-// import { END_POINTS } from 'src/constants/api';
-// import { loginApi } from 'src/api';
+import { END_POINTS } from 'src/constants/api';
+import { loginApi } from 'src/api';
 
 import AlertModal from 'src/components/AlertModal';
 import { CommonContainer } from '../../../styles/CommonContainer';
@@ -21,10 +21,10 @@ interface Props {
 }
 
 const MyPlanList = ({ idx, title, regions, startDate, endDate, createdDate, planId }: Props) => {
-  const [open, setOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
-  const onClose = () => {
-    setOpen(false);
+  const onModalClose = () => {
+    setModalOpen(false);
   };
 
   const parseName = (name: string) => {
@@ -34,25 +34,22 @@ const MyPlanList = ({ idx, title, regions, startDate, endDate, createdDate, plan
   const regionsNotSplit = regions.join(' ');
   const regionsSplit: string[] = regionsNotSplit.split(' ');
 
-  // const queryClient = useQueryClient();
-  // const deletePlanMutation = useMutation({
-  //   mutationFn: () => loginApi.delete(`${END_POINTS.PLANS}/${planId}`),
-  //   // onSuccess: () =>
-  //   //   queryClient.invalidateQueries([
-  //   //     'myPlanList',
-  //   //     pageParam,
-  //   //     searchType,
-  //   //     keyword,
-  //   //     comingYn,
-  //   //     createdYear,
-  //   //   ]),
-  //   onError: () => alert('삭제를 실패했습니다.'),
-  // });
+  const queryClient = useQueryClient();
+  const deletePlanMutation = useMutation({
+    mutationFn: () => loginApi.delete(`${END_POINTS.PLANS}/${planId}`),
+    onSuccess: () => {
+      alert('삭제했습니다.');
+      onModalClose();
+      return queryClient.invalidateQueries({
+        queryKey: ['myPlanList'],
+      });
+    },
+    onError: () => alert('삭제를 실패했습니다.'),
+  });
 
-  // const handleDelete = () => {
-  //   deletePlanMutation.mutate();
-  //   onClose();
-  // };
+  const handleDelete = () => {
+    deletePlanMutation.mutate();
+  };
 
   return (
     <PlanContainer>
@@ -70,14 +67,14 @@ const MyPlanList = ({ idx, title, regions, startDate, endDate, createdDate, plan
         {startDate} ~ {endDate}
       </Period>
       <CreatedAt>{createdDate}</CreatedAt>
-      <DeleteIcon onClick={() => setOpen(true)} />
-      {open && (
+      <DeleteIcon onClick={() => setModalOpen(true)} />
+      {modalOpen && (
         <AlertModal
           onButtonText="삭제"
           offButtonText="취소"
           path="/mypage/myPlan"
-          onClose={onClose}
-          // onClick={handleDelete}
+          onClose={onModalClose}
+          onClick={handleDelete}
         >
           정말 삭제하시겠어요?
         </AlertModal>
