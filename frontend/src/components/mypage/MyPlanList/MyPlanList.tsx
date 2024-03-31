@@ -38,7 +38,6 @@ const MyPlanList = ({ idx, title, regions, startDate, endDate, createdDate, plan
   const deletePlanMutation = useMutation({
     mutationFn: () => loginApi.delete(`${END_POINTS.PLANS}/${planId}`),
     onSuccess: () => {
-      alert('삭제했습니다.');
       onModalClose();
       return queryClient.invalidateQueries({
         queryKey: ['myPlanList'],
