@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { StyledButton } from '../LinkButton/LinkButton';
 
 interface Props {
-  onClick: () => void; // 후에 모달을 사용하는 공간에서 open, close 함수를 만들어서 누르면 꺼지게 동작
+  onClick: () => void;
   color: string;
   children: React.ReactNode;
 }

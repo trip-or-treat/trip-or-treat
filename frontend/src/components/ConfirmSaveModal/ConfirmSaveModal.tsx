@@ -39,7 +39,7 @@ const ConfirmSaveModal = ({ onClose }: Props) => {
     mutationFn: (payload: SchedulesType) => useSaveTotalPlan(payload),
     onSuccess: () => {
       alert('성공적으로 저장이 완료되었습니다!');
-      navigate('/myPage');
+      navigate('/myPage/myPlan');
     },
     onError: () => {
       alert('저장이 실패했습니다!');

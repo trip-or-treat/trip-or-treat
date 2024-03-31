@@ -65,7 +65,6 @@ const PlansChangePage = () => {
     );
   }
 
-  console.log(planDetailApi);
   return (
     <Main>
       {(isLoading || !planDetailApi) && <Loading type="LARGE" />}

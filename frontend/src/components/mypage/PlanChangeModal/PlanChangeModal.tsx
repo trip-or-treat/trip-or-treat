@@ -25,6 +25,8 @@ import KaKaoMap from 'src/components/KaKaoMap';
 import CloseButton from 'src/components/common/modal/CloseButton';
 
 import { usePatchTotalPlan } from 'src/hooks/api/usePatchTotalPlan';
+import { useDiableButton } from 'src/hooks/useDisableButton';
+import { StyledButton } from 'src/components/common/modal/LinkButton/LinkButton';
 
 interface Props {
   detailData: SchedulesTypeWithRegions;
@@ -52,6 +54,7 @@ const PlanChangeModal = ({ onClose, detailData }: Props) => {
 
   const navigate = useNavigate();
   const regions = filterRegions(detailData?.regions);
+  const isPossibleSaveButton = useDiableButton();
 
   useEffect(() => {
     setSelectedPlaceList(totalPlanDetail[curDay - 1]?.items);
@@ -136,9 +139,11 @@ const PlanChangeModal = ({ onClose, detailData }: Props) => {
         </Content>
 
         <ButtonBox>
-          <CloseButton onClick={handlePlanChange} color={theme.colors.mainColor}>
-            저장
-          </CloseButton>
+          <SaveButtonBox $isClicked={isPossibleSaveButton}>
+            <SaveButton onClick={handlePlanChange} $isClicked={isPossibleSaveButton}>
+              저장
+            </SaveButton>
+          </SaveButtonBox>
           <CloseButton onClick={onClose} color={theme.colors.darkGrey}>
             닫기
           </CloseButton>
@@ -222,4 +227,16 @@ const ButtonBox = styled.div`
     height: 45px;
     margin-top: 15px;
   }
+`;
+
+const SaveButtonBox = styled.div<{ $isClicked: boolean }>`
+  cursor: ${(props) => (props.$isClicked ? 'pointer' : 'not-allowed')};
+`;
+
+const SaveButton = styled.button<{ $isClicked: boolean }>`
+  ${StyledButton}
+  background-color: ${(props) =>
+    props.$isClicked ? props.theme.colors.mainColor : props.theme.colors.darkGrey};
+  pointer-events: ${(props) => (props.$isClicked ? props.theme.colors.mainColor : 'none')};
+  color: white;
 `;
