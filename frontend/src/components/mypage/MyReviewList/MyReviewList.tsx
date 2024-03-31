@@ -1,16 +1,29 @@
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+
+import PlaceModal from 'src/components/PlaceModal';
+import AlertModal from 'src/components/AlertModal';
+
+import { deleteReviewFetcher } from 'src/api/review';
 
 import { ReactComponent as StarFilled } from '../../../assets/svgs/starFilled.svg';
 import { ReactComponent as StarEmpty } from '../../../assets/svgs/starEmpty.svg';
-import { ReactComponent as EditIcon } from '../../../assets/svgs/edit.svg';
+import { ReactComponent as DeleteIcon } from '../../../assets/svgs/delete.svg';
+
 import { CommonContainer } from '../../../styles/CommonContainer';
 
-interface Props {
-  idx: number;
-  review: string;
-  place: string;
-  score: number;
-  createdAt: string;
+interface MyReviews {
+  data: {
+    id: number;
+    content: string;
+    tip: string;
+    placeId: number;
+    placeName: string;
+    score: number;
+    createdDate: string;
+  };
+  index: number;
 }
 
 const renderStars = (score: number) => {
@@ -25,19 +38,67 @@ const renderStars = (score: number) => {
   return stars;
 };
 
-const MyReviewList = ({ idx, review, place, score, createdAt }: Props) => {
+const MyReviewList = ({ data: myReview, index }: MyReviews) => {
+  const [isEditClick, setEditClick] = useState(false);
+  const [isModal, setModal] = useState(false);
+  const [isDelte, setDelte] = useState(false);
+  const navigate = useNavigate();
+
+  const handlerEditClick = () => {
+    setEditClick(!isEditClick);
+  };
+
+  const onRefresh = () => {
+    navigate(0);
+  };
+
+  useEffect(() => {
+    if (isEditClick) {
+      localStorage.setItem('myReview', JSON.stringify(myReview));
+      setModal(true);
+    } else {
+      localStorage.removeItem('myReview');
+      setModal(false);
+    }
+  }, [isEditClick]);
+
+  const handlerDelteClick = () => {
+    setDelte(!isDelte);
+  };
+
+  const onDelte = async () => {
+    await deleteReviewFetcher(myReview.id);
+    setDelte(!isDelte);
+    onRefresh();
+  };
+
   return (
     <ReviewContainer>
-      <Index>{idx}</Index>
-      <ReviewBox>
-        <Review>{review}</Review>
+      <Index>{index}</Index>
+      <ReviewBox onClick={handlerEditClick}>
+        <Review>{myReview.content}</Review>
       </ReviewBox>
       <PlaceBox>
-        <Place>{place}</Place>
+        <Place>{myReview.placeName}</Place>
       </PlaceBox>
-      <Score>{renderStars(score)}</Score>
-      <CreatedAt>{createdAt}</CreatedAt>
-      <EditIcon />
+      <Score>{renderStars(myReview.score)}</Score>
+      <CreatedAt>{myReview.createdDate}</CreatedAt>
+      <div>
+        <Delete onClick={handlerDelteClick}>
+          <DeleteIcon />
+        </Delete>
+      </div>
+      {isModal && <PlaceModal onClose={handlerEditClick} />}
+      {isDelte && (
+        <AlertModal
+          onButtonText="삭제"
+          offButtonText="닫기"
+          onClick={onDelte}
+          onClose={handlerDelteClick}
+        >
+          정말 삭제하시겠습니까?
+        </AlertModal>
+      )}
     </ReviewContainer>
   );
 };
@@ -59,10 +120,20 @@ const ReviewContainer = styled.div`
       fill: ${(props) => props.theme.colors.mainColor};
     }
   }
+
+  > * {
+    color: ${(props) => props.theme.colors.blackFont};
+  }
 `;
 
 const ReviewBox = styled.div`
+  display: flex;
+  align-items: center;
+
   width: 230px;
+  height: 40px;
+
+  cursor: pointer;
 `;
 
 const PlaceBox = styled.div`
@@ -107,4 +178,9 @@ const CreatedAt = styled.div`
 
   font-size: 12px;
   text-align: center;
+`;
+
+const Delete = styled.button`
+  border: none;
+  background-color: transparent;
 `;

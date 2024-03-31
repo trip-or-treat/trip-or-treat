@@ -5,8 +5,10 @@ import { useSetRecoilState } from 'recoil';
 import homeModalAtom from 'src/atoms/homeModalAtom';
 
 const LogoButton = () => {
+  const isMyPage = useLocation().pathname.startsWith('/mypage/');
   const isMain = useLocation().pathname === '/';
   const setIsModal = useSetRecoilState(homeModalAtom);
+  const nextPath = isMyPage ? '/' : '#';
 
   const handleClick = () => {
     if (isMain) {
@@ -16,7 +18,7 @@ const LogoButton = () => {
   };
 
   return (
-    <LogoButtonBox to="#" onClick={handleClick}>
+    <LogoButtonBox to={nextPath} onClick={handleClick}>
       TOT
     </LogoButtonBox>
   );

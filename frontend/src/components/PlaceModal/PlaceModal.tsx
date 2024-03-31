@@ -1,5 +1,6 @@
 import { styled } from 'styled-components';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { useEffect } from 'react';
 
 import { usePlaceInfo } from 'src/hooks/api/usePlaceInfo';
@@ -7,6 +8,7 @@ import { PlaceInfo } from 'src/@types/api/placeInfo';
 import { ReactComponent as Close } from 'src/assets/svgs/close.svg';
 import placeIdAtom from 'src/atoms/placeIdAtom';
 import overviewTitleAtom from 'src/atoms/overviewTitleAtom';
+import { editReviewAtom } from 'src/atoms/review';
 
 import ModalOverlay from '../common/modal/ModalOverlay';
 import ImageBox from '../common/modal/ImageBox';
@@ -27,13 +29,30 @@ interface Info {
 }
 
 const PlaceModal = ({ onClose }: Props) => {
-  const { id: currentId, name: content } = useRecoilValue(placeIdAtom);
-  const { data: placeInfoApi, isLoading, isError }: Info = usePlaceInfo(currentId);
   const setTitle = useSetRecoilState(overviewTitleAtom);
+  let { id: currentId, name: content } = useRecoilValue(placeIdAtom);
+  const myReview = localStorage.getItem('myReview');
+  const navigate = useNavigate();
+  const [isEditReview, setIsEditReview] = useRecoilState(editReviewAtom);
+
+  if (myReview) {
+    const review = JSON.parse(myReview);
+    currentId = review.placeId;
+    content = '';
+  }
+
+  const { data: placeInfoApi, isLoading, isError }: Info = usePlaceInfo(currentId);
 
   if (isError) {
     onClose();
   }
+
+  const onRefresh = () => {
+    if (myReview && isEditReview) {
+      navigate(0);
+      setIsEditReview(false);
+    }
+  };
 
   useEffect(() => {
     setTitle(true);
@@ -43,7 +62,7 @@ const PlaceModal = ({ onClose }: Props) => {
     <ModalOverlay>
       {!isLoading && (
         <StyledModalLayout>
-          <StyledIcon>
+          <StyledIcon onClick={onRefresh}>
             <Close onClick={onClose} />
           </StyledIcon>
           <StyledName>

@@ -16,11 +16,11 @@ interface ReviewData {
   isError: boolean;
 }
 
-const Reviews = ({ placeId }: { placeId: number }) => {
+const Reviews = ({ currentId }: { currentId: number }) => {
   const scoreArr = (score: number) =>
     Array.from({ length: score }).map((_, index) => `star${index}`);
 
-  const { data: reviewsApi, isLoading, isError }: ReviewData = useReview(placeId);
+  const { data: reviewsApi, isLoading, isError }: ReviewData = useReview(currentId);
 
   if (isLoading) {
     return <Loading type="SMALL" />;
