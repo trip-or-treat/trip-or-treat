@@ -15,6 +15,12 @@
 ### 백엔드
 
 ## 🖥️ 프로젝트 구조
+### 인프라
+![TOT 아키텍쳐](https://github.com/trip-or-treat/trip-or-treat/assets/108510951/8a3db4ff-1174-4988-b956-9c06f8293f0f))
+### CI/CD
+![TOT CI_CD](https://github.com/trip-or-treat/trip-or-treat/assets/108510951/f3959671-e409-4d69-9fdf-00f550fa24bc)
+### ERD
+![image](https://github.com/trip-or-treat/trip-or-treat/assets/108510951/b2ef03c6-a1c3-4d24-b06a-196c9909bfc0)
 
 ## 👥 팀원 소개
 
