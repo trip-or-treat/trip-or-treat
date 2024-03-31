@@ -47,11 +47,11 @@ const EnterSearch = ({ placeHolder, setKeyword }: Props) => {
 
   const handleRotate = () => {
     if (setKeyword) setKeyword('');
-    resetSearchType();
+    setValue('');
     resetComingYn();
     resetCreatedYear();
     resetCurrentPage();
-    setValue('');
+    resetSearchType();
   };
 
   const handleSearch = () => {
