@@ -23,7 +23,8 @@ public enum FailMessage {
     SCHEDULE_NOT_FOUND("스케줄이 존재하지 않습니다!"),
     SCHEDULE_PLACE_NOT_FOUND("스케줄-장소가 존재하지 않습니다!"),
     PLAN_WITH_USER_NOT_FOUND("해당 사용자의 게시물이 존재하지 않습니다!"),
-    USER_NICKNAME_EXIST("이미 존재하는 닉네임 입니다!");
+    USER_NICKNAME_EXIST("이미 존재하는 닉네임 입니다!"),
+    NOT_IMAGE_FILE("jpeg, png 파일만 업로드할 수 있습니다!");
 
     private final String message;
 
