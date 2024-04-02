@@ -12,7 +12,7 @@
 
 ### 프론트엔드
 
-![프론트엔드](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/0787c65a-c591-4456-9e5b-a786659acfd6)
+![프론트엔드](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/9dcf35c3-f69d-4ad9-82b3-88310732ac04)
 
 ### 백엔드
 
@@ -20,13 +20,13 @@
 
 ### 인프라
 
-![인프라](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/4719ae19-f9f8-4c98-8227-d784f68d8ee7)
+![인프라](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/40217b90-3fe3-4ff7-a889-4522683400b6)
 
 ## 🖥️ 프로젝트 구조
 
 ### 서비스 요청 흐름도
 
-![TOT 아키텍쳐](https://github.com/trip-or-treat/trip-or-treat/assets/108510951/8a3db4ff-1174-4988-b956-9c06f8293f0f))
+![TOT 아키텍쳐](https://github.com/trip-or-treat/trip-or-treat/assets/108510951/8a3db4ff-1174-4988-b956-9c06f8293f0f)
 
 ### CI/CD
 
