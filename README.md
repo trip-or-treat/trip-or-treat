@@ -6,9 +6,9 @@
 
 ## **[Trip or Treat 바로가기](https://triportreat.site/)**
 
----
+![기능 소개](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/271a2fe1-df97-44f0-a32e-177a8bc4ea8f)
 
-## 💡 서비스 핵심 기능 소개
+- [Figma 보러가기](https://www.figma.com/file/kdcZvWb2UnnoHR7Wv77bTE/Trip-Or-Treat?type=design&node-id=0-1&mode=design&t=zqyS6EnUi1fUjzYi-0)
 
 ---
 
