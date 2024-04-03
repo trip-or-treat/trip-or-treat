@@ -4,7 +4,7 @@
 
 국내여행 계획 플래너입니다. **여행지 선택**, **날짜별 계획**, **공유**까지 `Trip Or Treat`에서 해결할 수 있습니다.
 
-**[Trip or Treat 바로가기](https://triportreat.site/)**
+## **[Trip or Treat 바로가기](https://triportreat.site/)**
 
 ---
 
@@ -16,15 +16,15 @@
 
 - ### 프론트엔드
 
-![프론트엔드](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/9dcf35c3-f69d-4ad9-82b3-88310732ac04)
+![프론트엔드](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/65edaec8-8b41-4893-a77b-1cd713fe3307)
 
 - ### 백엔드
 
-![백엔드](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/a735b3de-2b68-497a-9fa8-8dd9498ebb20)
+![백엔드](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/e302ca59-e1e9-446b-a77f-7e9b90e456b2)
 
-- ### 인프라
+- ### 인프라 🤝 협업 툴
 
-![인프라](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/40217b90-3fe3-4ff7-a889-4522683400b6)
+![인프라](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/146cfb64-ab52-43f7-9a1a-e4d5b0b9b987)
 
 ---
 
@@ -46,7 +46,7 @@
 
 ## 🙆🏻 팀 문화
 
-![image](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/84733679-7243-4005-82cb-86d303833961)
+![image](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/7278028a-db85-4fce-a090-62fedbf177e8)
 
 ---
 
