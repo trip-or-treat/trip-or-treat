@@ -32,11 +32,11 @@
 
 - ### 서비스 요청 흐름도
 
-![TOT 아키텍쳐](https://github.com/trip-or-treat/trip-or-treat/assets/108510951/8a3db4ff-1174-4988-b956-9c06f8293f0f)
+![TOT 아키텍쳐](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/9db44955-b5a2-4ed2-9489-8d7c93d418ed)
 
 - ### CI/CD
 
-![TOT CI_CD](https://github.com/trip-or-treat/trip-or-treat/assets/108510951/f3959671-e409-4d69-9fdf-00f550fa24bc)
+![TOT CI_CD](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/08f7cbfa-287c-4ceb-88f0-63ef1d208fff)
 
 - ### ERD
 
