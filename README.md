@@ -6,7 +6,14 @@
 
 ## **[Trip or Treat 바로가기](https://triportreat.site/)**
 
-![기능 소개](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/18c3667e-f880-488f-af27-6ba4c2862533)
+![기능 소개](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/54101296-8630-41fb-b4d3-c493b4f6b50d)
+
+- 개발 기간
+  - 기획 및 디자인 (2024.01.16 ~ 2024.02.18)
+  - 1차 개발 (2024.02.19 ~ 2024.03.10)
+  - 2차 개발 (2024.03.11 ~ 2024.03.31)
+
+<br>
 
 - [Figma 보러가기](https://www.figma.com/file/kdcZvWb2UnnoHR7Wv77bTE/Trip-Or-Treat?type=design&node-id=0-1&mode=design&t=zqyS6EnUi1fUjzYi-0)
 
