@@ -4,37 +4,51 @@
 
 국내여행 계획 플래너입니다. **여행지 선택**, **날짜별 계획**, **공유**까지 `Trip Or Treat`에서 해결할 수 있습니다.
 
-**[Trip or Treat 바로가기](https://triportreat.site/)**
+## **[Trip or Treat 바로가기](https://triportreat.site/)**
 
-## 💡 서비스 핵심 기능 소개
+![기능 소개](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/271a2fe1-df97-44f0-a32e-177a8bc4ea8f)
+
+- [Figma 보러가기](https://www.figma.com/file/kdcZvWb2UnnoHR7Wv77bTE/Trip-Or-Treat?type=design&node-id=0-1&mode=design&t=zqyS6EnUi1fUjzYi-0)
+
+---
 
 ## 🛠 기술 스택
 
-### 프론트엔드
+- ### 프론트엔드
 
-![프론트엔드](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/0787c65a-c591-4456-9e5b-a786659acfd6)
+![프론트엔드](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/65edaec8-8b41-4893-a77b-1cd713fe3307)
 
-### 백엔드
+- ### 백엔드
 
-![백엔드](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/a735b3de-2b68-497a-9fa8-8dd9498ebb20)
+![백엔드](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/e302ca59-e1e9-446b-a77f-7e9b90e456b2)
 
-### 인프라
+- ### 인프라 🤝 협업 툴
 
-![인프라](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/4719ae19-f9f8-4c98-8227-d784f68d8ee7)
+![인프라](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/146cfb64-ab52-43f7-9a1a-e4d5b0b9b987)
+
+---
 
 ## 🖥️ 프로젝트 구조
 
-### 서비스 요청 흐름도
+- ### 서비스 요청 흐름도
 
-![TOT 아키텍쳐](https://github.com/trip-or-treat/trip-or-treat/assets/108510951/8a3db4ff-1174-4988-b956-9c06f8293f0f))
+![TOT 아키텍쳐](https://github.com/trip-or-treat/trip-or-treat/assets/108510951/8a3db4ff-1174-4988-b956-9c06f8293f0f)
 
-### CI/CD
+- ### CI/CD
 
 ![TOT CI_CD](https://github.com/trip-or-treat/trip-or-treat/assets/108510951/f3959671-e409-4d69-9fdf-00f550fa24bc)
 
-### ERD
+- ### ERD
 
 ![image](https://github.com/trip-or-treat/trip-or-treat/assets/108510951/b2ef03c6-a1c3-4d24-b06a-196c9909bfc0)
+
+---
+
+## 🙆🏻 팀 문화
+
+![image](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/7278028a-db85-4fce-a090-62fedbf177e8)
+
+---
 
 ## 👥 팀원 소개
 
