@@ -6,7 +6,7 @@
 
 ## **[Trip or Treat 바로가기](https://triportreat.site/)**
 
-![기능 소개](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/271a2fe1-df97-44f0-a32e-177a8bc4ea8f)
+![기능 소개](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/18c3667e-f880-488f-af27-6ba4c2862533)
 
 - [Figma 보러가기](https://www.figma.com/file/kdcZvWb2UnnoHR7Wv77bTE/Trip-Or-Treat?type=design&node-id=0-1&mode=design&t=zqyS6EnUi1fUjzYi-0)
 
@@ -16,7 +16,7 @@
 
 - ### 프론트엔드
 
-![프론트엔드](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/65edaec8-8b41-4893-a77b-1cd713fe3307)
+![프론트엔드](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/0ad61b53-05fb-43a2-8350-439b051ce710)
 
 - ### 백엔드
 
