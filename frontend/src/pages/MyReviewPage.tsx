@@ -56,7 +56,7 @@ const MyReviewPage = () => {
       <ReviewListCategory />
       {isError && <FailDataPage />}
       <ListContainer>
-        {currentPost.length === 0 && <EmptyBox>계획 목록이 없습니다.</EmptyBox>}
+        {currentPost.length === 0 && <EmptyBox>작성한 리뷰가 없습니다.</EmptyBox>}
         {currentPost?.map((data, index) => {
           return <MyReviewList key={data.id} data={data} index={index + 1} />;
         })}
