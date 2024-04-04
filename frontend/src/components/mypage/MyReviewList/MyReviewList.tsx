@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import styled from 'styled-components';
+
+import { loginApi } from 'src/api';
+import { END_POINTS } from 'src/constants/api';
 
 import PlaceModal from 'src/components/PlaceModal';
 import AlertModal from 'src/components/AlertModal';
-
-import { deleteReviewFetcher } from 'src/api/review';
 
 import { ReactComponent as StarFilled } from '../../../assets/svgs/starFilled.svg';
 import { ReactComponent as StarEmpty } from '../../../assets/svgs/starEmpty.svg';
@@ -41,15 +42,10 @@ const renderStars = (score: number) => {
 const MyReviewList = ({ data: myReview, index }: MyReviews) => {
   const [isEditClick, setEditClick] = useState(false);
   const [isModal, setModal] = useState(false);
-  const [isDelte, setDelte] = useState(false);
-  const navigate = useNavigate();
+  const [isDelete, setDelete] = useState(false);
 
   const handlerEditClick = () => {
     setEditClick(!isEditClick);
-  };
-
-  const onRefresh = () => {
-    navigate(0);
   };
 
   useEffect(() => {
@@ -63,13 +59,23 @@ const MyReviewList = ({ data: myReview, index }: MyReviews) => {
   }, [isEditClick]);
 
   const handlerDeleteClick = () => {
-    setDelte(!isDelte);
+    setDelete(!isDelete);
   };
 
-  const onDelete = async () => {
-    await deleteReviewFetcher(myReview.id);
-    setDelte(!isDelte);
-    onRefresh();
+  const queryClient = useQueryClient();
+  const deleteReviewMutation = useMutation({
+    mutationFn: () => loginApi.delete(`${END_POINTS.REVIEWS}/${myReview.id}`),
+    onSuccess: () => {
+      setDelete(!isDelete);
+      return queryClient.invalidateQueries({
+        queryKey: ['reviews'],
+      });
+    },
+    onError: () => alert('삭제를 실패했습니다.'),
+  });
+
+  const onDelete = () => {
+    deleteReviewMutation.mutate();
   };
 
   return (
@@ -83,20 +89,18 @@ const MyReviewList = ({ data: myReview, index }: MyReviews) => {
       </PlaceBox>
       <Score>{renderStars(myReview.score)}</Score>
       <CreatedAt>{myReview.createdDate}</CreatedAt>
-      <div>
-        <Delete onClick={handlerDeleteClick}>
-          <DeleteIcon />
-        </Delete>
-      </div>
+      <Delete onClick={handlerDeleteClick}>
+        <DeleteIcon />
+      </Delete>
       {isModal && <PlaceModal onClose={handlerEditClick} />}
-      {isDelte && (
+      {isDelete && (
         <AlertModal
           onButtonText="삭제"
           offButtonText="닫기"
           onClick={onDelete}
           onClose={handlerDeleteClick}
         >
-          정말 삭제하시겠습니까?
+          정말 삭제하시겠어요?
         </AlertModal>
       )}
     </ReviewContainer>
@@ -113,16 +117,11 @@ const ReviewContainer = styled.div`
   border-bottom: solid 1px ${(props) => props.theme.colors.lightGrey};
 
   svg {
-    width: 25px;
     cursor: pointer;
 
     &:hover {
       fill: ${(props) => props.theme.colors.mainColor};
     }
-  }
-
-  > * {
-    color: ${(props) => props.theme.colors.blackFont};
   }
 `;
 
