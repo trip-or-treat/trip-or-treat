@@ -39,7 +39,8 @@ const MyReviewPage = () => {
 
   const { data: myReviews, isLoading, isError }: Data = useReviews({ pageParam: currentPage });
 
-  const totalElements = myReviews?.data.totalElements;
+  let totalElements = myReviews?.data.totalElements;
+  if (myReviews?.data.totalElements === 0) totalElements = 1;
 
   useEffect(() => {
     if (!isLoading) setCurrentPost(myReviews.data.contents);
