@@ -21,9 +21,3 @@ export const editReviewFetcher = async ({ id, placeId, content, tip, score }: Re
 
   return data;
 };
-
-export const deleteReviewFetcher = async (id: number) => {
-  const data = await loginApi.delete(`${END_POINTS.REVIEWS}/${id}`);
-
-  return data;
-};
