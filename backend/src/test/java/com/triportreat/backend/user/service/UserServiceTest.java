@@ -1,6 +1,7 @@
 package com.triportreat.backend.user.service;
 
 import com.triportreat.backend.dummy.DummyObject;
+import com.triportreat.backend.file.error.exception.ImageUploadFailedException;
 import com.triportreat.backend.file.error.exception.NotImageFileException;
 import com.triportreat.backend.file.service.FileService;
 import com.triportreat.backend.place.error.handler.exception.UserNotFoundException;
@@ -22,6 +23,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import static com.triportreat.backend.common.response.FailMessage.IMAGE_UPLOAD_FAILED;
 import static com.triportreat.backend.common.response.FailMessage.NOT_IMAGE_FILE;
 import static com.triportreat.backend.common.response.FailMessage.USER_NICKNAME_EXIST;
 import static com.triportreat.backend.common.response.FailMessage.USER_NOT_FOUND;
@@ -153,6 +155,23 @@ class UserServiceTest extends DummyObject {
             assertThatThrownBy(() -> userService.updateUserProfile(imageFile, 1L))
                     .isInstanceOf(NotImageFileException.class)
                     .hasMessage(NOT_IMAGE_FILE.getMessage());
+        }
+
+        @Test
+        @DisplayName("실패 - 이미지 파일이 아닐경우")
+        void updateUserProfile_ImageUploadFailedException() {
+            // given
+            User user = createMockUser(1L, "user1");
+            MultipartFile imageFile = new MockMultipartFile("image.jpeg", "profile.pdf", "image/pdf", new byte[10]);
+
+            when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+            doThrow(ImageUploadFailedException.class).when(fileService).deleteAndUploadFile(any(), anyString());
+
+            // when
+            // then
+            assertThatThrownBy(() -> userService.updateUserProfile(imageFile, 1L))
+                    .isInstanceOf(ImageUploadFailedException.class)
+                    .hasMessage(IMAGE_UPLOAD_FAILED.getMessage());
         }
     }
 }
