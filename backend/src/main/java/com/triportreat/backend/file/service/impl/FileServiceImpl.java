@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.model.GetObjectMetadataRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.triportreat.backend.common.utils.UuidUtil;
+import com.triportreat.backend.file.error.exception.ImageUploadFailedException;
 import com.triportreat.backend.file.error.exception.NotImageFileException;
 import com.triportreat.backend.file.service.FileService;
 import java.io.IOException;
@@ -75,6 +76,7 @@ public class FileServiceImpl implements FileService {
             );
             amazonS3Client.putObject(putObjectRequest);
         } catch (IOException e) {
+            throw new ImageUploadFailedException();
         }
     }
 
