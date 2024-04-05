@@ -33,5 +33,13 @@ spring:
       port: 6379
       database: 0
 
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 0B
+      location: /home/ubuntu/files
+      max-file-size: 100MB
+      max-request-size: 100MB
+
 server:
   port: 8080

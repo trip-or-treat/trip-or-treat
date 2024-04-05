@@ -1,6 +1,9 @@
 package com.triportreat.backend.user.service;
 
 import com.triportreat.backend.dummy.DummyObject;
+import com.triportreat.backend.file.error.exception.ImageUploadFailedException;
+import com.triportreat.backend.file.error.exception.NotImageFileException;
+import com.triportreat.backend.file.service.FileService;
 import com.triportreat.backend.place.error.handler.exception.UserNotFoundException;
 import com.triportreat.backend.user.domain.UserNicknameRequestDto;
 import com.triportreat.backend.user.entity.User;
@@ -16,11 +19,17 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import static com.triportreat.backend.common.response.FailMessage.IMAGE_UPLOAD_FAILED;
+import static com.triportreat.backend.common.response.FailMessage.NOT_IMAGE_FILE;
 import static com.triportreat.backend.common.response.FailMessage.USER_NICKNAME_EXIST;
 import static com.triportreat.backend.common.response.FailMessage.USER_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,6 +40,9 @@ class UserServiceTest extends DummyObject {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private FileService fileService;
 
     @Nested
     @DisplayName("사용자 닉네임 변경")
@@ -104,6 +116,62 @@ class UserServiceTest extends DummyObject {
 
             //then
             verify(userRepository, times(0)).existsByNickname(userNicknameRequestDto.getNickname());
+        }
+    }
+
+    @Nested
+    @DisplayName("사용자 프로필 사진 변경")
+    class UpdateUserProfileImage {
+
+        @Test
+        @DisplayName("성공")
+        void updateUserProfile_Success() {
+            // given
+            User user = createMockUser(1L, "user1");
+            MultipartFile imageFile = new MockMultipartFile("image.jpeg", "profile.jpeg", "image/jpeg", new byte[10]);
+
+            when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+            when(fileService.deleteAndUploadFile(any(), anyString())).thenReturn("UUID_profile.jpeg");
+
+            // when
+            String newUrl = userService.updateUserProfile(imageFile, 1L);
+
+            // then
+            assertTrue(StringUtils.hasText(newUrl));
+        }
+
+        @Test
+        @DisplayName("실패 - 이미지 파일이 아닐경우")
+        void updateUserProfile_NotImageFileException() {
+            // given
+            User user = createMockUser(1L, "user1");
+            MultipartFile imageFile = new MockMultipartFile("image.jpeg", "profile.pdf", "image/pdf", new byte[10]);
+
+            when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+            doThrow(NotImageFileException.class).when(fileService).deleteAndUploadFile(any(), anyString());
+
+            // when
+            // then
+            assertThatThrownBy(() -> userService.updateUserProfile(imageFile, 1L))
+                    .isInstanceOf(NotImageFileException.class)
+                    .hasMessage(NOT_IMAGE_FILE.getMessage());
+        }
+
+        @Test
+        @DisplayName("실패 - 이미지 파일이 아닐경우")
+        void updateUserProfile_ImageUploadFailedException() {
+            // given
+            User user = createMockUser(1L, "user1");
+            MultipartFile imageFile = new MockMultipartFile("image.jpeg", "profile.pdf", "image/pdf", new byte[10]);
+
+            when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+            doThrow(ImageUploadFailedException.class).when(fileService).deleteAndUploadFile(any(), anyString());
+
+            // when
+            // then
+            assertThatThrownBy(() -> userService.updateUserProfile(imageFile, 1L))
+                    .isInstanceOf(ImageUploadFailedException.class)
+                    .hasMessage(IMAGE_UPLOAD_FAILED.getMessage());
         }
     }
 }
