@@ -27,7 +27,6 @@ interface MyPlanData {
   data: {
     data: TotalMyPlanData;
   };
-  isLoading: boolean;
   isError: boolean;
 }
 
@@ -41,6 +40,7 @@ interface TotalMyPlanData {
     regions: string[];
   }[];
   totalElements: number;
+  totalPages: number;
 }
 
 const MyPlanPage = () => {
@@ -53,11 +53,7 @@ const MyPlanPage = () => {
   const [keyword, setKeyword] = useState('');
 
   // 데이터 불러오기
-  const {
-    data: myPlanData,
-    isError,
-    isLoading,
-  }: MyPlanData = useMyPlanList({
+  const { data: myPlanData, isError }: MyPlanData = useMyPlanList({
     pageParam: currentPage,
     searchType,
     keyword: keyword || '',
@@ -66,19 +62,23 @@ const MyPlanPage = () => {
   });
 
   if (isError) return null;
-  console.log(myPlanData?.data.contents);
+  console.log(myPlanData?.data);
 
   useEffect(() => {
-    if (!isLoading) {
-      setCurrentPost(myPlanData.data.contents);
-    }
+    setCurrentPost(myPlanData?.data.contents);
   }, [myPlanData]);
 
   // 페이지네이션
-  const totalElements = myPlanData?.data.totalElements;
+  let totalElements = myPlanData?.data.totalElements;
+  if (totalElements === 0) totalElements = 1;
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [keyword]);
 
   // 작성연도 필터
   const currentYear = new Date().getFullYear();
