@@ -31,6 +31,7 @@ interface MyReviews {
     createdDate: string;
   }[];
   totalElements: number;
+  totalPages: number;
 }
 
 const MyReviewPage = () => {
@@ -45,6 +46,8 @@ const MyReviewPage = () => {
   useEffect(() => {
     if (!isLoading) setCurrentPost(myReviews.data.contents);
   }, [myReviews]);
+
+  if (currentPost.length === 0 && currentPage !== 1) setCurrentPage(myReviews?.data.totalPages);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
