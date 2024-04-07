@@ -1,8 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import { styled } from 'styled-components';
 
 import { ReactComponent as StarFilled } from 'src/assets/svgs/starFilled.svg';
 import { ReactComponent as Pencil } from 'src/assets/svgs/pencil.svg';
+
+import { editReviewAtom } from 'src/atoms/review';
 
 import ReviewInput from './ReviewInput';
 import Reviews from './Reviews';
@@ -10,14 +13,27 @@ import Reviews from './Reviews';
 const PlaceReview = ({ currentId }: { currentId: number }) => {
   const [isReviewInput, setReviewInput] = useState(false);
   const [isReviews, setReviews] = useState(true);
+  const [isTitle, setTitle] = useState(true);
+  const isEdit = useRecoilValue(editReviewAtom);
+
   const prevPage = localStorage.getItem('prevPage');
 
-  const onlyReviews = () => {
+  useEffect(() => {
     const isOnly = prevPage?.split('/')[1] === 'place';
-    return isOnly;
-  };
 
-  onlyReviews();
+    if (isOnly) {
+      setTitle(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isEdit) {
+      alert('수정이 완료되었습니다.');
+      setTitle(false);
+      onReviews();
+    }
+  }, [isEdit]);
+
   const onReviewInput = () => {
     setReviewInput(true);
     setReviews(false);
@@ -30,21 +46,24 @@ const PlaceReview = ({ currentId }: { currentId: number }) => {
 
   return (
     <Wrapper>
-      {onlyReviews() ? (
-        <Nav />
-      ) : (
-        <Nav>
-          <Title
-            onClick={onReviewInput}
-            style={isReviewInput ? { borderBottom: `1px solid #d9d9d9` } : {}}
-          >
-            리뷰 작성 <Pencil />
-          </Title>
-          <Title onClick={onReviews} style={isReviews ? { borderBottom: '1px solid #d9d9d9' } : {}}>
-            리뷰 <StarFilled />
-          </Title>
-        </Nav>
-      )}
+      <Nav>
+        {isTitle && (
+          <>
+            <Title
+              onClick={onReviewInput}
+              style={isReviewInput ? { borderBottom: `1px solid #d9d9d9` } : {}}
+            >
+              리뷰 작성 <Pencil />
+            </Title>
+            <Title
+              onClick={onReviews}
+              style={isReviews ? { borderBottom: '1px solid #d9d9d9' } : {}}
+            >
+              리뷰 <StarFilled />
+            </Title>
+          </>
+        )}
+      </Nav>
       {isReviewInput && <ReviewInput currentId={currentId} />}
       {isReviews && <Reviews currentId={currentId} />}
     </Wrapper>
