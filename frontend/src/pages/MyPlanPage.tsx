@@ -66,7 +66,6 @@ const MyPlanPage = () => {
   });
 
   if (isError) return null;
-  console.log(myPlanData?.data.contents);
 
   useEffect(() => {
     if (!isLoading) {
@@ -111,9 +110,6 @@ const MyPlanPage = () => {
     '다가오는 여행': 'Y',
     '지난 여행': 'N',
   };
-
-  console.log('currentPage:', currentPage);
-  console.log('currentPost:', currentPost);
 
   return (
     <div>

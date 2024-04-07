@@ -33,7 +33,6 @@ const Nav = () => {
   };
 
   const refresh = () => {
-    console.log(pathname);
     if (pathname.startsWith('/region') || pathname.startsWith('/place')) {
       return pathname;
     }
