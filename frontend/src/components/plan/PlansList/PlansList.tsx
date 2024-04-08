@@ -20,12 +20,12 @@ const calculateDailyExpense = (schedulePlaces: (SchedulePlacesDetail | ScheduleP
 };
 
 const PlansList = ({ schedules }: Props) => {
-  const CAROUSEL_LENGTH = schedules && schedules.length % 2;
+  const CAROUSEL_LENGTH = (schedules?.length && schedules?.length) ?? 0 % 2;
   const { handlePrev, handleNext, slideRef, currentSlide } = useCarousel(CAROUSEL_LENGTH, 150);
 
   return (
     <>
-      <Wrapper ref={slideRef} $length={CAROUSEL_LENGTH}>
+      <Wrapper ref={slideRef} $length={schedules?.length}>
         {schedules?.map(({ date, schedulePlaces }, listIdx) => (
           <PlanListBox key={date}>
             <DayTitle>{`${listIdx + 1}일차 경비 : ${calculateDailyExpense(schedulePlaces)}원`}</DayTitle>
@@ -37,12 +37,12 @@ const PlansList = ({ schedules }: Props) => {
       </Wrapper>
 
       {currentSlide === 1 && (
-        <LeftButton onClick={handlePrev} $length={CAROUSEL_LENGTH}>
+        <LeftButton onClick={handlePrev} $length={schedules?.length}>
           <ChevronLeft />
         </LeftButton>
       )}
       {currentSlide === 0 && (
-        <RightButton onClick={handleNext} $length={CAROUSEL_LENGTH}>
+        <RightButton onClick={handleNext} $length={schedules?.length}>
           <ChevronRight />
         </RightButton>
       )}
@@ -61,7 +61,7 @@ const Wrapper = styled.div<{ $length: number }>`
 const PlanListBox = styled.div`
   overflow: auto;
   flex: 0 0 calc(25% - 30px);
-  height: 65vh;
+  height: 60vh;
 `;
 
 const DayTitle = styled.p`
