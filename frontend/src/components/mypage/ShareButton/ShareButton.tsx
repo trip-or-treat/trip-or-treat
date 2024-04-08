@@ -38,11 +38,11 @@ export default ShareButton;
 
 const Wrapper = styled.div`
   position: absolute;
-  right: -15px;
+  width: 20px;
+  height: 35px;
+  right: -25px;
   top: 1px;
   z-index: 9;
-
-  height: 35px;
 `;
 
 const Button = styled.button`

@@ -76,7 +76,7 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.div`
-  width: 250px;
+  min-width: 250px;
   height: inherit;
 
   color: ${(props) => props.theme.colors.blackFont};
@@ -91,7 +91,6 @@ const Input = styled.input`
 
   border: none;
   background-color: inherit;
-
   color: ${(props) => props.theme.colors.blackFont};
   font-size: 30px;
   font-family: 'Pretendard-SemiBold';

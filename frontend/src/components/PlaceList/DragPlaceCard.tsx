@@ -133,7 +133,7 @@ const DragPlaceCard = ({ placeCardItem, magic }: Props) => {
 
           <Label htmlFor="memo">
             <p>메모</p>
-            <textarea
+            <TextArea
               id="memo"
               placeholder="(최대 20자)"
               maxLength={20}
@@ -219,11 +219,10 @@ const Label = styled.label`
   align-items: center;
 
   margin: 10px 0px;
-
-  font-size: 13px;
+  font-size: 12px;
 
   p {
-    width: 50px;
+    min-width: 50px;
   }
 
   input,
@@ -240,10 +239,12 @@ const Label = styled.label`
       font-size: 11px;
     }
   }
+`;
 
-  textarea {
-    width: 80%;
-    height: 60px;
-    resize: none;
-  }
+const TextArea = styled.textarea`
+  width: 80%;
+  height: 60px;
+  resize: none;
+
+  font-family: 'Pretendard-Regular';
 `;

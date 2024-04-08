@@ -99,4 +99,5 @@ const TitleBox = styled.section`
 `;
 const TotalExpenseBox = styled.section`
   text-align: end;
+  font-family: 'Pretendard-SemiBold';
 `;
