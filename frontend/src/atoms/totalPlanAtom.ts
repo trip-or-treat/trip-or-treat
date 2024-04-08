@@ -7,6 +7,7 @@ export interface TotalPlan {
   day: number;
   date: string;
   items: PlaceListTypes[];
+  scheduleId?: number;
 }
 
 const { persistAtom } = recoilPersist();

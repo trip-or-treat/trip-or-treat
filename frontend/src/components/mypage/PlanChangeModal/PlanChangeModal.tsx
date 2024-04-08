@@ -2,7 +2,6 @@ import theme from 'src/styles/theme';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 
 import curDayAtom from 'src/atoms/curDayAtom';
@@ -52,7 +51,6 @@ const PlanChangeModal = ({ onClose, detailData }: Props) => {
   const curDay = useRecoilValue(curDayAtom);
   const totalPlanDetail = useRecoilValue(totalPlanDetailAtom);
 
-  const navigate = useNavigate();
   const regions = filterRegions(detailData?.regions);
   const isClickPossible = useDisableButton();
 
@@ -68,7 +66,7 @@ const PlanChangeModal = ({ onClose, detailData }: Props) => {
     mutationFn: (payload: SchedulesType) => usePatchTotalPlan(detailData.planId, payload),
     onSuccess: () => {
       alert('성공적으로 저장이 완료되었습니다!');
-      navigate('/myPage/myPlan');
+      window.location.href = '/myPage/myPlan';
     },
     onError: () => {
       alert('저장이 실패했습니다!');
@@ -79,7 +77,7 @@ const PlanChangeModal = ({ onClose, detailData }: Props) => {
   const handlePlanChange = () => {
     const schedules = totalPlanDetail.map((data) => {
       return {
-        scheduleId: data.day,
+        scheduleId: data.scheduleId,
         date: data.date,
         schedulePlaces: data.items.map((schedulePlace, idx) => ({
           schedulePlaceId: schedulePlace.schedulePlaceId ? schedulePlace.schedulePlaceId : null,
@@ -220,7 +218,7 @@ const ButtonBox = styled.div`
   width: 100%;
   height: 7vh;
   background-color: white;
-  z-index: 999;
+  z-index: 99;
 
   button {
     width: 75px;

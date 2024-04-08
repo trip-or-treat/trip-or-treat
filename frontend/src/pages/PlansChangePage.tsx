@@ -42,8 +42,13 @@ const PlansChangePage = () => {
   const { data: planDetailApi, isLoading, isError }: PlanDetailData = usePlanDetail(planId);
 
   useEffect(() => {
-    const formattedData = planDetailApi?.data?.schedules.map((data) => {
-      return { date: data.date, day: data.scheduleId, items: data.schedulePlaces };
+    const formattedData = planDetailApi?.data?.schedules.map((data, idx) => {
+      return {
+        date: data.date,
+        day: idx + 1,
+        items: data.schedulePlaces,
+        scheduleId: data.scheduleId,
+      };
     });
 
     setCurDay(1);
@@ -68,7 +73,7 @@ const PlansChangePage = () => {
   return (
     <Main>
       {(isLoading || !planDetailApi?.data) && <Loading type="LARGE" />}
-      {!isLoading && (
+      {planDetailApi?.data && !isLoading && (
         <Wrapper>
           <PlanNavBar
             code={planDetailApi?.data?.code}
@@ -114,7 +119,7 @@ const ButtonBox = styled.div`
   display: flex;
   justify-content: center;
 
-  margin-top: 40px;
+  margin-top: 20px;
 
   button {
     width: 200px;
