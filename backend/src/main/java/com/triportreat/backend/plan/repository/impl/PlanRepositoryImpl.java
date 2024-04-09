@@ -1,18 +1,14 @@
 package com.triportreat.backend.plan.repository.impl;
 
-import static com.querydsl.core.group.GroupBy.groupBy;
-import static com.querydsl.core.group.GroupBy.list;
 import static com.triportreat.backend.plan.domain.PlanSearchValue.COMING_YN_FALSE;
 import static com.triportreat.backend.plan.domain.PlanSearchValue.COMING_YN_TRUE;
 import static com.triportreat.backend.plan.domain.PlanSearchValue.RECENT_6_MONTH;
 import static com.triportreat.backend.plan.domain.PlanSearchValue.SEARCH_TYPE_REGION;
-import static com.triportreat.backend.plan.domain.PlanSearchValue.SEARCH_TYPE_TITLE;
 import static com.triportreat.backend.plan.entity.QPlan.plan;
 import static com.triportreat.backend.plan.entity.QPlanRegion.planRegion;
 import static com.triportreat.backend.region.entity.QRegion.region;
 import static org.springframework.util.StringUtils.hasText;
 
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLTemplates;
@@ -20,18 +16,17 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.triportreat.backend.plan.domain.PlanRequestDto.PlanSearchRequestDto;
 import com.triportreat.backend.plan.domain.PlanResponseDto.PlanListResponseDto;
+import com.triportreat.backend.plan.entity.Plan;
 import com.triportreat.backend.plan.repository.PlanRepositoryCustom;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
-@Slf4j
 public class PlanRepositoryImpl implements PlanRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
@@ -42,100 +37,36 @@ public class PlanRepositoryImpl implements PlanRepositoryCustom {
 
     @Override
     public Page<PlanListResponseDto> searchPlans(PlanSearchRequestDto condition, Pageable pageable, Long userId) {
-        return isSearchByTitle(condition) ? searchPlansByTitle(condition, pageable, userId) : searchPlansByRegion(condition, pageable, userId);
-    }
-
-    private Page<PlanListResponseDto> searchPlansByTitle(PlanSearchRequestDto condition, Pageable pageable, Long userId) {
-        log.info("제목검색");
-        log.info(condition.toString());
-
-        List<Long> planIds = queryFactory
-                .select(plan.id)
-                .from(plan)
-                .where(
-                        userEq(userId),
-                        containsKeyword(condition.getType(), condition.getKeyword()),
-                        planDateGoeOrLt(condition.getComingYn()),
-                        planCreatedInYear(condition.getYear())
-                )
+        List<Plan> result = queryFactory
+                .selectFrom(plan)
+                .where(userIdEq(userId),
+                        titleOrRegionContainsKeyword(condition),
+                        dateGoeOrLt(condition.getComingYn()),
+                        createdDateInYear(condition.getYear()))
                 .orderBy(plan.createdDate.desc(), plan.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+        List<PlanListResponseDto> plans = result.stream()
+                .map(PlanListResponseDto::new)
+                .toList();
 
         JPAQuery<Long> countQuery = queryFactory
-                .select(plan.id.count())
+                .select(plan.count())
                 .from(plan)
-                .where(
-                        userEq(userId),
-                        containsKeyword(condition.getType(), condition.getKeyword()),
-                        planDateGoeOrLt(condition.getComingYn()),
-                        planCreatedInYear(condition.getYear())
-                );
+                .where(userIdEq(userId),
+                        titleOrRegionContainsKeyword(condition),
+                        dateGoeOrLt(condition.getComingYn()),
+                        createdDateInYear(condition.getYear()));
 
-        return PageableExecutionUtils.getPage(search(planIds), pageable, () -> countQuery.fetch().get(0));
+        return PageableExecutionUtils.getPage(plans, pageable, countQuery::fetchOne);
     }
 
-    private Page<PlanListResponseDto> searchPlansByRegion(PlanSearchRequestDto condition, Pageable pageable, Long userId) {
-        log.info("지역검색");
-
-        List<Long> planIds = queryFactory
-                .select(planRegion.plan.id)
-                .from(planRegion)
-                .where(planRegion.region.id.in(
-                                JPAExpressions
-                                        .select(region.id)
-                                        .from(region)
-                                        .where(containsKeyword(condition.getType(), condition.getKeyword()))),
-                        planDateGoeOrLt(condition.getComingYn()),
-                        planCreatedInYear(condition.getYear()),
-                        planRegionUserIdEq(userId))
-                .orderBy(planRegion.plan.createdDate.desc(), planRegion.plan.id.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
-        JPAQuery<Long> countQuery = queryFactory
-                .select(planRegion.plan.count())
-                .from(planRegion)
-                .where(planRegion.region.id.in(
-                                JPAExpressions
-                                        .select(region.id)
-                                        .from(region)
-                                        .where(containsKeyword(condition.getType(), condition.getKeyword()))
-                        ),
-                        planDateGoeOrLt(condition.getComingYn()),
-                        planCreatedInYear(condition.getYear()),
-                        planRegionUserIdEq(userId));
-
-        return PageableExecutionUtils.getPage(search(planIds), pageable, () -> countQuery.fetch().get(0));
+    private BooleanExpression userIdEq(Long userId) {
+        return userId != null && userId > 0L ? plan.user.id.eq(userId) : null;
     }
 
-    private List<PlanListResponseDto> search(List<Long> planIds) {
-        return planIds.stream().map(planId -> queryFactory
-                        .selectFrom(plan)
-                        .leftJoin(plan.regions, planRegion)
-                        .leftJoin(planRegion.region, region)
-                        .where(plan.id.eq(planId))
-                        .transform(groupBy(plan.id).list(Projections.fields(PlanListResponseDto.class,
-                                plan.id.as("planId"),
-                                plan.title,
-                                plan.startDate,
-                                plan.endDate,
-                                plan.createdDate.as("createdDateTime"),
-                                list(region.name).as("regions")))).get(0))
-                .collect(Collectors.toList());
-    }
-
-    private BooleanExpression userEq(Long userId) {
-        return userId!= null && userId > 0L ? plan.user.id.eq(userId) : null;
-    }
-
-    private BooleanExpression planRegionUserIdEq(Long userId) {
-        return userId != null && userId > 0L ? planRegion.plan.user.id.eq(userId) : null;
-    }
-
-    private BooleanExpression planDateGoeOrLt(String comingYn) {
+    private BooleanExpression dateGoeOrLt(String comingYn) {
         if (comingYn == null) {
             return null;
         } else if (comingYn.equals(COMING_YN_TRUE)) {
@@ -146,7 +77,7 @@ public class PlanRepositoryImpl implements PlanRepositoryCustom {
         return null;
     }
 
-    private BooleanExpression planCreatedInYear(int year) {
+    private BooleanExpression createdDateInYear(int year) {
         if (year == 0) {
             return null;
         } else if (year == RECENT_6_MONTH) {
@@ -157,24 +88,24 @@ public class PlanRepositoryImpl implements PlanRepositoryCustom {
         return null;
     }
 
-    private BooleanExpression containsKeyword(String type, String keyword) {
-        if (!hasText(type) || type.equals(SEARCH_TYPE_TITLE)) {
-            return titleContainsKeyword(keyword);
-        } else if (type.equals(SEARCH_TYPE_REGION)){
-            return regionNameContainsKeyword(keyword);
+    private BooleanExpression titleOrRegionContainsKeyword(PlanSearchRequestDto condition) {
+        if (hasText(condition.getType()) && hasText(condition.getKeyword())) {
+            return checkSearchType(condition);
+        } else {
+            return null;
         }
-        return null;
     }
 
-    private BooleanExpression titleContainsKeyword(String keyword) {
-        return hasText(keyword) ? plan.title.contains(keyword) : null;
-    }
-
-    private BooleanExpression regionNameContainsKeyword(String keyword) {
-        return hasText(keyword) ? region.name.contains(keyword) : null;
-    }
-
-    private boolean isSearchByTitle(PlanSearchRequestDto condition) {
-        return !condition.getType().equals(SEARCH_TYPE_REGION) || !hasText(condition.getKeyword());
+    private BooleanExpression checkSearchType(PlanSearchRequestDto condition) {
+        if (condition.getType().equals(SEARCH_TYPE_REGION)) {
+            return plan.id.in(
+                    JPAExpressions
+                            .select(planRegion.plan.id)
+                            .from(planRegion)
+                            .leftJoin(planRegion.region, region)
+                            .where(planRegion.region.name.contains(condition.getKeyword())));
+        } else {
+            return plan.title.contains(condition.getKeyword());
+        }
     }
 }

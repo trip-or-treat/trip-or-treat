@@ -20,6 +20,7 @@ import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 import com.triportreat.backend.common.error.exception.AuthenticateFailException;
 import com.triportreat.backend.common.response.PageResponseDto;
+import com.triportreat.backend.common.utils.CustomDateUtil;
 import com.triportreat.backend.dummy.DummyObject;
 import com.triportreat.backend.place.entity.ContentType;
 import com.triportreat.backend.place.entity.Place;
@@ -421,7 +422,7 @@ class PlanServiceTest extends DummyObject {
                             .regions(List.of("서울", "인천", "대전"))
                             .startDate(LocalDate.now().minusDays(3))
                             .endDate(LocalDate.now().minusDays(1))
-                            .createdDateTime(LocalDateTime.now().minusDays(7))
+                            .createdDate(CustomDateUtil.toStringFormat(LocalDateTime.now().minusDays(7)))
                             .build(),
                     PlanListResponseDto.builder()
                             .planId(2L)
@@ -429,7 +430,7 @@ class PlanServiceTest extends DummyObject {
                             .regions(List.of("서울", "인천", "대전"))
                             .startDate(LocalDate.now().minusDays(3))
                             .endDate(LocalDate.now().minusDays(1))
-                            .createdDateTime(LocalDateTime.now().minusDays(7))
+                            .createdDate(CustomDateUtil.toStringFormat(LocalDateTime.now().minusDays(7)))
                             .build());
 
             Pageable pageable = PageRequest.of(0, 10);

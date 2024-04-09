@@ -110,7 +110,7 @@ class PlanRepositoryTest {
         }
 
         @Test
-        @DisplayName("제목에 '1'이 포함된 최근 6개월안에 작성된 지난 여행 계획 목록 검색")
+        @DisplayName("제목에 '1'이 포함된 최근 6개월안에 작성된 지난 여행계획목록 검색")
         void searchPastPlanByTitleWithKeyword() {
             // given
             Long userId = 1L;
@@ -131,7 +131,7 @@ class PlanRepositoryTest {
         }
 
         @Test
-        @DisplayName("제목에 '1'이 포함된 최근 6개월안에 작성된 다가오는 여행 계획 목록 검색")
+        @DisplayName("제목에 '1'이 포함된 최근 6개월안에 작성된 다가오는 여행계획목록 검색")
         void searchComingPlanByTitleWithKeyword() {
             // given
             Long userId = 1L;
@@ -156,7 +156,7 @@ class PlanRepositoryTest {
     @DisplayName("지역 검색")
     class SearchByRegion {
         @Test
-        @DisplayName("지역에 인천이 포함된 최근 6개월안에 작성한 다가오는 여행 계획 목록 검색")
+        @DisplayName("지역에 인천이 포함된 최근 6개월안에 작성한 다가오는 여행계획목록 검색")
         void searchComingPlanByRegionWithKeyword() {
             // given
             Long userId = 1L;
@@ -178,7 +178,7 @@ class PlanRepositoryTest {
         }
 
         @Test
-        @DisplayName("지역에 인천이 포함된 올해에 작성한 다가오는 여행 계획 목록 검색")
+        @DisplayName("지역에 인천이 포함된 올해에 작성한 다가오는 여행계획목록 검색")
         void searchComingPlanByRegionWithKeywordThisYear() {
             // given
             Long userId = 1L;
@@ -201,7 +201,7 @@ class PlanRepositoryTest {
         }
 
         @Test
-        @DisplayName("지역에 대전이 포함된 최근 6개월안에 작성된 지난 여행 계획 목록 검색")
+        @DisplayName("지역에 대전이 포함된 최근 6개월안에 작성된 지난 여행계획목록 검색")
         void searchPastPlanByRegionWithKeyword() {
             // given
             Long userId = 1L;
