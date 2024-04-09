@@ -23,6 +23,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.BatchSize;
 
 @Entity
 @NoArgsConstructor
@@ -43,6 +44,7 @@ public class Plan extends BaseTimeEntity {
     @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Schedule> schedules = new ArrayList<>();
 
+    @BatchSize(size = 100)
     @Builder.Default
     @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<PlanRegion> regions = new HashSet<>();
