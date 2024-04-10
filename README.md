@@ -6,7 +6,14 @@
 
 ## **[Trip or Treat 바로가기](https://triportreat.site/)**
 
-![기능 소개](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/18c3667e-f880-488f-af27-6ba4c2862533)
+![기능 소개](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/c0f10c1b-849b-4bff-9e22-4eccd526fef7)
+
+- 개발 기간
+  - 기획 및 디자인 (2024.01.16 ~ 2024.02.18)
+  - 1차 개발 (2024.02.19 ~ 2024.03.10)
+  - 2차 개발 (2024.03.11 ~ 2024.03.31)
+
+<br>
 
 - [Figma 보러가기](https://www.figma.com/file/kdcZvWb2UnnoHR7Wv77bTE/Trip-Or-Treat?type=design&node-id=0-1&mode=design&t=zqyS6EnUi1fUjzYi-0)
 
@@ -32,11 +39,11 @@
 
 - ### 서비스 요청 흐름도
 
-![TOT 아키텍쳐](https://github.com/trip-or-treat/trip-or-treat/assets/108510951/8a3db4ff-1174-4988-b956-9c06f8293f0f)
+![TOT 아키텍쳐](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/9db44955-b5a2-4ed2-9489-8d7c93d418ed)
 
 - ### CI/CD
 
-![TOT CI_CD](https://github.com/trip-or-treat/trip-or-treat/assets/108510951/f3959671-e409-4d69-9fdf-00f550fa24bc)
+![TOT CI_CD](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/08f7cbfa-287c-4ceb-88f0-63ef1d208fff)
 
 - ### ERD
 
@@ -52,6 +59,7 @@
 
 ## 👥 팀원 소개
 
-|                Backend                 |                Backend                 |                 Backend                  |                Frontend                 |                 Frontend                  |               Frontend                |
-| :------------------------------------: | :------------------------------------: | :--------------------------------------: | :-------------------------------------: | :---------------------------------------: | :-----------------------------------: |
-| [양소희](https://github.com/MisaSohee) | [이다훈](https://github.com/honee8583) | [임동훈](https://github.com/snowcrab382) | [구예진](https://github.com/kyejin0412) | [김치환](https://github.com/rlaclghks123) | [유영민](https://github.com/yu-ratel) |
+|                                                                  Backend                                                                   |                                                                  Backend                                                                   |                                                                  Backend                                                                   |                                                                  Frontend                                                                  |                                                                  Frontend                                                                  |                                                                  Frontend                                                                  |
+| :----------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------: |
+| <img src="https://github.com/d-virusss/interview_frontend/assets/88155610/94471b9f-c7cc-4567-a577-cc5be67fd445" width="130" height="130"/> | <img src="https://github.com/d-virusss/interview_frontend/assets/88155610/d39e8b24-981e-4eb1-8bf4-e101e9381a5a" width="130" height="130"/> | <img src="https://github.com/d-virusss/interview_frontend/assets/88155610/34f08855-643e-4755-aa55-90f8d776d02e" width="130" height="130"/> | <img src="https://github.com/d-virusss/interview_frontend/assets/88155610/b4be1662-8930-4f65-ad27-e62dfef08221" width="130" height="130"/> | <img src="https://github.com/d-virusss/interview_frontend/assets/88155610/9a0b92f4-278d-4379-abc8-012969d03adc" width="130" height="130"/> | <img src="https://github.com/d-virusss/interview_frontend/assets/88155610/0ba78841-f73e-41ad-a5ec-e8c57fc9d421" width="130" height="130"/> |
+|                                                   [양소희](https://github.com/MisaSohee)                                                   |                                                   [이다훈](https://github.com/honee8583)                                                   |                                                  [임동훈](https://github.com/snowcrab382)                                                  |                                                  [구예진](https://github.com/kyejin0412)                                                   |                                                 [김치환](https://github.com/rlaclghks123)                                                  |                                                   [유영민](https://github.com/yu-ratel)                                                    |
