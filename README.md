@@ -6,7 +6,7 @@
 
 ## **[Trip or Treat 바로가기](https://triportreat.site/)**
 
-![기능 소개](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/54101296-8630-41fb-b4d3-c493b4f6b50d)
+![기능 소개](https://github.com/trip-or-treat/trip-or-treat/assets/88155610/c0f10c1b-849b-4bff-9e22-4eccd526fef7)
 
 - 개발 기간
   - 기획 및 디자인 (2024.01.16 ~ 2024.02.18)
