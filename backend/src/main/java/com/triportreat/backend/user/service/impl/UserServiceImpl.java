@@ -2,6 +2,7 @@ package com.triportreat.backend.user.service.impl;
 
 
 import com.triportreat.backend.place.error.handler.exception.UserNotFoundException;
+import com.triportreat.backend.user.domain.UserInfoResponseDto;
 import com.triportreat.backend.user.domain.UserNicknameRequestDto;
 import com.triportreat.backend.user.entity.User;
 import com.triportreat.backend.user.error.exception.UserNicknameExistException;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -47,5 +49,12 @@ public class UserServiceImpl implements UserService {
         user.updateProfileImage(newUrl);
 
         return newUrl;
+    }
+
+    @Override
+    public UserInfoResponseDto getUserInfo(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+        return new UserInfoResponseDto(user);
     }
 }

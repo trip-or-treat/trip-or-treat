@@ -5,6 +5,7 @@ import com.triportreat.backend.file.error.exception.ImageUploadFailedException;
 import com.triportreat.backend.file.error.exception.NotImageFileException;
 import com.triportreat.backend.file.service.FileService;
 import com.triportreat.backend.place.error.handler.exception.UserNotFoundException;
+import com.triportreat.backend.user.domain.UserInfoResponseDto;
 import com.triportreat.backend.user.domain.UserNicknameRequestDto;
 import com.triportreat.backend.user.entity.User;
 import com.triportreat.backend.user.error.exception.UserNicknameExistException;
@@ -172,6 +173,44 @@ class UserServiceTest extends DummyObject {
             assertThatThrownBy(() -> userService.updateUserProfile(imageFile, 1L))
                     .isInstanceOf(ImageUploadFailedException.class)
                     .hasMessage(IMAGE_UPLOAD_FAILED.getMessage());
+        }
+    }
+
+    @Nested
+    @DisplayName("회원정보 조회")
+    class GetUserInfo {
+
+        @Test
+        @DisplayName("성공")
+        void getUserInfo_Success() {
+            // given
+            User user = createMockUser(1L, "user1");
+
+            when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+
+            // when
+            UserInfoResponseDto userInfo = userService.getUserInfo(1L);
+
+            // then
+            assertThat(userInfo.getName()).isEqualTo(user.getName());
+            assertThat(userInfo.getEmail()).isEqualTo(user.getEmail());
+            assertThat(userInfo.getNickname()).isEqualTo(user.getNickname());
+            assertThat(userInfo.getImageThumbnail()).isEqualTo(user.getImageThumbnail());
+        }
+
+        @Test
+        @DisplayName("실패 - 사용자 정보 없음")
+        void getUserInfo_UserNotFoundException() {
+            // given
+            User user = createMockUser(1L, "user1");
+
+            when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+            // when
+            // then
+            assertThatThrownBy(() -> userService.getUserInfo(1L))
+                    .isInstanceOf(UserNotFoundException.class)
+                    .hasMessage(USER_NOT_FOUND.getMessage());
         }
     }
 }
