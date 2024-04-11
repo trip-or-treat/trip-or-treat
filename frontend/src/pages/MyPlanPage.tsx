@@ -66,7 +66,6 @@ const MyPlanPage = () => {
   });
 
   if (isError) return null;
-  console.log(myPlanData?.data.contents);
 
   useEffect(() => {
     if (!isLoading) {
