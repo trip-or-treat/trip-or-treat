@@ -1,3 +1,3 @@
-import ImageBox from './ImgaeBox';
+import ImageBox from './ImageBox';
 
 export default ImageBox;
