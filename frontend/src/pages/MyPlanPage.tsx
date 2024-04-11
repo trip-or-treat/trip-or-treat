@@ -28,6 +28,7 @@ interface MyPlanData {
     data: TotalMyPlanData;
   };
   isError: boolean;
+  isLoading: boolean;
 }
 
 interface TotalMyPlanData {
@@ -53,7 +54,11 @@ const MyPlanPage = () => {
   const [keyword, setKeyword] = useState('');
 
   // 데이터 불러오기
-  const { data: myPlanData, isError }: MyPlanData = useMyPlanList({
+  const {
+    data: myPlanData,
+    isError,
+    isLoading,
+  }: MyPlanData = useMyPlanList({
     pageParam: currentPage,
     searchType,
     keyword: keyword || '',
@@ -65,8 +70,16 @@ const MyPlanPage = () => {
   console.log(myPlanData?.data);
 
   useEffect(() => {
-    setCurrentPost(myPlanData?.data.contents);
-  }, [myPlanData]);
+    setCreatedYear(null);
+    setSearchType('T');
+    setComingYn(null);
+    setCurrentPage(1);
+  }, []);
+
+  useEffect(() => {
+    if (!isLoading) setCurrentPost(myPlanData?.data.contents);
+    if (currentPost?.length === 0) setCurrentPage(myPlanData?.data.totalPages);
+  }, [myPlanData?.data]);
 
   // 페이지네이션
   let totalElements = myPlanData?.data.totalElements;
@@ -93,13 +106,6 @@ const MyPlanPage = () => {
     if (year === createdYear) setCreatedYear(null);
     else setCreatedYear(year);
   };
-
-  useEffect(() => {
-    setCreatedYear(null);
-    setSearchType('T');
-    setComingYn(null);
-    setCurrentPage(1);
-  }, []);
 
   const searchTypeObj = {
     제목: 'T',
@@ -128,7 +134,7 @@ const MyPlanPage = () => {
         </ComingYnDrop>
       </SearchBox>
       <FilterBox>
-        {createdYearList.map((year) => (
+        {createdYearList?.map((year) => (
           <Button
             key={year}
             onClick={() => handleClick(year)}
@@ -141,8 +147,8 @@ const MyPlanPage = () => {
       <PlanListCategory />
       {isError && <FailDataPage />}
       <ListContainer>
-        {currentPost.length === 0 && <EmptyBox>계획 목록이 없습니다.</EmptyBox>}
-        {currentPost.map((data, idx) => {
+        {currentPost?.length === 0 && <EmptyBox>계획 목록이 없습니다.</EmptyBox>}
+        {currentPost?.map((data, idx) => {
           return (
             <MyPlanList
               key={data.planId}
