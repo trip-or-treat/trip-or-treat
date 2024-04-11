@@ -205,6 +205,7 @@ const CloseBtn = styled.button`
   border: none;
   background-color: ${(props) => props.theme.colors.mainColor};
 
+  font-family: 'Pretendard-Regular';
   color: white;
   cursor: pointer;
 `;
@@ -223,6 +224,7 @@ const Label = styled.label`
 
   p {
     min-width: 50px;
+    font-family: 'Pretendard-Regular';
   }
 
   input,

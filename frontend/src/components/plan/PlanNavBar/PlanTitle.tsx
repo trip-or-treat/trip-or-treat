@@ -89,6 +89,8 @@ const Input = styled.input`
 
   width: 250px;
 
+  padding: 5px 0px;
+
   border: none;
   background-color: inherit;
   color: ${(props) => props.theme.colors.blackFont};
@@ -137,4 +139,5 @@ const ChangeEndButton = styled(CommonButton)`
   border-radius: 7px;
   background-color: ${(props) => props.theme.colors.mainColor};
   color: ${(props) => props.theme.colors.whiteFont};
+  font-family: 'Pretendard-Regular';
 `;
