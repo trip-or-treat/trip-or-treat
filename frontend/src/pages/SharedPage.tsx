@@ -1,9 +1,11 @@
 import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
+
 import Loading from 'src/components/common/Loading';
 import PlanNavBar from 'src/components/plan/PlanNavBar';
 import PlansList from 'src/components/plan/PlansList';
 import { useShare } from 'src/hooks/api/useShare';
-import styled from 'styled-components';
+
 import FailDataPage from './FailDataPage';
 
 const SharedPage = () => {

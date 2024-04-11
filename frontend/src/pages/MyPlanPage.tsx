@@ -66,11 +66,10 @@ const MyPlanPage = () => {
   });
 
   if (isError) return null;
-  console.log(myPlanData?.data.contents);
 
   useEffect(() => {
     if (!isLoading) {
-      setCurrentPost(myPlanData.data.contents);
+      setCurrentPost(myPlanData?.data.contents);
     }
   }, [myPlanData]);
 
@@ -112,9 +111,6 @@ const MyPlanPage = () => {
     '지난 여행': 'N',
   };
 
-  console.log('currentPage:', currentPage);
-  console.log('currentPost:', currentPost);
-
   return (
     <div>
       <MyPageTitle>내 여행계획</MyPageTitle>
@@ -128,7 +124,7 @@ const MyPlanPage = () => {
         </ComingYnDrop>
       </SearchBox>
       <FilterBox>
-        {createdYearList.map((year) => (
+        {createdYearList?.map((year) => (
           <Button
             key={year}
             onClick={() => handleClick(year)}
@@ -141,8 +137,8 @@ const MyPlanPage = () => {
       <PlanListCategory />
       {isError && <FailDataPage />}
       <ListContainer>
-        {currentPost.length === 0 && <EmptyBox>계획 목록이 없습니다.</EmptyBox>}
-        {currentPost.map((data, idx) => {
+        {currentPost?.length === 0 && <EmptyBox>계획 목록이 없습니다.</EmptyBox>}
+        {currentPost?.map((data, idx) => {
           return (
             <MyPlanList
               key={data.planId}

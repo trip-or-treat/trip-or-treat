@@ -99,7 +99,7 @@ const ButtonBox = styled.div`
   display: flex;
   justify-content: center;
 
-  margin-top: 40px;
+  margin-top: 3%;
 
   button {
     width: 200px;
