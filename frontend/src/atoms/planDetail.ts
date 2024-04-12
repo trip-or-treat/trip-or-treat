@@ -6,6 +6,7 @@ export interface TotalPlanDetail {
   day: number;
   date: string;
   items: SchedulePlacesDetail[] | PlaceListTypes[];
+  scheduleId?: number;
 }
 
 export const planDetailCurRegionIdAtom = atom<number>({

@@ -118,9 +118,6 @@ const MyPlanPage = () => {
     '지난 여행': 'N',
   };
 
-  console.log('currentPage:', currentPage);
-  console.log('currentPost:', currentPost);
-
   return (
     <div>
       <MyPageTitle>내 여행계획</MyPageTitle>

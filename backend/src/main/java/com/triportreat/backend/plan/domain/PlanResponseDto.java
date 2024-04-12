@@ -1,16 +1,17 @@
 package com.triportreat.backend.plan.domain;
 
+import com.triportreat.backend.common.utils.CustomDateUtil;
 import com.triportreat.backend.plan.entity.Plan;
 import com.triportreat.backend.plan.entity.PlanRegion;
 import com.triportreat.backend.plan.entity.Schedule;
 import com.triportreat.backend.plan.entity.SchedulePlace;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.triportreat.backend.region.entity.Region;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -144,11 +145,24 @@ public class PlanResponseDto {
         private String title;
         private LocalDate startDate;
         private LocalDate endDate;
-        @JsonIgnore
-        private LocalDateTime createdDateTime;
         private String createdDate;
 
         @Builder.Default
         private List<String> regions = new ArrayList<>();
+
+        public PlanListResponseDto(Plan plan) {
+            this.planId = plan.getId();
+            this.title = plan.getTitle();
+            this.startDate = plan.getStartDate();
+            this.endDate = plan.getEndDate();
+            this.createdDate = CustomDateUtil.toStringFormat(plan.getCreatedDate());
+            this.regions = sortRegionsByRegionId(plan.getRegions());
+        }
+
+        private List<String> sortRegionsByRegionId(Set<PlanRegion> planRegions) {
+            return planRegions.stream().map(PlanRegion::getRegion).toList()
+                    .stream().sorted(Comparator.comparing(Region::getId)).toList()
+                    .stream().map(Region::getName).collect(Collectors.toList());
+        }
     }
 }

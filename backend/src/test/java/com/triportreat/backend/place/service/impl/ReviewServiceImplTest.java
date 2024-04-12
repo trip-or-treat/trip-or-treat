@@ -74,7 +74,7 @@ class ReviewServiceImplTest extends DummyObject {
             assertThat(reviewList).hasSize(2);
             assertThat(reviewList.get(0).getId()).isEqualTo(1L);
             assertThat(reviewList.get(0).getNickname()).isEqualTo("testUser");
-            assertThat(reviewList.get(0).getImageThumbnail()).isEqualTo("");
+            assertThat(reviewList.get(0).getImageThumbnail()).isEqualTo("testUser imageThumbnail");
             assertThat(reviewList.get(0).getContent()).isEqualTo("testContent");
             assertThat(reviewList.get(0).getTip()).isEqualTo("testTip");
             assertThat(reviewList.get(0).getScore()).isEqualTo(5);

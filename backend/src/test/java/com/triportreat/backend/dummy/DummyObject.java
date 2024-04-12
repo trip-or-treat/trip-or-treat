@@ -29,7 +29,7 @@ public class DummyObject {
                 .name(name)
                 .nickname(name)
                 .email(name + "@gmail.com")
-                .imageThumbnail("")
+                .imageThumbnail(name + " imageThumbnail")
                 .build();
     }
 
