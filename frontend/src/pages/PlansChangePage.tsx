@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import curDayAtom from 'src/atoms/curDayAtom';
@@ -35,6 +35,7 @@ const PlansChangePage = () => {
 
   const navigate = useNavigate();
   const { planId } = useParams();
+  const { pathname } = useLocation();
 
   const isLoggedIn = useRecoilValue(loginStateAtom);
   const [isModal, setModal] = useRecoilState(modalStateAtom);
@@ -70,6 +71,7 @@ const PlansChangePage = () => {
   const onClose = () => {
     setOpen(false);
     setTitle(planDetailApi?.data.title);
+    localStorage.setItem('prevPage', pathname);
   };
 
   if (isError) {
