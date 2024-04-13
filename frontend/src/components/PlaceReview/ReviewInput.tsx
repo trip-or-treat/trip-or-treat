@@ -184,6 +184,7 @@ const Content = styled.textarea`
 const RatingEmpty = styled.div`
   margin-left: 10px;
 
+  font-size: 15px;
   color: ${(props) => props.theme.colors.mainColor};
   font-family: 'Pretendard-SemiBold';
 `;
