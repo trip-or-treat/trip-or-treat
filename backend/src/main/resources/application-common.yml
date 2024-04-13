@@ -36,3 +36,9 @@ kakao:
   redirect-uri : /login
   token-uri : https://kauth.kakao.com/oauth/token
   user-info-uri : https://kapi.kakao.com/v2/user/me
+
+aws:
+  s3:
+    bucket: ENC(1yD+fvQgIrXM+kEmSPMrLhXJ8+4eq73+zT3t2cnJjW94Aa6PntJ22A==)
+    accessKey: ENC(ssxHKp3JC8WG+tlyqVFXUk5pzsUcz4AEm+onlg4esk0=)
+    secretKey: ENC(xvz9sMEBab324MA9dy2X27y08liu3EUjzDhjfhTQd0YNs9W9BnXIzky/TlMmXIfZXvupqW2dPTw=)

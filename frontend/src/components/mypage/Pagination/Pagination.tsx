@@ -11,7 +11,7 @@ const Paging = ({ currentPage, totalElements, setCurrentPage }: Props) => {
     <Pagination
       activePage={currentPage} // 현재페이지
       itemsCountPerPage={10} // 한 페이지 당 보여줄 데이터 수
-      totalItemsCount={totalElements} // 총 데이터 수
+      totalItemsCount={totalElements ?? 1} // 총 데이터 수
       pageRangeDisplayed={5} // 페이지네이터 몇 개 보여줄지
       prevPageText="<" // 이전 텍스트
       nextPageText=">" // 다음 텍스트

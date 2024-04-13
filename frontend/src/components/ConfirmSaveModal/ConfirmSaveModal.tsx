@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+
 import { useMutation } from '@tanstack/react-query';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import theme from 'src/styles/theme';
 import { useSaveTotalPlan } from 'src/hooks/api/useSaveTotalPlan';
@@ -20,8 +20,7 @@ interface Props {
 }
 
 const ConfirmSaveModal = ({ onClose }: Props) => {
-  const navigate = useNavigate();
-  const title = useRecoilValue(planTitleAtom);
+  const [title, setTitle] = useRecoilState(planTitleAtom);
   const totalPlan = useRecoilValue(totalPlanAtom);
   const myRegionList = useRecoilValue(myRegionListAtom);
 
@@ -39,7 +38,7 @@ const ConfirmSaveModal = ({ onClose }: Props) => {
     mutationFn: (payload: SchedulesType) => useSaveTotalPlan(payload),
     onSuccess: () => {
       alert('성공적으로 저장이 완료되었습니다!');
-      navigate('/myPage/myPlan');
+      window.location.href = '/myPage/myPlan';
     },
     onError: () => {
       alert('저장이 실패했습니다!');
@@ -57,6 +56,7 @@ const ConfirmSaveModal = ({ onClose }: Props) => {
     };
 
     mutate(result);
+    setTitle('');
   };
 
   return (

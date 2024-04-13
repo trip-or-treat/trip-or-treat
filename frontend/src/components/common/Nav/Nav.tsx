@@ -48,13 +48,11 @@ const Nav = () => {
             로그아웃
           </MenuButton>
           <MenuButton path="/mypage/myInfo">마이페이지</MenuButton>
-          <MenuButton path="/">이용방법</MenuButton>
         </>
       ) : (
         <>
           <LogoButton />
           <MenuButton path={KAKAO_AUTH_URL}>로그인</MenuButton>
-          <MenuButton path="/">이용방법</MenuButton>
         </>
       )}
     </NavBox>

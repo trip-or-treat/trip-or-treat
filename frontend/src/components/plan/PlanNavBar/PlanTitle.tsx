@@ -76,7 +76,7 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.div`
-  width: 250px;
+  min-width: 250px;
   height: inherit;
 
   color: ${(props) => props.theme.colors.blackFont};
@@ -89,9 +89,10 @@ const Input = styled.input`
 
   width: 250px;
 
+  padding: 5px 0px;
+
   border: none;
   background-color: inherit;
-
   color: ${(props) => props.theme.colors.blackFont};
   font-size: 30px;
   font-family: 'Pretendard-SemiBold';
@@ -138,4 +139,5 @@ const ChangeEndButton = styled(CommonButton)`
   border-radius: 7px;
   background-color: ${(props) => props.theme.colors.mainColor};
   color: ${(props) => props.theme.colors.whiteFont};
+  font-family: 'Pretendard-Regular';
 `;

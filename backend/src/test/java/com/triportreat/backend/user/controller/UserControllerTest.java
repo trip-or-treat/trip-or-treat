@@ -7,6 +7,7 @@ import com.triportreat.backend.auth.filter.JwtExceptionFilter;
 import com.triportreat.backend.auth.utils.AuthUserArgumentResolver;
 import com.triportreat.backend.common.config.WebConfig;
 import com.triportreat.backend.place.error.handler.exception.UserNotFoundException;
+import com.triportreat.backend.user.domain.UserInfoResponseDto;
 import com.triportreat.backend.user.domain.UserNicknameRequestDto;
 import com.triportreat.backend.user.error.exception.UserNicknameExistException;
 import com.triportreat.backend.user.service.UserService;
@@ -22,8 +23,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.triportreat.backend.common.response.FailMessage.*;
+import static com.triportreat.backend.common.response.SuccessMessage.GET_SUCCESS;
 import static com.triportreat.backend.common.response.SuccessMessage.PUT_SUCCESS;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -143,6 +146,51 @@ public class UserControllerTest {
                     .andExpect(jsonPath("$.message").value(VALIDATION_FAILED.getMessage()))
                     .andExpect(jsonPath("$.status").value(400))
                     .andExpect(jsonPath("$.data.nickname").value("닉네임은 필수 입력값입니다."));
+        }
+    }
+
+    @Nested
+    @DisplayName("회원정보조회")
+    class GetUserInfo {
+
+        @Test
+        @DisplayName("성공")
+        void getUserInfo_Success() throws Exception {
+            // given
+            UserInfoResponseDto userInfo = UserInfoResponseDto.builder()
+                    .name("user1")
+                    .email("user1@gmail.com")
+                    .nickname("user1")
+                    .imageThumbnail("user1 image Thumbnail")
+                    .build();
+
+            when(userService.getUserInfo(any())).thenReturn(userInfo);
+            // when
+            // then
+            mockMvc.perform(get("/user/info"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value(200))
+                    .andExpect(jsonPath("$.message").value(GET_SUCCESS.getMessage()))
+                    .andExpect(jsonPath("$.result").value(true))
+                    .andExpect(jsonPath("$.data.name").value("user1"))
+                    .andExpect(jsonPath("$.data.email").value("user1@gmail.com"))
+                    .andExpect(jsonPath("$.data.nickname").value("user1"))
+                    .andExpect(jsonPath("$.data.imageThumbnail").value("user1 image Thumbnail"));
+        }
+
+        @Test
+        @DisplayName("실패 - 사용자 정보 없음")
+        void getUserInfo_UserNotFoundException() throws Exception {
+            // given
+            doThrow(UserNotFoundException.class).when(userService).getUserInfo(any());
+
+            // when
+            // then
+            mockMvc.perform(get("/user/info"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value(500))
+                    .andExpect(jsonPath("$.message").value(USER_NOT_FOUND.getMessage()))
+                    .andExpect(jsonPath("$.result").value(false));
         }
     }
 }
