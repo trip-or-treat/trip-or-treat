@@ -32,12 +32,19 @@ const Nav = () => {
     setLogin(false);
   };
 
+  const refresh = () => {
+    if (pathname.startsWith('/region') || pathname.startsWith('/place')) {
+      return pathname;
+    }
+    return '/';
+  };
+
   return (
     <NavBox>
       {isLogin ? (
         <>
           <LogoButton />
-          <MenuButton path="/" onClick={onLogout}>
+          <MenuButton path={refresh()} onClick={onLogout}>
             로그아웃
           </MenuButton>
           <MenuButton path="/mypage/myInfo">마이페이지</MenuButton>

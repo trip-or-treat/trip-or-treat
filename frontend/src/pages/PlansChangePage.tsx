@@ -1,17 +1,19 @@
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import curDayAtom from 'src/atoms/curDayAtom';
 import loginStateAtom from 'src/atoms/Login/loginStateAtom';
-import { planTitleAtom } from 'src/atoms/plan';
+import { planTitleAtom, pastPlanAtom } from 'src/atoms/plan';
+import modalStateAtom from 'src/atoms/modalStateAtom';
 
 import usePageState from 'src/hooks/usePageState';
 import { usePlanDetail } from 'src/hooks/api/usePlanDetail';
 
 import { SchedulesTypeWithRegions } from 'src/@types/api/planDetail';
 
+import PlaceModal from 'src/components/PlaceModal';
 import Loading from 'src/components/common/Loading';
 import PlanChangeModal from 'src/components/mypage/PlanChangeModal';
 import PlanNavBar from '../components/plan/PlanNavBar';
@@ -33,10 +35,13 @@ const PlansChangePage = () => {
 
   const navigate = useNavigate();
   const { planId } = useParams();
+  const { pathname } = useLocation();
 
   const isLoggedIn = useRecoilValue(loginStateAtom);
+  const [isModal, setModal] = useRecoilState(modalStateAtom);
   const setCurDay = useSetRecoilState(curDayAtom);
   const setTitle = useSetRecoilState(planTitleAtom);
+  const setPastPaln = useSetRecoilState(pastPlanAtom);
 
   const { setClickedIdList, setTotalPlan } = usePageState();
   const { data: planDetailApi, isLoading, isError }: PlanDetailData = usePlanDetail(planId);
@@ -55,11 +60,18 @@ const PlansChangePage = () => {
     setTitle(planDetailApi?.data?.title);
     setTotalPlan(formattedData);
     setClickedIdList(formattedData?.map((data) => data?.items));
+
+    if (new Date() > new Date(planDetailApi?.data?.startDate)) {
+      setPastPaln(true);
+    } else {
+      setPastPaln(false);
+    }
   }, [planDetailApi]);
 
   const onClose = () => {
     setOpen(false);
     setTitle(planDetailApi?.data.title);
+    localStorage.setItem('prevPage', pathname);
   };
 
   if (isError) {
@@ -69,6 +81,10 @@ const PlansChangePage = () => {
       </Main>
     );
   }
+
+  const closeModal = () => {
+    setModal(false);
+  };
 
   return (
     <Main>
@@ -93,6 +109,7 @@ const PlansChangePage = () => {
       )}
 
       {isLoggedIn && open && <PlanChangeModal detailData={planDetailApi?.data} onClose={onClose} />}
+      {isModal && <PlaceModal onClose={closeModal} />}
     </Main>
   );
 };

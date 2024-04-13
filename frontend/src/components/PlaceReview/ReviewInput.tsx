@@ -1,6 +1,7 @@
 import { useState, ChangeEvent, useEffect } from 'react';
 import { styled } from 'styled-components';
 import { useSetRecoilState } from 'recoil';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { ReactComponent as StarFilled } from 'src/assets/svgs/starFilled.svg';
 import { ReactComponent as StarEmpty } from 'src/assets/svgs/starEmpty.svg';
@@ -35,15 +36,38 @@ const ReviewInput = ({ currentId }: { currentId: number }) => {
     }
   }, []);
 
+  const queryClient = useQueryClient();
+
+  const reviewEditMutation = useMutation({
+    mutationFn: editReviewFetcher,
+    onSuccess: () => {
+      return queryClient.invalidateQueries({
+        queryKey: ['review'],
+      });
+    },
+    onError: () => alert('수정을 실패했습니다.'),
+  });
+
+  const reviewWriteMutation = useMutation({
+    mutationFn: reviewWriteFetcher,
+    onSuccess: () => {
+      return queryClient.invalidateQueries({
+        queryKey: ['review'],
+      });
+    },
+    onError: () => alert('등록을 실패했습니다.'),
+  });
+
   const onSubmit = () => {
     if (score === 0 || score === -1) {
       setScore(-1);
     } else {
       if (myReview) {
-        editReviewFetcher({ id, placeId, content, tip, score });
+        reviewEditMutation.mutate({ id, placeId, content, tip, score });
+        localStorage.setItem('myReview', JSON.stringify({ id, placeId, content, tip, score }));
         isEditReview(true);
       } else {
-        reviewWriteFetcher({ placeId, content, tip, score });
+        reviewWriteMutation.mutate({ placeId, content, tip, score });
       }
       setSubmit(true);
       setContent('');
@@ -82,7 +106,6 @@ const ReviewInput = ({ currentId }: { currentId: number }) => {
 
   const review = {
     request: myReview ? '리뷰 수정' : '리뷰 등록',
-    complete: myReview ? '수정 완료' : '등록 완료',
   };
 
   return (
@@ -115,7 +138,7 @@ const ReviewInput = ({ currentId }: { currentId: number }) => {
       {!isSubmit ? (
         <InputSubmit onClick={onSubmit}>{review.request}</InputSubmit>
       ) : (
-        <SubmitCompleted>{review.complete}</SubmitCompleted>
+        <SubmitCompleted>등록 완료</SubmitCompleted>
       )}
     </InputInner>
   );
@@ -161,6 +184,7 @@ const Content = styled.textarea`
 const RatingEmpty = styled.div`
   margin-left: 10px;
 
+  font-size: 15px;
   color: ${(props) => props.theme.colors.mainColor};
   font-family: 'Pretendard-SemiBold';
 `;
@@ -219,6 +243,6 @@ const Svg = styled.button<{ $hoverIndex: number }>`
   cursor: pointer;
 
   &.hoverRange path {
-    fill: #ffd233;
+    fill: ${(props) => props.theme.colors.yellow};
   }
 `;

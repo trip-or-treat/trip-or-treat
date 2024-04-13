@@ -8,3 +8,8 @@ export const planTitleAtom = atom<string>({
   default: '',
   effects_UNSTABLE: [persistAtom],
 });
+
+export const pastPlanAtom = atom<boolean>({
+  key: 'pastPlanAtom',
+  default: false,
+});

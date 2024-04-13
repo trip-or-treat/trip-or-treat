@@ -9,7 +9,6 @@ const MyInfo = () => {
     <Info>
       <MenuBox>
         <InfoMenu>닉네임</InfoMenu>
-        <InfoMenu>이름</InfoMenu>
         <InfoMenu>이메일</InfoMenu>
       </MenuBox>
       <ContentBox>
@@ -17,7 +16,6 @@ const MyInfo = () => {
           여행자1
           <EditIcon />
         </InfoContent>
-        <InfoContent>고스트</InfoContent>
         <InfoContent>triportreat@gmail.com</InfoContent>
       </ContentBox>
     </Info>

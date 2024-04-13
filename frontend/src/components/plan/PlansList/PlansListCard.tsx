@@ -1,4 +1,9 @@
 import styled from 'styled-components';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+
+import { pastPlanAtom } from 'src/atoms/plan';
+import placeIdAtom from 'src/atoms/placeIdAtom';
+import modalStateAtom from 'src/atoms/modalStateAtom';
 
 import { ORDER_COLORS } from 'src/constants/color';
 import { SchedulePlaces, SchedulePlacesDetail } from 'src/@types/api/schedules';
@@ -11,6 +16,15 @@ interface Props {
 }
 
 const PlansListCard = ({ listIdx, idx, data }: Props) => {
+  const isPastPlan = useRecoilValue(pastPlanAtom);
+  const setModal = useSetRecoilState(modalStateAtom);
+  const setPlaceId = useSetRecoilState(placeIdAtom);
+
+  const openModal = () => {
+    setPlaceId({ id: data.placeId, name: data.placeName ? data.placeName : '' });
+    setModal(true);
+  };
+
   return (
     <Wrapper>
       <OrderBox color={ORDER_COLORS[listIdx]}>{idx + 1}</OrderBox>
@@ -25,6 +39,7 @@ const PlansListCard = ({ listIdx, idx, data }: Props) => {
             <li>{data.memo}</li>
           </ul>
         )}
+        {isPastPlan && <ReviewWrite onClick={openModal}>리뷰 작성</ReviewWrite>}
       </DescriptionBox>
       <img src={data.imageThumbnail || defaultImg} alt="이미지사진" />
     </Wrapper>
@@ -84,6 +99,22 @@ const Description = styled.div`
       font-size: 12px;
     }
   }
+`;
+
+const ReviewWrite = styled.button`
+  position: relative;
+  text-align: center;
+
+  right: 20px;
+  border: 0;
+  background-color: transparent;
+
+  font-family: 'Pretendard-Thin';
+  text-decoration: underline;
+  text-decoration-color: ${(props) => props.theme.colors.darkGrey};
+  text-underline-position: under;
+
+  cursor: pointer;
 `;
 
 const OrderBox = styled.div<{ color: string }>`

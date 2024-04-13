@@ -101,6 +101,8 @@ const PlanChangeModal = ({ onClose, detailData }: Props) => {
     mutate(result);
   };
 
+  localStorage.setItem('prevPage', '/place');
+
   return (
     <ModalOverlay>
       <Wrapper>
