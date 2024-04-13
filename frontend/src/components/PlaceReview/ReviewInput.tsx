@@ -242,6 +242,6 @@ const Svg = styled.button<{ $hoverIndex: number }>`
   cursor: pointer;
 
   &.hoverRange path {
-    fill: #ffd233;
+    fill: ${(props) => props.theme.colors.yellow};
   }
 `;
