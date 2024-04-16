@@ -43,11 +43,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public String updateUserProfile(MultipartFile file, Long userId){
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-
         String newUrl = fileService.deleteAndUploadFile(file, user.getImageThumbnail());
-
         user.updateProfileImage(newUrl);
-
         return newUrl;
     }
 
