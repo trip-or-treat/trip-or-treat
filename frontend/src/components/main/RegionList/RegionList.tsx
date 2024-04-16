@@ -130,7 +130,9 @@ const SearchBar = styled.div`
 
   ${media.mobile`
     width: 880px;
-    height: 70px;
+    height: 95px;
+
+    border-radius: 50px;
   `}
 `;
 
@@ -156,7 +158,7 @@ const Input = styled.input`
   outline: none;
 
   ${media.mobile`
-    font-size: 25px;
+    font-size: 28px;
     font-family: 'Pretendard-Medium';
   `}
 `;
