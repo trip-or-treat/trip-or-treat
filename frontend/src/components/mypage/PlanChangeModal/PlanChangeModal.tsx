@@ -26,6 +26,7 @@ import CloseButton from 'src/components/common/modal/CloseButton';
 import { usePatchTotalPlan } from 'src/hooks/api/usePatchTotalPlan';
 import { useDisableButton } from 'src/hooks/useDisableButton';
 import { StyledButton } from 'src/components/common/modal/LinkButton/LinkButton';
+import media from 'src/styles/media';
 
 interface Props {
   detailData: SchedulesTypeWithRegions;
@@ -111,28 +112,31 @@ const PlanChangeModal = ({ onClose, detailData }: Props) => {
         </TitleBox>
 
         <Content>
-          <SearchLayer>
-            <section>
-              {detailData && (
-                <RegionCategoryList
-                  data={regions}
-                  type="BUTTON"
-                  curRegionId={curRegionId}
-                  setCurRegionId={setCurRegionId}
-                />
-              )}
-              <EnterSearch placeHolder="장소를 검색해보세요!" setKeyword={setKeyword} />
-              <ContentTypeFilterItemList />
-            </section>
+          <PlaceBox>
+            <SearchLayer>
+              <section>
+                {detailData && (
+                  <RegionCategoryList
+                    data={regions}
+                    type="BUTTON"
+                    curRegionId={curRegionId}
+                    setCurRegionId={setCurRegionId}
+                  />
+                )}
+                <EnterSearch placeHolder="장소를 검색해보세요!" setKeyword={setKeyword} />
+                <ContentTypeFilterItemList />
+              </section>
 
-            {detailData && (
-              <PlaceList keyword={keyword} setKeyword={setKeyword} curRegionId={curRegionId} />
-            )}
-          </SearchLayer>
-          <DayLayer>
-            <DayCategory />
-            <SelectedPlaceCardList />
-          </DayLayer>
+              {detailData && (
+                <PlaceList keyword={keyword} setKeyword={setKeyword} curRegionId={curRegionId} />
+              )}
+            </SearchLayer>
+
+            <DayLayer>
+              <DayCategory />
+              <SelectedPlaceCardList />
+            </DayLayer>
+          </PlaceBox>
           <MapLayer>
             <KaKaoMap list={selectedPlaceList} curDay={curDay} />
           </MapLayer>
@@ -184,10 +188,25 @@ const Content = styled.div`
 
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+  ${media.mobile`
+    flex-direction: column;
+  `}
+`;
+
+const PlaceBox = styled.div`
+  display: flex;
+  width: 50%;
+
+  ${media.mobile`
+    width: 100%;
+    height:50rem;
+    margin-bottom:20px;
+  `}
 `;
 
 const SearchLayer = styled.div`
-  width: 25%;
+  width: 50%;
   border-left: ${(props) => `1px solid ${props.theme.colors.lightGrey}`};
   border-right: ${(props) => `1px solid ${props.theme.colors.lightGrey}`};
 
@@ -196,18 +215,32 @@ const SearchLayer = styled.div`
   & > section {
     padding: 20px;
   }
+
+  ${media.mobile`
+  width: 50%;  
+`}
 `;
 
 const DayLayer = styled.div`
-  width: 27%;
+  width: 50%;
   height: inherit;
   padding: 20px;
 
   box-sizing: border-box;
+
+  ${media.mobile`
+  width: 50%;  
+`}
 `;
 
 const MapLayer = styled.div`
   width: 48%;
+
+  ${media.mobile`
+  width:95%;
+  height:100%;
+  margin: 20px;;
+`}
 `;
 
 const ButtonBox = styled.div`
