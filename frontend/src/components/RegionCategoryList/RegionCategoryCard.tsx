@@ -70,4 +70,6 @@ const TitleBox = styled.p<{ $isClicked: boolean }>`
   font-family: ${(props) => (props.$isClicked ? 'Pretendard-SemiBold' : 'Pretendard-Light')};
   font-size: 21px;
   cursor: pointer;
+
+  white-space: nowrap;
 `;

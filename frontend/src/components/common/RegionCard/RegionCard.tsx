@@ -10,6 +10,7 @@ import regionClickedIdListAtom from 'src/atoms/regionClickedIdListAtom';
 
 import totalPlanAtom from 'src/atoms/totalPlanAtom';
 import placeClickedIdListAtom from 'src/atoms/placeClickedIdListAtom';
+
 import { ReactComponent as Plus } from '../../../assets/svgs/plus.svg';
 import { ReactComponent as Minus } from '../../../assets/svgs/minus.svg';
 import defaultimg from '../../../assets/images/defaultImg.png';
@@ -135,17 +136,19 @@ const RegionName = styled.p`
   font-size: 18px;
   color: ${(props) => props.theme.colors.blackFont};
   font-family: 'Pretendard-Medium';
+  white-space: nowrap;
 `;
 
 const DefaultMarker = styled.div`
-  padding: 5px 10px;
-
+  padding: 0.5rem 0.6rem;
   border-radius: 10px;
   background-color: ${(props) => props.theme.colors.lightGrey};
 
   color: ${(props) => props.theme.colors.blackFont};
   font-size: 11px;
   font-family: 'Pretendard-Medium';
+
+  white-space: nowrap;
 `;
 
 const IconButtonBox = styled.div`

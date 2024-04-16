@@ -86,7 +86,7 @@ const Input = styled.input`
   width: 90%;
 
   padding: 15px;
-  padding-left: 15%;
+  padding-left: 40px;
 
   border: none;
   border-radius: 35px;
