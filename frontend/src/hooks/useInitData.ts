@@ -3,7 +3,7 @@ import { useSetRecoilState } from 'recoil';
 import contentTypeIdAtom from 'src/atoms/contentTypeIdAtom';
 import curDayAtom from 'src/atoms/curDayAtom';
 import placeClickedIdListAtom from 'src/atoms/placeClickedIdListAtom';
-import { planTitleAtom } from 'src/atoms/plan';
+import { pastPlanAtom, planTitleAtom } from 'src/atoms/plan';
 import regionClickedIdListAtom from 'src/atoms/regionClickedIdListAtom';
 import totalPlanAtom from 'src/atoms/totalPlanAtom';
 
@@ -14,6 +14,7 @@ const useInitData = () => {
   const setPrevContentTypeId = useSetRecoilState(contentTypeIdAtom);
   const setCurDay = useSetRecoilState(curDayAtom);
   const setTitle = useSetRecoilState(planTitleAtom);
+  const setPastPlan = useSetRecoilState(pastPlanAtom);
 
   useEffect(() => {
     setPlaceClickedId([]);
@@ -22,6 +23,7 @@ const useInitData = () => {
     setCurDay(1);
     setTotalPlan([]);
     setTitle('');
+    setPastPlan(false);
   }, []);
 };
 
