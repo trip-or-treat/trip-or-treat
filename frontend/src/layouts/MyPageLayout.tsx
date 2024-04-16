@@ -20,14 +20,15 @@ const MyPageLayout = () => {
 export default MyPageLayout;
 
 const Main = styled.main`
+  width: 55%;
+  height: calc(100vh - 110px);
   margin-top: 110px;
   margin-left: 34%;
-  height: calc(100vh - 110px);
 
   ${media.mobile`
-    width: 96%;
+    width: 100%;
     height: calc(100vh - 270px);
-    margin-top: 250px;
-    margin-left: 2%;
+    margin: 130px 0;
+    padding: 0 20px;
   `}
 `;
