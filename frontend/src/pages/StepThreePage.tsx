@@ -122,7 +122,7 @@ const MapLayer = styled.div`
   height: inherit;
 
   ${media.mobile`
-  width:95%;
+  width:100%;
   height:100%;
   margin: 20px 0px;
 `}

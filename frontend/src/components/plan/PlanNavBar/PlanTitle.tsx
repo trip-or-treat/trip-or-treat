@@ -76,6 +76,7 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.div`
+  text-align: center;
   min-width: 250px;
   height: inherit;
 

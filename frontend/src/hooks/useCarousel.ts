@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 export const useCarousel = (length: number, padding: number) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const slideRef = useRef<HTMLDivElement>(null);
+  const isMobile = window.innerWidth < 1024;
   const cal = currentSlide * (window.innerWidth - padding + 20);
 
   const handlePrev = () => {
@@ -27,5 +28,5 @@ export const useCarousel = (length: number, padding: number) => {
     }
   }, [currentSlide]);
 
-  return { handlePrev, handleNext, slideRef, currentSlide };
+  return { handlePrev, handleNext, slideRef, currentSlide, isMobile };
 };

@@ -87,7 +87,7 @@ const NavList = styled.ul`
   height: 85%;
 
   ${media.mobile`
-    height: 93%;
+    height: 17%;
   `}
 `;
 

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useCarousel } from 'src/hooks/useCarousel';
 
 import { SchedulePlaces, SchedulePlacesDetail, SchedulesType } from 'src/@types/api/schedules';
+import media from 'src/styles/media';
 import { ReactComponent as ChevronLeft } from '../../../assets/svgs/chevronLeft.svg';
 import { ReactComponent as ChevronRight } from '../../../assets/svgs/chevronRight.svg';
 import PlansListCard from './PlansListCard';
@@ -20,8 +21,11 @@ const calculateDailyExpense = (schedulePlaces: (SchedulePlacesDetail | ScheduleP
 };
 
 const PlansList = ({ schedules }: Props) => {
-  const CAROUSEL_LENGTH = (schedules?.length && schedules?.length) ?? 0 % 2;
-  const { handlePrev, handleNext, slideRef, currentSlide } = useCarousel(CAROUSEL_LENGTH, 150);
+  const CAROUSEL_LENGTH = ((schedules?.length && schedules?.length) ?? 0) / 2;
+  const { handlePrev, handleNext, slideRef, currentSlide, isMobile } = useCarousel(
+    CAROUSEL_LENGTH,
+    150,
+  );
 
   return (
     <>
@@ -36,12 +40,19 @@ const PlansList = ({ schedules }: Props) => {
         ))}
       </Wrapper>
 
-      {currentSlide === 1 && (
+      {currentSlide >= 1 && (
         <LeftButton onClick={handlePrev} $length={schedules?.length}>
           <ChevronLeft />
         </LeftButton>
       )}
-      {currentSlide === 0 && (
+
+      {isMobile && currentSlide <= 1 && (
+        <RightButton onClick={handleNext} $length={schedules?.length}>
+          <ChevronRight />
+        </RightButton>
+      )}
+
+      {!isMobile && currentSlide === 0 && (
         <RightButton onClick={handleNext} $length={schedules?.length}>
           <ChevronRight />
         </RightButton>
@@ -62,6 +73,10 @@ const PlanListBox = styled.div`
   overflow: auto;
   flex: 0 0 calc(25% - 30px);
   height: 60vh;
+
+  ${media.mobile`
+  flex: 0 0 29%;
+  `}
 `;
 
 const DayTitle = styled.p`
