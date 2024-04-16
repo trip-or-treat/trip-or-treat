@@ -105,6 +105,7 @@ const StyledModalLayout = styled.div`
 
     width: 700px;
     height: 1024px;
+    padding: 20px 0px 20px 0px;
     margin-top: 30px;
 
     overflow: auto;
@@ -150,8 +151,8 @@ const StyledIcon = styled.div`
   cursor: pointer;
 
   ${media.mobile`
-    top: 25px;
-    left: 545px;
+    top: 10px;
+    left: 550px;
   `}
 `;
 
