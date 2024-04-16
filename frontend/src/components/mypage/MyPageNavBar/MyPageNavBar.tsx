@@ -32,12 +32,14 @@ const NavBox = styled.div`
 
   ${media.mobile`
     flex-direction: row;
+    top: 100px;
 
     width: 99%;
     height: 70px;
     margin: 0 5px;
 
     border-radius: 15px;
+    border: none;
   `}
 `;
 
@@ -46,10 +48,11 @@ const NavItem = styled(NavLink)`
   justify-content: center;
   align-items: center;
 
-  width: 171px;
+  width: 170px;
   height: 50px;
 
   border-radius: 10px;
+  background-color: white;
 
   text-decoration: none;
   font-family: 'Pretendard-Medium';
