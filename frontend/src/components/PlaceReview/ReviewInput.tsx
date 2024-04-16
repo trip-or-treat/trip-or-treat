@@ -2,6 +2,7 @@ import { useState, ChangeEvent, useEffect } from 'react';
 import { styled } from 'styled-components';
 import { useSetRecoilState } from 'recoil';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import media from 'src/styles/media';
 
 import { ReactComponent as StarFilled } from 'src/assets/svgs/starFilled.svg';
 import { ReactComponent as StarEmpty } from 'src/assets/svgs/starEmpty.svg';
@@ -179,6 +180,10 @@ const Content = styled.textarea`
 
   outline: none;
   resize: none;
+
+  ${media.mobile`
+    height: 20%
+  `}
 `;
 
 const RatingEmpty = styled.div`
@@ -202,6 +207,10 @@ const Tip = styled.textarea`
 
   line-height: 1.5;
   text-indent: 10px;
+
+  ${media.mobile`
+  height: 20%
+`}
 `;
 
 const InputSubmit = styled.button`
@@ -215,6 +224,10 @@ const InputSubmit = styled.button`
   color: ${(props) => props.theme.colors.whiteFont};
 
   cursor: pointer;
+
+  ${media.mobile`
+  height: 15%
+`}
 `;
 
 const SubmitCompleted = styled(InputSubmit)`
