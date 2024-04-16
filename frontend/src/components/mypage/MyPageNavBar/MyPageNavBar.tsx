@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import media from 'src/styles/media';
 import styled from 'styled-components';
 
 const MyPageNavBar = () => {
@@ -28,6 +29,17 @@ const NavBox = styled.div`
 
   border: solid 1px lightGray;
   border-radius: 10px;
+
+  ${media.mobile`
+    flex-direction: row;
+    top: 100px;
+
+    width: 100%;
+    height: 70px;
+    margin: 0;
+
+    border: none;
+  `}
 `;
 
 const NavItem = styled(NavLink)`
@@ -35,10 +47,11 @@ const NavItem = styled(NavLink)`
   justify-content: center;
   align-items: center;
 
-  width: 171px;
+  width: 170px;
   height: 50px;
 
   border-radius: 10px;
+  background-color: white;
 
   text-decoration: none;
   font-family: 'Pretendard-Medium';
@@ -51,4 +64,13 @@ const NavItem = styled(NavLink)`
     background-color: ${(props) => props.theme.colors.mainColor};
     color: ${(props) => props.theme.colors.whiteFont};
   }
+
+  ${media.mobile`
+    width: 450px;
+    height: 70px;
+
+    border-radius: 7px;
+
+    font-size: 28px;
+  `}
 `;

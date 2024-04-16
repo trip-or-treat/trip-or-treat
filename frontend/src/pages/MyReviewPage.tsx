@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 
+import media from 'src/styles/media';
+
 import EmptyBox from 'src/components/common/EmptyBox';
 import MyPageTitle from 'src/components/mypage/MyPageTitle';
 import ReviewListCategory from 'src/components/mypage/ReviewListCategory';
@@ -74,10 +76,18 @@ export default MyReviewPage;
 
 const Wrapper = styled.div`
   width: 800px;
+
+  ${media.mobile`
+    width: 100%;;
+  `}
 `;
 
 const ListContainer = styled.div`
   max-height: 60vh;
   min-height: 60vh;
   overflow-y: auto;
+
+  ${media.mobile`
+    min-height: 40vh;
+  `}
 `;

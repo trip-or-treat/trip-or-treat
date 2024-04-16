@@ -9,6 +9,8 @@ import {
   myPlanSearchTypeAtom,
 } from 'src/atoms/myPlan';
 
+import media from 'src/styles/media';
+
 import { ReactComponent as FindIcon } from '../../../assets/svgs/findIcon.svg';
 import { ReactComponent as RotateIcon } from '../../../assets/svgs/rotate.svg';
 
@@ -87,6 +89,10 @@ const Form = styled.form`
 
   margin: 0px 20px;
   height: 45px;
+
+  ${media.mobile`
+    height: 55px;
+  `}
 `;
 
 const Input = styled.input`
@@ -105,7 +111,17 @@ const Input = styled.input`
   &::placeholder {
     color: ${(props) => props.theme.colors.darkGrey};
     font-family: 'Pretendard-Regular';
+
+    ${media.mobile`
+      padding-left: 5px;
+      font-size: 23px;
+    `}
   }
+
+  ${media.mobile`
+    width: 500px;
+    font-size: 23px;
+  `}
 `;
 
 const Button = styled.button`
@@ -123,13 +139,26 @@ const Button = styled.button`
     width: 20px;
     height: 15px;
     fill: ${(props) => props.theme.colors.darkGrey};
+
+    ${media.mobile`
+      width: 27px;
+      height: 22px;
+    `}
   }
 
   &:first-child {
     left: 10px;
+
+    ${media.mobile`
+      left: 15px;
+    `}
   }
 
   &:last-child {
     right: 10px;
+
+    ${media.mobile`
+      right: 15px;
+    `}
   }
 `;

@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+
+import media from 'src/styles/media';
 import mainBannerBgImg from '../../../assets/images/mainBanner.png';
 import StartButton from './StartButton';
 
@@ -27,4 +29,9 @@ const BannerImg = styled.img<{ src: string }>`
   background-image: url(${(props) => props.src});
   background-size: cover;
   background-repeat: no-repeat;
+
+  ${media.mobile`
+    width: 83%;
+    margin: 0px 0px 40px 20px;
+  `}
 `;

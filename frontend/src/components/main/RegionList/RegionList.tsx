@@ -10,6 +10,8 @@ import regionsAtom from 'src/atoms/regionsAtom';
 import modalStateAtom from 'src/atoms/modalStateAtom';
 import createScheduleAtom from 'src/atoms/createScheduleAtom';
 
+import media from 'src/styles/media';
+
 import Loading from 'src/components/common/Loading';
 import RegionModal from 'src/components/RegionModal';
 import RegionItem from './RegionItem';
@@ -107,6 +109,10 @@ const Text = styled.div`
   font-family: 'Pretendard-Bold';
   font-size: 30px;
   color: ${(props) => props.theme.colors.blackFont};
+
+  ${media.mobile`
+    font-size: 40px;
+  `}
 `;
 
 const SearchBar = styled.div`
@@ -121,12 +127,23 @@ const SearchBar = styled.div`
 
   align-items: center;
   justify-content: center;
+
+  ${media.mobile`
+    width: 880px;
+    height: 95px;
+
+    border-radius: 50px;
+  `}
 `;
 
 const IconBox = styled.div`
   svg {
     width: 20px;
     cursor: pointer;
+
+    ${media.mobile`
+      width: 30px;
+    `}
   }
 `;
 
@@ -139,6 +156,11 @@ const Input = styled.input`
   text-align: center;
 
   outline: none;
+
+  ${media.mobile`
+    font-size: 28px;
+    font-family: 'Pretendard-Medium';
+  `}
 `;
 
 const ListContainer = styled.div`
@@ -152,6 +174,12 @@ const List = styled.div`
   row-gap: 155px;
 
   justify-content: center;
+
+  ${media.mobile`
+    grid-template-columns: repeat(3, 260px);
+    column-gap: 55px;
+    row-gap: 145px;
+  `}
 `;
 
 const CannotLoading = styled.div`

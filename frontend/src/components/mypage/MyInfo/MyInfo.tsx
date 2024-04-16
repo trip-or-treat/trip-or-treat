@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 
+import media from 'src/styles/media';
 import { ReactComponent as EditIcon } from '../../../assets/svgs/edit.svg';
-
-// TODO: 닉네임 변경
 
 const MyInfo = () => {
   return (
@@ -36,6 +35,12 @@ const Info = styled.div`
 
   font-family: 'Pretendard-Regular';
   font-size: 17px;
+
+  ${media.mobile`
+    width: 100%;
+    
+    font-size: 27px;
+  `}
 `;
 
 const MenuBox = styled.div`
@@ -50,6 +55,10 @@ const InfoMenu = styled.div`
   margin-left: 100px;
 
   line-height: 60px;
+
+  ${media.mobile`
+    line-height: 80px;
+  `}
 `;
 
 const ContentBox = styled.div`
@@ -80,5 +89,14 @@ const InfoContent = styled.div`
       border: none;
       border-radius: 3px;
     }
+
+    ${media.mobile`
+      width: 27px;
+      height: 27px;
+    `}
   }
+
+  ${media.mobile`
+    line-height: 80px;
+  `}
 `;

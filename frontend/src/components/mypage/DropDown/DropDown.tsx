@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 
+import media from 'src/styles/media';
 import { ReactComponent as DropDownIcon } from '../../../assets/svgs/dropDown.svg';
 import { CommonContainer } from '../../../styles/CommonContainer';
 
@@ -67,6 +68,17 @@ const ToggleBox = styled.div`
 
   cursor: pointer;
   overflow: hidden;
+
+  ${media.mobile`
+    height: 55px;
+  `}
+
+  svg {
+    ${media.mobile`
+      width: 40px;
+      height: 40px;
+    `}
+  }
 `;
 
 const DropMenu = styled.div`
@@ -88,6 +100,13 @@ const DropMenu = styled.div`
   font-size: 14px;
 
   z-index: 5;
+
+  ${media.mobile`
+    margin-top: 70px;
+    padding: 15px 2%;
+    
+    font-size: 23px;
+  `}
 `;
 
 const DropMenuItem = styled.div`
@@ -106,4 +125,9 @@ const DropMenuItem = styled.div`
 const Selected = styled.div`
   width: 70%;
   margin-right: 10px;
+
+  ${media.mobile`
+    margin-left: 10px;
+    font-size: 23px;
+  `}
 `;
