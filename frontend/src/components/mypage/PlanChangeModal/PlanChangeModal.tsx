@@ -163,9 +163,9 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   position: fixed;
-
   width: 80vw;
-  height: 95vh;
+  height: 85vh;
+  border-radius: 35px;
 
   background-color: white;
   overflow: hidden;

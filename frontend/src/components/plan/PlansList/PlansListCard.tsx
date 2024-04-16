@@ -7,6 +7,7 @@ import modalStateAtom from 'src/atoms/modalStateAtom';
 
 import { ORDER_COLORS } from 'src/constants/color';
 import { SchedulePlaces, SchedulePlacesDetail } from 'src/@types/api/schedules';
+
 import defaultImg from '../../../assets/images/defaultImg.png';
 
 interface Props {
@@ -52,7 +53,7 @@ const Wrapper = styled.div`
   display: flex;
   align-items: flex-start;
 
-  width: 100%;
+  width: 95%;
   margin-top: 40px;
   padding: 0px 10px;
   border-left: 0.1px solid ${(props) => props.theme.colors.darkGrey};
@@ -78,7 +79,8 @@ const DescriptionBox = styled.div`
   height: 100px;
 
   ul {
-    margin-bottom: 20px;
+    padding-left: 10px;
+    margin: 15px 5px 20px 0px;
     list-style-position: outside;
     list-style-type: disc;
     font-size: 12px;
