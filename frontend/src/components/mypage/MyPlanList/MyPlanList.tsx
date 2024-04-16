@@ -101,8 +101,9 @@ const PlanContainer = styled.div`
     }
 
     ${media.mobile`
-      width: 40px;
-  `}
+      width: 18px;
+      height: 18px;
+    `}
   }
 
   ${media.mobile`
