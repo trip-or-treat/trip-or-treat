@@ -21,7 +21,7 @@ export default StartButton;
 
 const Wrapper = styled.div`
   ${media.mobile`
-    height: 170px;
+    height: 300px;
   `}
 `;
 
@@ -58,4 +58,8 @@ const StartButtonBox = styled.button`
 
 const Scroll = styled.div`
   height: ${(props) => props.theme.height.topNavHeight};
+
+  ${media.mobile`
+    height: 260px;
+  `}
 `;
