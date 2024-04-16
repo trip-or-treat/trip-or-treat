@@ -7,6 +7,7 @@ import usePageState from 'src/hooks/usePageState';
 import { PlaceListTypes } from 'src/@types/api/placeList';
 import { SchedulePlacesDetail } from 'src/@types/api/schedules';
 
+import media from 'src/styles/media';
 import PlaceCardDetailBtn from './PlaceCardDetailBtn';
 import DragPlaceCard from './DragPlaceCard';
 
@@ -75,6 +76,10 @@ const Wrapper = styled.div`
 
   border: none;
   background-color: white;
+
+  ${media.mobile`
+    width: 95%;
+  `}
 `;
 
 const IconButtonBox = styled.div`
