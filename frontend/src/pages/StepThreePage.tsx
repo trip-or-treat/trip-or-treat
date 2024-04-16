@@ -73,7 +73,7 @@ const Wrapper = styled.div`
   height: calc(100vh - ${(props) => props.theme.height.topNavHeight});
 
   ${media.mobile`
-    flex-direction: column;
+  flex-direction: column;  
   `}
 `;
 
@@ -82,9 +82,10 @@ const PlaceBox = styled.div`
   width: 50%;
 
   ${media.mobile`
-    width: 100%;
-    height:50rem;
-    margin-bottom:20px;
+  width: 100%;  
+  max-height:50rem;
+  overflow: auto;
+  margin-bottom:20px;
   `}
 `;
 
@@ -102,6 +103,7 @@ const SearchLayer = styled.div`
 
   ${media.mobile`
   width: 50%;  
+  max-height:50rem;
 `}
 `;
 
@@ -114,6 +116,7 @@ const DayLayer = styled.div`
 
   ${media.mobile`
   width: 50%;  
+  max-height:50rem;
 `}
 `;
 
@@ -123,7 +126,6 @@ const MapLayer = styled.div`
 
   ${media.mobile`
   width:100%;
-  height:100%;
-  margin: 20px 0px;
+  height:50rem;
 `}
 `;
