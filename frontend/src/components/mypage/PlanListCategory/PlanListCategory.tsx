@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
+import media from 'src/styles/media';
 import { CommonContainer } from '../../../styles/CommonContainer';
 
 const PlanListCategory = () => {
@@ -7,7 +8,6 @@ const PlanListCategory = () => {
     <Container>
       <Index>번호</Index>
       <Title>계획명</Title>
-      {/* 이름 글자 수 공백 포함 11자로 제한 or 말줄임표 */}
       <Region>여행 지역</Region>
       <Period>여행 기간</Period>
       <CreatedDate>작성일</CreatedDate>
@@ -22,6 +22,11 @@ const Container = styled.div`
 
   border-bottom: solid 1px ${(props) => props.theme.colors.lightGrey};
   text-align: center;
+
+  ${media.mobile`
+    padding: 5px 0;
+    font-size: 18px;
+  `}
 `;
 
 const Index = styled.div`
@@ -29,24 +34,43 @@ const Index = styled.div`
   padding-right: 8px;
 
   border-right: solid 1px ${(props) => props.theme.colors.lightGrey};
+
+  ${media.mobile`
+    width: 70px;
+  `}
 `;
 
 const Title = styled.div`
   width: 227px;
   border-right: solid 1px ${(props) => props.theme.colors.lightGrey};
+
+  ${media.mobile`
+    width: 267px;
+  `}
 `;
 
 const Region = styled.div`
   width: 149px;
   border-right: solid 1px ${(props) => props.theme.colors.lightGrey};
+
+  ${media.mobile`
+    width: 179px;
+  `}
 `;
 
 const Period = styled.div`
   width: 197px;
   border-right: solid 1px ${(props) => props.theme.colors.lightGrey};
+
+  ${media.mobile`
+    width: 237px;
+  `}
 `;
 
 const CreatedDate = styled.div`
   width: 110px;
-  /* margin-left: -30px; */
+
+  ${media.mobile`
+    width: 140px;
+  `}
 `;

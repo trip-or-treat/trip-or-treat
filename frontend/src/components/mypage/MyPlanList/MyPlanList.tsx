@@ -6,6 +6,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { END_POINTS } from 'src/constants/api';
 import { loginApi } from 'src/api';
 
+import media from 'src/styles/media';
+
 import AlertModal from 'src/components/AlertModal';
 import { CommonContainer } from '../../../styles/CommonContainer';
 import { ReactComponent as DeleteIcon } from '../../../assets/svgs/delete.svg';
@@ -97,7 +99,18 @@ const PlanContainer = styled.div`
     &:hover {
       fill: ${(props) => props.theme.colors.mainColor};
     }
+
+    ${media.mobile`
+      width: 40px;
+  `}
   }
+
+  ${media.mobile`
+    height: 45px;
+    padding: 5px 0;
+    
+    font-size: 18px;
+  `}
 `;
 
 const Index = styled.div`
@@ -106,6 +119,10 @@ const Index = styled.div`
   text-align: center;
 
   cursor: default;
+
+  ${media.mobile`
+    width: 70px;
+  `}
 `;
 
 const PlanTitle = styled(Link)`
@@ -120,6 +137,10 @@ const PlanTitle = styled(Link)`
   &:hover {
     text-decoration: solid 1px ${(props) => props.theme.colors.blackFont};
   }
+
+  ${media.mobile`
+    width: 255px;
+  `}
 `;
 
 const Region = styled.div`
@@ -129,6 +150,10 @@ const Region = styled.div`
   padding-left: 20px;
 
   cursor: default;
+
+  ${media.mobile`
+    width: 160px;
+  `}
 `;
 
 const Period = styled.div`
@@ -138,6 +163,11 @@ const Period = styled.div`
   text-align: center;
 
   cursor: default;
+
+  ${media.mobile`
+    width: 238px;
+    font-size: 14px;
+  `}
 `;
 
 const CreatedAt = styled.div`
@@ -147,4 +177,9 @@ const CreatedAt = styled.div`
   text-align: center;
 
   cursor: default;
+
+  ${media.mobile`
+    width: 145px;
+    font-size: 14px;
+  `}
 `;

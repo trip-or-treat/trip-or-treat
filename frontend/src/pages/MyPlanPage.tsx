@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 
+import media from 'src/styles/media';
+
 import MyPlanList from 'src/components/mypage/MyPlanList';
 import MyPageTitle from 'src/components/mypage/MyPageTitle';
 import DropDown from 'src/components/mypage/DropDown';
@@ -168,6 +170,11 @@ const ListContainer = styled.div`
   max-height: 48vh;
   min-height: 48vh;
   overflow-y: auto;
+
+  ${media.mobile`
+    width: 100%;
+    min-height: 28vh;
+  `}
 `;
 
 const SearchBox = styled.div`
@@ -175,10 +182,18 @@ const SearchBox = styled.div`
   align-items: center;
 
   margin-bottom: 15px;
+
+  ${media.mobile`
+    margin-bottom: 20px;
+  `}
 `;
 
 const FilterBox = styled.div`
   display: flex;
+
+  ${media.mobile`
+    margin-bottom: 30px;
+  `}
 `;
 
 const Button = styled.button<{ $isClicked: boolean }>`
@@ -186,12 +201,25 @@ const Button = styled.button<{ $isClicked: boolean }>`
 
   height: 25px;
   margin: 0 10px 10px 0;
+
+  ${media.mobile`
+    height: 35px;
+    font-size: 15px;
+  `}
 `;
 
 const SearchTypeDrop = styled.div`
   width: 90px;
+
+  ${media.mobile`
+    width: 170px;
+  `}
 `;
 
 const ComingYnDrop = styled.div`
   width: 150px;
+
+  ${media.mobile`
+    width: 250px;
+  `}
 `;
