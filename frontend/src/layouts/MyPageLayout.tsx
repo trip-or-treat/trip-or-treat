@@ -25,9 +25,8 @@ const Main = styled.main`
   height: calc(100vh - 110px);
 
   ${media.mobile`
-    position: fixed;
-    
     width: 96%;
+    height: calc(100vh - 270px);
     margin-top: 250px;
     margin-left: 2%;
   `}
