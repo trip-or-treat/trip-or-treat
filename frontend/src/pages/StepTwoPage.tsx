@@ -11,6 +11,7 @@ import curDayAtom from 'src/atoms/curDayAtom';
 import myRegionListAtom from 'src/atoms/myRegionListAtom';
 import totalPlanAtom from 'src/atoms/totalPlanAtom';
 
+import media from 'src/styles/media';
 import FailDataPage from './FailDataPage';
 
 const StepTwoPage = () => {
@@ -69,6 +70,10 @@ const SearchLayer = styled.div`
   section {
     padding: 0px 20px;
   }
+
+  ${media.mobile`
+  width: 50%;  
+`}
 `;
 
 const MapLayer = styled.div`

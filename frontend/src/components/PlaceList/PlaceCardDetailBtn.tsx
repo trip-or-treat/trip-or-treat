@@ -69,7 +69,7 @@ const RegionNameBox = styled.div`
 
     &:first-child {
       overflow: hidden;
-      width: 150px;
+      width: 130px;
       height: 20px;
 
       margin-bottom: 3px;

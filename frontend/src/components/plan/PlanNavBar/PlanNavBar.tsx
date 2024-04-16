@@ -3,6 +3,7 @@ import { useRecoilValue } from 'recoil';
 
 import regionsAtom from 'src/atoms/regionsAtom';
 import { SchedulesType } from 'src/@types/api/schedules';
+import media from 'src/styles/media';
 import PlanTitle from './PlanTitle';
 
 interface Props {
@@ -70,6 +71,14 @@ const Wrapper = styled.div`
 const RegionListAndDateBox = styled.div`
   display: flex;
   align-items: flex-end;
+  white-space: nowrap;
+
+  ${media.mobile`
+  flex-direction: column;
+  gap:20px;
+
+  align-items: flex-start;
+  `}
 `;
 
 const Ul = styled.ul`

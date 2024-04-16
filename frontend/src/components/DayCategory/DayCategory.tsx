@@ -88,6 +88,8 @@ const DayButton = styled.button<{ $isClicked: boolean }>`
 `;
 
 const Content = styled.p`
+  white-space: nowrap;
+
   &:first-child {
     font-size: 12px;
     font-family: 'Pretendard-Medium';
