@@ -107,7 +107,7 @@ const PlanContainer = styled.div`
   }
 
   ${media.mobile`
-    height: 45px;
+    height: 50px;
     padding: 5px 0;
     
     font-size: 18px;
