@@ -84,10 +84,10 @@ const Nav = styled.ul`
 `;
 
 const NavList = styled.ul`
-  height: 85%;
+  min-height: 85%;
 
   ${media.mobile`
-    height: 17%;
+  min-height: 15%;
   `}
 `;
 
