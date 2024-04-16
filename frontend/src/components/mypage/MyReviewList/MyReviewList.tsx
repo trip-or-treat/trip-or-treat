@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import { loginApi } from 'src/api';
 import { END_POINTS } from 'src/constants/api';
 
+import media from 'src/styles/media';
+
 import PlaceModal from 'src/components/PlaceModal';
 import AlertModal from 'src/components/AlertModal';
 
@@ -112,8 +114,6 @@ export default MyReviewList;
 const ReviewContainer = styled.div`
   ${CommonContainer}
 
-  justify-content: space-between;
-
   border-bottom: solid 1px ${(props) => props.theme.colors.lightGrey};
 
   svg {
@@ -122,26 +122,54 @@ const ReviewContainer = styled.div`
     &:hover {
       fill: ${(props) => props.theme.colors.mainColor};
     }
+
+    ${media.mobile`
+      width: 18px;
+      height: 18px;
+    `}
   }
+
+  ${media.mobile`
+    height: 50px;
+    padding: 5px 0;
+
+    font-size: 18px;
+  `}
 `;
 
 const ReviewBox = styled.div`
   display: flex;
   align-items: center;
 
-  width: 230px;
+  width: 260px;
   height: 40px;
+  margin-right: 20px;
 
   cursor: pointer;
+
+  ${media.mobile`
+    width: 285px;
+    margin-right: 15px;
+  `}
 `;
 
 const PlaceBox = styled.div`
-  width: 140px;
+  width: 150px;
+
+  ${media.mobile`
+    width: 170px;
+  `}
 `;
 
 const Index = styled.div`
   width: 35px;
+  margin-right: 20px;
+
   text-align: center;
+
+  ${media.mobile`
+    width: 85px;
+  `}
 `;
 
 const Review = styled.div`
@@ -161,7 +189,7 @@ const Place = styled.div`
 `;
 
 const Score = styled.div`
-  width: 80px;
+  width: 140px;
 
   font-size: 13px;
   text-align: center;
@@ -169,14 +197,31 @@ const Score = styled.div`
   svg {
     width: 16px;
     cursor: default;
+
+    ${media.mobile`
+      width: 20px;
+      height: 20px;
+    `}
   }
+
+  ${media.mobile`
+    width: 170px;
+  `}
 `;
 
 const CreatedAt = styled.div`
-  width: 75px;
+  width: 90px;
+  margin-right: 15px;
 
   font-size: 12px;
   text-align: center;
+
+  ${media.mobile`
+    width: 155px;
+    margin-right: 0;
+
+    font-size: 14px;
+  `}
 `;
 
 const Delete = styled.button`

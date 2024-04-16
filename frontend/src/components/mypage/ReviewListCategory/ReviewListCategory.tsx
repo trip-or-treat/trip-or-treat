@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
+import media from 'src/styles/media';
 import { CommonContainer } from '../../../styles/CommonContainer';
 
 const ReviewListCategory = () => {
@@ -7,7 +8,6 @@ const ReviewListCategory = () => {
     <Container>
       <Index>번호</Index>
       <Review>리뷰</Review>
-      {/* 이름 글자 수 공백 포함 11자로 제한 or 말줄임표 */}
       <Place>장소</Place>
       <Score>평점</Score>
       <CreatedDate>작성일</CreatedDate>
@@ -22,6 +22,10 @@ const Container = styled.div`
 
   border-bottom: solid 1px ${(props) => props.theme.colors.lightGrey};
   text-align: center;
+
+  ${media.mobile`
+    font-size: 18px;
+  `}
 `;
 
 const Index = styled.div`
@@ -29,26 +33,46 @@ const Index = styled.div`
   padding-right: 8px;
 
   border-right: solid 1px ${(props) => props.theme.colors.lightGrey};
+
+  ${media.mobile`
+    width: 55px;
+  `}
 `;
 
 const Review = styled.div`
   width: 265px;
 
   border-right: solid 1px ${(props) => props.theme.colors.lightGrey};
+
+  ${media.mobile`
+    width: 290px;
+  `}
 `;
 
 const Place = styled.div`
   width: 185px;
 
   border-right: solid 1px ${(props) => props.theme.colors.lightGrey};
+
+  ${media.mobile`
+    width: 215px;
+  `}
 `;
 
 const Score = styled.div`
   width: 120px;
 
   border-right: solid 1px ${(props) => props.theme.colors.lightGrey};
+
+  ${media.mobile`
+    width: 150px;
+  `}
 `;
 
 const CreatedDate = styled.div`
   width: 105px;
+
+  ${media.mobile`
+    width: 165px;
+  `}
 `;
