@@ -1,4 +1,5 @@
 import React from 'react';
+import media from 'src/styles/media';
 import styled from 'styled-components';
 
 interface Props {
@@ -33,4 +34,8 @@ const StyledModalOverlay = styled.div`
   height: 100%;
 
   background-color: rgba(0, 0, 0, 0.4);
+
+  ${media.mobile`
+    flex-direction: column;
+  `}
 `;

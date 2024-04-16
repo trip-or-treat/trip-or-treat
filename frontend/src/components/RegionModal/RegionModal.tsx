@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
+import styled from 'styled-components';
+import media from 'src/styles/media';
 
 import { RegionsMoreInformation } from 'src/@types/api/regionsMoreInformation';
 import { useRegionsMoreInformation } from 'src/hooks/api/useRegionsMoreInformation';
@@ -96,6 +97,18 @@ const StyledModalLayout = styled.div`
   border-radius: 20px;
 
   background-color: ${(props) => props.theme.colors.whiteFont};
+
+  ${media.mobile`
+    display: flex;
+    align-content: flex-start;
+    flex-direction: row;
+
+    width: 700px;
+    height: 1024px;
+    margin-top: 30px;
+
+    overflow: auto;
+  `}
 `;
 
 const StyledName = styled.div`
@@ -106,12 +119,24 @@ const StyledName = styled.div`
   color: ${(props) => props.theme.colors.blackFont};
   font-size: 35px;
   text-align: left;
+
+  ${media.mobile`
+    text-align: center;
+
+    height: 5%;
+    margin: 20px;
+  `}
 `;
 
 const StyledButtonInner = styled.div`
   position: relative;
   top: 35px;
   right: 105px;
+
+  ${media.mobile`
+    top: 0px;
+    right: 0px;
+  `}
 `;
 
 const StyledIcon = styled.div`
@@ -123,14 +148,27 @@ const StyledIcon = styled.div`
   height: 21px;
 
   cursor: pointer;
+
+  ${media.mobile`
+    top: 25px;
+    left: 545px;
+  `}
 `;
 
 const StyledImageBoxInner = styled.div`
   margin-bottom: 40px;
+
+  ${media.mobile`
+    margin-bottom: 15px;
+  `}
 `;
 
 const StyledOverviewInner = styled.div`
   margin-bottom: 110px;
+
+  ${media.mobile`
+    margin-bottom: 20px;
+`}
 `;
 
 const StyledFooter = styled.div`

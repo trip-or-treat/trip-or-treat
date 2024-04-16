@@ -1,5 +1,6 @@
 import { decode } from 'html-entities';
 import styled from 'styled-components';
+import media from 'src/styles/media';
 
 import defaultImg from 'src/assets/images/defaultImg.png';
 
@@ -31,6 +32,10 @@ const Wrapper = styled.div`
   display: flex;
 
   margin: 25px 20px 0px 30px;
+
+  ${media.mobile`
+  margin: 15px 20px 0px 30px;
+`}
 `;
 
 const StyledTextInner = styled.div`

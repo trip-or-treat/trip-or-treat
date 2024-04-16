@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import media from 'src/styles/media';
 
 import ghostImage from 'src/assets/images/ghost.png';
 import Place from './Place';
@@ -37,6 +38,12 @@ const StyledModalLayout = styled.div`
   text-align: left;
   border-left: 1px solid ${(props) => props.theme.colors.lightGrey};
   margin-left: 30px;
+
+  ${media.mobile`
+    border-left: none;
+    border-top: 1px solid #D9D9D9;
+    margin-left: -30px;
+  `}
 `;
 
 const StyledPlaces = styled.div`
@@ -47,6 +54,10 @@ const StyledPlaces = styled.div`
   color: ${(props) => props.theme.colors.mainColor};
   font-family: 'Pretendard-Bold';
   font-size: 20px;
+
+  ${media.mobile`
+    text-align: center; 
+  `}
 `;
 
 const StyledGhostImage = styled.div`
@@ -59,4 +70,8 @@ const StyledGhostImage = styled.div`
 
   background-size: cover;
   background-image: url(${ghostImage});
+
+  ${media.mobile`
+    display: none;
+  `}
 `;
