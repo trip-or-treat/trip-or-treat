@@ -20,13 +20,13 @@ const MyPageLayout = () => {
 export default MyPageLayout;
 
 const Main = styled.main`
-  position: fixed;
-
   margin-top: 110px;
   margin-left: 34%;
-  height: calc(100vh - ${(props) => props.theme.height.topNavHeight});
+  height: calc(100vh - 110px);
 
   ${media.mobile`
+    position: fixed;
+    
     width: 96%;
     margin-top: 250px;
     margin-left: 2%;
