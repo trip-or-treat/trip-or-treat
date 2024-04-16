@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import media from 'src/styles/media';
 import styled from 'styled-components';
 
 const StartButton = () => {
@@ -9,14 +10,20 @@ const StartButton = () => {
   };
 
   return (
-    <div>
+    <Wrapper>
       <StartButtonBox onClick={onStartBtnClick}>시작하기</StartButtonBox>
       <Scroll ref={searchRef} />
-    </div>
+    </Wrapper>
   );
 };
 
 export default StartButton;
+
+const Wrapper = styled.div`
+  ${media.mobile`
+    height: 170px;
+  `}
+`;
 
 const StartButtonBox = styled.button`
   display: block;
@@ -39,6 +46,14 @@ const StartButtonBox = styled.button`
   &:hover {
     background-color: ${(props) => props.theme.colors.hoverColor};
   }
+
+  ${media.mobile`
+    width: 350px;
+    height: 65px;
+    margin: margin: auto auto 100px auto;
+
+    font-size: 25px;
+  `}
 `;
 
 const Scroll = styled.div`

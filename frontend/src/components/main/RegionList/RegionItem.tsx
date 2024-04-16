@@ -3,6 +3,7 @@ import { useSetRecoilState } from 'recoil';
 
 import modalStateAtom from 'src/atoms/modalStateAtom';
 import regionIdAtom from 'src/atoms/regionIdAtom';
+import media from 'src/styles/media';
 
 interface Props {
   id: number;
@@ -39,6 +40,11 @@ const Container = styled.button`
   background-color: white;
 
   cursor: pointer;
+
+  ${media.mobile`
+    width: 280px;
+    height: 280px;
+`}
 `;
 
 const RegionImg = styled.img<{ src: string }>`
@@ -60,4 +66,9 @@ const RegionName = styled.div`
   font-family: 'Pretendard-Regular';
   font-size: 21px;
   color: ${(props) => props.theme.colors.blackFont};
+
+  ${media.mobile`
+    font-size: 30px;
+    font-family: 'Pretendard-SemiBold';  
+  `}
 `;

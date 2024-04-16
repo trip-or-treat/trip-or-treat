@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
+import media from 'src/styles/media';
 
 import homeModalAtom from 'src/atoms/homeModalAtom';
 import loginStateAtom from 'src/atoms/Login/loginStateAtom';
@@ -72,4 +73,9 @@ const NavBox = styled.div`
   background-color: ${(props) => props.theme.colors.commonNavBgColor};
 
   line-height: ${(props) => props.theme.height.topNavHeight};
+
+  ${media.mobile`
+    height: 100px;
+    padding-left: 5px;
+  `}
 `;

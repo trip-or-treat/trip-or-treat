@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Link, useLocation } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
+import media from 'src/styles/media';
 
 import homeModalAtom from 'src/atoms/homeModalAtom';
 
@@ -39,4 +40,10 @@ const LogoButtonBox = styled(Link)`
   color: ${(props) => props.theme.colors.mainColor};
   text-align: center;
   text-decoration: none;
+
+  ${media.mobile`
+    padding: 20px 0 20px 0;
+    font-size: 40px;
+    font-family: 'Pretendard-Medium';
+  `}
 `;

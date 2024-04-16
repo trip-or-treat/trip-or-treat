@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
+import media from 'src/styles/media';
 
 interface ButtonTextProps {
   path: string;
@@ -29,4 +30,10 @@ const MenuButtonBox = styled(Link)`
   font-family: 'Pretendard-Regular';
   color: ${(props) => props.theme.colors.blackFont};
   text-decoration: none;
+
+  ${media.mobile`
+    padding: 20px 25px;
+    font-size: 27px;
+    font-family: 'Pretendard-Medium';
+  `}
 `;
