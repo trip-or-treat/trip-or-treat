@@ -21,7 +21,7 @@ const PlansListCard = ({ listIdx, idx, data }: Props) => {
   const setPlaceId = useSetRecoilState(placeIdAtom);
 
   const openModal = () => {
-    setPlaceId({ id: data.placeId, name: data.placeName ? data.placeName : '' });
+    setPlaceId({ id: data.placeId, name: data.subCategoryName ? data.subCategoryName : '' });
     setModal(true);
   };
 
