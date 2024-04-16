@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import Nav from 'src/components/common/Nav';
 import MyPageNavBar from 'src/components/mypage/MyPageNavBar';
+import media from 'src/styles/media';
 
 const MyPageLayout = () => {
   return (
@@ -24,4 +25,10 @@ const Main = styled.main`
   margin-top: 110px;
   margin-left: 34%;
   height: calc(100vh - ${(props) => props.theme.height.topNavHeight});
+
+  ${media.mobile`
+    width: 96%;
+    margin-top: 250px;
+    margin-left: 2%;
+  `}
 `;
