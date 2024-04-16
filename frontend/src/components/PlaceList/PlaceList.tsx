@@ -9,6 +9,7 @@ import { placeListFetcher } from 'src/api/placeList';
 import contentTypeIdAtom from 'src/atoms/contentTypeIdAtom';
 import modalStateAtom from 'src/atoms/modalStateAtom';
 
+import media from 'src/styles/media';
 import PlaceCard from './PlaceCard';
 import Loading from '../common/Loading';
 import PlaceModal from '../PlaceModal';
@@ -90,6 +91,10 @@ export default PlaceList;
 const Wrapper = styled.div<{ $isDetailPage: boolean }>`
   height: ${(props) => (props.$isDetailPage ? 'calc(90vh - 350px)' : 'calc(100vh - 320px)')};
   overflow: auto;
+
+  ${media.mobile`
+  height:35rem;
+`}
 `;
 
 const Title = styled.div`

@@ -34,4 +34,5 @@ export default ContentTypeFilterItem;
 
 const Button = styled.button<{ $isClicked: boolean }>`
   ${FilterButtonStyle};
+  white-space: nowrap;
 `;

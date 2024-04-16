@@ -16,6 +16,7 @@ import totalPlanAtom from 'src/atoms/totalPlanAtom';
 import curDayAtom from 'src/atoms/curDayAtom';
 import { PlaceListTypes } from 'src/@types/api/placeList';
 
+import media from 'src/styles/media';
 import FailDataPage from './FailDataPage';
 
 const StepThreePage = () => {
@@ -39,20 +40,22 @@ const StepThreePage = () => {
 
   return (
     <Wrapper>
-      <SearchLayer>
-        <section>
-          <RegionCategory data={myRegionList} type="LINK" />
-          <EnterSearch placeHolder="장소를 검색해보세요!" setKeyword={setKeyword} />
-          <ContentTypeFilterItemList />
-        </section>
+      <PlaceBox>
+        <SearchLayer>
+          <section>
+            <RegionCategory data={myRegionList} type="LINK" />
+            <EnterSearch placeHolder="장소를 검색해보세요!" setKeyword={setKeyword} />
+            <ContentTypeFilterItemList />
+          </section>
 
-        <PlaceList keyword={keyword} setKeyword={setKeyword} />
-      </SearchLayer>
+          <PlaceList keyword={keyword} setKeyword={setKeyword} />
+        </SearchLayer>
 
-      <DayLayer>
-        <DayCategory />
-        <SelectedPlaceCardList />
-      </DayLayer>
+        <DayLayer>
+          <DayCategory />
+          <SelectedPlaceCardList />
+        </DayLayer>
+      </PlaceBox>
 
       <MapLayer>
         <KaKaoMap list={selectedPlaceList} curDay={curDay} />
@@ -68,10 +71,25 @@ const Wrapper = styled.div`
 
   width: calc(100vw - ${(props) => props.theme.width.leftNavWidth});
   height: calc(100vh - ${(props) => props.theme.height.topNavHeight});
+
+  ${media.mobile`
+    flex-direction: column;
+  `}
+`;
+
+const PlaceBox = styled.div`
+  display: flex;
+  width: 50%;
+
+  ${media.mobile`
+    width: 100%;
+    height:50rem;
+    margin-bottom:20px;
+  `}
 `;
 
 const SearchLayer = styled.div`
-  width: 25%;
+  width: 50%;
   height: inherit;
   border-left: ${(props) => `1px solid ${props.theme.colors.lightGrey}`};
   border-right: ${(props) => `1px solid ${props.theme.colors.lightGrey}`};
@@ -81,17 +99,31 @@ const SearchLayer = styled.div`
   & > section {
     padding: 20px;
   }
+
+  ${media.mobile`
+  width: 50%;  
+`}
 `;
 
 const DayLayer = styled.div`
-  width: 27%;
-  height: inherit;
+  width: 50%;
+  height: 100vh;
   padding: 20px;
 
   box-sizing: border-box;
+
+  ${media.mobile`
+  width: 50%;  
+`}
 `;
 
 const MapLayer = styled.div`
   width: 48%;
   height: inherit;
+
+  ${media.mobile`
+  width:95%;
+  height:100%;
+  margin: 20px 0px;
+`}
 `;
