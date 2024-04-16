@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
+import media from 'src/styles/media';
 import DefaultProfile from '../../../assets/images/ghost.png';
 
 // TODO : 프로필 변경 버튼 누르면 사진 수정
@@ -21,6 +22,11 @@ const ProfileBox = styled.div`
 
   width: 700px;
   margin-bottom: 20px;
+
+  ${media.mobile`
+    width: 100%;
+    margin-bottom: 70px;
+  `}
 `;
 
 const ProfileImg = styled.img<{ src: string }>`
@@ -35,6 +41,11 @@ const ProfileImg = styled.img<{ src: string }>`
   font-family: 'Pretendard-Regular';
   font-size: 20px;
   color: ${(props) => props.theme.colors.darkGrey};
+
+  ${media.mobile`
+    width: 200px;
+    height: 200px;
+  `}
 `;
 
 const ChangeProfile = styled.button`
@@ -54,4 +65,11 @@ const ChangeProfile = styled.button`
   &:hover {
     color: #0741ed;
   }
+
+  ${media.mobile`
+    width: 150px;
+    
+    font-family: 'Pretendard-Medium';
+    font-size: 25px;
+  `}
 `;
