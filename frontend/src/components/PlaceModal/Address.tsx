@@ -1,3 +1,4 @@
+import media from 'src/styles/media';
 import styled from 'styled-components';
 
 interface Props {
@@ -6,12 +7,21 @@ interface Props {
 
 const Address = ({ address }: Props) => {
   return (
-    <>
+    <Wrapper>
       <StyledTitle>주소</StyledTitle>
       <StyledText>{address}</StyledText>
-    </>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  ${media.mobile`
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    width: 65%;
+`}
+`;
 
 const StyledTitle = styled.h3`
   margin-bottom: 15px;

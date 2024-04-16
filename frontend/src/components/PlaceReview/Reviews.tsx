@@ -1,4 +1,5 @@
 import { styled } from 'styled-components';
+import media from 'src/styles/media';
 
 import { ReactComponent as StarFilled } from 'src/assets/svgs/starFilled.svg';
 import { ReactComponent as HoneyPot } from 'src/assets/svgs/honeyPot.svg';
@@ -75,6 +76,10 @@ const Inner = styled.div`
     font-family: 'Pretendard-Regular';
     color: ${(props) => props.theme.colors.blackFont};
   }
+
+  ${media.mobile`
+    height: 65%;
+  `}
 `;
 
 const ReviewInner = styled.div`

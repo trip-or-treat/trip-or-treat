@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { styled } from 'styled-components';
+import media from 'src/styles/media';
 
 import { ReactComponent as StarFilled } from 'src/assets/svgs/starFilled.svg';
 import { ReactComponent as Pencil } from 'src/assets/svgs/pencil.svg';
@@ -78,6 +79,13 @@ const Wrapper = styled.div`
 
   width: 489px;
   height: 580px;
+
+  ${media.mobile`
+    left: 0px;
+    border-top: 1px solid #D9D9D9;
+    margin-top: 30px;
+    height: 415px;
+  `}
 `;
 
 const Nav = styled.div`
@@ -88,6 +96,12 @@ const Nav = styled.div`
 
   height: 10%;
   margin-top: 15px;
+
+  ${media.mobile`
+    &:empty {
+      display: none;
+    }
+  `}
 `;
 
 const Title = styled.button`

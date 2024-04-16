@@ -2,6 +2,7 @@ import { styled } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { useEffect } from 'react';
+import media from 'src/styles/media';
 
 import { usePlaceInfo } from 'src/hooks/api/usePlaceInfo';
 import { PlaceInfo } from 'src/@types/api/placeInfo';
@@ -96,6 +97,19 @@ const StyledModalLayout = styled.div`
   border: none;
   border-radius: 20px;
   background-color: ${(props) => props.theme.colors.whiteFont};
+
+  ${media.mobile`
+    display: flex;
+    align-content: flex-start;
+    flex-direction: row;
+
+    width: 700px;
+    height: 1024px;
+    padding: 20px 0px 20px 0px;
+    margin-top: 30px;
+    
+    overflow: auto;
+  `}
 `;
 
 const StyledName = styled.div`
@@ -106,6 +120,12 @@ const StyledName = styled.div`
   color: ${(props) => props.theme.colors.blackFont};
   font-size: 25px;
   text-align: left;
+
+  ${media.mobile`
+    text-align: center;
+    position: relative;
+    width: 100%;
+  `}
 `;
 
 const StyledContent = styled.span`
@@ -114,6 +134,10 @@ const StyledContent = styled.span`
   font-family: 'Pretendard-Thin';
   color: ${(props) => props.theme.colors.blackFont};
   font-size: 17px;
+
+  ${media.mobile`
+    display:none;
+  `}
 `;
 
 const StyledContentType = styled.div`
@@ -133,6 +157,11 @@ const StyledContentType = styled.div`
 
 const StyledImageBoxInner = styled.div`
   margin-bottom: 30px;
+
+  ${media.mobile`
+    text-align: center;
+    width: 100%;
+  `}
 `;
 
 const StyledIcon = styled.div`
@@ -144,4 +173,9 @@ const StyledIcon = styled.div`
   height: 21px;
 
   cursor: pointer;
+
+  ${media.mobile`
+    left: 310px;
+    bottom: -5px;
+  `}
 `;

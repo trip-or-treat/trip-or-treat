@@ -1,0 +1,2 @@
+ALTER TABLE USER MODIFY image_origin TEXT;
+ALTER TABLE USER MODIFY image_thumbnail TEXT;
