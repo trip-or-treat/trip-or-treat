@@ -34,11 +34,10 @@ const NavBox = styled.div`
     flex-direction: row;
     top: 100px;
 
-    width: 99%;
+    width: 100%;
     height: 70px;
-    margin: 0 5px;
+    margin: 0;
 
-    border-radius: 15px;
     border: none;
   `}
 `;
@@ -70,7 +69,7 @@ const NavItem = styled(NavLink)`
     width: 450px;
     height: 70px;
 
-    border-radius: 15px;
+    border-radius: 7px;
 
     font-size: 28px;
   `}
