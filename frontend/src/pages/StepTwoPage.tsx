@@ -57,6 +57,10 @@ const Wrapper = styled.div`
 
   width: calc(100vw - ${(props) => props.theme.width.leftNavWidth});
   height: calc(100vh - ${(props) => props.theme.height.topNavHeight});
+
+  ${media.mobile`
+    margin-top:42px;
+  `}
 `;
 
 const SearchLayer = styled.div`
@@ -72,7 +76,7 @@ const SearchLayer = styled.div`
   }
 
   ${media.mobile`
-  width: 50%;  
+    width: 50%;  
 `}
 `;
 

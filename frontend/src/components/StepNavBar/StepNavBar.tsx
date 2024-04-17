@@ -81,6 +81,10 @@ const Nav = styled.ul`
   height: calc(100vh - ${(props) => props.theme.height.topNavHeight});
 
   background-color: ${(props) => props.theme.colors.whiteFont};
+
+  ${media.mobile`
+    margin-top:100px;
+  `}
 `;
 
 const NavList = styled.ul`

@@ -1,14 +1,18 @@
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
-import myRegionListAtom from 'src/atoms/myRegionListAtom';
 import KaKaoMap from 'src/components/KaKaoMap';
 import ScheduleModal from 'src/components/ScheduleModal';
+
+import media from 'src/styles/media';
 import useInitData from 'src/hooks/useInitData';
-import { useParams } from 'react-router-dom';
+
 import regionsAtom from 'src/atoms/regionsAtom';
+import myRegionListAtom from 'src/atoms/myRegionListAtom';
 import regionClickedIdListAtom from 'src/atoms/regionClickedIdListAtom';
-import { useEffect } from 'react';
+
 import FailDataPage from './FailDataPage';
 
 const StepOnePage = () => {
@@ -43,4 +47,8 @@ const Wrapper = styled.div`
 
   width: calc(100vw - ${(props) => props.theme.width.leftNavWidth});
   height: calc(100vh - ${(props) => props.theme.height.topNavHeight});
+
+  ${media.mobile`
+    height: 100px;
+  `}
 `;
