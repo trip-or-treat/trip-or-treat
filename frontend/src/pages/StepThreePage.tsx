@@ -73,7 +73,8 @@ const Wrapper = styled.div`
   height: calc(100vh - ${(props) => props.theme.height.topNavHeight});
 
   ${media.mobile`
-  flex-direction: column;  
+    flex-direction: column;  
+    margin-top:42px;
   `}
 `;
 

@@ -1,22 +1,89 @@
 import styled from 'styled-components';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 
 import media from 'src/styles/media';
+import { useModifyNickname } from 'src/hooks/api/useModifyNickname';
 import { ReactComponent as EditIcon } from '../../../assets/svgs/edit.svg';
 
-const MyInfo = () => {
+interface Props {
+  email: string;
+  nickname: string;
+}
+
+const MyInfo = ({ email, nickname }: Props) => {
+  const profileRef = useRef<HTMLInputElement>(null);
+  const [isChangingNickname, setIsChangingNickname] = useState(false);
+  const [curNickname, setCurNickname] = useState('');
+
+  const { mutate } = useMutation({
+    mutationFn: (prop: { nickname: string }) => useModifyNickname(prop),
+    onSuccess: () => {
+      alert('성공적으로 이메일이 변경되었습니다!');
+    },
+
+    onError: () => {
+      alert('이메일 변경이 실패했습니다!');
+    },
+  });
+
+  const handleClickModifyNickname = () => {
+    setIsChangingNickname(true);
+  };
+
+  const handleNicknameInput = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value.length === 13) return;
+    setCurNickname(e.target.value);
+  };
+
+  const handleClickComplete = () => {
+    setIsChangingNickname(false);
+    mutate({ nickname: curNickname });
+  };
+
+  useEffect(() => {
+    setCurNickname(() => nickname);
+  }, [nickname]);
+
+  useEffect(() => {
+    if (isChangingNickname && profileRef.current !== null) {
+      profileRef.current.focus();
+    }
+  }, [isChangingNickname]);
+
   return (
     <Info>
       <MenuBox>
-        <InfoMenu>닉네임</InfoMenu>
-        <InfoMenu>이메일</InfoMenu>
+        <Column>
+          <Label>닉네임</Label>
+          <Content>
+            <Input
+              placeholder={curNickname}
+              id="nickname"
+              ref={profileRef}
+              onChange={handleNicknameInput}
+              disabled={!isChangingNickname}
+            />
+            {isChangingNickname ? (
+              <>
+                <Button onClick={handleClickComplete}>수정</Button>
+                <Button onClick={() => setIsChangingNickname(false)}>취소</Button>
+              </>
+            ) : (
+              <Button onClick={handleClickModifyNickname}>
+                <EditIcon />
+              </Button>
+            )}
+          </Content>
+        </Column>
+
+        <Column>
+          <Label>이메일</Label>
+          <Content>
+            <Input disabled placeholder={email} />
+          </Content>
+        </Column>
       </MenuBox>
-      <ContentBox>
-        <InfoContent>
-          여행자1
-          <EditIcon />
-        </InfoContent>
-        <InfoContent>triportreat@gmail.com</InfoContent>
-      </ContentBox>
     </Info>
   );
 };
@@ -48,55 +115,57 @@ const MenuBox = styled.div`
   flex-direction: column;
   justify-content: center;
 
-  width: 30%;
+  margin: 0px auto;
 `;
 
-const InfoMenu = styled.div`
-  margin-left: 100px;
-
-  line-height: 60px;
-
-  ${media.mobile`
-    line-height: 80px;
-  `}
-`;
-
-const ContentBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  width: 70%;
-`;
-
-const InfoContent = styled.div`
+const Column = styled.div`
   display: flex;
   align-items: center;
 
-  margin-left: 30px;
+  margin: 15px 0px;
+  width: 350px;
+  height: 25px;
+`;
 
-  line-height: 60px;
+const Label = styled.label`
+  margin: 0px 30px;
+  white-space: nowrap;
+`;
 
-  svg {
-    margin-left: 25px;
+const Button = styled.button`
+  outline: none;
 
-    cursor: pointer;
+  border: none;
+  background-color: inherit;
 
-    &:hover {
-      width: 15px;
-      height: 15px;
-      background-color: lightGrey;
-      border: none;
-      border-radius: 3px;
-    }
+  cursor: pointer;
+  white-space: nowrap;
 
-    ${media.mobile`
-      width: 27px;
-      height: 27px;
-    `}
+  &:hover {
+    color: ${(props) => props.theme.colors.hoverColor};
+
+    fill: ${(props) => props.theme.colors.hoverColor};
+  }
+`;
+
+const Content = styled.div`
+  display: flex;
+`;
+
+const Input = styled.input`
+  border: none;
+  width: 170px;
+  height: 20px;
+  font-size: 16px;
+
+  background-color: inherit;
+
+  &::placeholder {
+    padding-left: 5px;
   }
 
   ${media.mobile`
     line-height: 80px;
+    font-size:20px;
   `}
 `;
