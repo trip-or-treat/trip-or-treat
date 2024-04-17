@@ -166,5 +166,6 @@ const Input = styled.input`
 
   ${media.mobile`
     line-height: 80px;
+    font-size:20px;
   `}
 `;
