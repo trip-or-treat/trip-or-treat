@@ -20,7 +20,7 @@ const MyPageLayout = () => {
 export default MyPageLayout;
 
 const Main = styled.main`
-  width: 55%;
+  width: 850px;
   height: calc(100vh - 110px);
   margin-top: 110px;
   margin-left: 34%;
