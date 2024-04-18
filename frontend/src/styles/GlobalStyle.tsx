@@ -209,13 +209,39 @@ table {
     background-color: ${(props) => props.theme.colors.mainColor};
   }
 
-  
-  
+
   /* .page-selection {
     width: 48px;
     height: 30px;
     color: black;
   } */
+
+  .cropper-view-box {
+    border-radius: 50%;
+    border: dashed ${(props) => props.theme.colors.whiteFont};
+    outline: none;
+  }
+
+  .cropper-dashed, .cropper-center {
+    display:none;
+  }
+
+  .cropper-point {
+    background-color: ${(props) => props.theme.colors.blackFont};
+  }
+
+  .cropper-point.point-e, .cropper-point.point-n, .cropper-point.point-w, .cropper-point.point-s {
+    display: none;
+  }
+
+  .cropper-modal {
+    background-color: ${(props) => props.theme.colors.blackFont};
+    border-radius: 10px;
+  }
+
+  .cropper-line {
+    background-color: ${(props) => props.theme.colors.whiteFont};
+  }
 
 `;
 
