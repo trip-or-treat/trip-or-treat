@@ -6,6 +6,7 @@ import MyPageTitle from 'src/components/mypage/MyPageTitle';
 
 import { UserInfo } from 'src/@types/api/userInfo';
 import { useUserInfo } from 'src/hooks/api/userInfo';
+import Loading from 'src/components/common/Loading';
 
 interface UserData {
   data: {
@@ -16,14 +17,16 @@ interface UserData {
 }
 
 const MyInfoPage = () => {
-  const { data: userApi }: UserData = useUserInfo();
+  const { data: userApi, isLoading }: UserData = useUserInfo();
 
-  return (
+  return !isLoading ? (
     <Wrapper>
       <MyPageTitle>회원정보수정</MyPageTitle>
-      <MyProfile />
+      <MyProfile imageThumbnail={userApi?.data.imageThumbnail} />
       <MyInfo email={userApi?.data.email} nickname={userApi?.data.nickname} />
     </Wrapper>
+  ) : (
+    <Loading type="LARGE" />
   );
 };
 
