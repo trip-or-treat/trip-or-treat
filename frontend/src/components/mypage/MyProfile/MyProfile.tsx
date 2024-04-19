@@ -1,5 +1,6 @@
 import React, { useRef, useState, createRef } from 'react';
 import Cropper, { ReactCropperElement } from 'react-cropper';
+import { useMutation } from '@tanstack/react-query';
 import styled from 'styled-components';
 import media from 'src/styles/media';
 import 'cropperjs/dist/cropper.css';
@@ -11,11 +12,11 @@ import ModalOverlay from 'src/components/common/modal/ModalOverlay';
 
 const MyProfile = ({ imageThumbnail }: { imageThumbnail: string }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const cropperRef = createRef<ReactCropperElement>();
+  const [fileName, setFileName] = useState<string>('');
   const [userImg, setUserImg] = useState<string>(imageThumbnail);
   const [previewImg, setPreviewImg] = useState<string>('');
   const [isPreview, setPreview] = useState<boolean>(false);
-  const [fileName, setFileName] = useState<string>('');
-  const cropperRef = createRef<ReactCropperElement>();
 
   const onPreview = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) {
@@ -42,6 +43,10 @@ const MyProfile = ({ imageThumbnail }: { imageThumbnail: string }) => {
     inputRef.current.click();
   };
 
+  const onClose = () => {
+    setPreview(false);
+  };
+
   const dataURLtoFile = (dataURL: string): File | undefined => {
     const arr = dataURL.split(',');
     const matches = arr[0].match(/:(.*?);/);
@@ -56,7 +61,6 @@ const MyProfile = ({ imageThumbnail }: { imageThumbnail: string }) => {
     let n = bstr.length;
     const u8arr = new Uint8Array(n);
 
-    // n 이 0 이 되서도 u8arr[0]에 바이너리 코드를 디코딩해줘야하는데 0까지 해서 마지막이 디코딩이 안되니까 당연히 오류가 났었음
     while (n !== -1) {
       u8arr[n] = bstr.charCodeAt(n);
       n -= 1;
@@ -65,23 +69,29 @@ const MyProfile = ({ imageThumbnail }: { imageThumbnail: string }) => {
     return new File([u8arr], fileName, { type: mime });
   };
 
+  const changeMutation = useMutation({ mutationFn: profileChangeFetcher });
+
   const cropImgUpload = () => {
     const data = cropperRef.current?.cropper.getCroppedCanvas().toDataURL();
     const reader = new FileReader();
-    const cropImgFile = dataURLtoFile(data as string);
+    const cropImgFile = dataURLtoFile(data as string) as File;
 
-    profileChangeFetcher(cropImgFile as File);
-    alert('프로필 변경이 완료되었습니다!');
-    setPreview(false);
+    changeMutation.mutate(cropImgFile, {
+      onSuccess: () => {
+        reader.readAsDataURL(cropImgFile);
+        reader.onloadend = () => {
+          setUserImg(reader.result as string);
+        };
 
-    reader.readAsDataURL(cropImgFile as File);
-    reader.onloadend = () => {
-      setUserImg(reader.result as string);
-    };
-  };
+        alert('프로필 변경이 완료되었습니다!');
+        onClose();
+      },
 
-  const onClose = () => {
-    setPreview(false);
+      onError: () => {
+        alert('프로필 변경이 실패했습니다!');
+        onClose();
+      },
+    });
   };
 
   return (
