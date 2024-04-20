@@ -23,7 +23,7 @@ const MyProfile = ({ imageThumbnail }: { imageThumbnail: string }) => {
     if (!e.target.files) {
       return;
     }
-    if (e.target.files[0].size > maxSize) {
+    if (e.target.files && e.target.files[0].size > maxSize) {
       alert('용량은 최대 100MB까지 가능합니다!');
       return;
     }
@@ -115,7 +115,6 @@ const MyProfile = ({ imageThumbnail }: { imageThumbnail: string }) => {
               style={{ height: '400px', width: '400px', objectFit: 'cover' }}
               zoomTo={0.5}
               initialAspectRatio={1}
-              preview=".img-preview"
               viewMode={1}
               minCropBoxHeight={10}
               minCropBoxWidth={10}
@@ -193,43 +192,50 @@ const Input = styled.input`
 `;
 
 const PreviewInner = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   width: 440px;
   height: 540px;
-  display: flex;
   padding: 15px;
-  flex-direction: column;
-  background: ${(props) => props.theme.colors.whiteFont};
+
+  background-color: ${(props) => props.theme.colors.whiteFont};
   border-radius: 10px;
-  align-items: center;
 `;
 
 const PreviewTitle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   width: 100%;
   height: 10%;
+  margin-bottom: 20px;
+
   font-family: 'Pretendard-Regular';
   font-size: 20px;
   color: ${(props) => props.theme.colors.blackFont};
-  justify-content: center;
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
 `;
 
 const PreviewBtn = styled.button`
   width: 70%;
-  border: 0;
   height: 10%;
+  margin-top: 20px;
+
+  border: none;
   border-radius: 15px;
   background-color: yellow;
-  margin-top: 20px;
+
   font-size: 20px;
   font-family: 'Pretendard-Regular';
 `;
 
 const StyledIcon = styled.div`
   position: relative;
-  width: 100%;
   text-align: right;
+
+  width: 100%;
 
   cursor: pointer;
 `;

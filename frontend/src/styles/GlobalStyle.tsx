@@ -96,33 +96,36 @@ table {
 
 
 .react-datepicker {
-    position: relative;
+  position: relative;
 	
-    border: none;
+  border: none;
 
 	font-family: Pretendard-Light;
-    font-size: 14px;
+  font-size: 14px;
 }
 
 .react-datepicker__header {
-    position: relative;
-    padding: 8px 0;
-	margin: 5px;
-    border-bottom: none;
+  position: relative;
 
+  padding: 8px 0;
+	margin: 5px;
+
+  border-bottom: none;
 	background-color: ${(props) => props.theme.colors.whiteFont};
-    font-size: 20px;
-    text-align: center;
+
+  font-size: 20px;
+  text-align: center;
 }
 
 .react-datepicker__current-month {
-    margin-bottom: 30px;
+  margin-bottom: 30px;
 
-    font-family: Pretendard-SemiBold;
-    font-size: 20px;
+  font-family: Pretendard-SemiBold;
+  font-size: 20px;
 }
+
 .react-datepicker__day-name {
-    width: 45px;
+  width: 45px;
 
 	margin-left: 3px;
 
@@ -131,11 +134,12 @@ table {
 
 .react-datepicker__day {
 	display: inline-block;
-    width: 45px;
-    margin: 3px;
+
+  width: 45px;
+  margin: 3px;
 	
-    line-height: 35px;
-    text-align: center;
+  line-height: 35px;
+  text-align: center;
 }
 
 .react-datepicker__day:hover {
@@ -144,11 +148,11 @@ table {
 }
 
 .react-datepicker__day--sat {
-    color: blue;
+  color: blue;
 }
 
 .react-datepicker__day--sun {
-    color: red;
+  color: red;
 }
 
 .react-datepicker__day--in-selecting-range:not(.react-datepicker__day--in-range, .react-datepicker__month-text--in-range, .react-datepicker__quarter-text--in-range, .react-datepicker__year-text--in-range) {
