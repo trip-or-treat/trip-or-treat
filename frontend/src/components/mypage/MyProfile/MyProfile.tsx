@@ -1,15 +1,135 @@
+import React, { useRef, useState, createRef } from 'react';
+import Cropper, { ReactCropperElement } from 'react-cropper';
+import { useMutation } from '@tanstack/react-query';
 import styled from 'styled-components';
-
 import media from 'src/styles/media';
-import DefaultProfile from '../../../assets/images/ghost.png';
+import 'cropperjs/dist/cropper.css';
 
-// TODO : 프로필 변경 버튼 누르면 사진 수정
+import { profileChangeFetcher } from 'src/api/user';
 
-const MyProfile = () => {
+import { ReactComponent as Close } from 'src/assets/svgs/close.svg';
+import ModalOverlay from 'src/components/common/modal/ModalOverlay';
+
+const MyProfile = ({ imageThumbnail }: { imageThumbnail: string }) => {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const cropperRef = createRef<ReactCropperElement>();
+  const [fileName, setFileName] = useState<string>('');
+  const [userImg, setUserImg] = useState<string>(imageThumbnail);
+  const [previewImg, setPreviewImg] = useState<string>('');
+  const [isPreview, setPreview] = useState<boolean>(false);
+
+  const onPreview = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const maxSize = 10 * 1024 * 1024;
+    if (!e.target.files) {
+      return;
+    }
+    if (e.target.files && e.target.files[0].size > maxSize) {
+      alert('용량은 최대 100MB까지 가능합니다!');
+      return;
+    }
+    previewFile(e.target.files[0]);
+    setFileName(e.target.files[0].name);
+  };
+
+  const previewFile = (file: File) => {
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setPreviewImg(reader.result as string);
+      setPreview(true);
+    };
+  };
+
+  const onClick = () => {
+    if (!inputRef.current) {
+      return;
+    }
+    inputRef.current.click();
+  };
+
+  const onClose = () => {
+    setPreview(false);
+  };
+
+  const dataURLtoFile = (dataURL: string): File | undefined => {
+    const arr = dataURL.split(',');
+    const matches = arr[0].match(/:(.*?);/);
+    const mime = matches && matches.length >= 2 ? matches[1] : undefined;
+
+    if (!mime) {
+      cropperRef.current?.cropper.reset();
+      return undefined;
+    }
+
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+
+    while (n !== -1) {
+      u8arr[n] = bstr.charCodeAt(n);
+      n -= 1;
+    }
+
+    return new File([u8arr], fileName, { type: mime });
+  };
+
+  const changeMutation = useMutation({ mutationFn: profileChangeFetcher });
+
+  const cropImgUpload = () => {
+    const data = cropperRef.current?.cropper.getCroppedCanvas().toDataURL();
+    const reader = new FileReader();
+    const cropImgFile = dataURLtoFile(data as string) as File;
+
+    changeMutation.mutate(cropImgFile, {
+      onSuccess: () => {
+        reader.readAsDataURL(cropImgFile);
+        reader.onloadend = () => {
+          setUserImg(reader.result as string);
+        };
+
+        alert('프로필 변경이 완료되었습니다!');
+        onClose();
+      },
+
+      onError: () => {
+        alert('프로필 변경이 실패했습니다!');
+        onClose();
+      },
+    });
+  };
+
   return (
     <ProfileBox>
-      <ProfileImg src={DefaultProfile} alt="이미지를 불러오지 못했습니다." />
-      <ChangeProfile>프로필 변경</ChangeProfile>
+      {isPreview ? (
+        <ModalOverlay>
+          <PreviewInner>
+            <StyledIcon>
+              <Close onClick={onClose} />
+            </StyledIcon>
+            <PreviewTitle>이미지 미리보기</PreviewTitle>
+            <Cropper
+              ref={cropperRef}
+              src={previewImg}
+              alt="user Img"
+              style={{ height: '400px', width: '400px', objectFit: 'cover' }}
+              zoomTo={0.5}
+              initialAspectRatio={1}
+              viewMode={1}
+              minCropBoxHeight={10}
+              minCropBoxWidth={10}
+              background={false}
+              autoCropArea={1}
+              checkOrientation={false}
+            />
+            <PreviewBtn onClick={cropImgUpload}>이미지 변경</PreviewBtn>
+          </PreviewInner>
+        </ModalOverlay>
+      ) : (
+        <ProfileImg src={userImg} alt="이미지를 불러오지 못했습니다." />
+      )}
+      <Input type="file" accept=".png, .jpg, .jpeg" ref={inputRef} onChange={onPreview} />
+      <ChangeProfile onClick={onClick}>프로필 변경</ChangeProfile>
     </ProfileBox>
   );
 };
@@ -65,11 +185,57 @@ const ChangeProfile = styled.button`
   &:hover {
     color: #0741ed;
   }
+`;
 
-  ${media.mobile`
-    width: 150px;
-    
-    font-family: 'Pretendard-Medium';
-    font-size: 25px;
-  `}
+const Input = styled.input`
+  display: none;
+`;
+
+const PreviewInner = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 440px;
+  height: 540px;
+  padding: 15px;
+
+  background-color: ${(props) => props.theme.colors.whiteFont};
+  border-radius: 10px;
+`;
+
+const PreviewTitle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 10%;
+  margin-bottom: 20px;
+
+  font-family: 'Pretendard-Regular';
+  font-size: 20px;
+  color: ${(props) => props.theme.colors.blackFont};
+`;
+
+const PreviewBtn = styled.button`
+  width: 70%;
+  height: 10%;
+  margin-top: 20px;
+
+  border: none;
+  border-radius: 15px;
+  background-color: yellow;
+
+  font-size: 20px;
+  font-family: 'Pretendard-Regular';
+`;
+
+const StyledIcon = styled.div`
+  position: relative;
+  text-align: right;
+
+  width: 100%;
+
+  cursor: pointer;
 `;

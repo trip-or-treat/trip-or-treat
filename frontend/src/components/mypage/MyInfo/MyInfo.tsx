@@ -19,11 +19,11 @@ const MyInfo = ({ email, nickname }: Props) => {
   const { mutate } = useMutation({
     mutationFn: (prop: { nickname: string }) => useModifyNickname(prop),
     onSuccess: () => {
-      alert('성공적으로 이메일이 변경되었습니다!');
+      alert('성공적으로 닉네임이 변경되었습니다!');
     },
 
     onError: () => {
-      alert('이메일 변경이 실패했습니다!');
+      alert('닉네임 변경이 실패했습니다!');
     },
   });
 
