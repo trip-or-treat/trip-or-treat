@@ -19,7 +19,12 @@ const MyProfile = ({ imageThumbnail }: { imageThumbnail: string }) => {
   const [isPreview, setPreview] = useState<boolean>(false);
 
   const onPreview = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const maxSize = 10 * 1024 * 1024;
     if (!e.target.files) {
+      return;
+    }
+    if (e.target.files[0].size > maxSize) {
+      alert('용량은 최대 100MB까지 가능합니다!');
       return;
     }
     previewFile(e.target.files[0]);
