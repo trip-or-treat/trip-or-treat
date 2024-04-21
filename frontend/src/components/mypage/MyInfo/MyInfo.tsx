@@ -106,7 +106,7 @@ const Info = styled.div`
   ${media.mobile`
     width: 100%;
     
-    font-size: 24px;
+    font-size: 27px;
   `}
 `;
 
@@ -147,6 +147,13 @@ const Button = styled.button`
 
     fill: ${(props) => props.theme.colors.hoverColor};
   }
+
+  svg {
+    ${media.mobile`
+      width: 23px;
+      height: 23px;
+    `}
+  }
 `;
 
 const Content = styled.div`
@@ -167,8 +174,8 @@ const Input = styled.input`
 
   ${media.mobile`
     width: 250px;
+    height: 50px;
 
-    line-height: 80px;
-    font-size:20px;
+    font-size: 23px;
   `}
 `;

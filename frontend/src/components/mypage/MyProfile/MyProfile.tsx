@@ -163,8 +163,8 @@ const ProfileImg = styled.img<{ src: string }>`
   color: ${(props) => props.theme.colors.darkGrey};
 
   ${media.mobile`
-    width: 200px;
-    height: 200px;
+    width: 300px;
+    height: 300px;
   `}
 `;
 
@@ -185,6 +185,13 @@ const ChangeProfile = styled.button`
   &:hover {
     color: #0741ed;
   }
+
+  ${media.mobile`
+    width: 160px;
+    
+    font-size: 28px;
+    font-family: 'Pretendard-Medium';
+  `}
 `;
 
 const Input = styled.input`
