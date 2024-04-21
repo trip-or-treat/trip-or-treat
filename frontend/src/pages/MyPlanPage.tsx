@@ -76,7 +76,9 @@ const MyPlanPage = () => {
   }, [myPlanData]);
 
   // 페이지네이션
-  const totalElements = myPlanData?.data.totalElements;
+  let totalElements = myPlanData?.data.totalElements;
+  if (totalElements === 0) totalElements = 1;
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
