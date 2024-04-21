@@ -50,10 +50,6 @@ const Title = styled.div`
   }
 
   ${media.mobile`
-    width: 350px;
-    height: 50px;
-    margin-bottom: 60px;
-
-    font-size: 30px;
+    visibility: hidden;
   `}
 `;
