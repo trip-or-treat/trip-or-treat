@@ -77,8 +77,12 @@ const MyPlanPage = () => {
 
   // 페이지네이션
   let totalElements = myPlanData?.data.totalElements;
-  if (totalElements === 0) totalElements = 1;
+  if (totalElements === 0) {
+    setCurrentPage(1);
+    totalElements = 1;
+  }
 
+  console.log(myPlanData?.data.totalElements);
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
@@ -103,6 +107,10 @@ const MyPlanPage = () => {
     setComingYn(null);
     setCurrentPage(1);
   }, []);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [keyword]);
 
   const searchTypeObj = {
     제목: 'T',
