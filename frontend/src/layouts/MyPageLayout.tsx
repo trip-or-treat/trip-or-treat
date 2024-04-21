@@ -27,7 +27,7 @@ const Main = styled.main`
 
   ${media.mobile`
     width: 100%;
-    height: calc(100vh - 270px);
+    height: auto;
     margin: 190px 0;
     padding: 0 20px;
   `}
