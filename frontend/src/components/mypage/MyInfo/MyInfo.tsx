@@ -106,7 +106,7 @@ const Info = styled.div`
   ${media.mobile`
     width: 100%;
     
-    font-size: 27px;
+    font-size: 24px;
   `}
 `;
 
@@ -114,6 +114,7 @@ const MenuBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 
   margin: 0px auto;
 `;
@@ -154,7 +155,7 @@ const Content = styled.div`
 
 const Input = styled.input`
   border: none;
-  width: 170px;
+  width: 200px;
   height: 20px;
   font-size: 16px;
 
@@ -165,6 +166,8 @@ const Input = styled.input`
   }
 
   ${media.mobile`
+    width: 250px;
+
     line-height: 80px;
     font-size:20px;
   `}
