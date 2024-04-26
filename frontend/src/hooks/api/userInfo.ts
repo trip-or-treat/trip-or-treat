@@ -6,7 +6,7 @@ export const useUserInfo = () => {
     queryKey: ['userInfo'],
     queryFn: userInfoFetcher,
     staleTime: 0,
-    gcTime: 3000,
+    gcTime: 1000 * 60 * 5,
   });
 
   return { data, isLoading, isError };
