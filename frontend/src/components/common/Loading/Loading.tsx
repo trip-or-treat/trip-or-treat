@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Deffered from '../Deffered/Deffered';
 
 interface Props {
   type: 'SMALL' | 'MEDIUM' | 'LARGE';
@@ -6,11 +7,11 @@ interface Props {
 
 const Loading = ({ type }: Props) => {
   return (
-    <>
+    <Deffered>
       {type === 'SMALL' && <SmallLoading />}
       {type === 'MEDIUM' && <MediumLoading />}
       {type === 'LARGE' && <LargeLoading />}
-    </>
+    </Deffered>
   );
 };
 
