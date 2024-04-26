@@ -11,9 +11,9 @@ import FailDataPage from './FailDataPage';
 const SharedPage = () => {
   const { code } = useParams();
 
-  const { data: shareApi, isLoading } = useShare(code ?? '');
+  const { data: shareApi, isLoading, isError } = useShare(code ?? '');
 
-  if (!shareApi?.data) return <FailDataPage />;
+  if (isError) return <FailDataPage />;
 
   return (
     <Main>
