@@ -12,11 +12,11 @@ import SelectedPlaceCardList from 'src/components/SelectedPlaceCardList';
 
 import myRegionListAtom from 'src/atoms/myRegionListAtom';
 import totalPlanAtom from 'src/atoms/totalPlanAtom';
-
 import curDayAtom from 'src/atoms/curDayAtom';
-import { PlaceListTypes } from 'src/@types/api/placeList';
 
+import { PlaceListTypes } from 'src/@types/api/placeList';
 import media from 'src/styles/media';
+
 import FailDataPage from './FailDataPage';
 
 const StepThreePage = () => {

@@ -9,6 +9,7 @@ const theme = {
     whiteFont: '#FFFFFF',
     hoverColor: '#f84a3b',
     yellow: '#ffd233',
+    skeletonGreyColor: '#f2f2f2',
   },
 
   width: {

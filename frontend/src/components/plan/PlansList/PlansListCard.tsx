@@ -67,6 +67,7 @@ const Wrapper = styled.div`
     height: 100px;
 
     border-radius: 10px;
+    background: ${(props) => props.theme.colors.skeletonGreyColor};
   }
 `;
 

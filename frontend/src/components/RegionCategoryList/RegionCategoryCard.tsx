@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Regions } from 'src/@types/api/regions';
 import styled from 'styled-components';
+
+import { Regions } from 'src/@types/api/regions';
 
 interface Props {
   type: 'LINK' | 'BUTTON';

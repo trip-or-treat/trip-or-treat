@@ -54,6 +54,8 @@ const ThumbnailImg = styled.img`
   border-radius: 50%;
 
   object-fit: cover;
+
+  background: ${(props) => props.theme.colors.skeletonGreyColor};
 `;
 
 const RegionNameBox = styled.div`
