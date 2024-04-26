@@ -77,4 +77,5 @@ const StyledImageThumbnail = styled.img`
   background-size: cover;
   background-position: center;
   border-radius: 30px;
+  background: ${(props) => props.theme.colors.skeletonGreyColor};
 `;
