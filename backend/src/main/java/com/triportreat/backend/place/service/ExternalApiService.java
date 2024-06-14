@@ -3,7 +3,6 @@ package com.triportreat.backend.place.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.triportreat.backend.common.response.FailMessage;
 import com.triportreat.backend.place.domain.TourApiPlaceResponseDto;
 import com.triportreat.backend.place.domain.TourApiPlaceResponseDto.Item;
 import com.triportreat.backend.place.error.handler.exception.ApiCallFailedException;
@@ -68,36 +67,23 @@ public class ExternalApiService {
         return overview;
     }
 
-    public List<Item> callExternalApiForUpdatePlaces() {
-        try {
-            Integer totalCount = getTotalCount();
-            return getPlaces(totalCount);
-        } catch (RestClientException e) {
-            log.error(FailMessage.API_CALL_FAILED.getMessage());
-            throw new ApiCallFailedException();
-        } catch (NullPointerException e) {
-            log.error(FailMessage.API_RESPONSE_PARSE_FAILED.getMessage());
-            throw new ApiResponseParseException();
-        }
-    }
-
-    private List<Item> getPlaces(Integer totalCount) {
-        URI requestURl = setRequestUrl(totalCount);
-        ResponseEntity<TourApiPlaceResponseDto> response = restTemplate.getForEntity(requestURl,
+    public List<Item> getPlaces(Integer numOfRows, Integer pageNo) {
+        URI requestUrl = setRequestUrl(numOfRows, pageNo);
+        TourApiPlaceResponseDto response = restTemplate.getForObject(requestUrl,
                 TourApiPlaceResponseDto.class);
 
-        return response.getBody().getResponse().getBody().getItems().getItem();
+        return response.getResponse().getBody().getItems().getItem();
     }
 
-    private Integer getTotalCount() {
-        URI requestUrl = setRequestUrl(1);
-        ResponseEntity<TourApiPlaceResponseDto> response = restTemplate.getForEntity(requestUrl,
+    public Integer getTotalCount() {
+        URI requestUrl = setRequestUrl(1, 1);
+        TourApiPlaceResponseDto response = restTemplate.getForObject(requestUrl,
                 TourApiPlaceResponseDto.class);
 
-        return response.getBody().getResponse().getBody().getTotalCount();
+        return response.getResponse().getBody().getTotalCount();
     }
 
-    private URI setRequestUrl(Integer numOfRows) {
-        return URI.create(placeDataUrl + "&serviceKey=" + serviceKey + "&numOfRows=" + numOfRows + "&pageNo=" + 1);
+    private URI setRequestUrl(Integer numOfRows, Integer pageNo) {
+        return URI.create(placeDataUrl + "&serviceKey=" + serviceKey + "&numOfRows=" + numOfRows + "&pageNo=" + pageNo);
     }
 }

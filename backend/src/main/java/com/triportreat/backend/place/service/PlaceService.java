@@ -10,6 +10,5 @@ public interface PlaceService {
     List<PlaceByRegionIdDto> searchPlaceListByCondition(PlaceSearchCondition placeSearchCondition, Pageable pageable);
 
     PlaceInfoDto getPlaceInfo(Long id);
-  
-    void updatePlacesByExternalApi();
+
 }
