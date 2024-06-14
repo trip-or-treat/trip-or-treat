@@ -1,7 +1,7 @@
 package com.triportreat.backend.scheduler;
 
+import com.triportreat.backend.batch.BatchJobService;
 import com.triportreat.backend.common.cache.RedisService;
-import com.triportreat.backend.place.service.PlaceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class CronTable {
 
     private final RedisService redisService;
-    private final PlaceService placeService;
+    private final BatchJobService batchJobService;
 
     @Value("${schedule.use}")
     private boolean isRunnable;
@@ -22,16 +22,18 @@ public class CronTable {
     @Scheduled(cron = "${schedule.place-data.cron}")
     public void updatePlacesByExternalApi() {
         if (isRunnable) {
-            placeService.updatePlacesByExternalApi();
-            log.info("Place 데이터 업데이트 종료");
+            log.info("장소데이터 업데이트 시작");
+            batchJobService.runPlaceUpdateJob();
+            log.info("장소데이터 업데이트 종료");
         }
     }
 
     @Scheduled(cron = "${schedule.place-views.cron}")
     public void updatePlaceViewCounts() {
         if (isRunnable) {
+            log.info("장소 조회수 업데이트 시작");
             redisService.updatePlaceViewCounts();
-            log.info("Place 조회수 업데이트 종료");
+            log.info("장소 조회수 업데이트 종료");
         }
     }
 }
