@@ -19,7 +19,7 @@ openapi:
 
 schedule:
   place-data:
-    cron: 0 30 2 * * *
+    cron: 0 30 15 * * *
   place-views:
     cron: 0 0 * * * *
   use: true
